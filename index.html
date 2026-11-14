@@ -37,7 +37,7 @@ const translations={
 "إنشاء حساب جديد":"Create a new account","لدي حساب بالفعل":"I already have an account","حساب جديد":"New account",
 "الاسم":"Name","كلمة المرور (8 أحرف على الأقل)":"Password (at least 8 characters)","إنشاء الحساب":"Create account",
 "الحساب الأول المعتمد هو مالك النظام. حسابات الموظفين تُفعّل بعد إضافتها من المالك.":"The first approved account is the system owner. Employee accounts are activated by the owner.",
-"Front of House Inventory":"Front of House Inventory","خروج":"Sign out","الرئيسية":"Home","الأصناف":"Items",
+"Front of House Inventory":"إدارة مخزون أدوات الصالة والخدمة","خروج":"Sign out","الرئيسية":"Home","الأصناف":"Items",
 "حركة المخزون":"Stock movements","الجرد الفعلي":"Physical stocktake","الفروع":"Branches",
 "إعداد المالك لأول مرة":"Initial owner setup","أدخل اسمك واسم أول فرع. هذا الإجراء متاح للبريد المعتمد فقط.":"Enter your name and the first branch name. This action is available only to the authorized email.",
 "اسم المالك":"Owner name","اسم الفرع بالعربية":"Branch name (Arabic)","اسم الفرع بالإنجليزية":"Branch name (English)", "＋ تصنيف جديد":"＋ New category", "＋ صنف جديد":"＋ New item", "＋ جلسة جرد":"＋ Stocktake session", "＋ تسجيل حركة":"＋ Record movement", "اسم الصنف":"Item name", "اسم التصنيف":"Category", "الصورة":"Image", "اسم الفرع":"Branch", "المستخدم الحالي":"Current user", "إجمالي الأصناف":"Total items", "الفروع المتاحة":"Available branches", "أصناف الصالة والخدمة":"Front-of-house & service items", "الجرد الفعلي":"Physical stocktake", "إضافة تصنيف":"Add category", "إضافة صنف":"Add item", "لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.":"No branches are linked to your account. Contact the system owner.", "أكمل اسم الفرع باللغتين والعنوان":"Enter both branch names and the address.",
@@ -147,7 +147,7 @@ window.__novaroObserver=languageObserver;
 languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
 
 const db=supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz");
-let user,profile,branches=[],allBranches=[],items=[],cats=[],balances={},branchId,page="items";
+let user,profile,branches=[],allBranches=[],items=[],cats=[],balances={},branchId,page="home";
 const $=x=>document.getElementById(x), esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function err(e){console.error(e);alert(e.message||"حدث خطأ")}
 async function init(){const {data:{session}}=await db.auth.getSession();if(session)await enter(session.user);db.auth.onAuthStateChange((ev,s)=>{if(s)enter(s.user);else{$("app").classList.add("hidden");$("login").classList.remove("hidden")}})}
