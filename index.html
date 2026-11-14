@@ -154,7 +154,7 @@ async function load(){let q=db.from("branches").select("*").eq("is_active",true)
 $("tabs").onclick=e=>{let b=e.target.closest("[data-p]");if(b){page=b.dataset.p;render()}};
 const pageMotionObserver=new MutationObserver(()=>{const el=$("main");el.classList.remove("page-enter");requestAnimationFrame(()=>el.classList.add("page-enter"))});
 pageMotionObserver.observe($("main"),{childList:true});
-const sel=()=>'<select id="branchSelect">'+branches.map(b=>'<option value="'+b.id+'">'+esc(nameOf(b))+'</option>').join("")+'</select>';
+const sel=()=>'<select id="branchSelect">'+branches.map(b=>'<option value="'+b.id+'">'+esc(nameOf(b))+(b.address?' — '+esc(b.address):'')+'</option>').join("")+'</select>';
 function nameOf(x){return language==="en"?(x?.name_en||x?.name_ar||""):(x?.name_ar||x?.name_en||"")}
 function unitOf(x){return language==="en"?(x?.unit_en||x?.unit_ar||""):(x?.unit_ar||x?.unit_en||"")}
 function render(){document.querySelectorAll("[data-p]").forEach(b=>b.classList.toggle("active",b.dataset.p===page));let m=$("main");if(!branches.length&&profile.role!=="owner_admin"){m.innerHTML='<section class="card empty">لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.</section>';return}
