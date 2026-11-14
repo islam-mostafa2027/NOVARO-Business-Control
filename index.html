@@ -202,8 +202,27 @@ const translations={
 "لا يمكن حذف الجرد: ":"Unable to delete stocktake: ",
 "حذف":"Delete",
 "إجراء":"Action",
-"لا توجد فروع":"No branches found"
-
+"لا توجد فروع":"No branches found",
+"بدء جلسة جرد":"Start stocktake session",
+"شهر وسنة الجرد":"Stocktake month and year",
+"اختر شهر وسنة الجرد":"Select the stocktake month and year",
+"تعديل شهر الجرد":"Edit stocktake month",
+"الجلسة":"Session",
+"الشهر":"Month",
+"الحالة":"Status",
+"إجراءات":"Actions",
+"فتح الجرد":"Open stocktake",
+"تعديل":"Edit",
+"لا توجد جلسات بعد":"No sessions yet",
+"تحميل أصناف الجرد...":"Loading stocktake items...",
+"كل الأصناف النشطة موجودة هنا تلقائيًا. الأصناف الجديدة ستظهر عند فتح الجلسة.":"All active items appear here automatically. New items will appear when you open the session.",
+"عدد":"Count",
+"العدد الفعلي":"Actual count",
+"حفظ أعداد الجرد":"Save stocktake counts",
+"تم حفظ الأعداد بنجاح":"Counts saved successfully",
+"هذه الجلسة غير مفتوحة للتعديل حسب حالتها الحالية.":"This session is not open for editing in its current status.",
+"أدخل اسم الجلسة والشهر والسنة":"Enter the session name, month and year",
+"أكمل اسم الجلسة والشهر والسنة":"Complete the session name, month and year"
 };
 const reverseTranslations=Object.fromEntries(Object.entries(translations).map(([a,b])=>[b,a]));
 let language=localStorage.getItem("novaro-language")||"ar";
