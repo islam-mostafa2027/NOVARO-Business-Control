@@ -53,7 +53,7 @@ window.__novaroObserver=languageObserver;
 languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
 
 const db=supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz");
-let user,profile,branches=[],items=[],cats=[],balances={},branchId,page="home";
+let user,profile,branches=[],items=[],cats=[],balances={},branchId,page="items";
 const $=x=>document.getElementById(x), esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function err(e){console.error(e);alert(e.message||"حدث خطأ")}
 async function init(){const {data:{session}}=await db.auth.getSession();if(session)await enter(session.user);db.auth.onAuthStateChange((ev,s)=>{if(s)enter(s.user);else{$("app").classList.add("hidden");$("login").classList.remove("hidden")}})}
