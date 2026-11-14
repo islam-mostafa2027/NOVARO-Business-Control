@@ -1,6 +1,31 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#287d6b"><link rel="manifest" href="manifest.webmanifest"><title>NOVARO Inventory</title><style>
 :root{--g:#287d6b;--bg:#f3f7f5;--ink:#263a35;--muted:#71817c;--line:#e2ebe7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Tahoma,Arial}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 15px;background:var(--g);color:white;font-weight:650}.soft{background:#e6f1ed;color:var(--g)}.wrap{max-width:1050px;margin:auto;padding:16px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:17px;margin:12px 0;box-shadow:0 5px 20px #173d3010}.brand{display:flex;align-items:center;gap:12px}.logo{background:var(--g);color:white;border-radius:13px;padding:12px;font-weight:800}.muted{color:var(--muted)}.hidden{display:none!important}.login{max-width:420px;margin:9vh auto}.field{margin:12px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:white}.tabs{display:flex;gap:8px;overflow:auto;padding:8px 0}.tabs button{white-space:nowrap;background:#e8efec;color:#50615b}.tabs button.active{background:var(--g);color:white}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat b{display:block;font-size:26px;margin-top:5px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:500px}td,th{text-align:right;padding:11px;border-bottom:1px solid var(--line);font-size:14px}th{color:var(--muted)}.error{color:#b43f3f;white-space:pre-wrap}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.empty{padding:25px;text-align:center;color:var(--muted)}@media(max-width:600px){.wrap{padding:10px}.stats{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}}
+/* NOVARO refined interface */
+:root{--g:#287d6b;--bg:#f4f8f6;--ink:#243b34;--muted:#71827c;--line:#e1ebe6}
+body{font-family:Inter,system-ui,"Segoe UI",Tahoma,Arial,sans-serif;letter-spacing:.01em}
+.wrap{max-width:1180px;padding:20px}
+header.row{position:sticky;top:0;z-index:20;background:rgba(244,248,246,.94);backdrop-filter:blur(12px);padding:12px 14px;border:1px solid #e4eee9;border-radius:16px;margin:0 0 14px;box-shadow:0 8px 28px #173d300a}
+.logo{min-width:44px;min-height:44px;display:grid;place-items:center;box-shadow:0 5px 14px #287d6b25}
+.card{border-radius:18px;padding:20px;box-shadow:0 8px 28px #173d300c;transition:box-shadow .22s ease,transform .22s ease}
+.card:hover{box-shadow:0 12px 32px #173d3014}
+button{border-radius:11px;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;box-shadow:0 2px 6px #173d3010}
+button:hover{transform:translateY(-1px);box-shadow:0 6px 14px #173d3020}
+button:active{transform:translateY(0) scale(.98)}
+.tabs{gap:9px;padding:10px 2px 14px;scrollbar-width:thin}
+.tabs button{border:1px solid transparent;padding:11px 18px}
+.tabs button.active{box-shadow:0 5px 13px #287d6b2b}
+.field input,.field select,input,select{transition:border-color .18s ease,box-shadow .18s ease}
+.field input:focus,.field select:focus,input:focus,select:focus{outline:none;border-color:#72b4a1;box-shadow:0 0 0 3px #287d6b18}
+table{border-spacing:0}
+th{background:#f7faf8;font-weight:700}
+td,th{padding:13px 12px}
+tbody tr{transition:background .16s ease}
+tbody tr:hover{background:#f7fbf9}
+#main.page-enter{animation:novaroPageIn .28s cubic-bezier(.2,.75,.25,1) both}
+@keyframes novaroPageIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media(max-width:600px){.wrap{padding:10px}.stats{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}header.row{position:relative;padding:10px}.card{padding:15px;border-radius:15px}.tabs button{padding:10px 14px}}
 body[dir="ltr"]{direction:ltr}body[dir="ltr"] td,body[dir="ltr"] th{text-align:left}body[dir="ltr"] .field label{text-align:left}</style></head><body>
 <div id="login" class="wrap"><div class="card login"><div class="row" style="justify-content:flex-end"><button type="button" class="soft" id="langToggle">English</button></div><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">إدارة مخزون أدوات الصالة والخدمة</div></div></div><h2>تسجيل الدخول</h2><form id="loginForm"><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" required></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" required></div><button id="loginBtn">دخول</button></form><div id="loginErr" class="error"></div><div class="row" style="margin-top:14px"><button type="button" class="soft" id="showSignup">إنشاء حساب جديد</button><button type="button" class="soft" id="showLogin">لدي حساب بالفعل</button></div><form id="signupForm" class="hidden"><h3>حساب جديد</h3><div class="field"><label>الاسم</label><input id="signupName" required></div><div class="field"><label>البريد الإلكتروني</label><input id="signupEmail" type="email" required></div><div class="field"><label>كلمة المرور (8 أحرف على الأقل)</label><input id="signupPassword" type="password" minlength="8" required></div><button id="signupBtn">إنشاء الحساب</button><div id="signupErr" class="error"></div></form><p class="muted" id="loginHint">الحساب الأول المعتمد هو مالك النظام. حسابات الموظفين تُفعّل بعد إضافتها من المالك.</p></div></div>
 <div id="app" class="hidden"><div class="wrap"><header class="row"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">Front of House Inventory</div></div></div><div><span id="who" class="muted"></span> <button class="soft" id="langToggleApp" type="button">English</button> <button class="soft" id="logout">خروج</button></div></header><nav class="tabs" id="tabs"><button data-p="home" class="active">الرئيسية</button><button data-p="items">الأصناف</button><button data-p="counts">الجرد الفعلي</button><button data-p="branches">الفروع</button></nav><main id="main"></main></div></div>
@@ -31,6 +56,62 @@ const translations={
 "استلام":"Receipt","إجمالي الأصناف":"Total items","الفروع المتاحة":"Available branches",
 "الحساب موقوف":"This account is disabled","تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب، ثم ارجع وسجّل الدخول.":"Account created. Check your email to confirm it, then return and sign in.",
 "حدث خطأ":"An error occurred", "الصورة":"Image","حد التنبيه":"Low-stock alert","إجراءات":"Actions","تعديل":"Edit","إيقاف":"Disable","إضافة وتعديل الأصناف متاحان للمالك فقط":"Only the owner can add and edit items","إضافة مستخدم جديد":"Add new user","اسم الموظف":"Employee name","كلمة مرور مؤقتة (8 أحرف على الأقل)":"Temporary password (at least 8 characters)","الصلاحية":"Role","موظف مخزون":"Inventory staff","مدير فرع":"Branch manager","مشاهدة فقط":"View only","إنشاء حساب الموظف":"Create employee account","المستخدمون والصلاحيات":"Users and permissions","المستخدمون":"Users","صورة الصنف":"Item image","وحدة القياس بالعربية":"Unit in Arabic","حد التنبيه عند انخفاض المخزون":"Low-stock threshold","إيقاف هذا الصنف؟":"Disable this item?","أصناف الصالة والخدمة":"Front-of-house & service items","كل التصنيفات":"All categories","تصنيف جديد":"New category","إضافة تصنيف":"Add category","اسم التصنيف":"Category name","الكمية الموجودة فعليًا":"Actual quantity on hand","تعديل العدد":"Edit quantity","تعديل الكمية الفعلية":"Edit actual quantity","الكمية الحالية":"Current quantity","الكمية الموجودة فعليًا":"Actual quantity on hand", "الكمية الافتتاحية":"Opening quantity","inventory_staff":"موظف مخزون","branch_manager":"مدير فرع","viewer":"مشاهدة فقط","owner_admin":"مالك النظام", "حفظ الصلاحية":"Save role","تفعيل":"Activate","نشط":"Active","موقوف":"Disabled", "إضافة فرع":"Add branch", "＋ إضافة فرع":"＋ Add branch", "العنوان أو الموقع بالتفصيل":"Full address or location", "العنوان":"Address", "Select branch":"Select branch", "اختر الفرع":"Select branch", "بحث باسم الصنف":"Search by item name", "اسم التصنيف بالعربية":"Category name (Arabic)", "اسم التصنيف بالإنجليزية":"Category name (English)", "أدخل اسم التصنيف باللغتين":"Enter the category name in both languages", "اسم الفرع بالعربية":"Branch name (Arabic)", "اسم الفرع بالإنجليزية":"Branch name (English)"
+
+"إدارة مخزون أدوات الصالة والخدمة":"Front-of-house and service inventory",
+"الرئيسية":"Home","الأصناف":"Items","الجرد الفعلي":"Physical stocktake","الفروع":"Branches",
+"أصناف الصالة والخدمة":"Front-of-house and service items","اختر الفرع":"Select branch",
+"إجمالي الأصناف":"Total items","الفروع المتاحة":"Available branches","المستخدم الحالي":"Current user",
+"الصورة":"Image","اسم الصنف":"Item name","التصنيف":"Category","الكمية الموجودة فعليًا":"Actual quantity",
+"إجراءات":"Actions","تعديل العدد":"Adjust quantity","تعديل":"Edit","إيقاف":"Deactivate",
+"كل التصنيفات":"All categories","بحث باسم الصنف":"Search items","＋ تصنيف جديد":"＋ New category",
+"＋ صنف جديد":"＋ New item","＋ جلسة جرد":"＋ New stocktake","＋ تسجيل حركة":"＋ Record movement",
+"إضافة تصنيف":"Add category","اسم التصنيف بالعربية":"Category name (Arabic)",
+"اسم التصنيف بالإنجليزية":"Category name (English)","أدخل اسم التصنيف باللغتين":"Enter the category in both languages",
+"إضافة صنف":"Add item","اسم الصنف بالعربية":"Item name (Arabic)","اسم الصنف بالإنجليزية":"Item name (English)",
+"كود الصنف":"Item code","بدون تصنيف":"Uncategorized","وحدة القياس بالعربية":"Unit (Arabic)",
+"وحدة القياس":"Unit","Unit in English":"Unit (English)","حد التنبيه عند انخفاض المخزون":"Low-stock alert threshold",
+"صورة الصنف":"Item image","حفظ":"Save","رجوع":"Back","إضافة فرع":"Add branch",
+"اسم الفرع بالعربية":"Branch name (Arabic)","اسم الفرع بالإنجليزية":"Branch name (English)",
+"العنوان أو الموقع بالتفصيل":"Full address or location","العنوان":"Address","الفروع":"Branches",
+"الكود":"Code","اسم الفرع":"Branch name","لا توجد أصناف":"No items found",
+"لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.":"No branches are assigned to your account. Contact the system owner.",
+"إضافة وتعديل الأصناف متاحان للمالك فقط":"Only the owner can add or edit items",
+"إضافة التصنيفات متاحة للمالك فقط":"Only the owner can add categories",
+"إضافة الأصناف متاحة للمالك فقط":"Only the owner can add items",
+"تسجيل حركة":"Record movement","الصنف":"Item","النوع":"Type","استلام / إضافة":"Receive / Add",
+"صرف":"Issue","تسوية":"Adjustment","الكمية":"Quantity","ملاحظات":"Notes",
+"بدء جلسة جرد":"Start stocktake","اسم الجلسة":"Session name","تاريخ الجرد":"Stocktake date",
+"الجلسة":"Session","التاريخ":"Date","الحالة":"Status","لا توجد جلسات بعد":"No stocktake sessions yet",
+"استلام":"Receipt","حساب جديد":"New account","الاسم":"Name","البريد الإلكتروني":"Email",
+"كلمة المرور":"Password","تسجيل الدخول":"Sign in","دخول":"Sign in","خروج":"Sign out",
+"إنشاء حساب جديد":"Create account","لدي حساب بالفعل":"I already have an account",
+"كلمة المرور (8 أحرف على الأقل)":"Password (at least 8 characters)",
+"إنشاء الحساب":"Create account","إعداد المالك لأول مرة":"First-time owner setup",
+"أدخل اسمك واسم أول فرع. هذا الإجراء متاح للبريد المعتمد فقط.":"Enter your name and first branch. This action is available only to the authorized email.",
+"اسم المالك":"Owner name","تهيئة النظام":"Set up system","حساب الموظف":"Employee account",
+"إضافة مستخدم جديد":"Add user","اسم الموظف":"Employee name",
+"كلمة مرور مؤقتة (8 أحرف على الأقل)":"Temporary password (at least 8 characters)",
+"الصلاحية":"Role","موظف مخزون":"Inventory staff","مدير فرع":"Branch manager",
+"مشاهدة فقط":"View only","إنشاء حساب الموظف":"Create employee account",
+"المستخدمون والصلاحيات":"Users and permissions","المستخدمون":"Users",
+"هذه الصفحة للمالك فقط":"This page is for the owner only","نشط":"Active","موقوف":"Disabled",
+"تفعيل":"Activate","إيقاف هذا الصنف؟":"Deactivate this item?",
+"هل تريد إيقاف هذا الصنف؟":"Are you sure you want to deactivate this item?",
+"حفظ الصلاحية":"Save role","غير مصرح":"Not authorized",
+"الكمية الحالية":"Current quantity","تعديل الكمية الفعلية":"Adjust actual quantity",
+"أكمل اسم الفرع باللغتين والعنوان":"Complete both branch names and the address",
+"أدخل اسم التصنيف باللغتين":"Enter the category name in both languages",
+"حجم الصورة يجب ألا يتجاوز 5 ميجابايت":"Image size must not exceed 5 MB",
+"أدخل كمية صحيحة":"Enter a valid quantity","لا توجد حركات":"No movements",
+"لا توجد حركات مسجلة":"No movements recorded","لا توجد أصناف":"No items found",
+"تحميل...":"Loading...","المستخدمون":"Users","اسم التصنيف":"Category name",
+"مالك النظام":"System owner","الحساب موقوف":"This account is disabled",
+"حدث خطأ":"An error occurred","تم إنشاء حساب الموظف بنجاح":"Employee account created successfully",
+"تعذر إنشاء الحساب":"Could not create the account","رصيد افتتاحي":"Opening balance",
+"تعديل الصنف":"Edit item","إضافة صنف":"Add item","إضافة تصنيف":"Add category",
+"＋ إضافة فرع":"＋ Add branch","Select branch":"Select branch","اختر الفرع":"Select branch",
+"الكمية الافتتاحية":"Opening quantity","الصلاحيات":"Permissions","أصناف الصالة والخدمة":"Front-of-house and service items"
+
 };
 const reverseTranslations=Object.fromEntries(Object.entries(translations).map(([a,b])=>[b,a]));
 let language=localStorage.getItem("novaro-language")||"ar";
@@ -38,8 +119,10 @@ function applyLanguage(){
  const dict=language==="en"?translations:reverseTranslations;
  document.documentElement.lang=language;document.documentElement.dir=language==="ar"?"rtl":"ltr";
  document.body.dir=document.documentElement.dir;
- const walk=n=>{if(n.nodeType===Node.TEXT_NODE){const v=n.nodeValue.trim();if(dict[v])n.nodeValue=n.nodeValue.replace(v,dict[v]);}
- else if(n.nodeType===Node.ELEMENT_NODE){if(n.placeholder&&dict[n.placeholder])n.placeholder=dict[n.placeholder];if(n.title&&dict[n.title])n.title=dict[n.title];for(const c of [...n.childNodes])walk(c)}};
+ const pairs=Object.entries(dict).sort((a,b)=>b[0].length-a[0].length);
+ const translateText=v=>{let out=v;for(const [from,to] of pairs){if(from)out=out.split(from).join(to)}return out};
+ const walk=n=>{if(n.nodeType===Node.TEXT_NODE){n.nodeValue=translateText(n.nodeValue)}
+ else if(n.nodeType===Node.ELEMENT_NODE){if(n.placeholder)n.placeholder=translateText(n.placeholder);if(n.title)n.title=translateText(n.title);if(n.value&&n.tagName==="BUTTON")n.value=translateText(n.value);for(const c of [...n.childNodes])walk(c)}};
  const obs=window.__novaroObserver;if(obs)obs.disconnect();walk(document.body);
  const a=document.getElementById("langToggle"),b=document.getElementById("langToggleApp");
  if(a)a.textContent=language==="ar"?"English":"العربية";
@@ -67,6 +150,8 @@ async function enter(u){user=u;let r=await db.from("profiles").select("*").eq("i
 profile=r.data;if(!profile.is_active){await db.auth.signOut();throw Error("الحساب موقوف")} $("login").classList.add("hidden");$("app").classList.remove("hidden");$("who").textContent=esc(profile.display_name||u.email);await load();render()}
 async function load(){let q=db.from("branches").select("*").eq("is_active",true).order("name_ar");if(profile.role!=="owner_admin"){let m=await db.from("branch_members").select("branch_id").eq("user_id",user.id).eq("is_active",true);q=q.in("id",(m.data||[]).map(x=>x.branch_id))}let [b,i,c,m]=await Promise.all([q,db.from("items").select("*,categories(name_ar,name_en)").eq("is_active",true).order("name_ar"),db.from("categories").select("*").eq("is_active",true).order("sort_order"),db.from("stock_movements").select("branch_id,item_id,movement_type,quantity")]);if(b.error)throw b.error;if(i.error)throw i.error;if(c.error)throw c.error;if(m.error)throw m.error;branches=b.data||[];items=i.data||[];cats=c.data||[];balances={};for(const x of(m.data||[])){const k=x.branch_id+":"+x.item_id;const q=Number(x.quantity);balances[k]=(balances[k]||0)+(x.movement_type==="issue"?-q:q)}if(!branches.some(x=>x.id===branchId))branchId=branches[0]?.id}
 $("tabs").onclick=e=>{let b=e.target.closest("[data-p]");if(b){page=b.dataset.p;render()}};
+const pageMotionObserver=new MutationObserver(()=>{const el=$("main");el.classList.remove("page-enter");requestAnimationFrame(()=>el.classList.add("page-enter"))});
+pageMotionObserver.observe($("main"),{childList:true});
 const sel=()=>'<select id="branchSelect">'+branches.map(b=>'<option value="'+b.id+'">'+esc(nameOf(b))+'</option>').join("")+'</select>';
 function nameOf(x){return language==="en"?(x?.name_en||x?.name_ar||""):(x?.name_ar||x?.name_en||"")}
 function unitOf(x){return language==="en"?(x?.unit_en||x?.unit_ar||""):(x?.unit_ar||x?.unit_en||"")}
