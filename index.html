@@ -53,6 +53,61 @@ body[dir="ltr"]{direction:ltr}body[dir="ltr"] td,body[dir="ltr"] th{text-align:l
 }
 @media(min-width:601px){.tabs{position:sticky;top:91px;z-index:19}}
 body[dir="ltr"] .tabs{direction:ltr}
+
+/* Readability and home branch selector refinement */
+:root{--bg:#f2f7f4;--ink:#203a32;--muted:#62766e;--line:#dce8e1}
+body{font-size:16px;line-height:1.65;color:var(--ink)}
+.wrap{max-width:1220px}
+.card{padding:22px;border-radius:20px}
+h2{font-size:26px;line-height:1.35}h3{font-size:21px;line-height:1.4;margin:0 0 12px}
+button{font-size:15px;padding:12px 17px}
+.field label,.branch-select-wrap label{font-size:15px;font-weight:700;color:#52685f}
+.field input,.field select,input,select{font-size:16px;min-height:48px}
+td,th{font-size:15px;padding:15px 13px}
+.muted{font-size:14px;color:#62766e}
+.app-header{padding:16px 20px}
+.app-header .brand b{font-size:18px}
+.tabs button{font-size:15px;padding:13px 20px}
+.branch-panel{padding:25px 26px;background:linear-gradient(135deg,#fff 0%,#f7fbf8 100%);border:1px solid #dce9e2;box-shadow:0 9px 28px #183e3010}
+.branch-heading{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.branch-heading h3{font-size:22px;margin:0 0 3px}
+.branch-heading p{margin:0;color:#71827a;font-size:15px}
+.branch-symbol{width:48px;height:48px;display:grid;place-items:center;flex:none;border-radius:15px;background:#e4f1eb;color:#287d6b;font-size:27px;font-weight:700}
+.branch-select-wrap{max-width:620px}
+.branch-select-wrap label{display:block;margin-bottom:8px}
+.branch-select-wrap select{width:100%;border:1px solid #cbded3;border-radius:13px;background:#fff;color:#243b34;padding:12px 16px;box-shadow:0 3px 12px #183e3008;outline:none;appearance:auto}
+.branch-select-wrap select:focus{border-color:#287d6b;box-shadow:0 0 0 4px #287d6b18}
+.stats{gap:14px}
+.stat-card{min-height:118px;display:flex;flex-direction:column;justify-content:center;gap:7px}
+.stat-card span{font-size:15px;font-weight:650;color:#667970}
+.stat-card b{font-size:30px;line-height:1.2;color:#287d6b}
+.stat-card .role-value{font-size:18px;color:#263e35}
+@media(max-width:600px){
+ body{font-size:16px}
+ .wrap{padding:12px 12px 100px}
+ .card{padding:18px;border-radius:17px}
+ h2{font-size:23px}h3{font-size:19px}
+ button{font-size:14px;padding:11px 13px}
+ .app-header{padding:13px}
+ .app-header .brand b{font-size:16px}
+ .tabs button{font-size:13px;padding:13px 3px}
+ .branch-panel{padding:19px 17px;margin-top:5px}
+ .branch-heading{gap:11px;margin-bottom:17px}
+ .branch-heading h3{font-size:20px}
+ .branch-heading p{font-size:14px;line-height:1.5}
+ .branch-symbol{width:43px;height:43px;border-radius:13px}
+ .branch-select-wrap{max-width:none}
+ .branch-select-wrap label{font-size:15px}
+ .branch-select-wrap select{min-height:54px;font-size:16px;padding:13px;border-radius:12px}
+ .stats{gap:10px}
+ .stat-card{min-height:108px;padding:15px}
+ .stat-card span{font-size:14px}
+ .stat-card b{font-size:27px}
+ .stat-card .role-value{font-size:16px}
+ td,th{font-size:14px;padding:12px 10px}
+ .field label{font-size:14px}
+ .field input,.field select,input,select{font-size:16px}
+}
 </style></head><body>
 <div id="login" class="wrap"><div class="card login"><div class="row" style="justify-content:flex-end"><button type="button" class="soft" id="langToggle">English</button></div><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">إدارة مخزون أدوات الصالة والخدمة</div></div></div><h2>تسجيل الدخول</h2><form id="loginForm"><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" required></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" required></div><button id="loginBtn">دخول</button></form><div id="loginErr" class="error"></div><div class="row" style="margin-top:14px"><button type="button" class="soft" id="showSignup">إنشاء حساب جديد</button><button type="button" class="soft" id="showLogin">لدي حساب بالفعل</button></div><form id="signupForm" class="hidden"><h3>حساب جديد</h3><div class="field"><label>الاسم</label><input id="signupName" required></div><div class="field"><label>البريد الإلكتروني</label><input id="signupEmail" type="email" required></div><div class="field"><label>كلمة المرور (8 أحرف على الأقل)</label><input id="signupPassword" type="password" minlength="8" required></div><button id="signupBtn">إنشاء الحساب</button><div id="signupErr" class="error"></div></form><p class="muted" id="loginHint">الحساب الأول المعتمد هو مالك النظام. حسابات الموظفين تُفعّل بعد إضافتها من المالك.</p></div></div>
 <div id="app" class="hidden"><div class="wrap"><header class="app-header"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">Front of House Inventory</div></div></div><div class="header-actions"><span id="who" class="muted"></span><button class="language-control" id="langToggleApp" type="button">◎ English</button><button class="soft logout-control" id="logout">خروج</button></div></header><nav class="tabs" id="tabs" aria-label="Main navigation"><button data-p="home" class="active">الرئيسية</button><button data-p="items">الأصناف</button><button data-p="counts">الجرد الفعلي</button><button data-p="branches">الفروع</button></nav><main id="main"></main></div></div>
@@ -195,7 +250,7 @@ function nameOf(x){return language==="en"?(x?.name_en||x?.name_ar||""):(x?.name_
 function unitOf(x){return language==="en"?(x?.unit_en||x?.unit_ar||""):(x?.unit_ar||x?.unit_en||"")}
 function roleName(role){return ({owner_admin:language==="en"?"System owner":"مالك النظام",inventory_staff:language==="en"?"Inventory staff":"موظف مخزون",branch_manager:language==="en"?"Branch manager":"مدير فرع",viewer:language==="en"?"View only":"مشاهدة فقط"})[role]||role||"—"}
 function render(){document.querySelectorAll("[data-p]").forEach(b=>b.classList.toggle("active",b.dataset.p===page));let m=$("main");if(!branches.length&&profile.role!=="owner_admin"){m.innerHTML='<section class="card empty">لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.</section>';return}
-if(page==="home")m.innerHTML='<section class="card"><div class="row"><h3>'+(language==="en"?"Select branch":"اختر الفرع")+'</h3>'+sel()+'</div></section><section class="stats"><div class="card">إجمالي الأصناف<b>'+items.length+'</b></div><div class="card">الفروع المتاحة<b>'+branches.length+'</b></div><div class="card">المستخدم الحالي<b style="font-size:16px">'+esc(roleName(profile.role))+'</b></div></section>';
+if(page==="home")m.innerHTML='<section class="card branch-panel"><div class="branch-heading"><span class="branch-symbol">⌖</span><div><h3>'+(language==="en"?"Choose a branch":"اختيار الفرع")+'</h3><p>'+(language==="en"?"Select the branch you want to manage":"حدد الفرع الذي تريد إدارة مخزونه")+'</p></div></div><div class="branch-select-wrap"><label for="branchSelect">'+(language==="en"?"Current branch":"الفرع الحالي")+'</label>'+sel()+'</div></section><section class="stats"><div class="card stat-card"><span>'+(language==="en"?"Total items":"إجمالي الأصناف")+'</span><b>'+items.length+'</b></div><div class="card stat-card"><span>'+(language==="en"?"Available branches":"الفروع المتاحة")+'</span><b>'+branches.length+'</b></div><div class="card stat-card"><span>'+(language==="en"?"Current role":"صلاحية المستخدم")+'</span><b class="role-value">'+esc(roleName(profile.role))+'</b></div></section>';
 if(page==="items")m.innerHTML='<section class="card"><div class="row"><h3>أصناف الصالة والخدمة</h3><div><button class="soft" onclick="addCategory()">＋ تصنيف جديد</button> <button onclick="addItem()">＋ صنف جديد</button></div></div><div class="field"><label>التصنيف</label><select id="categoryFilter"><option value="">كل التصنيفات</option>'+cats.map(c=>'<option value="'+c.id+'">'+esc(nameOf(c))+'</option>').join("")+'</select></div><input id="search" placeholder="بحث باسم الصنف" style="width:100%;padding:11px;border:1px solid #ddd;border-radius:9px"><div class="tablewrap"><table><thead><tr><th>الصورة</th><th>اسم الصنف</th><th>التصنيف</th><th>الكمية الموجودة فعليًا</th><th>إجراءات</th></tr></thead><tbody id="itemRows">'+itemRows(items)+'</tbody></table></div></section>';
 
 if(page==="counts")m.innerHTML='<section class="card"><div class="row"><h3>الجرد الفعلي</h3><button onclick="addSession()">＋ جلسة جرد</button></div><div id="sessions" class="empty">تحميل...</div></section>';
