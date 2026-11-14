@@ -1,10 +1,57 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#287d6b"><link rel="manifest" href="manifest.webmanifest"><title>NOVARO Inventory</title><style>
 :root{--g:#287d6b;--bg:#f3f7f5;--ink:#263a35;--muted:#71817c;--line:#e2ebe7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Tahoma,Arial}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 15px;background:var(--g);color:white;font-weight:650}.soft{background:#e6f1ed;color:var(--g)}.wrap{max-width:1050px;margin:auto;padding:16px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:17px;margin:12px 0;box-shadow:0 5px 20px #173d3010}.brand{display:flex;align-items:center;gap:12px}.logo{background:var(--g);color:white;border-radius:13px;padding:12px;font-weight:800}.muted{color:var(--muted)}.hidden{display:none!important}.login{max-width:420px;margin:9vh auto}.field{margin:12px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:white}.tabs{display:flex;gap:8px;overflow:auto;padding:8px 0}.tabs button{white-space:nowrap;background:#e8efec;color:#50615b}.tabs button.active{background:var(--g);color:white}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat b{display:block;font-size:26px;margin-top:5px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:500px}td,th{text-align:right;padding:11px;border-bottom:1px solid var(--line);font-size:14px}th{color:var(--muted)}.error{color:#b43f3f;white-space:pre-wrap}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.empty{padding:25px;text-align:center;color:var(--muted)}@media(max-width:600px){.wrap{padding:10px}.stats{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}}
-</style></head><body>
-<div id="login" class="wrap"><div class="card login"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">إدارة مخزون أدوات الصالة والخدمة</div></div></div><h2>تسجيل الدخول</h2><form id="loginForm"><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" required></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" required></div><button id="loginBtn">دخول</button></form><div id="loginErr" class="error"></div><div class="row" style="margin-top:14px"><button type="button" class="soft" id="showSignup">إنشاء حساب جديد</button><button type="button" class="soft" id="showLogin">لدي حساب بالفعل</button></div><form id="signupForm" class="hidden"><h3>حساب جديد</h3><div class="field"><label>الاسم</label><input id="signupName" required></div><div class="field"><label>البريد الإلكتروني</label><input id="signupEmail" type="email" required></div><div class="field"><label>كلمة المرور (8 أحرف على الأقل)</label><input id="signupPassword" type="password" minlength="8" required></div><button id="signupBtn">إنشاء الحساب</button><div id="signupErr" class="error"></div></form><p class="muted" id="loginHint">الحساب الأول المعتمد هو مالك النظام. حسابات الموظفين تُفعّل بعد إضافتها من المالك.</p></div></div>
-<div id="app" class="hidden"><div class="wrap"><header class="row"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">Front of House Inventory</div></div></div><div><span id="who" class="muted"></span> <button class="soft" id="logout">خروج</button></div></header><nav class="tabs" id="tabs"><button data-p="home" class="active">الرئيسية</button><button data-p="items">الأصناف</button><button data-p="moves">حركة المخزون</button><button data-p="counts">الجرد الفعلي</button><button data-p="branches">الفروع</button></nav><main id="main"></main></div></div>
+body[dir="ltr"]{direction:ltr}body[dir="ltr"] td,body[dir="ltr"] th{text-align:left}body[dir="ltr"] .field label{text-align:left}</style></head><body>
+<div id="login" class="wrap"><div class="card login"><div class="row" style="justify-content:flex-end"><button type="button" class="soft" id="langToggle">English</button></div><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">إدارة مخزون أدوات الصالة والخدمة</div></div></div><h2>تسجيل الدخول</h2><form id="loginForm"><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" required></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" required></div><button id="loginBtn">دخول</button></form><div id="loginErr" class="error"></div><div class="row" style="margin-top:14px"><button type="button" class="soft" id="showSignup">إنشاء حساب جديد</button><button type="button" class="soft" id="showLogin">لدي حساب بالفعل</button></div><form id="signupForm" class="hidden"><h3>حساب جديد</h3><div class="field"><label>الاسم</label><input id="signupName" required></div><div class="field"><label>البريد الإلكتروني</label><input id="signupEmail" type="email" required></div><div class="field"><label>كلمة المرور (8 أحرف على الأقل)</label><input id="signupPassword" type="password" minlength="8" required></div><button id="signupBtn">إنشاء الحساب</button><div id="signupErr" class="error"></div></form><p class="muted" id="loginHint">الحساب الأول المعتمد هو مالك النظام. حسابات الموظفين تُفعّل بعد إضافتها من المالك.</p></div></div>
+<div id="app" class="hidden"><div class="wrap"><header class="row"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">Front of House Inventory</div></div></div><div><span id="who" class="muted"></span> <button class="soft" id="langToggleApp" type="button">English</button> <button class="soft" id="logout">خروج</button></div></header><nav class="tabs" id="tabs"><button data-p="home" class="active">الرئيسية</button><button data-p="items">الأصناف</button><button data-p="moves">حركة المخزون</button><button data-p="counts">الجرد الفعلي</button><button data-p="branches">الفروع</button></nav><main id="main"></main></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+
+const translations={
+"إدارة مخزون أدوات الصالة والخدمة":"Dining Room & Service Inventory Management",
+"تسجيل الدخول":"Sign in","البريد الإلكتروني":"Email address","كلمة المرور":"Password","دخول":"Sign in",
+"إنشاء حساب جديد":"Create a new account","لدي حساب بالفعل":"I already have an account","حساب جديد":"New account",
+"الاسم":"Name","كلمة المرور (8 أحرف على الأقل)":"Password (at least 8 characters)","إنشاء الحساب":"Create account",
+"الحساب الأول المعتمد هو مالك النظام. حسابات الموظفين تُفعّل بعد إضافتها من المالك.":"The first approved account is the system owner. Employee accounts are activated by the owner.",
+"Front of House Inventory":"Front of House Inventory","خروج":"Sign out","الرئيسية":"Home","الأصناف":"Items",
+"حركة المخزون":"Stock movements","الجرد الفعلي":"Physical stocktake","الفروع":"Branches",
+"إعداد المالك لأول مرة":"Initial owner setup","أدخل اسمك واسم أول فرع. هذا الإجراء متاح للبريد المعتمد فقط.":"Enter your name and the first branch name. This action is available only to the authorized email.",
+"اسم المالك":"Owner name","اسم الفرع بالعربية":"Branch name (Arabic)","اسم الفرع بالإنجليزية":"Branch name (English)",
+"تهيئة النظام":"Initialize system","إجمالي الأصناف":"Total items","الفروع المتاحة":"Available branches",
+"المستخدم الحالي":"Current user","حركات الفرع الأخيرة":"Recent branch movements","بحث باسم الصنف أو الكود":"Search by item name or code",
+"＋ صنف جديد":"＋ New item","الكود":"Code","الصنف":"Item","التصنيف":"Category","الوحدة":"Unit",
+"＋ تسجيل حركة":"＋ Record movement","＋ جلسة جرد":"＋ Stocktake session","اسم الفرع":"Branch name",
+"لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.":"No branches are linked to your account. Contact the system owner.",
+"لا توجد أصناف":"No items found","لا توجد حركات مسجلة":"No movements recorded","لا توجد حركات":"No movements",
+"إضافة الأصناف متاحة للمالك فقط":"Only the owner can add items","إضافة صنف":"Add item","اسم الصنف بالعربية":"Item name (Arabic)",
+"اسم الصنف بالإنجليزية":"Item name (English)","كود الصنف":"Item code","بدون تصنيف":"No category",
+"وحدة القياس":"Unit of measure","قطعة":"Piece","حفظ":"Save","رجوع":"Back",
+"تسجيل حركة":"Record movement","استلام / إضافة":"Receive / Add","صرف":"Issue","تسوية":"Adjustment",
+"الكمية":"Quantity","ملاحظات":"Notes","بدء جلسة جرد":"Start stocktake session","اسم الجلسة":"Session name",
+"تاريخ الجرد":"Stocktake date","الجلسة":"Session","التاريخ":"Date","الحالة":"Status","لا توجد جلسات بعد":"No sessions yet",
+"استلام":"Receipt","إجمالي الأصناف":"Total items","الفروع المتاحة":"Available branches",
+"الحساب موقوف":"This account is disabled","تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب، ثم ارجع وسجّل الدخول.":"Account created. Check your email to confirm it, then return and sign in.",
+"حدث خطأ":"An error occurred"
+};
+const reverseTranslations=Object.fromEntries(Object.entries(translations).map(([a,b])=>[b,a]));
+let language=localStorage.getItem("novaro-language")||"ar";
+function applyLanguage(){
+ const dict=language==="en"?translations:reverseTranslations;
+ document.documentElement.lang=language;document.documentElement.dir=language==="ar"?"rtl":"ltr";
+ document.body.dir=document.documentElement.dir;
+ const walk=n=>{if(n.nodeType===Node.TEXT_NODE){const v=n.nodeValue.trim();if(dict[v])n.nodeValue=n.nodeValue.replace(v,dict[v]);}
+ else if(n.nodeType===Node.ELEMENT_NODE){if(n.placeholder&&dict[n.placeholder])n.placeholder=dict[n.placeholder];if(n.title&&dict[n.title])n.title=dict[n.title];for(const c of [...n.childNodes])walk(c)}};
+ const obs=window.__novaroObserver;if(obs)obs.disconnect();walk(document.body);
+ const a=document.getElementById("langToggle"),b=document.getElementById("langToggleApp");
+ if(a)a.textContent=language==="ar"?"English":"العربية";
+ if(b)b.textContent=language==="ar"?"English":"العربية";
+ if(obs)obs.observe(document.body,{childList:true,subtree:true,characterData:true});
+}
+function setLanguage(next){language=next;localStorage.setItem("novaro-language",language);applyLanguage();if(user&&profile)render();}
+document.addEventListener("click",e=>{if(e.target.id==="langToggle"||e.target.id==="langToggleApp")setLanguage(language==="ar"?"en":"ar")});
+const languageObserver=new MutationObserver(()=>applyLanguage());
+window.__novaroObserver=languageObserver;
+languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
+
 const db=supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz");
 let user,profile,branches=[],items=[],cats=[],branchId,page="home";
 const $=x=>document.getElementById(x), esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -39,5 +86,5 @@ function addItem(){if(profile.role!=="owner_admin"){alert("إضافة الأصن
 function addMove(){form("تسجيل حركة",'<div class="field"><label>الصنف</label><select id="item">'+items.map(i=>'<option value="'+i.id+'">'+esc(i.name_ar)+'</option>').join("")+'</select></div><div class="field"><label>النوع</label><select id="type"><option value="receipt">استلام / إضافة</option><option value="issue">صرف</option><option value="adjustment">تسوية</option></select></div>'+inp("الكمية","qty",'type="number" min="0.01" step="0.01" required')+inp("ملاحظات","note"),async()=>{let r=await db.from("stock_movements").insert({branch_id:branchId,item_id:$("item").value,movement_type:$("type").value,quantity:Number($("qty").value),note:$("note").value||null,created_by:user.id});if(r.error)throw r.error})}
 function addSession(){form("بدء جلسة جرد",inp("اسم الجلسة","title","required")+inp("تاريخ الجرد","date",'type="date" required'),async()=>{let r=await db.from("inventory_sessions").insert({branch_id:branchId,title:$("title").value,inventory_date:$("date").value,created_by:user.id});if(r.error)throw r.error})}
 async function sessions(){let r=await db.from("inventory_sessions").select("*").eq("branch_id",branchId).order("created_at",{ascending:false});$("sessions").innerHTML=r.error?esc(r.error.message):r.data.length?'<div class="tablewrap"><table><tr><th>الجلسة</th><th>التاريخ</th><th>الحالة</th></tr>'+r.data.map(s=>'<tr><td>'+esc(s.title)+'</td><td>'+esc(s.inventory_date)+'</td><td>'+esc(s.status)+'</td></tr>').join("")+'</table></div>':"لا توجد جلسات بعد"}
-init().catch(err);
+applyLanguage();init().catch(err);
 </script></body></html>
