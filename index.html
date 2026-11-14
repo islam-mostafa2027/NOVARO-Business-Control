@@ -127,11 +127,12 @@ function applyLanguage(){
  const a=document.getElementById("langToggle"),b=document.getElementById("langToggleApp");
  if(a)a.textContent=language==="ar"?"English":"العربية";
  if(b)b.textContent=language==="ar"?"English":"العربية";
- if(obs)obs.observe(document.body,{childList:true,subtree:true,characterData:true});
+ if(obs){obs.takeRecords();obs.observe(document.body,{childList:true,subtree:true,characterData:true});}
 }
 function setLanguage(next){language=next;localStorage.setItem("novaro-language",language);applyLanguage();if(user&&profile)render();}
 document.addEventListener("click",e=>{if(e.target.id==="langToggle"||e.target.id==="langToggleApp")setLanguage(language==="ar"?"en":"ar")});
-const languageObserver=new MutationObserver(()=>applyLanguage());
+let languageUpdatePending=false;
+const languageObserver=new MutationObserver(()=>{if(languageUpdatePending)return;languageUpdatePending=true;queueMicrotask(()=>{languageUpdatePending=false;applyLanguage();});});
 window.__novaroObserver=languageObserver;
 languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
 
