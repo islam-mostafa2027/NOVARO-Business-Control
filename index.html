@@ -969,14 +969,22 @@ async function viewStocktakeReport(id){
  }catch(e){host.innerHTML='<div class="error">'+esc(e.message||String(e))+'</div>'}
 }
 async function exportStocktakeReport(id){
- try{const data=await getSingleStocktakeReport(id),en=language==="en",head=en?["Type","Item","Code","Unit","Counted quantity"]:["النوع","الصنف","الكود","الوحدة","الكمية الفعلية"];
- const rows=data.rows.map(x=>[branchLabel(data.branch)||"",x.categories?.group_key==="materials"?(en?"Materials":"الخامات"):(en?"Equipment":"العُدّة"),en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en),x.quantity]);
- head.unshift(en?"Branch":"الفرع");
- const csv="\\uFEFF"+[head,...rows].map(r=>r.map(v=>'"'+String(v??"").split('"').join('""')+'"').join(",")).join("\\r\\n");
- const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="NOVARO-Stocktake-"+String(data.branch?.code||data.session.branch_id||"Branch").slice(0,12)+"-"+String(data.session.inventory_date||data.session.id).slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);
+ try{
+  const data=await getSingleStocktakeReport(id),en=language==="en",branch=branchLabel(data.branch)||"—";
+  const headers=en?["Branch","Section","Item name","Item code","Unit","Counted quantity"]:["الفرع","القسم","اسم الصنف","كود الصنف","الوحدة","الكمية الفعلية"];
+  const rows=data.rows.map(x=>[branch,x.categories?.group_key==="materials"?(en?"Materials":"الخامات"):(en?"Equipment":"العُدّة"),en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"—",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—",x.quantity]);
+  const cell=v=>'<td>'+esc(String(v??""))+'</td>';
+  const html='<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif;color:#263b4a;direction:'+(en?'ltr':'rtl')+';padding:22px}h1{text-align:center;color:#315b70;font-size:22px;margin:0 0 8px}.meta{text-align:center;color:#657d8b;margin:0 0 20px}table{width:100%;border-collapse:collapse;table-layout:auto}th{background:#315b70;color:#fff;font-weight:bold;padding:11px 8px;border:1px solid #244b5a;text-align:center}td{padding:9px 8px;border:1px solid #c9dce5;text-align:center}tbody tr:nth-child(even){background:#f0f7fa}tbody tr{page-break-inside:avoid} .qty{font-weight:bold}@media print{thead{display:table-header-group}tr{page-break-inside:avoid}body{padding:8mm}}</style></head><body><h1>'+esc(en?"NOVARO — Stocktake Report":"NOVARO — تقرير الجرد")+'</h1><p class="meta">'+esc(branch)+' | '+esc(sessionLabel(data.session))+' | '+data.rows.length+' '+(en?"items":"صنف")+'</p><table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join("")+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(cell).join("")+'</tr>').join("")+'</tbody></table></body></html>';
+  const blob=new Blob(['\\uFEFF',html],{type:"application/vnd.ms-excel;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="NOVARO-Stocktake-"+String(data.branch?.code||data.session.branch_id||"Branch").slice(0,12)+"-"+String(data.session.inventory_date||data.session.id).slice(0,10)+".xls";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
  }catch(e){alert(e.message||String(e))}
 }
-function printStocktakeReport(){document.body.classList.add("print-single-stocktake");window.print();setTimeout(()=>document.body.classList.remove("print-single-stocktake"),500)}
+function printStocktakeReport(){
+ document.body.classList.add("print-single-stocktake");
+ const style=document.createElement("style");style.id="stocktake-print-style";
+ style.textContent='@media print{body.print-single-stocktake #reportContent{width:100%!important;margin:0!important;padding:0!important}body.print-single-stocktake .single-stocktake-report{color:#172d3a!important;font-size:11pt!important}body.print-single-stocktake .single-stocktake-report h2{text-align:center;border-bottom:2px solid #315b70;padding-bottom:10px;margin-bottom:8px}body.print-single-stocktake .single-stocktake-report .report-group{break-inside:avoid;margin-top:18px!important}body.print-single-stocktake .single-stocktake-report table{width:100%!important;border-collapse:collapse!important;font-size:10pt!important}body.print-single-stocktake .single-stocktake-report thead{display:table-header-group!important}body.print-single-stocktake .single-stocktake-report th{background:#315b70!important;color:white!important;border:1px solid #244b5a!important;padding:9px!important;text-align:center!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}body.print-single-stocktake .single-stocktake-report td{border:1px solid #b9cbd4!important;padding:8px!important;text-align:center!important}body.print-single-stocktake .single-stocktake-report tbody tr:nth-child(even){background:#eef5f8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}body.print-single-stocktake .single-stocktake-report tbody tr{break-inside:avoid}body.print-single-stocktake .single-stocktake-report .tablewrap{overflow:visible!important}}';
+ document.head.appendChild(style);window.print();setTimeout(()=>{document.body.classList.remove("print-single-stocktake");style.remove()},800);
+}
 function exportInventoryReport(){
  const rows=window.__reportRows||[];if(!rows.length)return alert(language==="en"?"No report data to export.":"لا توجد بيانات لتصديرها.");
  const head=language==="en"?["Item","Code","Previous count","Current count","Change"]:["الصنف","الكود","الجرد السابق","الجرد الحالي","التغير"];
