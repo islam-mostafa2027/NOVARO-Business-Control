@@ -119,7 +119,7 @@ jobs:
               if artifact not in g:
                   if "dependencies {" not in g:
                       raise SystemExit("Gradle dependencies block not found")
-                  g = g.replace("dependencies {", "dependencies {\\n    " + dep, 1)
+                  g = g.replace("dependencies {", "dependencies {\n    " + dep, 1)
           gradle.write_text(g)
           main = next(Path("android/app/src/main/java").rglob("MainActivity.java"), None)
           if main is None:
@@ -142,8 +142,8 @@ jobs:
           existing = set(x.strip() for x in lines if x.startswith("import "))
           idx = max(i for i,x in enumerate(lines) if x.startswith("import "))
           lines[idx+1:idx+1] = [x for x in imports if x not in existing]
-          s = "\\n".join(lines) + "\\n"
-          pattern = r'@JavascriptInterface public void commit\\(\\) \\{.*?\\n\\s*\\}(?=\\s*@JavascriptInterface public void cancel\\(\\))'
+          s = "\n".join(lines) + "\n"
+          pattern = r'@JavascriptInterface public void commit\(\) \{.*?\n\s*\\}(?=\s*@JavascriptInterface public void cancel\(\))'
           new_methods = """@JavascriptInterface public void save(String username, String password) {
                   runOnUiThread(() -> {
                       try {
