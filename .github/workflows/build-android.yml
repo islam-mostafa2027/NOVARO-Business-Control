@@ -43,34 +43,65 @@ jobs:
       - name: Generate Android project
         run: npx cap add android
 
-      - name: Enable Android WebView autofill support
+      - name: Enable Android Autofill save support
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          files = list(Path("android/app/src/main/java").rglob("MainActivity.java"))
-          if not files:
+          path = next(Path("android/app/src/main/java").rglob("MainActivity.java"), None)
+          if path is None:
               raise SystemExit("MainActivity.java not found")
-          path = files[0]
           source = path.read_text()
-          if "setImportantForAutofill" not in source:
-              lines = source.splitlines()
-              package_index = next(i for i, line in enumerate(lines) if line.startswith("package "))
-              lines[package_index + 1:package_index + 1] = [
-                  "",
-                  "import android.os.Build;",
-                  "import android.view.View;",
-              ]
-              source = "\n".join(lines) + "\n"
-              source = source.replace(
-                  "super.onCreate(savedInstanceState);",
-                  "super.onCreate(savedInstanceState);\n"
-                  "        if (Build.VERSION.SDK_INT >= 26 && getBridge() != null && getBridge().getWebView() != null) {\n"
-                  "            getBridge().getWebView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_YES);\n"
-                  "        }",
-                  1,
-              )
-              path.write_text(source)
-          print("Configured WebView autofill:", path)
+          imports = [
+              "import android.content.Context;",
+              "import android.os.Build;",
+              "import android.view.View;",
+              "import android.view.autofill.AutofillManager;",
+              "import android.webkit.JavascriptInterface;",
+          ]
+          lines = source.splitlines()
+          package_index = next(i for i, line in enumerate(lines) if line.startswith("package "))
+          existing_imports = set(line.strip() for line in lines if line.startswith("import "))
+          lines[package_index + 1:package_index + 1] = [line for line in imports if line not in existing_imports] + [""]
+          source = "\n".join(lines) + "\n"
+          if "class NovaroAutofillBridge" not in source:
+              bridge = """
+          private class NovaroAutofillBridge {
+              @JavascriptInterface
+              public void commit() {
+                  if (Build.VERSION.SDK_INT >= 26) {
+                      runOnUiThread(() -> {
+                          AutofillManager manager = (AutofillManager) getSystemService(Context.AUTOFILL_SERVICE);
+                          if (manager != null) manager.commit();
+                      });
+                  }
+              }
+              @JavascriptInterface
+              public void cancel() {
+                  if (Build.VERSION.SDK_INT >= 26) {
+                      runOnUiThread(() -> {
+                          AutofillManager manager = (AutofillManager) getSystemService(Context.AUTOFILL_SERVICE);
+                          if (manager != null) manager.cancel();
+                      });
+                  }
+              }
+          }
+          """
+              source = source.replace("public class MainActivity extends BridgeActivity {",
+                                      "public class MainActivity extends BridgeActivity {\n" + bridge, 1)
+          needle = "super.onCreate(savedInstanceState);"
+          setup = '''
+                  if (Build.VERSION.SDK_INT >= 26 && getBridge() != null && getBridge().getWebView() != null) {
+                      android.webkit.WebView webView = getBridge().getWebView();
+                      webView.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_YES);
+                      webView.setSaveEnabled(true);
+                      webView.addJavascriptInterface(new NovaroAutofillBridge(), "NOVAROAndroidAutofill");
+                  }'''
+          if "NOVAROAndroidAutofill" not in source:
+              if needle not in source:
+                  raise SystemExit("Could not find MainActivity onCreate hook")
+              source = source.replace(needle, needle + setup, 1)
+          path.write_text(source)
+          print("Android Autofill save bridge configured:", path)
           PY
       - name: Sync Capacitor
         run: npx cap sync android
