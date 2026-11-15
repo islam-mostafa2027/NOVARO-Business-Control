@@ -105,6 +105,7 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
           gradle = Path("android/app/build.gradle")
           if not gradle.exists():
               raise SystemExit("Expected generated Groovy Gradle file")
@@ -132,36 +133,30 @@ jobs:
           idx = max(i for i,x in enumerate(lines) if x.startswith("import "))
           lines[idx+1:idx+1] = [x for x in imports if x not in existing]
           s = "\n".join(lines) + "\n"
-          old = """@JavascriptInterface public void commit() {
-                          if (Build.VERSION.SDK_INT >= 26) runOnUiThread(() -> {
-                              AutofillManager manager = getSystemService(AutofillManager.class);
-                              if (manager != null) manager.commit();
-                          });
-                      }"""
-          new = """@JavascriptInterface public void save(String username, String password) {
-                          runOnUiThread(() -> {
-                              try {
-                                  CredentialManager manager = CredentialManager.create(MainActivity.this);
-                                  CreatePasswordRequest request = new CreatePasswordRequest(username, password);
-                                  manager.createCredentialAsync(MainActivity.this, request, null,
-                                      Executors.newSingleThreadExecutor(),
-                                      new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
-                                          @Override public void onResult(CreateCredentialResponse result) {
-                                              android.util.Log.i("NOVARO", "Credential Manager flow completed");
-                                          }
-                                          @Override public void onError(CreateCredentialException e) {
-                                              android.util.Log.w("NOVARO", "Password save was not completed", e);
-                                          }
-                                      });
-                              } catch (Exception e) {
-                                  android.util.Log.w("NOVARO", "Credential Manager unavailable", e);
-                              }
-                          });
-                      }"""
-          if old in s:
-              s = s.replace(old, new, 1)
-          elif "public void save(String username, String password)" not in s:
-              raise SystemExit("Autofill bridge method mismatch")
+          pattern = r'@JavascriptInterface public void commit\\(\\) \\{.*?\\n\\s*\\}(?=\\s*@JavascriptInterface public void cancel\\(\\))'
+          new_method = """@JavascriptInterface public void save(String username, String password) {
+                  runOnUiThread(() -> {
+                      try {
+                          CredentialManager manager = CredentialManager.create(MainActivity.this);
+                          CreatePasswordRequest request = new CreatePasswordRequest(username, password);
+                          manager.createCredentialAsync(MainActivity.this, request, null,
+                              Executors.newSingleThreadExecutor(),
+                              new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
+                                  @Override public void onResult(CreateCredentialResponse result) {
+                                      android.util.Log.i("NOVARO", "Credential Manager flow completed");
+                                  }
+                                  @Override public void onError(CreateCredentialException e) {
+                                      android.util.Log.w("NOVARO", "Password save was not completed", e);
+                                  }
+                              });
+                      } catch (Exception e) {
+                          android.util.Log.w("NOVARO", "Credential Manager unavailable", e);
+                      }
+                  });
+              }"""
+          s, count = re.subn(pattern, lambda _: new_method, s, count=1, flags=re.S)
+          if count != 1:
+              raise SystemExit("Could not safely replace Android Autofill commit method")
           main.write_text(s)
           print("Credential Manager bridge configured")
           PY
