@@ -1,9 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<defs>
-  <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9f0f7"/><stop offset=".65" stop-color="#a9d9e8"/><stop offset="1" stop-color="#83c4da"/></linearGradient>
-  <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#4f91aa"/><stop offset="1" stop-color="#315b70"/></linearGradient>
-</defs>
-<rect x="20" y="20" width="472" height="472" rx="118" fill="url(#tile)"/>
-<path d="M145 368V144h55l167 157V144h55v224h-53L200 211v157z" fill="#23475a"/>
-<path d="M352 393l58-58h30l-58 58z" fill="url(#accent)"/>
+<defs><linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2d806b"/><stop offset="1" stop-color="#185a49"/></linearGradient><linearGradient id="slash" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a9e0dc"/><stop offset="1" stop-color="#d7e7ff"/></linearGradient></defs>
+<rect x="20" y="20" width="472" height="472" rx="118" fill="url(#green)"/>
+<text x="256" y="320" text-anchor="middle" fill="#fff" font-family="Georgia,serif" font-size="270" font-weight="900">N</text>
+<path d="M348 386l54-54h28l-54 54z" fill="url(#slash)"/>
 </svg>
