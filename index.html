@@ -1572,61 +1572,7 @@ function printStocktakeReport(){
  const tables=groups.map(g=>{const list=rows.filter(x=>(x.categories?.group_key==="materials"?"materials":"equipment")===g.key);const body=list.map((x,i)=>'<tr><td>'+(i+1)+'</td><td class="item">'+escHtml(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+escHtml(x.item_code||"—")+'</td><td>'+escHtml(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+escHtml(fmtQty(x.quantity))+'</td></tr>').join("");return '<section class="group"><h2>'+g.label+' <small>('+list.length+')</small></h2>'+(list.length?'<table><thead><tr><th style="width:7%">'+(en?"No.":"م")+'</th><th style="width:39%">'+(en?"Item name":"اسم الصنف")+'</th><th style="width:20%">'+(en?"Item code":"كود الصنف")+'</th><th style="width:14%">'+(en?"Unit":"الوحدة")+'</th><th style="width:20%">'+(en?"Actual quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+body+'</tbody></table>':'<p class="empty">'+(en?"No items in this section.":"لا توجد أصناف في هذا القسم.")+'</p>')+'</section>'}).join("");
  const w=window.open("","_blank");if(!w)return alert(en?"Allow pop-ups to open the printable report.":"اسمح بفتح النوافذ المنبثقة لعرض التقرير القابل للطباعة.");
  const title=en?"STOCKTAKE REPORT":"تقرير الجرد",date=String(data.session.inventory_date||"").slice(0,10)||"—";
- const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.print-actions{position:sticky;top:0;z-index:5;display:flex;justify-content:center;gap:10px;padding:12px;background:#eaf3f7;border-bottom:1px solid #cbdce3}.print-actions button{border:0;border-radius:8px;padding:11px 22px;background:#315b70;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}.group{margin:18px 0 22px;break-inside:auto}.group h2{font-size:16px;color:#244b5a;background:#eaf3f7;border-right:4px solid #315b70;padding:8px 10px;margin:0 0 8px}.group h2 small{font-size:11px;color:#607987}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 10px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start}.empty{padding:8px;color:#718894}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{.print-actions{display:none!important}body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:18px}}</style>e></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header>'+tables+'<div class="foot">NOVARO Inventory</div><script id="novaro-ai-runtime">
-(function(){
- const launcher=document.getElementById("novaro-ai-launcher"),panel=document.getElementById("novaro-ai-panel");
- if(!launcher||!panel)return;
- const $=id=>document.getElementById(id),log=$("novaro-ai-log"),input=$("novaro-ai-input"),status=$("novaro-ai-status");
- let lastAnswer="",recognition=null,drag=null;
- const isEn=()=>document.documentElement.lang==="en";
- const tr=(ar,en)=>isEn()?en:ar;
- function setStatus(v){status.textContent=v||""}
- function addMsg(text,who){const d=document.createElement("div");d.className="ai-msg "+who;d.textContent=text;log.append(d);log.scrollTop=log.scrollHeight;return d}
- function setPosition(x,y){const pad=8,w=launcher.offsetWidth||62,h=launcher.offsetHeight||62; x=Math.max(pad,Math.min(innerWidth-w-pad,x));y=Math.max(pad,Math.min(innerHeight-h-pad,y));launcher.style.left=x+"px";launcher.style.top=y+"px";launcher.style.right="auto";launcher.style.bottom="auto";try{localStorage.setItem("novaro-ai-position",JSON.stringify({x,y}))}catch(_){}}
- function restorePosition(){let p;try{p=JSON.parse(localStorage.getItem("novaro-ai-position")||"null")}catch(_){}if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y))setPosition(p.x,p.y);else setPosition(Math.max(12,innerWidth-78),Math.max(100,innerHeight-160))}
- function panelPosition(){const r=launcher.getBoundingClientRect(),w=Math.min(370,innerWidth-24),h=Math.min(540,innerHeight-105);let left=Math.max(12,Math.min(innerWidth-w-12,r.left+(r.left>innerWidth/2?-w+20:0)));let top=Math.max(12,Math.min(innerHeight-h-12,r.top-h-12));panel.style.left=left+"px";panel.style.top=top+"px";panel.style.right="auto";panel.style.bottom="auto"}
- function open(){panel.classList.add("open");panelPosition();input.focus()}
- function close(){panel.classList.remove("open");if(recognition){try{recognition.stop()}catch(_){}}}
- launcher.addEventListener("pointerdown",e=>{if(e.button!==0)return;const r=launcher.getBoundingClientRect();drag={sx:e.clientX,sy:e.clientY,x:r.left,y:r.top,moved:false};launcher.setPointerCapture(e.pointerId)});
- launcher.addEventListener("pointermove",e=>{if(!drag)return;const dx=e.clientX-drag.sx,dy=e.clientY-drag.sy;if(Math.abs(dx)+Math.abs(dy)>7)drag.moved=true;if(drag.moved)setPosition(drag.x+dx,drag.y+dy)});
- launcher.addEventListener("pointerup",()=>{if(!drag)return;const moved=drag.moved;drag=null;if(!moved){if(panel.classList.contains("open"))close();else open()}});
- launcher.addEventListener("pointercancel",()=>drag=null);
- panel.querySelector(".ai-close").addEventListener("click",close);
- addEventListener("resize",()=>{const r=launcher.getBoundingClientRect();setPosition(r.left,r.top);if(panel.classList.contains("open"))panelPosition()});
- async function send(){
-  const q=input.value.trim();if(!q)return;
-  if(typeof db==="undefined"||typeof user==="undefined"||!user){addMsg(tr("سجّل الدخول أولاً لاستخدام المساعد.","Please sign in to use the assistant."),"bot");return}
-  input.value="";addMsg(q,"me");setStatus(tr("جاري تحليل بيانات الفرع وصياغة الرد...","Analyzing authorized branch data..."));
-  const btn=$("novaro-ai-send");btn.disabled=true;
-  try{
-   const {data,error}=await db.auth.getSession();if(error)throw error;
-   const token=data?.session?.access_token;if(!token)throw Error(tr("انتهت جلسة الدخول. سجّل الدخول مرة أخرى.","Your session expired. Please sign in again."));
-   const res=await fetch("https://acgbcucjdmkboryxbhid.supabase.co/functions/v1/novaro-ai",{method:"POST",headers:{"Authorization":"Bearer "+token,"apikey":"sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz","Content-Type":"application/json"},body:JSON.stringify({question:q,language:isEn()?"en":"ar"})});
-   const dataOut=await res.json().catch(()=>({}));
-   if(!res.ok){if(dataOut.code==="AI_NOT_CONFIGURED")throw Error(tr("واجهة المساعد جاهزة، ويتبقى ربط مفتاح خدمة الذكاء الاصطناعي من إعدادات Supabase.","The assistant UI is ready; its AI provider key still needs to be configured in Supabase."));throw Error(dataOut.error||tr("تعذر الحصول على الرد.","Could not get a response."))}
-   lastAnswer=String(dataOut.answer||"");addMsg(lastAnswer,"bot");setStatus("");
-  }catch(e){addMsg(e.message||String(e),"bot");setStatus(tr("لم تكتمل العملية","Request not completed"))}
-  finally{btn.disabled=false}
- }
- $("novaro-ai-send").addEventListener("click",send);
- input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
- $("novaro-ai-mic").addEventListener("click",()=>{
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){setStatus(tr("الإملاء الصوتي غير مدعوم في هذا المتصفح. يمكنك استخدام لوحة المفاتيح الصوتية للهاتف.","Voice dictation is not supported in this browser. You can use your phone keyboard's voice typing."));return}
-  if(recognition){try{recognition.stop()}catch(_){}recognition=null;return}
-  recognition=new SR();recognition.lang=isEn()?"en-US":"ar-EG";recognition.interimResults=true;recognition.continuous=false;
-  recognition.onresult=e=>{let t="";for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;input.value=t};
-  recognition.onerror=e=>setStatus(tr("تعذر التقاط الصوت: ","Voice input error: ")+e.error);
-  recognition.onend=()=>{recognition=null;setStatus("")};setStatus(tr("اتكلم دلوقتي...","Listening..."));recognition.start();
- });
- $("novaro-ai-speak").addEventListener("click",()=>{if(!lastAnswer){setStatus(tr("لا يوجد رد للاستماع إليه بعد.","There is no answer to read yet."));return}if(!("speechSynthesis"in window)){setStatus(tr("القراءة الصوتية غير مدعومة هنا.","Speech playback is not supported here."));return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastAnswer);u.lang=isEn()?"en-US":"ar-EG";speechSynthesis.speak(u)});
- const observer=new MutationObserver(()=>{const app=$("app"),visible=app&&!app.classList.contains("hidden")&&typeof user!=="undefined"&&!!user;launcher.style.display=visible?"flex":"none";if(!visible)close()});
- observer.observe(document.body,{attributes:true,subtree:true,attributeFilter:["class"]});
- const app=$("app");if(app)observer.observe(app,{attributes:true,attributeFilter:["class"]});
- document.addEventListener("click",()=>{const appNow=$("app");if(appNow&&!appNow.classList.contains("hidden")&&typeof user!=="undefined"&&user&&launcher.style.display!=="flex")launcher.style.display="flex"});
- restorePosition();
-})();
-</script></body></html>';
+ const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.print-actions{position:sticky;top:0;z-index:5;display:flex;justify-content:center;gap:10px;padding:12px;background:#eaf3f7;border-bottom:1px solid #cbdce3}.print-actions button{border:0;border-radius:8px;padding:11px 22px;background:#315b70;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}.group{margin:18px 0 22px;break-inside:auto}.group h2{font-size:16px;color:#244b5a;background:#eaf3f7;border-right:4px solid #315b70;padding:8px 10px;margin:0 0 8px}.group h2 small{font-size:11px;color:#607987}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 10px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start}.empty{padding:8px;color:#718894}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{.print-actions{display:none!important}body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:18px}}</style>e></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header>'+tables+'<div class="foot">NOVARO Inventory</div></body></html>';
  w.document.open();w.document.write(html);w.document.close();
 }
 function render(){document.querySelectorAll("[data-p]").forEach(b=>b.classList.toggle("active",b.dataset.p===page));let m=$("main");if(!branches.length&&profile.role!=="owner_admin"){m.innerHTML='<section class="card empty">لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.</section>';return}
@@ -1827,6 +1773,62 @@ function stocktakeUnitFields(x,en,locked){const ar=x.count_unit_ar||x.items?.uni
 function showStocktakeCategory(categoryId){window.__novaroStocktakeSubView="category";const v=window.__stocktakeView;if(!v)return;const en=language==="en",area=$("sessions"),cat=cats.find(c=>c.id===categoryId),title=categoryId==="__none"?(en?"Uncategorized":"بدون تصنيف"):categoryName(cat),rows=v.rows.filter(x=>(x.items?.category_id||"__none")===categoryId);const cards=rows.map(x=>'<article class="card" style="margin:0;display:flex;gap:13px;align-items:center;flex-wrap:wrap"><div style="width:92px;height:92px;flex:none;border-radius:14px;overflow:hidden;background:#eef3f0;display:grid;place-items:center">'+(x.items?.image_url?'<img src="'+esc(x.items.image_url)+'" alt="" style="width:100%;height:100%;object-fit:cover">':'<span style="font-size:30px">▧</span>')+'</div><div style="flex:1;min-width:130px"><b style="display:block;font-size:17px">'+esc(nameOf(x.items)||"صنف")+'</b>'+stocktakeUnitFields(x,en,v.locked)+'</div><div style="width:125px"><label style="display:block;font-size:13px;color:var(--muted);margin-bottom:5px">'+(en?"Actual quantity":"الكمية الموجودة")+'</label><input type="number" min="0" step="0.01" data-count-id="'+x.id+'" value="'+Number(x.counted_quantity||0)+'" '+(v.locked?"disabled":"")+' style="width:100%;padding:10px;border:1px solid var(--line);border-radius:10px"></div></article>').join("");area.innerHTML='<div class="row"><div><h3>'+esc(title)+'</h3><p class="muted">'+rows.length+' '+(en?"items":"صنف")+'</p></div><button class="soft" onclick="renderStocktakeCategories()">← '+(en?"All categories":"كل التصنيفات")+'</button></div>'+(rows.length?'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">'+cards+'</div>':'<section class="card empty">'+(en?"No items in this category yet":"لا توجد أصناف في هذا التصنيف حالياً")+'</section>')+(v.locked?'<p class="muted">'+(en?"This session is locked.":"الجلسة مغلقة.")+'</p>':'<div class="row" style="margin-top:16px"><button id="saveCategoryCounts">'+(en?"Save quantities":"حفظ الكميات")+'</button><span id="countSaveMsg" class="muted"></span></div>');if(!v.locked&&rows.length){area.querySelectorAll("[data-unit-select]").forEach(sel=>sel.onchange=()=>{const custom=area.querySelector('[data-unit-custom="'+sel.dataset.unitSelect+'"]');if(custom)custom.style.display=sel.value==="other"?"block":"none"});$("saveCategoryCounts").onclick=async()=>{const btn=$("saveCategoryCounts");btn.disabled=true;try{for(const input of area.querySelectorAll("[data-count-id]")){const value=Number(input.value);if(input.value.trim()===""||!Number.isFinite(value)||value<0)throw Error(en?"Enter a valid quantity":"اكتب كمية صحيحة، ويمكن كتابة صفر إذا كان الصنف غير موجود");const id=input.dataset.countId,sel=area.querySelector('[data-unit-select="'+id+'"]'),custom=area.querySelector('[data-unit-custom="'+id+'"]');let ar,eng;if(sel.value==="other"){const val=(custom.value||"").trim();if(!val)throw Error(en?"Enter the custom unit":"اكتب وحدة القياس الأخرى");ar=val;eng=val}else{const pair=STOCKTAKE_UNITS[Number(sel.value)];if(!pair)throw Error(en?"Choose a valid unit":"اختر وحدة قياس صحيحة");[ar,eng]=pair}const u=await db.from("inventory_counts").update({counted_quantity:value,count_unit_ar:ar,count_unit_en:eng,counted_by:user.id,counted_at:new Date().toISOString(),is_counted:true}).eq("id",id);if(u.error)throw u.error;const row=v.rows.find(x=>x.id===id);if(row){row.counted_quantity=value;row.count_unit_ar=ar;row.count_unit_en=eng;row.is_counted=true}}$("countSaveMsg").textContent=en?"Saved successfully":"تم حفظ الكميات بنجاح"}catch(e){$("countSaveMsg").textContent=e.message||String(e)}finally{btn.disabled=false}}} }
 setTimeout(()=>{const splash=document.getElementById("splash");if(splash){splash.classList.add("splash-out");setTimeout(()=>splash.remove(),700)}},4400);
 applyLanguage();init().catch(err);
+</script><script>
+
+(function(){
+ const launcher=document.getElementById("novaro-ai-launcher"),panel=document.getElementById("novaro-ai-panel");
+ if(!launcher||!panel)return;
+ const $=id=>document.getElementById(id),log=$("novaro-ai-log"),input=$("novaro-ai-input"),status=$("novaro-ai-status");
+ let lastAnswer="",recognition=null,drag=null;
+ const isEn=()=>document.documentElement.lang==="en";
+ const tr=(ar,en)=>isEn()?en:ar;
+ function setStatus(v){status.textContent=v||""}
+ function addMsg(text,who){const d=document.createElement("div");d.className="ai-msg "+who;d.textContent=text;log.append(d);log.scrollTop=log.scrollHeight;return d}
+ function setPosition(x,y){const pad=8,w=launcher.offsetWidth||62,h=launcher.offsetHeight||62; x=Math.max(pad,Math.min(innerWidth-w-pad,x));y=Math.max(pad,Math.min(innerHeight-h-pad,y));launcher.style.left=x+"px";launcher.style.top=y+"px";launcher.style.right="auto";launcher.style.bottom="auto";try{localStorage.setItem("novaro-ai-position",JSON.stringify({x,y}))}catch(_){}}
+ function restorePosition(){let p;try{p=JSON.parse(localStorage.getItem("novaro-ai-position")||"null")}catch(_){}if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y))setPosition(p.x,p.y);else setPosition(Math.max(12,innerWidth-78),Math.max(100,innerHeight-160))}
+ function panelPosition(){const r=launcher.getBoundingClientRect(),w=Math.min(370,innerWidth-24),h=Math.min(540,innerHeight-105);let left=Math.max(12,Math.min(innerWidth-w-12,r.left+(r.left>innerWidth/2?-w+20:0)));let top=Math.max(12,Math.min(innerHeight-h-12,r.top-h-12));panel.style.left=left+"px";panel.style.top=top+"px";panel.style.right="auto";panel.style.bottom="auto"}
+ function open(){panel.classList.add("open");panelPosition();input.focus()}
+ function close(){panel.classList.remove("open");if(recognition){try{recognition.stop()}catch(_){}}}
+ launcher.addEventListener("pointerdown",e=>{if(e.button!==0)return;const r=launcher.getBoundingClientRect();drag={sx:e.clientX,sy:e.clientY,x:r.left,y:r.top,moved:false};launcher.setPointerCapture(e.pointerId)});
+ launcher.addEventListener("pointermove",e=>{if(!drag)return;const dx=e.clientX-drag.sx,dy=e.clientY-drag.sy;if(Math.abs(dx)+Math.abs(dy)>7)drag.moved=true;if(drag.moved)setPosition(drag.x+dx,drag.y+dy)});
+ launcher.addEventListener("pointerup",()=>{if(!drag)return;const moved=drag.moved;drag=null;if(!moved){if(panel.classList.contains("open"))close();else open()}});
+ launcher.addEventListener("pointercancel",()=>drag=null);
+ panel.querySelector(".ai-close").addEventListener("click",close);
+ addEventListener("resize",()=>{const r=launcher.getBoundingClientRect();setPosition(r.left,r.top);if(panel.classList.contains("open"))panelPosition()});
+ async function send(){
+  const q=input.value.trim();if(!q)return;
+  if(typeof db==="undefined"||typeof user==="undefined"||!user){addMsg(tr("سجّل الدخول أولاً لاستخدام المساعد.","Please sign in to use the assistant."),"bot");return}
+  input.value="";addMsg(q,"me");setStatus(tr("جاري تحليل بيانات الفرع وصياغة الرد...","Analyzing authorized branch data..."));
+  const btn=$("novaro-ai-send");btn.disabled=true;
+  try{
+   const {data,error}=await db.auth.getSession();if(error)throw error;
+   const token=data?.session?.access_token;if(!token)throw Error(tr("انتهت جلسة الدخول. سجّل الدخول مرة أخرى.","Your session expired. Please sign in again."));
+   const res=await fetch("https://acgbcucjdmkboryxbhid.supabase.co/functions/v1/novaro-ai",{method:"POST",headers:{"Authorization":"Bearer "+token,"apikey":"sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz","Content-Type":"application/json"},body:JSON.stringify({question:q,language:isEn()?"en":"ar"})});
+   const dataOut=await res.json().catch(()=>({}));
+   if(!res.ok){if(dataOut.code==="AI_NOT_CONFIGURED")throw Error(tr("واجهة المساعد جاهزة، ويتبقى ربط مفتاح خدمة الذكاء الاصطناعي من إعدادات Supabase.","The assistant UI is ready; its AI provider key still needs to be configured in Supabase."));throw Error(dataOut.error||tr("تعذر الحصول على الرد.","Could not get a response."))}
+   lastAnswer=String(dataOut.answer||"");addMsg(lastAnswer,"bot");setStatus("");
+  }catch(e){addMsg(e.message||String(e),"bot");setStatus(tr("لم تكتمل العملية","Request not completed"))}
+  finally{btn.disabled=false}
+ }
+ $("novaro-ai-send").addEventListener("click",send);
+ input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
+ $("novaro-ai-mic").addEventListener("click",()=>{
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){setStatus(tr("الإملاء الصوتي غير مدعوم في هذا المتصفح. يمكنك استخدام لوحة المفاتيح الصوتية للهاتف.","Voice dictation is not supported in this browser. You can use your phone keyboard's voice typing."));return}
+  if(recognition){try{recognition.stop()}catch(_){}recognition=null;return}
+  recognition=new SR();recognition.lang=isEn()?"en-US":"ar-EG";recognition.interimResults=true;recognition.continuous=false;
+  recognition.onresult=e=>{let t="";for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;input.value=t};
+  recognition.onerror=e=>setStatus(tr("تعذر التقاط الصوت: ","Voice input error: ")+e.error);
+  recognition.onend=()=>{recognition=null;setStatus("")};setStatus(tr("اتكلم دلوقتي...","Listening..."));recognition.start();
+ });
+ $("novaro-ai-speak").addEventListener("click",()=>{if(!lastAnswer){setStatus(tr("لا يوجد رد للاستماع إليه بعد.","There is no answer to read yet."));return}if(!("speechSynthesis"in window)){setStatus(tr("القراءة الصوتية غير مدعومة هنا.","Speech playback is not supported here."));return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastAnswer);u.lang=isEn()?"en-US":"ar-EG";speechSynthesis.speak(u)});
+ const observer=new MutationObserver(()=>{const app=$("app"),visible=app&&!app.classList.contains("hidden")&&typeof user!=="undefined"&&!!user;launcher.style.display=visible?"flex":"none";if(!visible)close()});
+ observer.observe(document.body,{attributes:true,subtree:true,attributeFilter:["class"]});
+ const app=$("app");if(app)observer.observe(app,{attributes:true,attributeFilter:["class"]});
+ document.addEventListener("click",()=>{const appNow=$("app");if(appNow&&!appNow.classList.contains("hidden")&&typeof user!=="undefined"&&user&&launcher.style.display!=="flex")launcher.style.display="flex"});
+ restorePosition();
+})();
+
 </script><script>
 if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(error=>console.warn("NOVARO offline shell:",error)));}
 </script></body></html>
