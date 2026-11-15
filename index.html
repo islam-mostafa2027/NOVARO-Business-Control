@@ -790,10 +790,8 @@ function startNotificationStream(){
  notificationChannel=db.channel("novaro-notifications-"+user.id)
  .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
    const n=payload.new;if(!n)return;
-   notificationRows=[n,...notificationRows.filter(x=>x.id!==n.id)].slice(0,40);renderNotifications();
-   const panel=$("notificationPanel");if(panel)panel.classList.remove("hidden");
-   if("Notification" in window&&Notification.permission==="granted"){try{new Notification(n.title||"NOVARO",{body:n.body||"تم تسجيل تغيير جديد",icon:"/NOVARO-Inventory/icon-192.png"})}catch(e){console.warn(e)}}
-   const toast=document.createElement("div");toast.className="notification-toast";toast.textContent=(n.title||"NOVARO")+" — "+(n.body||"");document.body.append(toast);setTimeout(()=>toast.remove(),6500);
+   notificationRows=[n,...notificationRows.filter(x=>x.id!==n.id)].slice(0,40);
+   renderNotifications();
  })
  .subscribe();
 }
