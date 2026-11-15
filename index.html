@@ -1275,6 +1275,9 @@ function translateText(value){
  for(const [ar,en] of pairs){if(ar)out=out.split(ar).join(en);}
  return out;
 }
+const novaroLanguageTextSource=new WeakMap();
+const novaroLanguageAttrSource=new WeakMap();
+const novaroLanguageValueSource=new WeakMap();
 function applyLanguage(){
  document.documentElement.lang=language;
  document.documentElement.dir=language==="ar"?"rtl":"ltr";
@@ -1282,15 +1285,36 @@ function applyLanguage(){
  const obs=window.__novaroObserver;
  if(obs)obs.disconnect();
  const walk=n=>{
-  if(n.nodeType===Node.TEXT_NODE){n.nodeValue=translateText(n.nodeValue);return;}
+  if(n.nodeType===Node.TEXT_NODE){
+   let rec=novaroLanguageTextSource.get(n);
+   if(!rec||n.nodeValue!==rec.last){rec={source:n.nodeValue,last:null};novaroLanguageTextSource.set(n,rec)}
+   const next=translateText(rec.source);
+   if(n.nodeValue!==next)n.nodeValue=next;
+   rec.last=next;
+   return;
+  }
   if(n.nodeType!==Node.ELEMENT_NODE||["SCRIPT","STYLE","NOSCRIPT"].includes(n.tagName))return;
-  for(const attr of ["placeholder","title","aria-label","alt"])if(n.hasAttribute(attr))n.setAttribute(attr,translateText(n.getAttribute(attr)));
-  if(["BUTTON","INPUT"].includes(n.tagName)&&["button","submit","reset"].includes((n.type||"").toLowerCase()))n.value=translateText(n.value);
+  let attrs=novaroLanguageAttrSource.get(n);
+  if(!attrs){attrs={};novaroLanguageAttrSource.set(n,attrs)}
+  for(const attr of ["placeholder","title","aria-label","alt"]){
+   if(!n.hasAttribute(attr))continue;
+   const current=n.getAttribute(attr),rec=attrs[attr];
+   if(!rec||current!==rec.last)attrs[attr]={source:current,last:null};
+   const item=attrs[attr],next=translateText(item.source);
+   if(current!==next)n.setAttribute(attr,next);
+   item.last=next;
+  }
+  if(["BUTTON","INPUT"].includes(n.tagName)&&["button","submit","reset"].includes((n.type||"").toLowerCase())){
+   let rec=novaroLanguageValueSource.get(n);
+   if(!rec||n.value!==rec.last){rec={source:n.value,last:null};novaroLanguageValueSource.set(n,rec)}
+   const next=translateText(rec.source);
+   if(n.value!==next)n.value=next;
+   rec.last=next;
+  }
   for(const c of [...n.childNodes])walk(c);
  };
  walk(document.body);
  document.title=translateText("NOVARO Inventory");
- 
  const reportTab=document.querySelector('[data-p="reports"]');
  const reportLabel=reportTab?.querySelector(".report-nav-label");
  if(reportLabel)reportLabel.textContent=language==="en"?"Reports":"التقارير";
@@ -1302,7 +1326,7 @@ function setLanguage(next){
  if(user&&profile)render();
  applyLanguage();
 }
-document.addEventListener("click",e=>{if(e.target.id==="langToggle"||e.target.id==="langToggleApp")setLanguage(language==="ar"?"en":"ar")});
+document.addEventListener("click",e=>{const toggle=e.target.closest?.("#langToggle,#langToggleApp");if(toggle)setLanguage(language==="ar"?"en":"ar")});
 let languageUpdatePending=false;
 const languageObserver=new MutationObserver(()=>{if(languageUpdatePending)return;languageUpdatePending=true;queueMicrotask(()=>{languageUpdatePending=false;applyLanguage();});});
 window.__novaroObserver=languageObserver;
