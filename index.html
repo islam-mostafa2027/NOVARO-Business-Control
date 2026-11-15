@@ -461,7 +461,7 @@ body:after{color:#315b70;opacity:.045}
  .workspace-content .row{gap:7px}
 }
 @media(max-width:380px){.app-layout{grid-template-columns:72px minmax(0,1fr);gap:7px}.app-layout .tabs button{font-size:9px}}
-</style></head><body>
+</style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <script>(function(){var release=function(){var x=document.getElementById("splash");if(x){x.classList.add("splash-out");setTimeout(function(){x.remove()},700)}};setTimeout(release,3500);window.addEventListener("error",release,{once:true})})();</script>
 <div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
@@ -971,19 +971,54 @@ async function viewStocktakeReport(id){
 async function exportStocktakeReport(id){
  try{
   const data=await getSingleStocktakeReport(id),en=language==="en",branch=branchLabel(data.branch)||"—";
-  const headers=en?["Branch","Section","Item name","Item code","Unit","Counted quantity"]:["الفرع","القسم","اسم الصنف","كود الصنف","الوحدة","الكمية الفعلية"];
-  const rows=data.rows.map(x=>[branch,x.categories?.group_key==="materials"?(en?"Materials":"الخامات"):(en?"Equipment":"العُدّة"),en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"—",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—",x.quantity]);
-  const cell=v=>'<td>'+esc(String(v??""))+'</td>';
-  const html='<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif;color:#263b4a;direction:'+(en?'ltr':'rtl')+';padding:22px}h1{text-align:center;color:#315b70;font-size:22px;margin:0 0 8px}.meta{text-align:center;color:#657d8b;margin:0 0 20px}table{width:100%;border-collapse:collapse;table-layout:auto}th{background:#315b70;color:#fff;font-weight:bold;padding:11px 8px;border:1px solid #244b5a;text-align:center}td{padding:9px 8px;border:1px solid #c9dce5;text-align:center}tbody tr:nth-child(even){background:#f0f7fa}tbody tr{page-break-inside:avoid} .qty{font-weight:bold}@media print{thead{display:table-header-group}tr{page-break-inside:avoid}body{padding:8mm}}</style></head><body><h1>'+esc(en?"NOVARO — Stocktake Report":"NOVARO — تقرير الجرد")+'</h1><p class="meta">'+esc(branch)+' | '+esc(sessionLabel(data.session))+' | '+data.rows.length+' '+(en?"items":"صنف")+'</p><table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join("")+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(cell).join("")+'</tr>').join("")+'</tbody></table></body></html>';
-  const blob=new Blob(['\\uFEFF',html],{type:"application/vnd.ms-excel;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="NOVARO-Stocktake-"+String(data.branch?.code||data.session.branch_id||"Branch").slice(0,12)+"-"+String(data.session.inventory_date||data.session.id).slice(0,10)+".xls";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+  if(!window.ExcelJS)throw Error(en?"Excel export library could not be loaded. Check your internet connection and try again.":"تعذر تحميل مكتبة إنشاء Excel. تأكد من اتصال الإنترنت وحاول مرة أخرى.");
+  const wb=new ExcelJS.Workbook();wb.creator="NOVARO Inventory";wb.subject=en?"Stocktake report":"تقرير جرد";wb.title=(en?"Stocktake — ":"جرد — ")+sessionTitle(data.session);wb.created=new Date();
+  const ws=wb.addWorksheet(en?"Stocktake":"تقرير الجرد",{views:[{rightToLeft:!en,state:"frozen",ySplit:7}],pageSetup:{paperSize:9,orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:0,printTitlesRow:"1:7",margins:{left:.25,right:.25,top:.5,bottom:.5,header:.2,footer:.2}}});
+  ws.columns=[{width:8},{width:34},{width:19},{width:17},{width:18}];
+  const navy="244B5A",blue="315B70",pale="EAF3F7",line="C8D9E1",white="FFFFFF",ink="263B4A";
+  ws.mergeCells("A1:E1");ws.getCell("A1").value=en?"NOVARO | STOCKTAKE REPORT":"NOVARO | تقرير الجرد";
+  ws.getRow(1).height=32;ws.getCell("A1").font={name:"Arial",size:18,bold:true,color:{argb:white}};ws.getCell("A1").fill={type:"pattern",pattern:"solid",fgColor:{argb:navy}};ws.getCell("A1").alignment={horizontal:"center",vertical:"middle"};
+  ws.mergeCells("A2:E2");ws.getCell("A2").value=sessionTitle(data.session);ws.getRow(2).height=25;ws.getCell("A2").font={name:"Arial",size:13,bold:true,color:{argb:blue}};ws.getCell("A2").alignment={horizontal:"center",vertical:"middle"};
+  ws.mergeCells("A3:E3");ws.getCell("A3").value=(en?"Branch: ":"الفرع: ")+branch+"     |     "+sessionLabel(data.session);ws.getCell("A3").font={name:"Arial",size:11,color:{argb:ink}};ws.getCell("A3").alignment={horizontal:"center",vertical:"middle"};
+  const equip=data.rows.filter(x=>x.categories?.group_key!=="materials"),materials=data.rows.filter(x=>x.categories?.group_key==="materials");
+  ws.mergeCells("A4:E4");ws.getCell("A4").value=(en?"Total items: ":"إجمالي الأصناف: ")+data.rows.length+"     |     "+(en?"Equipment: ":"العُدّة: ")+equip.length+"     |     "+(en?"Materials: ":"الخامات: ")+materials.length;ws.getCell("A4").font={name:"Arial",size:10,bold:true,color:{argb:blue}};ws.getCell("A4").alignment={horizontal:"center"};
+  ws.addRow([]);ws.addRow([en?"No.":"م","Item name","Item code","Unit",en?"Counted quantity":"الكمية الفعلية"]);
+  const header=ws.getRow(6);header.height=26;header.eachCell(c=>{c.font={name:"Arial",size:11,bold:true,color:{argb:white}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:blue}};c.alignment={horizontal:"center",vertical:"middle"};c.border={top:{style:"thin",color:{argb:navy}},bottom:{style:"medium",color:{argb:navy}},left:{style:"thin",color:{argb:white}},right:{style:"thin",color:{argb:white}}}});
+  let n=0;
+  for(const [key,label,list] of [["equipment",en?"EQUIPMENT":"العُدّة",equip],["materials",en?"MATERIALS":"الخامات",materials]]){
+   const sectionRow=ws.addRow([label]);ws.mergeCells(sectionRow.number,1,sectionRow.number,5);sectionRow.height=23;const sc=sectionRow.getCell(1);sc.font={name:"Arial",size:11,bold:true,color:{argb:navy}};sc.fill={type:"pattern",pattern:"solid",fgColor:{argb:pale}};sc.alignment={horizontal:"right",vertical:"middle"};
+   for(const x of list){n++;const row=ws.addRow([n,en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"—",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—",Number(x.quantity||0)]);row.height=22;row.eachCell(c=>{c.font={name:"Arial",size:10,color:{argb:ink}};c.alignment={horizontal:c.col===2?"right":"center",vertical:"middle"};c.border={top:{style:"hair",color:{argb:line}},bottom:{style:"thin",color:{argb:line}},left:{style:"thin",color:{argb:line}},right:{style:"thin",color:{argb:line}}};if(n%2===0)c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"F5F9FB"}}});row.getCell(5).numFmt="#,##0.##";}
+  }
+  ws.autoFilter={from:"A6",to:"E6"};ws.eachRow(r=>r.eachCell(c=>{if(!c.alignment)c.alignment={vertical:"middle",horizontal:"center"}}));ws.headerFooter={oddFooter:"&L NOVARO Inventory&C"+(en?"Stocktake report":"تقرير الجرد")+"&RPage &P of &N"};
+  const buffer=await wb.xlsx.writeBuffer(),blob=new Blob([buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="NOVARO-Stocktake-"+String(data.branch?.code||"Branch").slice(0,12)+"-"+String(data.session.inventory_date||data.session.id).slice(0,10)+".xlsx";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
  }catch(e){alert(e.message||String(e))}
 }
 function printStocktakeReport(){
  document.body.classList.add("print-single-stocktake");
  const style=document.createElement("style");style.id="stocktake-print-style";
- style.textContent='@media print{body.print-single-stocktake #reportContent{width:100%!important;margin:0!important;padding:0!important}body.print-single-stocktake .single-stocktake-report{color:#172d3a!important;font-size:11pt!important}body.print-single-stocktake .single-stocktake-report h2{text-align:center;border-bottom:2px solid #315b70;padding-bottom:10px;margin-bottom:8px}body.print-single-stocktake .single-stocktake-report .report-group{break-inside:avoid;margin-top:18px!important}body.print-single-stocktake .single-stocktake-report table{width:100%!important;border-collapse:collapse!important;font-size:10pt!important}body.print-single-stocktake .single-stocktake-report thead{display:table-header-group!important}body.print-single-stocktake .single-stocktake-report th{background:#315b70!important;color:white!important;border:1px solid #244b5a!important;padding:9px!important;text-align:center!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}body.print-single-stocktake .single-stocktake-report td{border:1px solid #b9cbd4!important;padding:8px!important;text-align:center!important}body.print-single-stocktake .single-stocktake-report tbody tr:nth-child(even){background:#eef5f8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}body.print-single-stocktake .single-stocktake-report tbody tr{break-inside:avoid}body.print-single-stocktake .single-stocktake-report .tablewrap{overflow:visible!important}}';
- document.head.appendChild(style);window.print();setTimeout(()=>{document.body.classList.remove("print-single-stocktake");style.remove()},800);
+ style.textContent=`@page{size:A4 landscape;margin:12mm 10mm 14mm}
+ @media print{
+ body.print-single-stocktake{background:#fff!important;color:#203746!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ body.print-single-stocktake #splash,body.print-single-stocktake #login,body.print-single-stocktake .app-header,body.print-single-stocktake .tabs,body.print-single-stocktake #reportBranch,body.print-single-stocktake .report-toolbar,body.print-single-stocktake .stocktake-report-list,body.print-single-stocktake .app-watermark:not(.single-stocktake-report .app-watermark){display:none!important}
+ body.print-single-stocktake #reportContent{display:block!important;width:100%!important;margin:0!important;padding:0!important}
+ body.print-single-stocktake .single-stocktake-report{display:block!important;font-family:Arial,Tahoma,sans-serif!important;font-size:9pt!important;color:#203746!important}
+ body.print-single-stocktake .single-stocktake-report .print-report-head{display:block!important;text-align:center;border-bottom:2px solid #315b70;padding:0 0 9px;margin:0 0 12px}
+ body.print-single-stocktake .single-stocktake-report .print-report-brand{font-size:19pt;font-weight:800;letter-spacing:2px;color:#244b5a;margin-bottom:4px}
+ body.print-single-stocktake .single-stocktake-report h2{text-align:center;font-size:15pt;margin:4px 0;color:#244b5a}
+ body.print-single-stocktake .single-stocktake-report .report-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:9pt;color:#496474;margin-top:7px}
+ body.print-single-stocktake .single-stocktake-report .report-group{break-inside:auto;margin:13px 0 0!important}
+ body.print-single-stocktake .single-stocktake-report .report-group h3{background:#eaf3f7!important;color:#244b5a!important;border-inline-start:4px solid #315b70;padding:7px 10px;margin:0 0 5px!important;font-size:10pt;break-after:avoid}
+ body.print-single-stocktake .single-stocktake-report .tablewrap{overflow:visible!important}
+ body.print-single-stocktake .single-stocktake-report table{width:100%!important;min-width:0!important;table-layout:fixed!important;border-collapse:collapse!important;font-size:9pt!important;margin:0 0 7px}
+ body.print-single-stocktake .single-stocktake-report thead{display:table-header-group!important}
+ body.print-single-stocktake .single-stocktake-report th{background:#315b70!important;color:#fff!important;border:1px solid #244b5a!important;padding:7px 6px!important;text-align:center!important;font-weight:700!important}
+ body.print-single-stocktake .single-stocktake-report td{border:1px solid #c5d5dd!important;padding:6px!important;text-align:center!important;vertical-align:middle!important;overflow-wrap:anywhere}
+ body.print-single-stocktake .single-stocktake-report tbody tr:nth-child(even){background:#f1f6f8!important}
+ body.print-single-stocktake .single-stocktake-report tbody tr{break-inside:avoid!important}
+ body.print-single-stocktake .single-stocktake-report .app-watermark{margin-top:14px!important;padding:7px!important;font-size:8pt!important}
+ }`;
+ document.head.appendChild(style);window.print();setTimeout(()=>{document.body.classList.remove("print-single-stocktake");style.remove()},1200);
 }
 function exportInventoryReport(){
  const rows=window.__reportRows||[];if(!rows.length)return alert(language==="en"?"No report data to export.":"لا توجد بيانات لتصديرها.");
