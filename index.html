@@ -529,23 +529,219 @@ const translations={
 "أدخل اسم الجلسة والشهر والسنة":"Enter the session name, month and year",
 "أكمل اسم الجلسة والشهر والسنة":"Complete the session name, month and year"
 };
+Object.assign(translations,{
+  "آخر عملية جرد": "Latest stocktake",
+  "ابدأ جلسة جرد لعرض بيانات المخزون هنا.": "Start a stocktake session to view inventory data here.",
+  "إخفاء التصنيف؟ سيتم الاحتفاظ بسجلات الجرد القديمة.": "Hide this category? Previous stocktake records will be preserved.",
+  "اسم مدير الفرع": "Branch manager name",
+  "أكمل البيانات، وكلمة المرور لازم تكون 8 أحرف على الأقل.": "Complete the fields. The password must be at least 8 characters.",
+  "الإجراءات": "Actions",
+  "الأصناف النشطة": "Active items",
+  "التغير": "Change",
+  "الجرد الحالي": "Current count",
+  "الجرد السابق": "Previous count",
+  "الحساب ده هيقدر يدخل على الفرع ده فقط.": "This account will only be able to access this branch.",
+  "الخامات": "Materials",
+  "العُدّة": "Equipment",
+  "العربية": "Arabic",
+  "الفرع الحالي": "Current branch",
+  "القسم": "Group",
+  "الكمية الفعلية": "Actual quantity",
+  "الكمية الموجودة": "Quantity on hand",
+  "النوع / التصنيف": "Type / Category",
+  "انقل الأصناف النشطة من التصنيف أو أوقفها أولًا قبل إخفائه.": "Move or deactivate the active items in this category before hiding it.",
+  "إيميل الفرع": "Branch email",
+  "تصدير Excel": "Export Excel",
+  "تغيرت عن الجرد السابق": "Changed since previous stocktake",
+  "تقارير المخزون": "Inventory reports",
+  "تقرير الجرد": "Stocktake report",
+  "تم إنشاء الجلسة، لكن تعذر تجهيز قائمة الأصناف: ": "The session was created, but the item list could not be prepared: ",
+  "تم تسجيل تغيير جديد": "A new change was recorded",
+  "تنبيهات الحد الأدنى": "Low-stock alerts",
+  "جاري تحميل التقرير...": "Loading report...",
+  "جرد": "Stocktake",
+  "حدد الفرع الذي تريد إدارة مخزونه": "Select the branch whose inventory you want to manage",
+  "حساب دخول الفرع": "Branch login account",
+  "رجوع لكل الجردات": "Back to all stocktakes",
+  "صلاحية المستخدم": "User role",
+  "صنف": "Item",
+  "صنف جديد": "New item",
+  "طباعة / PDF": "Print / PDF",
+  "كود الصنف (اختياري)": "Item code (optional)",
+  "كود الصنف ده غير صالح للتحويل إلى باركود.": "This item code cannot be converted to a barcode.",
+  "لا توجد بيانات لتصديرها.": "No data available to export.",
+  "لا يوجد جرد": "No stocktake found",
+  "مقارنة آخر عمليتي جرد.": "Compare the latest two stocktakes.",
+  "مولّد الباركود لسه بيحمّل. جرّب بعد لحظة.": "The barcode generator is still loading. Try again in a moment.",
+  "هذا المتصفح لا يدعم إشعارات النظام. ستظل إشعارات NOVARO داخل البرنامج تعمل.": "This browser does not support system notifications. NOVARO notifications will still work inside the app.",
+  "إدارة التصنيفات": "Manage categories",
+  "إدارة مخزون أدوات الصالة والخدمة": "Front-of-house & service inventory management",
+  "اختيار الفرع": "Choose a branch",
+  "طباعة الباركود": "Print barcode",
+  "التاريخ": "Date",
+  "النوع": "Type",
+  "الكمية": "Quantity",
+  "رجوع": "Back",
+  "حفظ": "Save",
+  "الفروع": "Branches",
+  "الجرد الفعلي": "Physical stocktake",
+  "تحميل...": "Loading...",
+  "لم يُنشأ بعد": "Not created yet",
+  "إنشاء حساب الدخول": "Create login account",
+  "تعديل حساب الدخول": "Edit login account",
+  "تعديل بيانات الفرع": "Edit branch details",
+  "تعديل شهر الجرد": "Edit stocktake month",
+  "حذف الجرد": "Delete stocktake",
+  "حفظ الجرد": "Save stocktake",
+  "فتح الجرد": "Open stocktake",
+  "إضافة فرع": "Add branch",
+  "إضافة مستخدم جديد": "Add new user",
+  "إضافة وتعديل الأصناف متاحان للمالك فقط": "Only the owner can add and edit items",
+  "إدارة التصنيفات متاحة للمالك فقط": "Only the owner can manage categories",
+  "لا توجد فروع": "No branches found",
+  "لا توجد إشعارات حتى الآن": "No notifications yet",
+  "لا توجد حركات مسجلة": "No movements recorded",
+  "لا توجد جلسات بعد": "No sessions yet",
+  "لا توجد أصناف": "No items found",
+  "لا توجد حركات": "No movements",
+  "نشط": "Active",
+  "موقوف": "Disabled",
+  "غير مصرح": "Not authorized",
+  "إيقاف": "Deactivate",
+  "تفعيل": "Activate",
+  "حذف": "Delete",
+  "تعديل": "Edit",
+  "إجراء": "Action",
+  "استلام": "Receipt",
+  "صرف": "Issue",
+  "تسوية": "Adjustment",
+  "استلام / إضافة": "Receive / Add",
+  "بدون تصنيف": "Uncategorized",
+  "موظف مخزون": "Inventory staff",
+  "مدير فرع": "Branch manager",
+  "مشاهدة فقط": "View only",
+  "مالك النظام": "System owner",
+  "كل التصنيفات": "All categories",
+  "اسم الفرع": "Branch name",
+  "العنوان": "Address",
+  "الكود": "Code",
+  "اسم الموظف": "Employee name",
+  "البريد الإلكتروني": "Email address",
+  "كلمة المرور": "Password",
+  "الصلاحية": "Role",
+  "الحالة": "Status",
+  "الاسم": "Name",
+  "إيميل الدخول": "Login email",
+  "الفرع": "Branch",
+  "إضافة صنف": "Add item",
+  "تعديل الصنف": "Edit item",
+  "تعديل الكمية الفعلية": "Adjust actual quantity",
+  "الكمية الحالية": "Current quantity",
+  "الكمية الموجودة فعليًا": "Actual quantity on hand",
+  "أدخل كمية صحيحة": "Enter a valid quantity",
+  "هل تريد إيقاف هذا الصنف؟": "Are you sure you want to deactivate this item?",
+  "لا يمكن إيقاف حساب المالك الحالي": "The current owner account cannot be disabled",
+  "تعذر إنشاء الحساب": "Could not create the account",
+  "تم إنشاء حساب الموظف بنجاح": "Employee account created successfully",
+  "حدث خطأ": "An error occurred",
+  "اختر التصنيف": "Choose a category",
+  "اختار التصنيف": "Choose a category",
+  "حفظ الكميات": "Save quantities",
+  "تم حفظ الكميات بنجاح": "Quantities saved successfully",
+  "الجلسة مغلقة ولا تسمح بالتعديل.": "This session is locked and cannot be edited.",
+  "الجلسة مغلقة.": "This session is locked.",
+  "إخفاء التصنيف": "Hide category",
+  "بحث باسم الصنف": "Search items",
+  "بحث باسم الصنف أو الكود": "Search by item name or code",
+  "صورة الصنف": "Item image",
+  "اسم الصنف بالعربية": "Item name (Arabic)",
+  "اسم الصنف بالإنجليزية": "Item name (English)",
+  "اسم التصنيف بالعربية": "Category name (Arabic)",
+  "اسم التصنيف بالإنجليزية": "Category name (English)",
+  "اسم الفرع بالعربية": "Branch name (Arabic)",
+  "اسم الفرع بالإنجليزية": "Branch name (English)",
+  "الموقع بالعربية": "Location (Arabic)",
+  "الموقع بالإنجليزية": "Location (English)",
+  "العنوان أو الموقع بالتفصيل": "Full address or location",
+  "أكمل اسم الفرع والموقع باللغتين": "Complete the branch name and location in both languages",
+  "أكمل اسم الفرع باللغتين والعنوان": "Complete both branch names and the address",
+  "إعداد المالك لأول مرة": "First-time owner setup",
+  "اسم المالك": "Owner name",
+  "تهيئة النظام": "Initialize system",
+  "إنشاء حساب الموظف": "Create employee account",
+  "المستخدمون والصلاحيات": "Users and permissions",
+  "المستخدمون": "Users",
+  "إجمالي الأصناف": "Total items",
+  "الفروع المتاحة": "Available branches",
+  "المستخدم الحالي": "Current user",
+  "حركات الفرع الأخيرة": "Recent branch movements",
+  "أصناف الصالة والخدمة": "Front-of-house & service items",
+  "لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.": "No branches are linked to your account. Contact the system owner.",
+  "تعديل العدد": "Adjust quantity",
+  "إضافة تصنيف": "Add category",
+  "إضافة حركة": "Add movement",
+  "تسجيل حركة": "Record movement",
+  "بدء جلسة جرد": "Start stocktake session",
+  "اسم الجلسة": "Session name",
+  "تاريخ الجرد": "Stocktake date",
+  "شهر وسنة الجرد": "Stocktake month and year",
+  "اختر شهر وسنة الجرد": "Select the stocktake month and year",
+  "أكمل اسم الجلسة والشهر والسنة": "Complete the session name, month and year",
+  "أكمل اسم الجلسة والتاريخ": "Complete the session name and date",
+  "تحميل أصناف الجرد...": "Loading stocktake items...",
+  "كل الأصناف النشطة موجودة هنا تلقائيًا. الأصناف الجديدة ستظهر عند فتح الجلسة.": "All active items appear here automatically. New items will appear when you open the session.",
+  "العدد الفعلي": "Actual count",
+  "حفظ أعداد الجرد": "Save stocktake counts",
+  "تم حفظ الأعداد بنجاح": "Counts saved successfully",
+  "هذه الجلسة غير مفتوحة للتعديل حسب حالتها الحالية.": "This session is not open for editing in its current status.",
+  "الجلسة": "Session",
+  "الشهر": "Month",
+  "إجراءات": "Actions",
+  "المقارنة": "Comparison",
+  "التنبيهات": "Alerts"
+});
 const reverseTranslations=Object.fromEntries(Object.entries(translations).map(([a,b])=>[b,a]));
-let language=localStorage.getItem("novaro-language")||"ar";
+let language=localStorage.getItem("novaro-language")==="en"?"en":"ar";
+function translateCanonical(value){
+ let out=String(value??"");
+ const pairs=Object.entries(translations).sort((a,b)=>b[1].length-a[1].length);
+ for(const [ar,en] of pairs){if(en)out=out.split(en).join(ar);}
+ return out;
+}
+function translateText(value){
+ const canonical=translateCanonical(value);
+ if(language==="ar")return canonical;
+ let out=canonical;
+ const pairs=Object.entries(translations).sort((a,b)=>b[0].length-a[0].length);
+ for(const [ar,en] of pairs){if(ar)out=out.split(ar).join(en);}
+ return out;
+}
 function applyLanguage(){
- const dict=language==="en"?translations:reverseTranslations;
- document.documentElement.lang=language;document.documentElement.dir=language==="ar"?"rtl":"ltr";
+ document.documentElement.lang=language;
+ document.documentElement.dir=language==="ar"?"rtl":"ltr";
  document.body.dir=document.documentElement.dir;
- const pairs=Object.entries(dict).sort((a,b)=>b[0].length-a[0].length);
- const translateText=v=>{let out=v;for(const [from,to] of pairs){if(from)out=out.split(from).join(to)}return out};
- const walk=n=>{if(n.nodeType===Node.TEXT_NODE){n.nodeValue=translateText(n.nodeValue)}
- else if(n.nodeType===Node.ELEMENT_NODE){if(n.tagName==="SCRIPT"||n.tagName==="STYLE"||n.tagName==="NOSCRIPT")return;if(n.placeholder)n.placeholder=translateText(n.placeholder);if(n.title)n.title=translateText(n.title);if(n.value&&n.tagName==="BUTTON")n.value=translateText(n.value);for(const c of [...n.childNodes])walk(c)}};
- const obs=window.__novaroObserver;if(obs)obs.disconnect();walk(document.body);
+ const obs=window.__novaroObserver;
+ if(obs)obs.disconnect();
+ const walk=n=>{
+  if(n.nodeType===Node.TEXT_NODE){n.nodeValue=translateText(n.nodeValue);return;}
+  if(n.nodeType!==Node.ELEMENT_NODE||["SCRIPT","STYLE","NOSCRIPT"].includes(n.tagName))return;
+  for(const attr of ["placeholder","title","aria-label","alt"])if(n.hasAttribute(attr))n.setAttribute(attr,translateText(n.getAttribute(attr)));
+  if(["BUTTON","INPUT"].includes(n.tagName)&&["button","submit","reset"].includes((n.type||"").toLowerCase()))n.value=translateText(n.value);
+  for(const c of [...n.childNodes])walk(c);
+ };
+ walk(document.body);
+ document.title=translateText("NOVARO Inventory");
  const a=document.getElementById("langToggle"),b=document.getElementById("langToggleApp");
  if(a)a.textContent=language==="ar"?"English":"العربية";
  if(b)b.textContent=language==="ar"?"English":"العربية";
- if(obs){obs.takeRecords();obs.observe(document.body,{childList:true,subtree:true,characterData:true});}
+ if(obs){obs.takeRecords();obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["placeholder","title","aria-label","alt"]});}
 }
-function setLanguage(next){language=next;localStorage.setItem("novaro-language",language);applyLanguage();if(user&&profile)render();}
+function setLanguage(next){
+ language=next==="en"?"en":"ar";
+ localStorage.setItem("novaro-language",language);
+ if(user&&profile)render();
+ applyLanguage();
+}
 document.addEventListener("click",e=>{if(e.target.id==="langToggle"||e.target.id==="langToggleApp")setLanguage(language==="ar"?"en":"ar")});
 let languageUpdatePending=false;
 const languageObserver=new MutationObserver(()=>{if(languageUpdatePending)return;languageUpdatePending=true;queueMicrotask(()=>{languageUpdatePending=false;applyLanguage();});});
