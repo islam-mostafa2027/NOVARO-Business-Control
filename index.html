@@ -635,6 +635,41 @@ button:focus-visible,.tabs button:focus-visible{outline:3px solid #8bb4d2;outlin
 /* Consistent outline icon treatment */
 .app-layout .tabs button .nav-icon svg{display:block;width:19px;height:19px;flex:none}
 @media(max-width:760px){.app-layout .tabs button .nav-icon svg{width:19px;height:19px}}
+
+/* NOVARO sign-in visual refinement: lighter surface and clearer brand copy */
+.auth-visual{
+ background:linear-gradient(145deg,#edf3f8 0%,#e4edf5 56%,#dce8f1 100%)!important;
+ color:#20364b!important;
+ box-shadow:0 22px 60px rgba(35,62,88,.10)!important;
+}
+.auth-visual .visual-grid{
+ opacity:.22!important;
+ background-image:linear-gradient(#7893aa20 1px,transparent 1px),linear-gradient(90deg,#7893aa20 1px,transparent 1px)!important;
+}
+.auth-visual .glow-a{background:radial-gradient(circle,#9bbbd455,transparent 70%)!important}
+.auth-visual .glow-b{background:radial-gradient(circle,#b1c9dc70,transparent 70%)!important}
+.auth-visual .visual-mark{
+ color:#244766!important;border:1px solid #9bb3c8!important;
+ background:rgba(255,255,255,.72)!important;
+ box-shadow:0 8px 22px rgba(48,78,105,.09)!important;
+}
+.auth-visual .visual-brand{color:#203b55!important}
+.auth-visual .eyebrow{color:#426d91!important;font-size:12px!important;letter-spacing:.16em!important}
+.auth-visual .visual-copy h1{color:#203b55!important}
+.auth-visual .visual-copy h1 em{color:#477da8!important}
+.auth-visual .visual-copy p{color:#49647c!important;font-weight:500!important}
+.auth-visual .visual-foot{color:#55718a!important;font-size:11px!important;letter-spacing:.12em!important}
+.auth-visual .visual-foot i{background:#6e94b3!important}
+.app-header .brand .muted{
+ color:#536b80!important;font-size:12px!important;font-weight:600!important;
+ line-height:1.5!important;letter-spacing:0!important;
+}
+@media(max-width:760px){
+ .auth-visual{background:linear-gradient(145deg,#edf3f8,#e2ecf4)!important}
+ .auth-visual .visual-content{padding:22px 24px!important}
+ .auth-visual .visual-copy h1{font-size:30px!important}
+ .auth-visual .visual-copy p{font-size:13px!important;line-height:1.8!important}
+}
 </style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <script>(function(){var release=function(){var x=document.getElementById("splash");if(x){x.classList.add("splash-out");setTimeout(function(){x.remove()},700)}};setTimeout(release,3500);window.addEventListener("error",release,{once:true})})();</script>
