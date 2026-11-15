@@ -744,6 +744,8 @@ function applyLanguage(){
  const a=document.getElementById("langToggle"),b=document.getElementById("langToggleApp");
  if(a)a.textContent=language==="ar"?"English":"العربية";
  if(b)b.textContent=language==="ar"?"English":"العربية";
+ const reportTab=document.querySelector('[data-p="reports"]');
+ if(reportTab)reportTab.textContent=language==="en"?"Reports":"التقارير";
  if(obs){obs.takeRecords();obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["placeholder","title","aria-label","alt"]});}
 }
 function setLanguage(next){
@@ -850,7 +852,16 @@ function sessionLabel(x){
  const locale=language==="en"?"en-GB-u-ca-gregory-nu-latn":"ar-EG-u-ca-gregory";
  return new Intl.DateTimeFormat(locale,{month:"long",year:"numeric",timeZone:"UTC",numberingSystem:language==="en"?"latn":"arab"}).format(date);
 }
-function sessionTitle(x){return translateText(x?.title||"جرد")}
+function sessionTitle(x){
+ if(!x)return language==="en"?"Stocktake":"جرد";
+ const raw=String(x.inventory_date||"").split("T")[0],p=raw.split("-").map(Number);
+ if(p.length===3&&p.every(Number.isFinite)){
+  const monthsEn=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const monthsAr=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  return language==="en"?"Stocktake — "+(monthsEn[p[1]-1]||"")+" "+String(p[0]):"جرد — "+(monthsAr[p[1]-1]||"")+" "+String(p[0]);
+ }
+ return language==="en"?"Stocktake":translateText(x.title||"جرد");
+}
 async function homeDashboard(){
  const host=$("homeDashboard");if(!host||!branchId)return;
  try{
@@ -882,7 +893,7 @@ async function getSingleStocktakeReport(id){
 }
 function stocktakeReportTable(data){
  const rows=data.rows,en=language==="en";
- return '<div class="single-stocktake-report"><h2>'+esc(language==="en"?translateText(data.session.title||"تقرير الجرد"):(data.session.title||"تقرير الجرد"))+'</h2><p class="muted">'+esc(branchLabel(data.branch)||"—")+'</p><p class="muted">'+esc(sessionLabel(data.session))+' · '+rows.length+' '+(en?"items":"صنف")+'</p><div class="tablewrap"><table><thead><tr><th>'+(en?"Item":"الصنف")+'</th><th>'+(en?"Code":"الكود")+'</th><th>'+(en?"Unit":"الوحدة")+'</th><th>'+(en?"Counted quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+esc(x.item_code||"—")+'</td><td>'+esc(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+fmtQty(x.quantity)+'</td></tr>').join("")+'</tbody></table></div><p class="app-watermark">Designed &amp; Developed by <strong>Islam Mostafa</strong></p></div>';
+ return '<div class="single-stocktake-report"><h2>'+esc(language==="en"?"Stocktake report — "+sessionTitle(data.session):(sessionTitle(data.session)))+'</h2><p class="muted">'+esc(branchLabel(data.branch)||"—")+'</p><p class="muted">'+esc(sessionLabel(data.session))+' · '+rows.length+' '+(en?"items":"صنف")+'</p><div class="tablewrap"><table><thead><tr><th>'+(en?"Item":"الصنف")+'</th><th>'+(en?"Code":"الكود")+'</th><th>'+(en?"Unit":"الوحدة")+'</th><th>'+(en?"Counted quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+esc(x.item_code||"—")+'</td><td>'+esc(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+fmtQty(x.quantity)+'</td></tr>').join("")+'</tbody></table></div><p class="app-watermark">Designed &amp; Developed by <strong>Islam Mostafa</strong></p></div>';
 }
 async function viewStocktakeReport(id){
  const host=$("reportContent");host.innerHTML='<div class="empty">'+(language==="en"?"Loading report...":"جاري تحميل التقرير...")+'</div>';
