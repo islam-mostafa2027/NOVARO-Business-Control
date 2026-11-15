@@ -101,6 +101,70 @@ jobs:
               path.write_text(source)
           print("Android WebView Autofill bridge enabled:", path)
           PY
+      - name: Add Google Password Manager Credential Manager support
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          gradle = Path("android/app/build.gradle")
+          if not gradle.exists():
+              raise SystemExit("Expected generated Groovy Gradle file")
+          g = gradle.read_text()
+          dep = 'implementation "androidx.credentials:credentials:1.5.0"'
+          if "androidx.credentials:credentials:" not in g:
+              if "dependencies {" not in g:
+                  raise SystemExit("Gradle dependencies block not found")
+              g = g.replace("dependencies {", "dependencies {\\n    " + dep, 1)
+              gradle.write_text(g)
+          main = next(Path("android/app/src/main/java").rglob("MainActivity.java"), None)
+          if main is None:
+              raise SystemExit("MainActivity.java not found")
+          s = main.read_text()
+          imports = [
+              "import androidx.credentials.CredentialManager;",
+              "import androidx.credentials.CreatePasswordRequest;",
+              "import androidx.credentials.CreateCredentialResponse;",
+              "import androidx.credentials.CredentialManagerCallback;",
+              "import androidx.credentials.exceptions.CreateCredentialException;",
+              "import java.util.concurrent.Executors;"
+          ]
+          lines = s.splitlines()
+          existing = set(x.strip() for x in lines if x.startswith("import "))
+          idx = max(i for i,x in enumerate(lines) if x.startswith("import "))
+          lines[idx+1:idx+1] = [x for x in imports if x not in existing]
+          s = "\\n".join(lines) + "\\n"
+          old = """@JavascriptInterface public void commit() {
+                          if (Build.VERSION.SDK_INT >= 26) runOnUiThread(() -> {
+                              AutofillManager manager = getSystemService(AutofillManager.class);
+                              if (manager != null) manager.commit();
+                          });
+                      }"""
+          new = """@JavascriptInterface public void save(String username, String password) {
+                          runOnUiThread(() -> {
+                              try {
+                                  CredentialManager manager = CredentialManager.create(MainActivity.this);
+                                  CreatePasswordRequest request = new CreatePasswordRequest(username, password);
+                                  manager.createCredentialAsync(MainActivity.this, request, null,
+                                      Executors.newSingleThreadExecutor(),
+                                      new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
+                                          @Override public void onResult(CreateCredentialResponse result) {
+                                              android.util.Log.i("NOVARO", "Credential Manager flow completed");
+                                          }
+                                          @Override public void onError(CreateCredentialException e) {
+                                              android.util.Log.w("NOVARO", "Password save was not completed", e);
+                                          }
+                                      });
+                              } catch (Exception e) {
+                                  android.util.Log.w("NOVARO", "Credential Manager unavailable", e);
+                              }
+                          });
+                      }"""
+          if old in s:
+              s = s.replace(old, new, 1)
+          elif "public void save(String username, String password)" not in s:
+              raise SystemExit("Autofill bridge method mismatch")
+          main.write_text(s)
+          print("Credential Manager bridge configured")
+          PY
       - name: Sync Capacitor
         run: npx cap sync android
 
