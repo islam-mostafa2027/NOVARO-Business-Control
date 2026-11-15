@@ -1276,7 +1276,50 @@ function printItemBarcode(id){
  try{window.JsBarcode(svg,item.item_code,{format:"CODE128",displayValue:true,font:"Arial",fontSize:16,height:72,margin:14,lineColor:"#183d30",textMargin:8});}
  catch(e){return alert(language==="en"?"This item code cannot be converted to a barcode.":"كود الصنف ده غير صالح للتحويل إلى باركود.");}
  const w=window.open("","_blank");if(!w)return alert(language==="en"?"Allow pop-ups to print the barcode.":"اسمح بفتح النوافذ المنبثقة لطباعة الباركود.");
-  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(nameOf(item))+'</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:30px;color:#183d30}svg{max-width:100%;height:auto}.label{font-size:18px;font-weight:bold;margin-bottom:8px}@media print{button{display:none}}</style></head><body><div class="label">'+esc(nameOf(item))+'</div>'+svg.outerHTML+'<p>'+esc(item.item_code)+'</p><button onclick="window.print()">طباعة الباركود</button></body></html>');
+  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(nameOf(item))+'</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:30px;color:#183d30}svg{max-width:100%;height:auto}.label{font-size:18px;font-weight:bold;margin-bottom:8px}@media print{button{display:none}}
+/* NOVARO exterior readability correction — 2026-11-15 */
+#splash{
+ background:linear-gradient(145deg,#f5f8fc 0%,#eaf0f6 58%,#dfe8f1 100%)!important;
+ color:#203b55!important;
+}
+#splash .splash-orbit{border-color:#6f8eaa20!important}
+#splash .splash-mark{
+ color:#315f88!important;background:linear-gradient(145deg,#fff,#eaf1f7)!important;
+ border:1px solid #cbd8e4!important;box-shadow:0 0 0 10px #315f8808,0 16px 40px #315f8818!important;
+}
+#splash .splash-word{color:#203b55!important;text-shadow:none!important}
+#splash .splash-caption{color:#466681!important;font-size:12px!important;font-weight:750!important;letter-spacing:.18em!important}
+#splash .splash-credit{color:#526d85!important;font-size:11px!important}
+#splash .splash-credit strong{color:#294d6c!important}
+#splash .splash-loader{background:#315f8826!important}
+#splash .splash-loader span{background:#477da8!important}
+.auth-visual{
+ background:linear-gradient(145deg,#f1f6fb 0%,#e7eff6 56%,#dce8f1 100%)!important;
+ color:#203b55!important;box-shadow:0 20px 55px rgba(48,78,105,.10)!important;
+}
+.auth-visual .visual-grid{
+ opacity:.28!important;
+ background-image:linear-gradient(#567b9a12 1px,transparent 1px),linear-gradient(90deg,#567b9a12 1px,transparent 1px)!important;
+}
+.auth-visual .glow-a{background:radial-gradient(circle,#a9c4dc70,transparent 70%)!important}
+.auth-visual .glow-b{background:radial-gradient(circle,#b9d0e280,transparent 70%)!important}
+.auth-visual .visual-brand{color:#203b55!important}
+.auth-visual .visual-copy .eyebrow{color:#315f88!important;font-size:12px!important;font-weight:800!important;letter-spacing:.14em!important}
+.auth-visual .visual-copy h1{color:#203b55!important}
+.auth-visual .visual-copy h1 em{color:#477da8!important}
+.auth-visual .visual-copy p{color:#405f79!important;font-size:18px!important;font-weight:600!important;line-height:2!important}
+.auth-visual .visual-foot{color:#466681!important;font-weight:750!important}
+.auth-visual .visual-mark{color:#315f88!important;background:#fff!important;border:1px solid #cbd8e4!important;box-shadow:0 6px 18px #315f8818!important}
+.app-header .brand .muted{
+ color:#405f79!important;font-size:13px!important;font-weight:700!important;
+ line-height:1.55!important;letter-spacing:.01em!important;opacity:1!important;
+}
+.auth-mini-brand small{color:#526d85!important;font-size:12px!important;font-weight:650!important}
+@media(max-width:760px){
+ #splash .splash-caption{font-size:11px!important;letter-spacing:.12em!important}
+ .auth-visual .visual-copy p{font-size:14px!important}
+}
+</style></head><body><div class="label">'+esc(nameOf(item))+'</div>'+svg.outerHTML+'<p>'+esc(item.item_code)+'</p><button onclick="window.print()">طباعة الباركود</button></body></html>');
  w.document.close();
 }
 async function latest(){let r=await db.from("stock_movements").select("*,items(name_ar,name_en)").eq("branch_id",branchId).order("created_at",{ascending:false}).limit(8);$("latest").innerHTML=r.error?esc(r.error.message):r.data.length?tableMoves(r.data):"لا توجد حركات مسجلة"}
