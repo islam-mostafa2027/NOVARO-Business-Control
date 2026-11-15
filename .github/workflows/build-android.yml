@@ -66,7 +66,7 @@ jobs:
               existing = set(line.strip() for line in lines if line.startswith("import "))
               lines[package_index + 1:package_index + 1] = [x for x in imports if x not in existing] + [""]
               source = "\n".join(lines) + "\n"
-              class_match = re.search(r"public\\s+class\\s+MainActivity\\s+extends\\s+BridgeActivity\\s*\\{", source)
+              class_match = re.search(r"public\s+class\s+MainActivity\s+extends\s+BridgeActivity\s*\{", source)
               if not class_match:
                   raise SystemExit("MainActivity class declaration not recognized")
               addition = """
