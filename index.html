@@ -893,14 +893,18 @@ async function reportsPage(){
 async function getSingleStocktakeReport(id){
  const session=window.__novaroSessions?.find(x=>x.id===id);
  const q=await db.from("inventory_sessions").select("*").eq("id",id).single();if(q.error)throw q.error;
- const r=await db.from("inventory_counts").select("counted_quantity,items(id,item_code,name_ar,name_en,unit_ar,unit_en)").eq("session_id",id);
+ const r=await db.from("inventory_counts").select("counted_quantity,items(id,item_code,name_ar,name_en,unit_ar,unit_en,categories(group_key))").eq("session_id",id);
  if(r.error)throw r.error;
  const branch=branches.find(b=>b.id===q.data.branch_id)||allBranches.find(b=>b.id===q.data.branch_id)||null;
  return {session:q.data,branch,rows:(r.data||[]).filter(x=>x.items).map(x=>({...x.items,quantity:Number(x.counted_quantity||0)}))};
 }
 function stocktakeReportTable(data){
  const rows=data.rows,en=language==="en";
- return '<div class="single-stocktake-report"><h2>'+esc(language==="en"?"Stocktake report — "+sessionTitle(data.session):(sessionTitle(data.session)))+'</h2><p class="muted">'+esc(branchLabel(data.branch)||"—")+'</p><p class="muted">'+esc(sessionLabel(data.session))+' · '+rows.length+' '+(en?"items":"صنف")+'</p><div class="tablewrap"><table><thead><tr><th>'+(en?"Item":"الصنف")+'</th><th>'+(en?"Code":"الكود")+'</th><th>'+(en?"Unit":"الوحدة")+'</th><th>'+(en?"Counted quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+esc(x.item_code||"—")+'</td><td>'+esc(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+fmtQty(x.quantity)+'</td></tr>').join("")+'</tbody></table></div><p class="app-watermark">Designed &amp; Developed by <strong>Islam Mostafa</strong></p></div>';
+ const groupOf=x=>x.categories?.group_key==="materials"?"materials":"equipment";
+ const tableFor=list=>'<div class="tablewrap"><table><thead><tr><th>'+(en?"Item":"الصنف")+'</th><th>'+(en?"Code":"الكود")+'</th><th>'+(en?"Unit":"الوحدة")+'</th><th>'+(en?"Counted quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+list.map(x=>'<tr><td>'+esc(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+esc(x.item_code||"—")+'</td><td>'+esc(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+fmtQty(x.quantity)+'</td></tr>').join("")+'</tbody></table></div>';
+ const equipment=rows.filter(x=>groupOf(x)==="equipment"),materials=rows.filter(x=>groupOf(x)==="materials");
+ const section=(label,list)=>'<section class="report-group" style="margin-top:22px"><h3 style="margin:0 0 10px">'+label+' <span class="muted">('+list.length+')</span></h3>'+(list.length?tableFor(list):'<p class="empty">'+(en?"No items in this section.":"لا توجد أصناف في هذا القسم.")+'</p>')+'</section>';
+ return '<div class="single-stocktake-report"><h2>'+esc(en?"Stocktake report — "+sessionTitle(data.session):sessionTitle(data.session))+'</h2><p class="muted">'+esc(branchLabel(data.branch)||"—")+'</p><p class="muted">'+esc(sessionLabel(data.session))+' · '+rows.length+' '+(en?"items":"صنف")+'</p>'+section(en?"Equipment":"العُدّة",equipment)+section(en?"Materials":"الخامات",materials)+'<p class="app-watermark">Designed &amp; Developed by <strong>Islam Mostafa</strong></p></div>';
 }
 async function viewStocktakeReport(id){
  const host=$("reportContent");host.innerHTML='<div class="empty">'+(language==="en"?"Loading report...":"جاري تحميل التقرير...")+'</div>';
@@ -909,7 +913,7 @@ async function viewStocktakeReport(id){
 }
 async function exportStocktakeReport(id){
  try{const data=await getSingleStocktakeReport(id),en=language==="en",head=en?["Item","Code","Unit","Counted quantity"]:["الصنف","الكود","الوحدة","الكمية الفعلية"];
- const rows=data.rows.map(x=>[branchLabel(data.branch)||"",en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en),x.quantity]);
+ const rows=data.rows.map(x=>[branchLabel(data.branch)||"",x.categories?.group_key==="materials"?(en?"Materials":"الخامات"):(en?"Equipment":"العُدّة"),en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en),x.quantity]);
  head.unshift(en?"Branch":"الفرع");
  const csv="\\uFEFF"+[head,...rows].map(r=>r.map(v=>'"'+String(v??"").split('"').join('""')+'"').join(",")).join("\\r\\n");
  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="NOVARO-Stocktake-"+String(data.branch?.code||data.session.branch_id||"Branch").slice(0,12)+"-"+String(data.session.inventory_date||data.session.id).slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);
