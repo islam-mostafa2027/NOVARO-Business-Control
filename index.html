@@ -547,6 +547,90 @@ tbody tr:hover{background:#f6f9fb}
  .auth-shell{background:#f3f6f9}
 }
 
+
+/* NOVARO UI refresh v1.1 — unified responsive slate workspace */
+:root{
+ --g:#315f88;--bg:#f4f6f9;--ink:#26384b;--muted:#718196;--line:#e2e8ef;
+ --navy:#1d344b;--navy-2:#294761;--blue:#3b719e;--teal:#568b91;
+ --surface:#fff;--surface-soft:#f7f9fc;--success:#2f806c;--warning:#b98238;--danger:#b85d65;
+}
+html{background:var(--bg);scroll-behavior:smooth}
+body{background:linear-gradient(180deg,#f7f9fb 0%,#f0f3f7 100%);color:var(--ink);font-family:Inter,"Segoe UI",Tahoma,Arial,sans-serif}
+#app>.wrap{width:min(100%,1600px);max-width:1600px;padding:24px clamp(14px,2.2vw,34px) 48px}
+.app-header{position:sticky;top:10px;z-index:35;min-height:76px;margin-bottom:22px;padding:13px 20px;border:1px solid #e3e9f0;border-radius:18px;background:rgba(255,255,255,.94);box-shadow:0 8px 26px rgba(29,52,75,.07);backdrop-filter:blur(16px)}
+.app-header .logo,.logo{width:46px;height:46px;min-width:46px;min-height:46px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#3d7198,#244963)!important;color:#fff!important;font-size:22px!important;box-shadow:0 6px 16px #24496325!important}
+.app-header .brand{gap:12px}.app-header .brand b{font-size:18px;color:#26384b}.app-header .brand .muted{font-size:11px;color:#8290a0;letter-spacing:.08em}
+.header-actions{gap:8px}.header-actions button{min-height:40px}
+.app-layout{display:grid;grid-template-columns:236px minmax(0,1fr);gap:24px;align-items:start}
+.app-layout.branch-not-selected{grid-template-columns:minmax(0,1fr)}
+.app-layout .tabs{position:sticky;top:106px;display:flex;flex-direction:column;align-items:stretch;gap:6px;max-height:calc(100vh - 124px);overflow-y:auto;padding:14px 11px;border:1px solid #263f57;border-radius:18px;background:linear-gradient(165deg,#243f58,#1c3248);box-shadow:0 12px 30px #1d344b1c;scrollbar-width:thin}
+.app-layout .nav-caption{padding:8px 12px 13px;color:#a9bbca;font-size:10px;font-weight:800;letter-spacing:.12em}
+.app-layout .tabs button{width:100%;min-height:48px;display:flex;align-items:center;justify-content:flex-start;gap:12px;padding:9px 12px;border:1px solid transparent;border-radius:12px;background:transparent!important;color:#d5e0e9!important;text-align:start;font-size:14px;font-weight:650;box-shadow:none!important;transform:none}
+.app-layout .tabs button:hover{background:#ffffff12!important;color:#fff!important}
+.app-layout .tabs button.active{background:#fff!important;color:#244a68!important;box-shadow:0 5px 15px #10263a30!important}
+.app-layout .tabs button .nav-icon{width:32px;height:32px;display:grid;place-items:center;flex:none;border-radius:10px;background:#ffffff12;color:#dce8f1;font-size:17px}
+.app-layout .tabs button.active .nav-icon{background:#eaf1f7;color:#315f88}
+.workspace-content{min-width:0}.workspace-content #main{min-width:0;min-height:60vh}
+.card{padding:22px;border:1px solid #e3e9ef;border-radius:17px;background:#fff;box-shadow:0 5px 20px #26384b09}
+.card:hover{border-color:#d6e1eb;box-shadow:0 9px 26px #26384b0e}
+h2,h3{color:#26384b;letter-spacing:-.02em}
+.stat-card{min-height:126px;border-radius:16px;background:linear-gradient(145deg,#fff,#f8fafc)}
+.stat-card:after{background:#eaf1f6}.stat-card b{color:#315f88}
+.branch-panel{border-color:#dce5ed;background:linear-gradient(135deg,#fff,#f6f9fc)}
+.branch-symbol{background:#eaf1f6;color:#315f88}
+button{border-radius:10px;font-weight:700}
+button:not(.soft):not(.language-control):not(.credential-pick){background:linear-gradient(110deg,#3d739d,#2e5c80);color:#fff;box-shadow:0 3px 10px #315f881c}
+button.soft,.soft,.language-control{background:#edf2f6!important;color:#355d7d!important;border:1px solid #e0e8ef!important;box-shadow:none!important}
+.logout-control{background:#f8eeee!important;color:#a3545b!important;border-color:#f0dfe1!important}
+.field input,.field select,input,select,textarea{border:1px solid #dce4ec;border-radius:10px;background:#fbfcfd;color:#26384b}
+.field input:focus,.field select:focus,input:focus,select:focus,textarea:focus{outline:none;border-color:#6d9abb;box-shadow:0 0 0 3px #477ba51b}
+.tablewrap{max-width:100%;overflow:auto;border:1px solid #e3e9ef;border-radius:13px}
+table{min-width:560px;border-collapse:separate;border-spacing:0}
+th{background:#f2f5f8;color:#62758a;font-weight:750}
+td,th{border-bottom:1px solid #e9eef3}
+tbody tr:hover{background:#f6f9fc}
+.empty{color:#78889a}.muted{color:#718196}
+.app-watermark{padding:18px 4px;color:#91a0af;font-size:11px}
+.app-watermark strong{color:#315f88}
+.auth-shell{max-width:1500px;min-height:100svh;padding:clamp(14px,2.4vw,34px);grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr);gap:20px}
+.auth-visual{border-radius:24px;background:linear-gradient(145deg,#294b69 0%,#1e344b 58%,#172b40 100%)!important;box-shadow:0 20px 55px #1e344b20}
+.visual-copy h1 em{color:#a9cde3!important}.eyebrow,.auth-kicker{color:#83b1d0!important}
+.auth-panel{border:1px solid #e3e9ef;border-radius:24px;background:rgba(255,255,255,.94);box-shadow:0 18px 55px #26384b10}
+.mini-mark{background:linear-gradient(145deg,#426f96,#294d6d)!important}
+.auth-form-wrap .field input{background:#fbfcfd;border-color:#dce4ec}
+.auth-submit{background:linear-gradient(110deg,#3d739d,#294f70)!important}
+#splash{background:radial-gradient(circle at 50% 45%,#355f82 0,#243f5a 42%,#172b40 100%)!important}
+.splash-mark{background:linear-gradient(145deg,#ffffff25,#ffffff08)!important;color:#fff!important}
+.splash-loader span{background:#b8d4e7!important}
+button:focus-visible,.tabs button:focus-visible{outline:3px solid #8bb4d2;outline-offset:3px}
+@media(min-width:1200px){.app-layout{grid-template-columns:248px minmax(0,1fr);gap:28px}.app-layout .tabs{padding:16px 12px}.workspace-content .stats{gap:16px}}
+@media(min-width:761px) and (max-width:1050px){
+ #app>.wrap{padding:16px 14px 34px}.app-layout{grid-template-columns:190px minmax(0,1fr);gap:14px}
+ .app-layout .tabs{padding:10px 7px}.app-layout .tabs button{gap:8px;padding:9px 8px;font-size:13px}
+ .app-header{padding:12px 14px}.app-header .brand b{font-size:16px}
+ .card{padding:17px}
+}
+@media(max-width:760px){
+ #app>.wrap{padding:10px 10px 96px}.app-header{position:relative;top:auto;min-height:unset;padding:10px 12px;margin-bottom:12px;border-radius:15px}
+ .app-header .brand{gap:8px}.app-header .logo,.logo{width:39px;height:39px;min-width:39px;min-height:39px;font-size:19px!important}
+ .app-header .brand b{font-size:14px}.app-header .brand .muted{font-size:9px}
+ .header-actions{gap:5px}.header-actions button{min-height:36px;padding:7px 9px;font-size:12px}
+ .app-layout{display:flex;flex-direction:column;gap:10px}.app-layout .tabs{position:fixed;z-index:60;left:9px;right:9px;top:auto;bottom:9px;max-height:none;display:flex;flex-direction:row;justify-content:space-around;gap:3px;overflow-x:auto;padding:6px;border:1px solid #d8e2eb;border-radius:16px;background:rgba(29,52,75,.97);box-shadow:0 8px 28px #152a3f35;backdrop-filter:blur(14px)}
+ .app-layout .nav-caption{display:none}
+ .app-layout .tabs button{flex:1;min-width:0;min-height:55px;flex-direction:column;justify-content:center;gap:3px;padding:5px 2px;border-radius:10px;font-size:10px;line-height:1.15;white-space:nowrap}
+ .app-layout .tabs button .nav-icon{width:25px;height:24px;background:transparent;font-size:17px}
+ .app-layout .tabs button.active{background:#fff!important;color:#294f70!important}
+ .app-layout .tabs button.active .nav-icon{background:transparent;color:#315f88}
+ .workspace-content{width:100%}.workspace-content .card{padding:15px;border-radius:15px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat-card{min-height:100px;padding:14px}.stat-card b{font-size:26px}
+ .tablewrap{max-width:100%}.auth-shell{display:flex;flex-direction:column;gap:0;padding:0;background:#f4f6f9}
+ .auth-visual{min-height:220px;border-radius:0 0 22px 22px}.visual-content{min-height:220px;padding:20px 22px}
+ .visual-copy{padding:18px 0 0;margin:0}.visual-copy h1{font-size:32px}.visual-copy p{font-size:12px}
+ .auth-panel{min-height:calc(100svh - 220px);border:0;border-radius:0;padding:18px 22px 22px;box-shadow:none}
+}
+@media(max-width:380px){.app-layout .tabs button{font-size:9px}.app-header .brand .muted{display:none}.stats{gap:7px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <script>(function(){var release=function(){var x=document.getElementById("splash");if(x){x.classList.add("splash-out");setTimeout(function(){x.remove()},700)}};setTimeout(release,3500);window.addEventListener("error",release,{once:true})})();</script>
