@@ -749,6 +749,20 @@ button:focus-visible,.tabs button:focus-visible{outline:3px solid #8bb4d2;outlin
 @media(max-width:600px){.item-name-barcode{gap:8px;min-width:220px}.item-barcode{min-width:104px;padding:4px}.item-barcode svg{width:98px;height:34px}}
 
 .item-barcode-fallback small{display:block}
+
+#novaroScanner,#novaroItemDetails{position:fixed;inset:0;z-index:9999;background:#071b16d9;display:none;align-items:center;justify-content:center;padding:14px}
+#novaroScanner .scan-panel,#novaroItemDetails .detail-panel{background:#fff;color:#183d30;width:min(100%,560px);max-height:92vh;overflow:auto;border-radius:18px;padding:18px;box-shadow:0 18px 60px #0005}
+#novaroScanner video{width:100%;max-height:45vh;object-fit:cover;background:#10231d;border-radius:12px;margin:10px 0}
+#novaroScanner input{width:100%;padding:12px;border:1px solid #ccd9d2;border-radius:10px;font-size:16px}
+#novaroScanner button,#novaroItemDetails button{margin:4px 3px;padding:10px 14px;border:0;border-radius:9px;background:#183d30;color:#fff}
+#novaroScanner button.secondary,#novaroItemDetails button.secondary{background:#edf3ef;color:#183d30}
+#novaroScanner .scan-status{font-size:13px;color:#52685f;margin:8px 0}
+#novaroItemDetails .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+#novaroItemDetails .detail-cell{background:#f4f7f5;border-radius:10px;padding:11px;min-width:0}
+#novaroItemDetails .detail-cell small{display:block;color:#687b72;margin-bottom:5px}
+#novaroItemDetails .detail-cell b{overflow-wrap:anywhere}
+#novaroItemDetails .detail-qty{font-size:24px;color:#176b48}
+@media(max-width:420px){#novaroScanner .scan-panel,#novaroItemDetails .detail-panel{padding:13px}}
 </style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <script>(function(){var release=function(){var x=document.getElementById("splash");if(x){x.classList.add("splash-out");setTimeout(function(){x.remove()},700)}};setTimeout(release,3200)})();</script>
@@ -1367,7 +1381,7 @@ function printStocktakeReport(){
 }
 function render(){document.querySelectorAll("[data-p]").forEach(b=>b.classList.toggle("active",b.dataset.p===page));let m=$("main");if(!branches.length&&profile.role!=="owner_admin"){m.innerHTML='<section class="card empty">لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.</section>';return}
 if(page==="home")m.innerHTML='<section class="card branch-panel"><div class="branch-heading"><span class="branch-symbol">⌖</span><div><h3>'+(language==="en"?"Choose a branch":"اختيار الفرع")+'</h3><p>'+(language==="en"?"Select the branch you want to manage":"حدد الفرع الذي تريد إدارة مخزونه")+'</p></div></div><div class="branch-select-wrap"><label for="branchSelect">'+(language==="en"?"Current branch":"الفرع الحالي")+'</label>'+sel()+'</div></section><section class="stats"><div class="card stat-card"><span>'+(language==="en"?"Total items":"إجمالي الأصناف")+'</span><b>'+items.length+'</b></div><div class="card stat-card"><span>'+(language==="en"?"Available branches":"الفروع المتاحة")+'</span><b>'+branches.length+'</b></div><div class="card stat-card"><span>'+(language==="en"?"Current role":"صلاحية المستخدم")+'</span><b class="role-value">'+esc(roleName(profile.role))+'</b></div></section>';
-if(page==="items")m.innerHTML='<section class="card"><div class="row"><h3>'+(language==="en"?"Front-of-house & service items":"أصناف الصالة والخدمة")+'</h3><div><button class="soft" onclick="manageCategories()">إدارة التصنيفات</button> <button class="soft" onclick="addCategory()">＋ '+(language==="en"?"New category":"تصنيف جديد")+'</button> <button onclick="addItem()">＋ '+(language==="en"?"New item":"صنف جديد")+'</button></div></div><div class="field"><label>'+(language==="en"?"Category":"التصنيف")+'</label><select id="categoryFilter"><option value="">'+(language==="en"?"All categories":"كل التصنيفات")+'</option>'+categoryOptions()+'</select></div><input id="search" placeholder="'+(language==="en"?"Search items":"بحث باسم الصنف")+'" style="width:100%;padding:11px;border:1px solid #ddd;border-radius:9px"><div class="tablewrap"><table><thead><tr><th>'+(language==="en"?"Image":"الصورة")+'</th><th>'+(language==="en"?"Item name":"اسم الصنف")+'</th><th>'+(language==="en"?"Barcode":"باركود")+'</th><th>'+(language==="en"?"Type / Category":"النوع / التصنيف")+'</th><th>'+(language==="en"?"Current stock":"الرصيد الحالي")+'</th><th>'+(language==="en"?"Actions":"الإجراءات")+'</th></tr></thead><tbody id="itemRows">'+itemRows(items)+'</tbody></table></div></section>';
+if(page==="items")m.innerHTML='<section class="card"><div class="row"><h3>'+(language==="en"?"Front-of-house & service items":"أصناف الصالة والخدمة")+'</h3><div><button class="soft" onclick="openBarcodeScanner()">▦ '+(language==="en"?"Scan barcode":"مسح باركود")+'</button> <button class="soft" onclick="manageCategories()">إدارة التصنيفات</button> <button class="soft" onclick="addCategory()">＋ '+(language==="en"?"New category":"تصنيف جديد")+'</button> <button onclick="addItem()">＋ '+(language==="en"?"New item":"صنف جديد")+'</button></div></div><div class="field"><label>'+(language==="en"?"Category":"التصنيف")+'</label><select id="categoryFilter"><option value="">'+(language==="en"?"All categories":"كل التصنيفات")+'</option>'+categoryOptions()+'</select></div><input id="search" placeholder="'+(language==="en"?"Search items":"بحث باسم الصنف")+'" style="width:100%;padding:11px;border:1px solid #ddd;border-radius:9px"><div class="tablewrap"><table><thead><tr><th>'+(language==="en"?"Image":"الصورة")+'</th><th>'+(language==="en"?"Item name":"اسم الصنف")+'</th><th>'+(language==="en"?"Barcode":"باركود")+'</th><th>'+(language==="en"?"Type / Category":"النوع / التصنيف")+'</th><th>'+(language==="en"?"Current stock":"الرصيد الحالي")+'</th><th>'+(language==="en"?"Actions":"الإجراءات")+'</th></tr></thead><tbody id="itemRows">'+itemRows(items)+'</tbody></table></div></section>';
 
 if(page==="counts")m.innerHTML='<section class="card"><div class="row"><h3>الجرد الفعلي</h3><button onclick="addSession()">＋ جلسة جرد</button></div><div id="sessions" class="empty">تحميل...</div></section>';
 
@@ -1447,6 +1461,60 @@ async function hideCategory(id){if(profile.role!=="owner_admin")return alert("غ
 function addCategory(){const en=language==="en";if(profile.role!=="owner_admin")return alert(en?"Only the system owner can add categories":"إضافة التصنيفات متاحة للمالك فقط");form(en?"Add category":"إضافة تصنيف",'<div class="field"><label>'+(en?"Group":"القسم")+'</label><select id="catGroup"><option value="equipment">'+(en?"Equipment":"العُدّة")+'</option><option value="materials">'+(en?"Materials":"الخامات")+'</option></select></div>'+inp(en?"Category name (Arabic)":"اسم التصنيف بالعربية","catNameAr","required")+inp(en?"Category name (English)":"اسم التصنيف بالإنجليزية","catNameEn","required"),async()=>{const ar=$("catNameAr").value.trim(),nameEn=$("catNameEn").value.trim();if(!ar||!nameEn)throw Error(en?"Enter the category name in both languages":"أدخل اسم التصنيف باللغتين");const r=await db.from("categories").insert({name_ar:ar,name_en:nameEn,group_key:$("catGroup").value,sort_order:cats.length+1,is_active:true,created_by:user.id});if(r.error)throw r.error;await load();render()})}
 function editQty(id){const i=items.find(x=>x.id===id);if(!i)return;const current=Number(balances[branchId+":"+id]||0);form("تعديل الكمية الفعلية",'<p>'+esc(nameOf(i))+' — الكمية الحالية: <b>'+current+'</b></p>'+inp("الكمية الموجودة فعليًا","newQty",'type="number" min="0" step="1" required'),async()=>{const next=Number($("newQty").value);if(!Number.isFinite(next)||next<0)throw Error("أدخل كمية صحيحة");const diff=next-current;if(diff===0)return;const r=await db.from("stock_movements").insert({branch_id:branchId,item_id:id,movement_type:diff>0?"receipt":"issue",quantity:Math.abs(diff),note:"تسوية مخزون: تعديل الكمية الفعلية إلى "+next,created_by:user.id});if(r.error)throw r.error});$("newQty").value=current}
 
+
+function closeBarcodeScanner(){
+ if(window.__novaroScanFrame)cancelAnimationFrame(window.__novaroScanFrame);
+ window.__novaroScanFrame=null;
+ if(window.__novaroScanStream){window.__novaroScanStream.getTracks().forEach(t=>t.stop());window.__novaroScanStream=null}
+ const v=$("novaroScanVideo");if(v){v.pause();v.srcObject=null}
+ const modal=$("novaroScanner");if(modal)modal.style.display="none";
+}
+function closeScannedItem(){const el=$("novaroItemDetails");if(el)el.style.display="none"}
+function showScannedItem(item){
+ const en=language==="en",key=branchId+":"+item.id,has=Object.prototype.hasOwnProperty.call(balances,key),qty=Number(balances[key]||0),cat=cats.find(x=>x.id===item.category_id);
+ const label=(ar,eng)=>en?eng:ar;
+ const cell=(ar,eng,val,cls="")=>'<div class="detail-cell"><small>'+label(ar,eng)+'</small><b class="'+cls+'">'+val+'</b></div>';
+ const image=item.image_url?'<img src="'+esc(item.image_url)+'" alt="" style="width:86px;height:86px;object-fit:cover;border-radius:12px">':"";
+ const box=$("novaroItemDetails");
+ box.innerHTML='<div class="detail-panel"><div style="display:flex;align-items:center;gap:12px">'+image+'<div><h2 style="margin:0 0 6px">'+esc(nameOf(item))+'</h2><div style="color:#687b72">'+label("تفاصيل الصنف","Product details")+'</div></div></div><div class="detail-grid">'+
+ cell("كود الصنف","Item code",esc(item.item_code||"—"))+
+ cell("الكمية الحالية","Current quantity",has?esc(fmtQty(qty)):"—","detail-qty")+
+ cell("التصنيف","Category",esc(categoryName(cat)))+
+ cell("نوع الصنف","Item type",esc(categoryGroupLabel(cat?.group_key||"equipment")))+
+ cell("وحدة القياس","Unit",esc(unitOf(item)||"—"))+
+ cell("الحد الأدنى للمخزون","Minimum stock",esc(fmtQty(Number(item.min_stock||0))))+
+ '</div><div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="secondary" onclick="closeScannedItem()">'+label("إغلاق","Close")+'</button></div></div>';
+ box.style.display="flex";
+}
+function findScannedItem(){
+ const code=$("novaroScanCode").value.trim();if(!code)return;
+ const item=items.find(x=>String(x.item_code||"").trim().toLowerCase()===code.toLowerCase());
+ if(!item){$("novaroScanStatus").textContent=language==="en"?"No product matches this item code.":"مفيش صنف مطابق لكود المنتج ده.";return}
+ closeBarcodeScanner();showScannedItem(item);
+}
+async function openBarcodeScanner(){
+ if(!branchId){alert(language==="en"?"Choose a branch first.":"اختار الفرع الأول.");return}
+ if(!$("novaroScanner")){
+  document.body.insertAdjacentHTML("beforeend",'<div id="novaroScanner"><div class="scan-panel"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0">'+(language==="en"?"Scan product barcode":"مسح باركود الصنف")+'</h3><button class="secondary" onclick="closeBarcodeScanner()">×</button></div><video id="novaroScanVideo" playsinline muted></video><div id="novaroScanStatus" class="scan-status"></div><label for="novaroScanCode">'+(language==="en"?"Or enter item code":"أو أدخل كود الصنف")+'</label><input id="novaroScanCode" autocomplete="off" placeholder="'+(language==="en"?"Item code":"كود الصنف")+'"><div style="margin-top:10px"><button onclick="findScannedItem()">'+(language==="en"?"Open product":"فتح الصنف")+'</button><button class="secondary" onclick="closeBarcodeScanner()">'+(language==="en"?"Close":"إغلاق")+'</button></div></div></div><div id="novaroItemDetails" onclick="if(event.target===this)closeScannedItem()"></div>');
+ }
+ $("novaroScanner").style.display="flex";$("novaroScanCode").value="";
+ const status=$("novaroScanStatus"),video=$("novaroScanVideo");
+ if(!("BarcodeDetector" in window)||!navigator.mediaDevices?.getUserMedia){status.textContent=language==="en"?"Camera scanning is unavailable here. Enter the item code below.":"المسح بالكاميرا غير متاح في المتصفح ده. اكتب كود الصنف يدويًا.";return}
+ try{
+  const supported=await window.BarcodeDetector.getSupportedFormats();
+  if(!supported.includes("code_128")){status.textContent=language==="en"?"This browser cannot read this barcode format. Enter the item code below.":"المتصفح لا يدعم نوع الباركود ده. اكتب كود الصنف يدويًا.";return}
+  const detector=new window.BarcodeDetector({formats:["code_128"]});
+  window.__novaroScanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
+  video.srcObject=window.__novaroScanStream;await video.play();
+  status.textContent=language==="en"?"Point the camera at the barcode.":"وجّه كاميرا الموبايل ناحية الباركود.";
+  const scan=async()=>{
+   if($("novaroScanner").style.display==="none"||!window.__novaroScanStream)return;
+   try{const found=await detector.detect(video);if(found.length&&found[0].rawValue){$("novaroScanCode").value=found[0].rawValue;findScannedItem();return}}catch(e){}
+   window.__novaroScanFrame=requestAnimationFrame(scan);
+  };
+  window.__novaroScanFrame=requestAnimationFrame(scan);
+ }catch(e){status.textContent=language==="en"?"Camera could not start. Allow camera access or enter the code below.":"مش قادر أشغّل الكاميرا. اسمح باستخدامها أو اكتب الكود يدويًا."}
+}
 function editItem(id){const i=items.find(x=>x.id===id);if(i)itemForm(i)}
 async function deactivateItem(id){if(profile.role!=="owner_admin")return alert("غير مصرح");if(!confirm("هل تريد إيقاف هذا الصنف؟"))return;const r=await db.from("items").update({is_active:false,updated_by:user.id}).eq("id",id);if(r.error)return alert(r.error.message);await load();render()}
 async function saveUserRole(id){const role=$("role_"+id).value;const a=await db.from("profiles").update({role,updated_at:new Date().toISOString()}).eq("id",id);if(a.error)throw a.error;const b=await db.from("branch_members").update({branch_role:role}).eq("user_id",id);if(b.error)throw b.error;await usersPage()}
