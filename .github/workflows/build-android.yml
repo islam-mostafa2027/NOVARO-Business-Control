@@ -119,7 +119,7 @@ jobs:
               if artifact not in g:
                   if "dependencies {" not in g:
                       raise SystemExit("Gradle dependencies block not found")
-                  g = g.replace("dependencies {", "dependencies {\n    " + dep, 1)
+                  g = g.replace("dependencies {", "dependencies {\\n    " + dep, 1)
           gradle.write_text(g)
           main = next(Path("android/app/src/main/java").rglob("MainActivity.java"), None)
           if main is None:
@@ -129,17 +129,22 @@ jobs:
               "import androidx.credentials.CredentialManager;",
               "import androidx.credentials.CreatePasswordRequest;",
               "import androidx.credentials.CreateCredentialResponse;",
-              "import androidx.credentials.CredentialManagerCallback;",
+              "import androidx.credentials.GetCredentialRequest;",
+              "import androidx.credentials.GetCredentialResponse;",
+              "import androidx.credentials.GetPasswordOption;",
+              "import androidx.credentials.PasswordCredential;",
               "import androidx.credentials.exceptions.CreateCredentialException;",
+              "import androidx.credentials.exceptions.GetCredentialException;",
+              "import androidx.credentials.CredentialManagerCallback;",
               "import java.util.concurrent.Executors;"
           ]
           lines = s.splitlines()
           existing = set(x.strip() for x in lines if x.startswith("import "))
           idx = max(i for i,x in enumerate(lines) if x.startswith("import "))
           lines[idx+1:idx+1] = [x for x in imports if x not in existing]
-          s = "\n".join(lines) + "\n"
-          pattern = r'@JavascriptInterface public void commit\(\) \{.*?\n\s*\}(?=\s*@JavascriptInterface public void cancel\(\))'
-          new_method = """@JavascriptInterface public void save(String username, String password) {
+          s = "\\n".join(lines) + "\\n"
+          pattern = r'@JavascriptInterface public void commit\\(\\) \\{.*?\\n\\s*\\}(?=\\s*@JavascriptInterface public void cancel\\(\\))'
+          new_methods = """@JavascriptInterface public void save(String username, String password) {
                   runOnUiThread(() -> {
                       try {
                           CredentialManager manager = CredentialManager.create(MainActivity.this);
@@ -148,7 +153,7 @@ jobs:
                               Executors.newSingleThreadExecutor(),
                               new CredentialManagerCallback<CreateCredentialResponse, CreateCredentialException>() {
                                   @Override public void onResult(CreateCredentialResponse result) {
-                                      android.util.Log.i("NOVARO", "Credential Manager flow completed");
+                                      android.util.Log.i("NOVARO", "Credential save flow completed");
                                   }
                                   @Override public void onError(CreateCredentialException e) {
                                       android.util.Log.w("NOVARO", "Password save was not completed", e);
@@ -158,12 +163,41 @@ jobs:
                           android.util.Log.w("NOVARO", "Credential Manager unavailable", e);
                       }
                   });
+              }
+              @JavascriptInterface public void get() {
+                  runOnUiThread(() -> {
+                      try {
+                          CredentialManager manager = CredentialManager.create(MainActivity.this);
+                          GetCredentialRequest request = new GetCredentialRequest.Builder()
+                              .addCredentialOption(new GetPasswordOption())
+                              .build();
+                          manager.getCredentialAsync(MainActivity.this, request, null,
+                              Executors.newSingleThreadExecutor(),
+                              new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                                  @Override public void onResult(GetCredentialResponse result) {
+                                      if (result.getCredential() instanceof PasswordCredential) {
+                                          PasswordCredential credential = (PasswordCredential) result.getCredential();
+                                          String js = "window.NOVAROFillCredentials && window.NOVAROFillCredentials("
+                                              + org.json.JSONObject.quote(credential.getId()) + ","
+                                              + org.json.JSONObject.quote(credential.getPassword()) + ");";
+                                          getBridge().getWebView().post(() ->
+                                              getBridge().getWebView().evaluateJavascript(js, null));
+                                      }
+                                  }
+                                  @Override public void onError(GetCredentialException e) {
+                                      android.util.Log.i("NOVARO", "No saved credential selected or retrieval cancelled", e);
+                                  }
+                              });
+                      } catch (Exception e) {
+                          android.util.Log.w("NOVARO", "Credential retrieval unavailable", e);
+                      }
+                  });
               }"""
-          s, count = re.subn(pattern, lambda _: new_method, s, count=1, flags=re.S)
+          s, count = re.subn(pattern, lambda _: new_methods, s, count=1, flags=re.S)
           if count != 1:
               raise SystemExit("Could not safely replace Android Autofill commit method")
           main.write_text(s)
-          print("Credential Manager bridge configured")
+          print("Credential Manager save and retrieval bridge configured")
           PY
       - name: Sync Capacitor
         run: npx cap sync android
