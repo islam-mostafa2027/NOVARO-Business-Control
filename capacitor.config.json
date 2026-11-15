@@ -1,0 +1,9 @@
+{
+  "appId": "com.novaro.inventory",
+  "appName": "NOVARO Inventory",
+  "webDir": "www",
+  "backgroundColor": "#f3f7f5",
+  "server": {
+    "androidScheme": "https"
+  }
+}
