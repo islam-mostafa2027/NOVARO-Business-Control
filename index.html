@@ -1000,8 +1000,7 @@ function printItemBarcode(id){
  try{window.JsBarcode(svg,item.item_code,{format:"CODE128",displayValue:true,font:"Arial",fontSize:16,height:72,margin:14,lineColor:"#183d30",textMargin:8});}
  catch(e){return alert(language==="en"?"This item code cannot be converted to a barcode.":"كود الصنف ده غير صالح للتحويل إلى باركود.");}
  const w=window.open("","_blank");if(!w)return alert(language==="en"?"Allow pop-ups to print the barcode.":"اسمح بفتح النوافذ المنبثقة لطباعة الباركود.");
- w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(nameOf(item))+'</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:30px;color:#183d30}svg{max-width:100%;height:auto}.label{font-size:18px;font-weight:bold;margin-bottom:8px}@media print{button{display:none}}
- w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(nameOf(item))+'</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:30px;color:#183d30}svg{max-width:100%;height:auto}.label{font-size:18px;font-weight:bold;margin-bottom:8px}@media print{button{display:none}}</style></head><body><div class="label">
+  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(nameOf(item))+'</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:30px;color:#183d30}svg{max-width:100%;height:auto}.label{font-size:18px;font-weight:bold;margin-bottom:8px}@media print{button{display:none}}</style></head><body><div class="label">'+esc(nameOf(item))+'</div>'+svg.outerHTML+'<p>'+esc(item.item_code)+'</p><button onclick="window.print()">طباعة الباركود</button></body></html>');
  w.document.close();
 }
 async function latest(){let r=await db.from("stock_movements").select("*,items(name_ar,name_en)").eq("branch_id",branchId).order("created_at",{ascending:false}).limit(8);$("latest").innerHTML=r.error?esc(r.error.message):r.data.length?tableMoves(r.data):"لا توجد حركات مسجلة"}
