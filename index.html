@@ -707,6 +707,7 @@ Object.assign(translations,{
   "الشهر": "Month",
   "إجراءات": "Actions",
   "المقارنة": "Comparison",
+  "التقارير": "Reports", "التقرير": "Report", "تقرير": "Report", "جرد": "Stocktake",
   "التنبيهات": "Alerts"
 });
 const reverseTranslations=Object.fromEntries(Object.entries(translations).map(([a,b])=>[b,a]));
@@ -841,7 +842,15 @@ async function getBranchStocktakeData(id){
  return snapshots;
 }
 function fmtQty(n){return Number(n||0).toLocaleString(language==="en"?"en-US":"ar-EG",{maximumFractionDigits:2})}
-function sessionLabel(x){return x?new Date(x.inventory_date+"T00:00:00").toLocaleDateString(language==="en"?"en-GB":"ar-EG",{month:"long",year:"numeric"}):"—"}
+function sessionLabel(x){
+ if(!x||!x.inventory_date)return "—";
+ const raw=String(x.inventory_date).split("T")[0],parts=raw.split("-").map(Number);
+ if(parts.length!==3||parts.some(n=>!Number.isFinite(n)))return "—";
+ const date=new Date(Date.UTC(parts[0],parts[1]-1,parts[2],12));
+ const locale=language==="en"?"en-GB-u-ca-gregory-nu-latn":"ar-EG-u-ca-gregory";
+ return new Intl.DateTimeFormat(locale,{month:"long",year:"numeric",timeZone:"UTC",numberingSystem:language==="en"?"latn":"arab"}).format(date);
+}
+function sessionTitle(x){return translateText(x?.title||"جرد")}
 async function homeDashboard(){
  const host=$("homeDashboard");if(!host||!branchId)return;
  try{
@@ -860,7 +869,7 @@ async function reportsPage(){
   const q=await db.from("inventory_sessions").select("*").eq("branch_id",id).order("created_at",{ascending:false});
   if(q.error)throw q.error;
   const list=q.data||[];
-  host.innerHTML=list.length?'<div class="stocktake-report-list">'+list.map(x=>'<section class="card report-session-row"><div><b>'+esc(x.title||"جرد")+'</b><p class="muted">'+esc(branchLabel(branches.find(b=>b.id===x.branch_id)||allBranches.find(b=>b.id===x.branch_id))||"")+' · '+esc(sessionLabel(x))+' · '+esc(x.status||"")+'</p></div><div class="row report-actions"><button onclick="viewStocktakeReport(\''+x.id+'\')">'+(language==="en"?"View / Print":"عرض / طباعة")+'</button><button class="soft" onclick="exportStocktakeReport(\''+x.id+'\')">'+(language==="en"?"Export Excel":"تصدير Excel")+'</button></div></section>').join("")+'</div>':'<div class="empty">'+(language==="en"?"No stocktake sessions for this branch yet.":"لا توجد جلسات جرد لهذا الفرع حتى الآن.")+'</div>';
+  host.innerHTML=list.length?'<div class="stocktake-report-list">'+list.map(x=>'<section class="card report-session-row"><div><b>'+esc(sessionTitle(x))+'</b><p class="muted">'+esc(branchLabel(branches.find(b=>b.id===x.branch_id)||allBranches.find(b=>b.id===x.branch_id))||"")+' · '+esc(sessionLabel(x))+' · '+esc(x.status||"")+'</p></div><div class="row report-actions"><button onclick="viewStocktakeReport(\''+x.id+'\')">'+(language==="en"?"View / Print":"عرض / طباعة")+'</button><button class="soft" onclick="exportStocktakeReport(\''+x.id+'\')">'+(language==="en"?"Export Excel":"تصدير Excel")+'</button></div></section>').join("")+'</div>':'<div class="empty">'+(language==="en"?"No stocktake sessions for this branch yet.":"لا توجد جلسات جرد لهذا الفرع حتى الآن.")+'</div>';
  }catch(e){host.innerHTML='<div class="error">'+esc(e.message||String(e))+'</div>'}
 }
 async function getSingleStocktakeReport(id){
@@ -873,7 +882,7 @@ async function getSingleStocktakeReport(id){
 }
 function stocktakeReportTable(data){
  const rows=data.rows,en=language==="en";
- return '<div class="single-stocktake-report"><h2>'+esc(data.session.title|| (en?"Stocktake report":"تقرير الجرد"))+'</h2><p class="muted">'+esc(branchLabel(data.branch)||"—")+'</p><p class="muted">'+esc(sessionLabel(data.session))+' · '+rows.length+' '+(en?"items":"صنف")+'</p><div class="tablewrap"><table><thead><tr><th>'+(en?"Item":"الصنف")+'</th><th>'+(en?"Code":"الكود")+'</th><th>'+(en?"Unit":"الوحدة")+'</th><th>'+(en?"Counted quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+esc(x.item_code||"—")+'</td><td>'+esc(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+fmtQty(x.quantity)+'</td></tr>').join("")+'</tbody></table></div><p class="app-watermark">Designed &amp; Developed by <strong>Islam Mostafa</strong></p></div>';
+ return '<div class="single-stocktake-report"><h2>'+esc(language==="en"?translateText(data.session.title||"تقرير الجرد"):(data.session.title||"تقرير الجرد"))+'</h2><p class="muted">'+esc(branchLabel(data.branch)||"—")+'</p><p class="muted">'+esc(sessionLabel(data.session))+' · '+rows.length+' '+(en?"items":"صنف")+'</p><div class="tablewrap"><table><thead><tr><th>'+(en?"Item":"الصنف")+'</th><th>'+(en?"Code":"الكود")+'</th><th>'+(en?"Unit":"الوحدة")+'</th><th>'+(en?"Counted quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+esc(x.item_code||"—")+'</td><td>'+esc(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+fmtQty(x.quantity)+'</td></tr>').join("")+'</tbody></table></div><p class="app-watermark">Designed &amp; Developed by <strong>Islam Mostafa</strong></p></div>';
 }
 async function viewStocktakeReport(id){
  const host=$("reportContent");host.innerHTML='<div class="empty">'+(language==="en"?"Loading report...":"جاري تحميل التقرير...")+'</div>';
