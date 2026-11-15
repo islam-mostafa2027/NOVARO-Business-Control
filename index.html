@@ -912,7 +912,7 @@ async function viewStocktakeReport(id){
  }catch(e){host.innerHTML='<div class="error">'+esc(e.message||String(e))+'</div>'}
 }
 async function exportStocktakeReport(id){
- try{const data=await getSingleStocktakeReport(id),en=language==="en",head=en?["Item","Code","Unit","Counted quantity"]:["الصنف","الكود","الوحدة","الكمية الفعلية"];
+ try{const data=await getSingleStocktakeReport(id),en=language==="en",head=en?["Type","Item","Code","Unit","Counted quantity"]:["النوع","الصنف","الكود","الوحدة","الكمية الفعلية"];
  const rows=data.rows.map(x=>[branchLabel(data.branch)||"",x.categories?.group_key==="materials"?(en?"Materials":"الخامات"):(en?"Equipment":"العُدّة"),en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en),x.quantity]);
  head.unshift(en?"Branch":"الفرع");
  const csv="\\uFEFF"+[head,...rows].map(r=>r.map(v=>'"'+String(v??"").split('"').join('""')+'"').join(",")).join("\\r\\n");
