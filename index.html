@@ -1566,6 +1566,22 @@ async function requestSavedCredentials(){
  }
 }
 
+// Open the Android Credential Manager account picker when the password field is focused.
+// The native bridge returns the selected account securely without storing passwords in web storage.
+let novaroCredentialRequestAt=0;
+$("password").addEventListener("focus",()=>{
+ const now=Date.now();
+ if(now-novaroCredentialRequestAt<700)return;
+ novaroCredentialRequestAt=now;
+ requestSavedCredentials();
+});
+$("password").addEventListener("pointerdown",()=>{
+ const now=Date.now();
+ if(now-novaroCredentialRequestAt<700)return;
+ novaroCredentialRequestAt=now;
+ requestSavedCredentials();
+});
+
 async function init(){const {data,error}=await db.auth.getSession();if(error)throw error;if(data?.session?.user)await openWorkspace(data.session.user);db.auth.onAuthStateChange((ev,session)=>{if(ev==="SIGNED_OUT"){openedUserId=null;openingUserId=null;$("app").classList.add("hidden");$("login").classList.remove("hidden");return}if(session&&ev==="SIGNED_IN")setTimeout(()=>openWorkspace(session.user).catch(showAuthError),0);});}
 let novaroLoginInProgress=false,novaroAutoLoginTimer=null;
 async function submitNovaroLogin(e){
