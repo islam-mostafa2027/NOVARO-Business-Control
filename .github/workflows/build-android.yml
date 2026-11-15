@@ -143,7 +143,7 @@ jobs:
           idx = max(i for i,x in enumerate(lines) if x.startswith("import "))
           lines[idx+1:idx+1] = [x for x in imports if x not in existing]
           s = "\n".join(lines) + "\n"
-          pattern = r'@JavascriptInterface public void commit\(\) \{.*?\n\s*\\}(?=\s*@JavascriptInterface public void cancel\(\))'
+          pattern = r'@JavascriptInterface public void commit\(\) \{.*?\n\s*\}(?=\s*@JavascriptInterface public void cancel\(\))'
           new_methods = """@JavascriptInterface public void save(String username, String password) {
                   runOnUiThread(() -> {
                       try {
