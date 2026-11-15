@@ -849,96 +849,38 @@ html[lang="ar"] .novaro-back-button{flex-direction:row}
 html[lang="ar"] .novaro-back-button svg{transform:rotate(180deg)}
 html[lang="en"] .novaro-back-button svg{transform:none}
 
-/* NOVARO global diagnostic console */
-#novaroDiagLauncher{position:fixed;z-index:99998;bottom:16px;right:16px;border:0;border-radius:999px;padding:11px 15px;background:#245f52;color:#fff;font:700 13px Arial,sans-serif;box-shadow:0 5px 20px #102e2540;cursor:pointer}
-#novaroDiagLauncher .nd-count{display:inline-flex;min-width:19px;height:19px;align-items:center;justify-content:center;margin-inline-start:6px;border-radius:20px;background:#fff;color:#a52d2d;font-size:11px}
-#novaroDiagPanel{position:fixed;z-index:99999;inset:auto 12px 66px 12px;max-width:680px;max-height:min(72vh,620px);margin-inline:auto;background:#fff;color:#243b35;border:1px solid #cbded5;border-radius:16px;box-shadow:0 12px 45px #102e2540;display:none;overflow:hidden;font:13px/1.5 Arial,Tahoma,sans-serif;direction:rtl}
-#novaroDiagPanel.open{display:flex;flex-direction:column}
-#novaroDiagPanel .nd-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;background:#edf5f0;border-bottom:1px solid #d8e7df}
-#novaroDiagPanel .nd-actions{display:flex;gap:7px;flex-wrap:wrap}
-#novaroDiagPanel button{border:0;border-radius:8px;padding:8px 11px;background:#285f52;color:white;font-weight:700;cursor:pointer}
-#novaroDiagPanel button.nd-secondary{background:#e2ece6;color:#285f52}
-#novaroDiagPanel .nd-body{padding:12px;overflow:auto}
-#novaroDiagPanel .nd-summary{margin:0 0 9px;color:#526b61}
-#novaroDiagPanel pre{white-space:pre-wrap;overflow-wrap:anywhere;direction:ltr;text-align:left;background:#f4f7f5;border:1px solid #dce8e1;border-radius:9px;padding:10px;margin:0;font:11px/1.5 ui-monospace,monospace;user-select:text}
-#novaroDiagPanel .nd-empty{padding:18px;text-align:center;color:#60786d}
-#novaroDiagPanel .nd-foot{padding:8px 12px;border-top:1px solid #e1ebe5;color:#71847a;font-size:11px}
-@media(max-width:600px){#novaroDiagLauncher{bottom:12px;right:12px;padding:10px 13px}#novaroDiagPanel{inset:auto 8px 60px;max-height:75vh}}
 </style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body><script>
-/* NOVARO global error recorder: starts before application scripts. */
+/* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
  "use strict";
- var records=[],limit=100,seq=0,ready=false,panel,pre,countNode;
+ var records=[],limit=100;
  function safe(v){try{if(v instanceof Error)return {name:v.name,message:v.message,stack:v.stack||""};if(typeof v==="string")return v;return JSON.parse(JSON.stringify(v));}catch(_){return String(v);}}
+ function report(){return JSON.stringify({app:"NOVARO Inventory",generatedAt:new Date().toISOString(),page:location.href,userAgent:navigator.userAgent,errors:records},null,2);}
+ function show(item){
+  var app=document.getElementById("app"),login=document.getElementById("loginErr"),target=null;
+  if(app&&app.classList.contains("hidden")&&login)target=login;
+  if(!target)target=document.getElementById("formErr")||document.getElementById("userErr");
+  if(target){target.textContent=item.message;target.title=item.type+" | "+JSON.stringify(item.details||{});return;}
+  var main=document.getElementById("main");if(!main)return;
+  var box=main.querySelector(".novaro-runtime-error");
+  if(!box){box=document.createElement("div");box.className="novaro-runtime-error";box.setAttribute("role","alert");main.prepend(box);}
+  box.textContent=item.type+": "+item.message;box.title=JSON.stringify(item.details||{});
+  var copy=document.createElement("button");copy.type="button";copy.textContent="نسخ تقرير الخطأ";
+  copy.onclick=function(){var value=report();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(value);else{var t=document.createElement("textarea");t.value=value;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();}};
+  box.appendChild(copy);
+ }
  function add(type,message,details){
-  var text=typeof message==="string"?message:(message&&message.message)||String(message||"Unknown error");
-  var last=records[records.length-1];
-  if(last&&last.type===type&&last.message===text&&Date.now()-last.time<700)return;
-  var item={id:++seq,time:new Date().toISOString(),type:type,message:text,details:details||{}};
-  records.push(item);if(records.length>limit)records.shift();
-  window.__NOVARO_LAST_ERROR=item;
-  if(countNode)countNode.textContent=String(records.length);
-  if(pre)pre.textContent=makeReport();
-  var loginMessage=document.getElementById("loginErr");
-  if(loginMessage&&!document.getElementById("app")?.classList.contains("hidden")){
-   /* Keep the login form's own validation messages intact while the workspace is open. */
-  }else if(loginMessage&&type!=="console.error"){
-   loginMessage.textContent="تم رصد خطأ ("+type+"). افتح زر «تشخيص الأخطاء» لنسخ التفاصيل.";
-  }
+  var value=typeof message==="string"?message:(message&&message.message)||String(message||"Unknown error");
+  var last=records[records.length-1];if(last&&last.type===type&&last.message===value&&Date.now()-last.time<700)return;
+  var item={id:records.length+1,time:new Date().toISOString(),type:type,message:value,details:details||{}};
+  records.push(item);if(records.length>limit)records.shift();window.__NOVARO_LAST_ERROR=item;show(item);
  }
- function makeReport(){
-  return JSON.stringify({app:"NOVARO Inventory",generatedAt:new Date().toISOString(),page:location.href,userAgent:navigator.userAgent,errors:records},null,2);
- }
- window.NOVAROReportError=function(error,context,extra){
-  var e=safe(error);add("application",e&&e.message?e.message:e,{context:context||"Application",extra:extra||null,stack:e&&e.stack||""});
- };
- window.NOVAROGetErrorReport=makeReport;
- window.addEventListener("error",function(event){
-  if(event&&event.target&&event.target!==window){
-   var target=event.target,src=target.src||target.href||"";
-   add("resource.load","Failed to load resource",{tag:target.tagName||"",url:src});
-   return;
-  }
-  add("javascript",event&&event.message||"JavaScript error",{file:event&&event.filename||"",line:event&&event.lineno||0,column:event&&event.colno||0,stack:event&&event.error&&event.error.stack||""});
- },true);
- window.addEventListener("unhandledrejection",function(event){
-  var e=safe(event&&event.reason);
-  add("unhandledrejection",e&&e.message?e.message:e,{reason:e,stack:e&&e.stack||""});
- });
- var originalError=console.error;
- console.error=function(){
-  try{var args=Array.prototype.slice.call(arguments);add("console.error",args.map(function(x){var v=safe(x);return typeof v==="string"?v:JSON.stringify(v);}).join(" "),{arguments:args.map(safe),stack:(new Error("console.error call")).stack});}catch(_){}
-  return originalError.apply(console,arguments);
- };
- if(window.fetch){
-  var originalFetch=window.fetch;
-  window.fetch=function(){
-   var args=arguments,url=typeof args[0]==="string"?args[0]:(args[0]&&args[0].url)||"";
-   return originalFetch.apply(this,args).then(function(response){
-    if(!response.ok)add("network.http","HTTP "+response.status+" "+response.statusText,{url:url,status:response.status});
-    return response;
-   }).catch(function(error){add("network.fetch",error,{url:url,stack:error&&error.stack||""});throw error;});
-  };
- }
- function buildUI(){
-  if(ready||!document.body)return;ready=true;
-  var launch=document.createElement("button");launch.id="novaroDiagLauncher";launch.type="button";launch.innerHTML='تشخيص الأخطاء <span class="nd-count">0</span>';countNode=launch.querySelector(".nd-count");
-  panel=document.createElement("section");panel.id="novaroDiagPanel";panel.setAttribute("role","dialog");panel.setAttribute("aria-label","NOVARO error diagnostics");
-  panel.innerHTML='<div class="nd-head"><strong>سجل أخطاء NOVARO</strong><div class="nd-actions"><button type="button" id="ndCopy">نسخ كود التقرير</button><button type="button" class="nd-secondary" id="ndClear">مسح السجل</button><button type="button" class="nd-secondary" id="ndClose">إغلاق</button></div></div><div class="nd-body"><p class="nd-summary">أي خطأ يتم رصده سيظهر هنا. اضغط «نسخ كود التقرير» وأرسل النص لي لتحليله.</p><pre id="ndReport"></pre></div><div class="nd-foot">يُحفظ السجل داخل الصفحة الحالية فقط ولا يُرسل تلقائيًا لأي جهة.</div>';
-  document.body.appendChild(launch);document.body.appendChild(panel);pre=panel.querySelector("#ndReport");
-  launch.addEventListener("click",function(){panel.classList.toggle("open");pre.textContent=makeReport();});
-  panel.querySelector("#ndClose").addEventListener("click",function(){panel.classList.remove("open");});
-  panel.querySelector("#ndClear").addEventListener("click",function(){records=[];window.__NOVARO_LAST_ERROR=null;countNode.textContent="0";pre.textContent="لا توجد أخطاء مسجلة.";});
-  panel.querySelector("#ndCopy").addEventListener("click",function(){
-   var report=makeReport(),button=this;
-   function copied(){button.textContent="تم النسخ ✓";setTimeout(function(){button.textContent="نسخ كود التقرير";},1600);}
-   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(report).then(copied).catch(function(){fallbackCopy(report,copied);});}else fallbackCopy(report,copied);
-  });
-  function fallbackCopy(value,done){var t=document.createElement("textarea");t.value=value;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");done();}catch(_){pre.textContent=value;}t.remove();}
-  pre.textContent=makeReport();
- }
- if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",buildUI);else buildUI();
- window.addEventListener("load",buildUI);
+ window.NOVAROReportError=function(error,context,extra){var e=safe(error);add("application",e&&e.message?e.message:e,{context:context||"Application",extra:extra||null,stack:e&&e.stack||""});};
+ window.NOVAROGetErrorReport=report;
+ window.addEventListener("error",function(e){if(e&&e.target&&e.target!==window){var t=e.target;add("resource.load","Failed to load resource",{tag:t.tagName||"",url:t.src||t.href||""});return;}add("javascript",e&&e.message||"JavaScript error",{file:e&&e.filename||"",line:e&&e.lineno||0,column:e&&e.colno||0,stack:e&&e.error&&e.error.stack||""});},true);
+ window.addEventListener("unhandledrejection",function(e){var v=safe(e&&e.reason);add("unhandledrejection",v&&v.message?v.message:v,{reason:v,stack:v&&v.stack||""});});
+ var originalError=console.error;console.error=function(){try{var args=Array.prototype.slice.call(arguments);add("console.error",args.map(function(v){var q=safe(v);return typeof q==="string"?q:JSON.stringify(q);}).join(" "),{stack:(new Error("console.error")).stack});}catch(_){}return originalError.apply(console,arguments);};
+ if(window.fetch){var originalFetch=window.fetch;window.fetch=function(){var args=arguments,url=typeof args[0]==="string"?args[0]:(args[0]&&args[0].url)||"";return originalFetch.apply(this,args).then(function(response){if(!response.ok)add("network.http","HTTP "+response.status+" "+response.statusText,{url:url,status:response.status});return response;}).catch(function(error){add("network.fetch",error,{url:url,stack:error&&error.stack||""});throw error;});};}
 })();
 </script>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
@@ -1359,9 +1301,10 @@ function novaroGoBack(){
 function novaroBackButton(){
  const main=$("main");if(!main)return;
  let bar=document.getElementById("novaroPageBackbar");
- if(!bar){bar=document.createElement("div");bar.id="novaroPageBackbar";bar.className="novaro-page-backbar";bar.innerHTML='<button type="button" class="novaro-back-button" aria-label="رجوع" title="رجوع"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18 9 12l6-6"/><path d="M9 12h11"/></svg><span data-back-label>رجوع</span></button>';main.prepend(bar);bar.querySelector("button").addEventListener("click",novaroGoBack);}
- const label=bar.querySelector("[data-back-label]");if(label)label.textContent=language==="en"?"Back":"رجوع";
- const btn=bar.querySelector("button");if(btn){btn.disabled=page==="home"&&!novaroPageHistory.length&&!main.querySelector("#save")&&!window.__novaroStocktakeSubView;btn.title=language==="en"?"Back to previous page":"الرجوع للصفحة السابقة";}
+ const canGoBack=!!(main.querySelector("#save")||window.__novaroStocktakeSubView||novaroPageHistory.length||page!=="home");
+ if(!canGoBack){if(bar)bar.remove();return;}
+ if(!bar){bar=document.createElement("div");bar.id="novaroPageBackbar";bar.className="novaro-page-backbar";bar.innerHTML='<button type="button" class="novaro-back-button" aria-label="رجوع" title="رجوع"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18 9 12l6-6"/><path d="M9 12h11"/></svg></button>';main.prepend(bar);bar.querySelector("button").addEventListener("click",novaroGoBack);}
+ bar.querySelector("button").title=language==="en"?"Back":"رجوع";
 }
 const $=x=>document.getElementById(x), esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function err(e){console.error(e);alert(e.message||"حدث خطأ")}
@@ -1583,7 +1526,7 @@ function printStocktakeReport(){
  const tables=groups.map(g=>{const list=rows.filter(x=>(x.categories?.group_key==="materials"?"materials":"equipment")===g.key);const body=list.map((x,i)=>'<tr><td>'+(i+1)+'</td><td class="item">'+escHtml(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+escHtml(x.item_code||"—")+'</td><td>'+escHtml(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+escHtml(fmtQty(x.quantity))+'</td></tr>').join("");return '<section class="group"><h2>'+g.label+' <small>('+list.length+')</small></h2>'+(list.length?'<table><thead><tr><th style="width:7%">'+(en?"No.":"م")+'</th><th style="width:39%">'+(en?"Item name":"اسم الصنف")+'</th><th style="width:20%">'+(en?"Item code":"كود الصنف")+'</th><th style="width:14%">'+(en?"Unit":"الوحدة")+'</th><th style="width:20%">'+(en?"Actual quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+body+'</tbody></table>':'<p class="empty">'+(en?"No items in this section.":"لا توجد أصناف في هذا القسم.")+'</p>')+'</section>'}).join("");
  const w=window.open("","_blank");if(!w)return alert(en?"Allow pop-ups to open the printable report.":"اسمح بفتح النوافذ المنبثقة لعرض التقرير القابل للطباعة.");
  const title=en?"STOCKTAKE REPORT":"تقرير الجرد",date=String(data.session.inventory_date||"").slice(0,10)||"—";
- const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.print-actions{position:sticky;top:0;z-index:5;display:flex;justify-content:center;gap:10px;padding:12px;background:#eaf3f7;border-bottom:1px solid #cbdce3}.print-actions button{border:0;border-radius:8px;padding:11px 22px;background:#315b70;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}.group{margin:18px 0 22px;break-inside:auto}.group h2{font-size:16px;color:#244b5a;background:#eaf3f7;border-right:4px solid #315b70;padding:8px 10px;margin:0 0 8px}.group h2 small{font-size:11px;color:#607987}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 10px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start}.empty{padding:8px;color:#718894}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{.print-actions{display:none!important}body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:18px}}\n/* Universal in-app back control */\n.novaro-page-backbar{display:flex;align-items:center;justify-content:flex-start;margin:0 0 12px;min-height:38px;direction:inherit}\n.novaro-back-button{display:inline-flex!important;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:7px 12px!important;border:1px solid #dce9e1!important;border-radius:11px!important;background:#fff!important;color:#236e5d!important;box-shadow:0 3px 10px #173d300b!important;font-size:13px!important;font-weight:750!important;transition:background .16s ease,transform .16s ease}\n.novaro-back-button:hover:not(:disabled){background:#eaf4ee!important;transform:translateY(-1px)}\n.novaro-back-button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}\n.novaro-back-button:disabled{opacity:.42;cursor:default;box-shadow:none!important}\n[dir="rtl"] .novaro-back-button svg{transform:rotate(180deg)}\n@media(max-width:600px){.novaro-page-backbar{margin-bottom:9px}.novaro-back-button{min-height:38px;padding:8px 13px!important}}\n</style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header>'+tables+'<div class="foot">NOVARO Inventory</div></body></html>';
+ const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.print-actions{position:sticky;top:0;z-index:5;display:flex;justify-content:center;gap:10px;padding:12px;background:#eaf3f7;border-bottom:1px solid #cbdce3}.print-actions button{border:0;border-radius:8px;padding:11px 22px;background:#315b70;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}.group{margin:18px 0 22px;break-inside:auto}.group h2{font-size:16px;color:#244b5a;background:#eaf3f7;border-right:4px solid #315b70;padding:8px 10px;margin:0 0 8px}.group h2 small{font-size:11px;color:#607987}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 10px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start}.empty{padding:8px;color:#718894}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{.print-actions{display:none!important}body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:18px}}\n/* Compact contextual back control */\n.novaro-page-backbar{display:flex;align-items:center;justify-content:flex-start;margin:0 0 6px;min-height:26px;direction:inherit}\n.novaro-back-button{display:inline-flex!important;align-items:center;justify-content:center;width:30px!important;height:30px!important;min-height:30px!important;padding:0!important;border:1px solid #dce9e1!important;border-radius:9px!important;background:transparent!important;color:#477b6d!important;box-shadow:none!important;font-size:0!important;transition:background .16s ease}\n.novaro-back-button:hover{background:#eaf4ee!important}\n.novaro-back-button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}\n[dir="rtl"] .novaro-back-button svg{transform:rotate(180deg)}\n.novaro-runtime-error{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0;padding:10px 12px;border:1px solid #efcaca;border-radius:10px;background:#fff4f4;color:#9b3030;font-size:13px;direction:inherit}\n.novaro-runtime-error button{border:1px solid #e3bcbc;border-radius:7px;background:#fff;color:#8e3030;padding:5px 9px;font-size:12px}\n</style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header>'+tables+'<div class="foot">NOVARO Inventory</div></body></html>';
  w.document.open();w.document.write(html);w.document.close();
 }
 function render(){document.querySelectorAll("[data-p]").forEach(b=>b.classList.toggle("active",b.dataset.p===page));let m=$("main");if(!branches.length&&profile.role!=="owner_admin"){m.innerHTML='<section class="card empty">لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.</section>';return}
