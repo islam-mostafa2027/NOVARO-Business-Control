@@ -764,7 +764,7 @@ button:focus-visible,.tabs button:focus-visible{outline:3px solid #8bb4d2;outlin
 #novaroItemDetails .detail-cell b{overflow-wrap:anywhere}
 #novaroItemDetails .detail-qty{font-size:24px;color:#176b48}
 @media(max-width:420px){#novaroScanner .scan-panel,#novaroItemDetails .detail-panel{padding:13px}}
-.item-qrcode-wrap{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:112px}.item-qrcode{display:inline-flex;align-items:center;justify-content:center;width:108px;height:108px;background:#fff;padding:2px;border-radius:6px}.item-qrcode img,.item-qrcode canvas{display:block!important;max-width:104px!important;max-height:104px!important}.item-qrcode-wrap small{font-size:11px;direction:ltr;unicode-bidi:plaintext}\n</style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body>
+.item-qrcode-wrap{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:76px}.item-qrcode{display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;background:#fff;padding:2px;border-radius:5px}.item-qrcode img,.item-qrcode canvas{display:block!important;max-width:68px!important;max-height:68px!important}.item-qrcode-wrap small{font-size:10px;line-height:1.2;direction:ltr;unicode-bidi:plaintext}\n</style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <script>(function(){var release=function(){var x=document.getElementById("splash");if(x){x.classList.add("splash-out");setTimeout(function(){x.remove()},700)}};setTimeout(release,3200)})();</script>
 <div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
@@ -1400,7 +1400,7 @@ function renderItemQRCodes(){
  document.querySelectorAll(".item-qrcode").forEach(el=>{
   if(el.dataset.qrReady==="1")return;
   el.dataset.qrReady="1";
-  try{new window.QRCode(el,{text:el.dataset.itemUrl,width:104,height:104,colorDark:"#183d30",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});}
+  try{new window.QRCode(el,{text:el.dataset.itemUrl,width:68,height:68,colorDark:"#183d30",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});}
   catch(e){el.textContent="QR";}
  });
 }
