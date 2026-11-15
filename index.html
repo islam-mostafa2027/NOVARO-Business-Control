@@ -848,7 +848,99 @@ html[lang="en"] .novaro-back-button{flex-direction:row}
 html[lang="ar"] .novaro-back-button{flex-direction:row}
 html[lang="ar"] .novaro-back-button svg{transform:rotate(180deg)}
 html[lang="en"] .novaro-back-button svg{transform:none}
-</style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body>
+
+/* NOVARO global diagnostic console */
+#novaroDiagLauncher{position:fixed;z-index:99998;bottom:16px;right:16px;border:0;border-radius:999px;padding:11px 15px;background:#245f52;color:#fff;font:700 13px Arial,sans-serif;box-shadow:0 5px 20px #102e2540;cursor:pointer}
+#novaroDiagLauncher .nd-count{display:inline-flex;min-width:19px;height:19px;align-items:center;justify-content:center;margin-inline-start:6px;border-radius:20px;background:#fff;color:#a52d2d;font-size:11px}
+#novaroDiagPanel{position:fixed;z-index:99999;inset:auto 12px 66px 12px;max-width:680px;max-height:min(72vh,620px);margin-inline:auto;background:#fff;color:#243b35;border:1px solid #cbded5;border-radius:16px;box-shadow:0 12px 45px #102e2540;display:none;overflow:hidden;font:13px/1.5 Arial,Tahoma,sans-serif;direction:rtl}
+#novaroDiagPanel.open{display:flex;flex-direction:column}
+#novaroDiagPanel .nd-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;background:#edf5f0;border-bottom:1px solid #d8e7df}
+#novaroDiagPanel .nd-actions{display:flex;gap:7px;flex-wrap:wrap}
+#novaroDiagPanel button{border:0;border-radius:8px;padding:8px 11px;background:#285f52;color:white;font-weight:700;cursor:pointer}
+#novaroDiagPanel button.nd-secondary{background:#e2ece6;color:#285f52}
+#novaroDiagPanel .nd-body{padding:12px;overflow:auto}
+#novaroDiagPanel .nd-summary{margin:0 0 9px;color:#526b61}
+#novaroDiagPanel pre{white-space:pre-wrap;overflow-wrap:anywhere;direction:ltr;text-align:left;background:#f4f7f5;border:1px solid #dce8e1;border-radius:9px;padding:10px;margin:0;font:11px/1.5 ui-monospace,monospace;user-select:text}
+#novaroDiagPanel .nd-empty{padding:18px;text-align:center;color:#60786d}
+#novaroDiagPanel .nd-foot{padding:8px 12px;border-top:1px solid #e1ebe5;color:#71847a;font-size:11px}
+@media(max-width:600px){#novaroDiagLauncher{bottom:12px;right:12px;padding:10px 13px}#novaroDiagPanel{inset:auto 8px 60px;max-height:75vh}}
+</style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body><script>
+/* NOVARO global error recorder: starts before application scripts. */
+(function(){
+ "use strict";
+ var records=[],limit=100,seq=0,ready=false,panel,pre,countNode;
+ function safe(v){try{if(v instanceof Error)return {name:v.name,message:v.message,stack:v.stack||""};if(typeof v==="string")return v;return JSON.parse(JSON.stringify(v));}catch(_){return String(v);}}
+ function add(type,message,details){
+  var text=typeof message==="string"?message:(message&&message.message)||String(message||"Unknown error");
+  var last=records[records.length-1];
+  if(last&&last.type===type&&last.message===text&&Date.now()-last.time<700)return;
+  var item={id:++seq,time:new Date().toISOString(),type:type,message:text,details:details||{}};
+  records.push(item);if(records.length>limit)records.shift();
+  window.__NOVARO_LAST_ERROR=item;
+  if(countNode)countNode.textContent=String(records.length);
+  if(pre)pre.textContent=makeReport();
+  var loginMessage=document.getElementById("loginErr");
+  if(loginMessage&&!document.getElementById("app")?.classList.contains("hidden")){
+   /* Keep the login form's own validation messages intact while the workspace is open. */
+  }else if(loginMessage&&type!=="console.error"){
+   loginMessage.textContent="تم رصد خطأ ("+type+"). افتح زر «تشخيص الأخطاء» لنسخ التفاصيل.";
+  }
+ }
+ function makeReport(){
+  return JSON.stringify({app:"NOVARO Inventory",generatedAt:new Date().toISOString(),page:location.href,userAgent:navigator.userAgent,errors:records},null,2);
+ }
+ window.NOVAROReportError=function(error,context,extra){
+  var e=safe(error);add("application",e&&e.message?e.message:e,{context:context||"Application",extra:extra||null,stack:e&&e.stack||""});
+ };
+ window.NOVAROGetErrorReport=makeReport;
+ window.addEventListener("error",function(event){
+  if(event&&event.target&&event.target!==window){
+   var target=event.target,src=target.src||target.href||"";
+   add("resource.load","Failed to load resource",{tag:target.tagName||"",url:src});
+   return;
+  }
+  add("javascript",event&&event.message||"JavaScript error",{file:event&&event.filename||"",line:event&&event.lineno||0,column:event&&event.colno||0,stack:event&&event.error&&event.error.stack||""});
+ },true);
+ window.addEventListener("unhandledrejection",function(event){
+  var e=safe(event&&event.reason);
+  add("unhandledrejection",e&&e.message?e.message:e,{reason:e,stack:e&&e.stack||""});
+ });
+ var originalError=console.error;
+ console.error=function(){
+  try{var args=Array.prototype.slice.call(arguments);add("console.error",args.map(function(x){var v=safe(x);return typeof v==="string"?v:JSON.stringify(v);}).join(" "),{arguments:args.map(safe),stack:(new Error("console.error call")).stack});}catch(_){}
+  return originalError.apply(console,arguments);
+ };
+ if(window.fetch){
+  var originalFetch=window.fetch;
+  window.fetch=function(){
+   var args=arguments,url=typeof args[0]==="string"?args[0]:(args[0]&&args[0].url)||"";
+   return originalFetch.apply(this,args).then(function(response){
+    if(!response.ok)add("network.http","HTTP "+response.status+" "+response.statusText,{url:url,status:response.status});
+    return response;
+   }).catch(function(error){add("network.fetch",error,{url:url,stack:error&&error.stack||""});throw error;});
+  };
+ }
+ function buildUI(){
+  if(ready||!document.body)return;ready=true;
+  var launch=document.createElement("button");launch.id="novaroDiagLauncher";launch.type="button";launch.innerHTML='تشخيص الأخطاء <span class="nd-count">0</span>';countNode=launch.querySelector(".nd-count");
+  panel=document.createElement("section");panel.id="novaroDiagPanel";panel.setAttribute("role","dialog");panel.setAttribute("aria-label","NOVARO error diagnostics");
+  panel.innerHTML='<div class="nd-head"><strong>سجل أخطاء NOVARO</strong><div class="nd-actions"><button type="button" id="ndCopy">نسخ كود التقرير</button><button type="button" class="nd-secondary" id="ndClear">مسح السجل</button><button type="button" class="nd-secondary" id="ndClose">إغلاق</button></div></div><div class="nd-body"><p class="nd-summary">أي خطأ يتم رصده سيظهر هنا. اضغط «نسخ كود التقرير» وأرسل النص لي لتحليله.</p><pre id="ndReport"></pre></div><div class="nd-foot">يُحفظ السجل داخل الصفحة الحالية فقط ولا يُرسل تلقائيًا لأي جهة.</div>';
+  document.body.appendChild(launch);document.body.appendChild(panel);pre=panel.querySelector("#ndReport");
+  launch.addEventListener("click",function(){panel.classList.toggle("open");pre.textContent=makeReport();});
+  panel.querySelector("#ndClose").addEventListener("click",function(){panel.classList.remove("open");});
+  panel.querySelector("#ndClear").addEventListener("click",function(){records=[];window.__NOVARO_LAST_ERROR=null;countNode.textContent="0";pre.textContent="لا توجد أخطاء مسجلة.";});
+  panel.querySelector("#ndCopy").addEventListener("click",function(){
+   var report=makeReport(),button=this;
+   function copied(){button.textContent="تم النسخ ✓";setTimeout(function(){button.textContent="نسخ كود التقرير";},1600);}
+   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(report).then(copied).catch(function(){fallbackCopy(report,copied);});}else fallbackCopy(report,copied);
+  });
+  function fallbackCopy(value,done){var t=document.createElement("textarea");t.value=value;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");done();}catch(_){pre.textContent=value;}t.remove();}
+  pre.textContent=makeReport();
+ }
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",buildUI);else buildUI();
+ window.addEventListener("load",buildUI);
+})();
+</script>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <script>(function(){var release=function(){var x=document.getElementById("splash");if(x){x.classList.add("splash-out");setTimeout(function(){x.remove()},700)}};setTimeout(release,3200)})();</script>
 <div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
