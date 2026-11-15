@@ -390,15 +390,34 @@ body:after{color:#315b70;opacity:.045}
  .logo{min-width:48px;min-height:48px;font-size:25px!important}
 }
 
+
+/* Live branch and owner notifications */
+.notification-wrap{position:relative;display:inline-flex;align-items:center}
+.notification-bell{position:relative;min-width:42px;padding:9px 12px!important;border-radius:13px!important;font-size:18px;line-height:1}
+.notification-badge{position:absolute;top:-6px;right:-5px;min-width:19px;height:19px;padding:1px 5px;border-radius:20px;background:#e65f72;color:white;font-size:10px;font-weight:800;display:grid;place-items:center;border:2px solid white}
+.notification-badge.hidden{display:none!important}
+.notification-panel{position:absolute;z-index:100;top:calc(100% + 12px);right:0;width:min(360px,calc(100vw - 28px));max-height:430px;overflow:auto;background:#fff;border:1px solid #dcebf1;border-radius:17px;box-shadow:0 16px 45px #294b5c25;padding:12px}
+.notification-panel.hidden{display:none!important}
+.notification-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:3px 3px 10px;border-bottom:1px solid #e5eef2;margin-bottom:8px}
+.notification-panel-head button{padding:6px 10px!important;font-size:11px}
+.notification-entry{padding:11px 10px;border-radius:12px;border-bottom:1px solid #eef3f5;cursor:pointer}
+.notification-entry:last-child{border-bottom:0}
+.notification-entry.unread{background:#edf7fb}
+.notification-entry b{display:block;color:#29495b;font-size:13px;margin-bottom:4px}
+.notification-entry p{margin:0;color:#526b79;font-size:12px;line-height:1.6}
+.notification-entry small{display:block;color:#8295a0;font-size:10px;margin-top:5px}
+.notification-empty{padding:22px 8px;text-align:center;color:#81939d;font-size:12px}
+@media(max-width:600px){.notification-panel{right:auto;left:-78px;width:min(340px,calc(100vw - 24px))}.header-actions{gap:7px}.notification-bell{min-width:38px;padding:8px!important}}
+.notification-toast{position:fixed;z-index:200;top:18px;left:50%;transform:translateX(-50%);width:min(440px,calc(100vw - 28px));padding:13px 16px;border-radius:14px;background:#315b70;color:white;box-shadow:0 12px 35px #23475a40;font-size:13px;line-height:1.6;text-align:center;animation:notificationToastIn .22s ease-out}@keyframes notificationToastIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
 </style></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
 <section class="auth-panel"><div class="auth-panel-top"><div class="auth-mini-brand"><span class="mini-mark">N</span><span><b>NOVARO Inventory</b><small>Front of House Inventory</small></span></div><button type="button" class="language-control" id="langToggle">English</button></div><div class="auth-form-wrap"><div class="auth-kicker">WELCOME BACK</div><h2>تسجيل الدخول</h2><p class="auth-subtitle">سجّل دخولك لمتابعة المخزون وإدارة الجرد.</p><form id="loginForm"><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="username" placeholder="name@company.com" required></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required></div><button id="loginBtn" class="auth-submit">دخول إلى النظام <span>←</span></button></form><div id="loginErr" class="error"></div><div class="auth-switch"><span>مستخدم جديد؟</span><button type="button" class="soft" id="showSignup">إنشاء حساب</button><button type="button" class="soft hidden" id="showLogin">لدي حساب بالفعل</button></div><form id="signupForm" class="hidden"><h3>حساب جديد</h3><div class="field"><label>الاسم</label><input id="signupName" autocomplete="name" required></div><div class="field"><label>البريد الإلكتروني</label><input id="signupEmail" type="email" autocomplete="email" required></div><div class="field"><label>كلمة المرور (8 أحرف على الأقل)</label><input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required></div><button id="signupBtn" class="auth-submit">إنشاء الحساب <span>←</span></button><div id="signupErr" class="error"></div></form><p class="auth-note" id="loginHint">الحسابات تُفعّل من خلال مالك النظام. إذا كان لديك حساب فرع، استخدم بيانات الدخول المخصصة لفرعك.</p></div><div class="auth-panel-footer"><span>© NOVARO Inventory</span><span>Secure access · Branch ready</span></div></section></div>
-<div id="app" class="hidden"><div class="wrap"><header class="app-header"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">Front of House Inventory</div></div></div><div class="header-actions"><span id="who" class="muted"></span><button class="language-control" id="langToggleApp" type="button">◎ English</button><button class="soft logout-control" id="logout">خروج</button></div></header><nav class="tabs" id="tabs" aria-label="Main navigation"><button data-p="home" class="active">الرئيسية</button><button data-p="items">الأصناف</button><button data-p="counts">الجرد الفعلي</button><button data-p="branches">الفروع</button><button data-p="reports">التقارير</button></nav><main id="main"></main><footer class="app-watermark"><span>Designed &amp; Developed by</span><strong>Islam Mostafa</strong></footer></div></div>
+<div id="app" class="hidden"><div class="wrap"><header class="app-header"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">Front of House Inventory</div></div></div><div class="header-actions"><span id="who" class="muted"></span><div class="notification-wrap"><button id="notificationBell" class="notification-bell soft" type="button" aria-label="الإشعارات">🔔<span id="notificationBadge" class="notification-badge hidden">0</span></button><div id="notificationPanel" class="notification-panel hidden"><div class="notification-panel-head"><b>الإشعارات</b><button id="notificationRefresh" class="soft" type="button">تحديث</button></div><div id="notificationList"></div></div></div><button class="language-control" id="langToggleApp" type="button">◎ English</button><button class="soft logout-control" id="logout">خروج</button></div></header><nav class="tabs" id="tabs" aria-label="Main navigation"><button data-p="home" class="active">الرئيسية</button><button data-p="items">الأصناف</button><button data-p="counts">الجرد الفعلي</button><button data-p="branches">الفروع</button><button data-p="reports">التقارير</button></nav><main id="main"></main><footer class="app-watermark"><span>Designed &amp; Developed by</span><strong>Islam Mostafa</strong></footer></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script><script>
 
 const translations={
-"إدارة أذكى.":"Smarter management.","رؤية أوضح.":"Clearer visibility.","كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.":"Every branch, every item, and every stocktake detail in one place.","مستخدم جديد؟":"New here?","إنشاء حساب":"Create account","WELCOME BACK":"WELCOME BACK","SMART INVENTORY CONTROL":"SMART INVENTORY CONTROL","سجّل دخولك لمتابعة المخزون وإدارة الجرد.":"Sign in to monitor inventory and manage stocktakes.","دخول إلى النظام":"Sign in to workspace","إدارة مخزون أدوات الصالة والخدمة":"Front-of-house & service inventory","Secure access · Branch ready":"Secure access · Branch ready",
+"إدارة أذكى.":"Smarter management.","الإشعارات":"Notifications","تحديث":"Refresh","لا توجد إشعارات حتى الآن":"No notifications yet","تغيير جديد في NOVARO":"New change in NOVARO","رؤية أوضح.":"Clearer visibility.","كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.":"Every branch, every item, and every stocktake detail in one place.","مستخدم جديد؟":"New here?","إنشاء حساب":"Create account","WELCOME BACK":"WELCOME BACK","SMART INVENTORY CONTROL":"SMART INVENTORY CONTROL","سجّل دخولك لمتابعة المخزون وإدارة الجرد.":"Sign in to monitor inventory and manage stocktakes.","دخول إلى النظام":"Sign in to workspace","إدارة مخزون أدوات الصالة والخدمة":"Front-of-house & service inventory","Secure access · Branch ready":"Secure access · Branch ready",
 
 "إدارة مخزون أدوات الصالة والخدمة":"Dining Room & Service Inventory Management",
 "تسجيل الدخول":"Sign in","البريد الإلكتروني":"Email address","كلمة المرور":"Password","دخول":"Sign in",
@@ -534,18 +553,58 @@ window.__novaroObserver=languageObserver;
 languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
 
 const db=supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz");
+
+let notificationChannel=null, notificationRows=[];
+function notificationTime(v){const d=new Date(v);return d.toLocaleString(language==="en"?"en-US":"ar-EG",{dateStyle:"short",timeStyle:"short"})}
+function renderNotifications(){
+ const list=$("notificationList"),badge=$("notificationBadge");if(!list||!badge)return;
+ const unread=notificationRows.filter(n=>!n.read_at).length;
+ badge.textContent=unread>99?"99+":String(unread);badge.classList.toggle("hidden",unread===0);
+ if(!notificationRows.length){list.innerHTML='<div class="notification-empty">لا توجد إشعارات حتى الآن</div>';return}
+ list.innerHTML=notificationRows.slice(0,25).map(n=>'<article class="notification-entry '+(!n.read_at?'unread':'')+'" data-notification-id="'+esc(n.id)+'"><b>'+esc(n.title)+'</b><p>'+esc(n.body)+'</p><small>'+esc(notificationTime(n.created_at))+'</small></article>').join("");
+ list.querySelectorAll("[data-notification-id]").forEach(el=>el.addEventListener("click",()=>markNotificationRead(el.dataset.notificationId)));
+}
+async function loadNotifications(){
+ if(!user)return;
+ const {data,error}=await db.from("notifications").select("id,title,body,created_at,read_at,branch_id,action,entity_table").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(40);
+ if(error){console.warn("Notifications:",error.message);return}
+ notificationRows=data||[];renderNotifications();
+}
+async function markNotificationRead(id){
+ const n=notificationRows.find(x=>x.id===id);if(!n||n.read_at)return;
+ const stamp=new Date().toISOString();
+ const {error}=await db.from("notifications").update({read_at:stamp}).eq("id",id).eq("recipient_id",user.id);
+ if(error){console.warn(error.message);return}
+ n.read_at=stamp;renderNotifications();
+}
+function startNotificationStream(){
+ if(notificationChannel){db.removeChannel(notificationChannel);notificationChannel=null}
+ notificationChannel=db.channel("novaro-notifications-"+user.id)
+ .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
+   const n=payload.new;if(!n)return;
+   notificationRows=[n,...notificationRows.filter(x=>x.id!==n.id)].slice(0,40);renderNotifications();
+   const panel=$("notificationPanel");if(panel)panel.classList.remove("hidden");
+   const toast=document.createElement("div");toast.className="notification-toast";toast.textContent=(n.title||"NOVARO")+" — "+(n.body||"");document.body.append(toast);setTimeout(()=>toast.remove(),6500);
+ })
+ .subscribe();
+}
+
 let user,profile,branches=[],allBranches=[],items=[],cats=[],balances={},branchId,page="home";
 const $=x=>document.getElementById(x), esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function err(e){console.error(e);alert(e.message||"حدث خطأ")}
 async function init(){const {data:{session}}=await db.auth.getSession();if(session)await enter(session.user);db.auth.onAuthStateChange((ev,s)=>{if(s)enter(s.user);else{$("app").classList.add("hidden");$("login").classList.remove("hidden")}})}
 $("loginForm").onsubmit=async e=>{e.preventDefault();$("loginBtn").disabled=true;const {data,error}=await db.auth.signInWithPassword({email:$("email").value,password:$("password").value});$("loginBtn").disabled=false;if(error){$("loginErr").textContent=error.message;return}await enter(data.user)};
 $("logout").onclick=()=>db.auth.signOut();
+$("notificationBell").onclick=()=>{$("notificationPanel").classList.toggle("hidden");if(!$("notificationPanel").classList.contains("hidden"))loadNotifications()};
+$("notificationRefresh").onclick=loadNotifications;
+document.addEventListener("click",e=>{if(!e.target.closest(".notification-wrap"))$("notificationPanel")?.classList.add("hidden")});
+
 $("showSignup").onclick=()=>{$("loginForm").classList.add("hidden");$("loginErr").textContent="";$("signupForm").classList.remove("hidden");$("loginHint").classList.add("hidden");$("showSignup").classList.add("hidden");$("showLogin").classList.remove("hidden")};
 $("showLogin").onclick=()=>{$("signupForm").classList.add("hidden");$("loginForm").classList.remove("hidden");$("signupErr").textContent="";$("loginHint").classList.remove("hidden");$("showLogin").classList.add("hidden");$("showSignup").classList.remove("hidden")};
 $("signupForm").onsubmit=async e=>{e.preventDefault();$("signupBtn").disabled=true;$("signupErr").textContent="";const {data,error}=await db.auth.signUp({email:$("signupEmail").value.trim(),password:$("signupPassword").value,options:{data:{display_name:$("signupName").value.trim()}}});$("signupBtn").disabled=false;if(error){$("signupErr").textContent=error.message;return}if(data.session){await enter(data.user)}else{$("signupErr").textContent="تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب، ثم ارجع وسجّل الدخول.";$("signupForm").reset()}};
 
 async function enter(u){user=u;let r=await db.from("profiles").select("*").eq("id",u.id).maybeSingle();if(r.error)throw r.error;if(!r.data){$("login").classList.add("hidden");$("app").classList.remove("hidden");$("main").innerHTML='<section class="card"><h2>إعداد المالك لأول مرة</h2><p class="muted">أدخل اسمك واسم أول فرع. هذا الإجراء متاح للبريد المعتمد فقط.</p><div class="field"><label>اسم المالك</label><input id="ownerName"></div><div class="formgrid"><div class="field"><label>اسم الفرع بالعربية</label><input id="branchAr"></div><div class="field"><label>اسم الفرع بالإنجليزية</label><input id="branchEn"></div></div><button id="initOwner">تهيئة النظام</button><div id="initErr" class="error"></div></section>';$("initOwner").onclick=async()=>{let {error}=await db.rpc("initialize_inventory_owner",{p_display_name:$("ownerName").value,p_branch_name_ar:$("branchAr").value,p_branch_name_en:$("branchEn").value});if(error){$("initErr").textContent=error.message;return}await enter(u)};return}
-profile=r.data;if(!profile.is_active){await db.auth.signOut();throw Error("الحساب موقوف")} $("login").classList.add("hidden");$("app").classList.remove("hidden");$("who").textContent=esc(profile.display_name||u.email);await load();render()}
+profile=r.data;if(!profile.is_active){await db.auth.signOut();throw Error("الحساب موقوف")} $("login").classList.add("hidden");$("app").classList.remove("hidden");$("who").textContent=esc(profile.display_name||u.email);await load();render();await loadNotifications();startNotificationStream()}
 async function load(){let q=db.from("branches").select("*").eq("is_active",true).order("name_ar");if(profile.role!=="owner_admin"){let m=await db.from("branch_members").select("branch_id").eq("user_id",user.id).eq("is_active",true);q=q.in("id",(m.data||[]).map(x=>x.branch_id))}const aq=profile.role==="owner_admin"?db.from("branches").select("*").order("name_ar"):q;let [b,ab,i,c,m]=await Promise.all([q,aq,db.from("items").select("*,categories(name_ar,name_en)").eq("is_active",true).order("name_ar"),db.from("categories").select("*").eq("is_active",true).order("sort_order"),db.from("stock_movements").select("branch_id,item_id,movement_type,quantity")]);if(b.error)throw b.error;if(ab.error)throw ab.error;if(i.error)throw i.error;if(c.error)throw c.error;if(m.error)throw m.error;branches=b.data||[];allBranches=ab.data||[];items=i.data||[];cats=(c.data||[]).sort((a,b)=>{const ao=/^(other|أخرى)$/i.test((a.name_en||a.name_ar||"").trim()),bo=/^(other|أخرى)$/i.test((b.name_en||b.name_ar||"").trim());return ao===bo?Number(a.sort_order||0)-Number(b.sort_order||0):ao?1:-1});balances={};for(const x of(m.data||[])){const k=x.branch_id+":"+x.item_id;const q=Number(x.quantity);balances[k]=(balances[k]||0)+(x.movement_type==="issue"?-q:q)}if(!branches.some(x=>x.id===branchId))branchId=branches[0]?.id}
 $("tabs").onclick=e=>{let b=e.target.closest("[data-p]");if(b){page=b.dataset.p;render()}};
 
