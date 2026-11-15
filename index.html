@@ -872,6 +872,29 @@ async function offerPasswordSave(username,password){
   }
  }catch(error){console.debug("NOVARO password save was not available:",error);}
 }
+let novaroCredentialPickerOpen=false;
+window.NOVAROFillCredentials=function(username,password){
+ $("email").value=username||"";
+ $("password").value=password||"";
+ $("rememberMe").checked=true;
+ $("email").dispatchEvent(new Event("input",{bubbles:true}));
+ $("password").dispatchEvent(new Event("input",{bubbles:true}));
+};
+async function requestSavedCredentials(){
+ if(novaroCredentialPickerOpen)return;
+ novaroCredentialPickerOpen=true;
+ try{
+  const nativeBridge=window.NOVAROAndroidAutofill;
+  if(nativeBridge&&typeof nativeBridge.get==="function"){nativeBridge.get();return;}
+  if(navigator.credentials&&typeof navigator.credentials.get==="function"){
+   const credential=await navigator.credentials.get({password:true,mediation:"optional"});
+   if(credential&&credential.type==="password")window.NOVAROFillCredentials(credential.id,credential.password);
+  }
+ }catch(error){console.debug("NOVARO credential retrieval unavailable:",error);}
+ finally{setTimeout(()=>{novaroCredentialPickerOpen=false;},900);}
+}
+$("email").addEventListener("focus",requestSavedCredentials);
+$("password").addEventListener("focus",requestSavedCredentials);
 async function init(){const {data,error}=await db.auth.getSession();if(error)throw error;if(data?.session?.user)await openWorkspace(data.session.user);db.auth.onAuthStateChange((ev,session)=>{if(ev==="SIGNED_OUT"){openedUserId=null;openingUserId=null;$("app").classList.add("hidden");$("login").classList.remove("hidden");return}if(session&&ev==="SIGNED_IN")setTimeout(()=>openWorkspace(session.user).catch(showAuthError),0);});}
 $("loginForm").onsubmit=async e=>{e.preventDefault();const btn=$("loginBtn"),msg=$("loginErr");btn.disabled=true;msg.textContent=language==="en"?"Signing in...":"جاري تسجيل الدخول...";try{const loginEmail=$("email").value.trim();if($("rememberMe").checked)localStorage.setItem("novaro-remembered-email",loginEmail);else localStorage.removeItem("novaro-remembered-email");const loginPassword=$("password").value;const {data,error}=await db.auth.signInWithPassword({email:loginEmail,password:loginPassword});if(error)throw error;await offerPasswordSave(loginEmail,loginPassword);if(!data?.user)throw Error(language==="en"?"Sign-in did not return a user.":"لم يتم إرجاع بيانات المستخدم بعد تسجيل الدخول.");msg.textContent=language==="en"?"Opening workspace...":"تم التحقق من الحساب، جاري فتح البرنامج...";await openWorkspace(data.user);}catch(error){console.error("NOVARO sign-in error:",error);msg.textContent=error?.message||(language==="en"?"Could not sign in. Check your connection and try again.":"تعذر تسجيل الدخول. تأكد من الاتصال وحاول مرة أخرى.");}finally{btn.disabled=false}};
 $("logout").onclick=async()=>{const btn=$("logout");btn.disabled=true;try{const {error}=await db.auth.signOut();if(error)throw error;if(notificationChannel){await db.removeChannel(notificationChannel);notificationChannel=null}user=null;profile=null;branches=[];allBranches=[];items=[];cats=[];balances={};branchId="";page="home";notificationRows=[];openedUserId=null;openingUserId=null;$("notificationPanel")?.classList.add("hidden");$("loginForm")?.reset();const savedEmail=localStorage.getItem("novaro-remembered-email");if(savedEmail){$("email").value=savedEmail;$("rememberMe").checked=true;} $("loginErr").textContent="";$("loginBtn").disabled=false;$("app").classList.add("hidden");$("login").classList.remove("hidden");}catch(error){console.error("NOVARO sign-out error:",error);alert(error?.message||(language==="en"?"Could not sign out. Please try again.":"تعذر تسجيل الخروج. حاول مرة أخرى."));}finally{btn.disabled=false}};
