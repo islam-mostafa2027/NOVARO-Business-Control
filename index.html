@@ -319,7 +319,7 @@ button.soft{background:#e8f0f3!important;color:#244b5a!important;border:1px soli
 .field input:focus,.field select:focus,input:focus,select:focus{border-color:#65aeb0;box-shadow:0 0 0 3px #65aeb01c}.branch-select-wrap select:focus{border-color:#65aeb0;box-shadow:0 0 0 4px #65aeb01c}
 .stat-card b{color:#315f70}.app-watermark strong{color:#315f70}body:after{color:#315f70;opacity:.045}
 #splash{background:radial-gradient(circle at 50% 45%,#416f7e 0,#244b5a 42%,#183744 100%)}.splash-caption{color:#c5dce5}.splash-loader span{background:#8dc7c8}.auth-visual{background:linear-gradient(145deg,#315f70 0%,#244b5a 55%,#183744 100%)}
-@media print{body:after{display:none!important}.app-watermark{margin-top:18px}}
+@media print{body:after{display:none!important}.app-watermark{margin-top:18px}}\n@media print{body.print-single-stocktake #splash,body.print-single-stocktake #login,body.print-single-stocktake .app-header,body.print-single-stocktake .tabs,body.print-single-stocktake #reportBranch,body.print-single-stocktake .report-toolbar,body.print-single-stocktake .stocktake-report-list,body.print-single-stocktake .app-watermark:not(.single-stocktake-report .app-watermark){display:none!important}body.print-single-stocktake #reportContent{display:block!important}body.print-single-stocktake .single-stocktake-report{display:block!important}body.print-single-stocktake .wrap{max-width:none;padding:0}}
 </style></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
@@ -515,13 +515,36 @@ async function reportsPage(){
  select.onchange=()=>{window.__reportBranch=select.value;reportsPage()};
  const id=window.__reportBranch||select.value||branchId;
  try{
-  const snaps=await getBranchStocktakeData(id);window.__reportRows=[];
-  if(!snaps.length){host.innerHTML='<div class="empty">'+(language==="en"?"No stocktake data for this branch yet.":"لا توجد بيانات جرد لهذا الفرع حتى الآن.")+'</div>';return}
-  const current=snaps[0],previous=snaps[1],oldMap=new Map((previous?.rows||[]).map(x=>[x.id,x]));
-  const rows=current.rows.map(x=>{const old=oldMap.get(x.id);return {...x,previous:old?old.quantity:null,delta:old?x.quantity-old.quantity:null}});window.__reportRows=rows;
-  host.innerHTML='<p class="muted">'+(language==="en"?"Current count: ":"الجرد الحالي: ")+sessionLabel(current.session)+(previous?" · "+(language==="en"?"Compared with: ":"مقارنة بـ: ")+sessionLabel(previous.session):"")+'</p><div class="tablewrap"><table><thead><tr><th>'+(language==="en"?"Item":"الصنف")+'</th><th>'+(language==="en"?"Code":"الكود")+'</th><th>'+(language==="en"?"Previous count":"الجرد السابق")+'</th><th>'+(language==="en"?"Current count":"الجرد الحالي")+'</th><th>'+(language==="en"?"Change":"التغير")+'</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(language==="en"?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+esc(x.item_code||"—")+'</td><td>'+(x.previous===null?"—":fmtQty(x.previous))+'</td><td>'+fmtQty(x.quantity)+'</td><td class="'+(x.delta===null?"":x.delta>0?"report-positive":x.delta<0?"report-negative":"")+'">'+(x.delta===null?"—":(x.delta>0?"+":"")+fmtQty(x.delta))+'</td></tr>').join("")+'</tbody></table></div><p class="muted">'+(language==="en"?"Change is the difference between two physical stocktakes, not a confirmed shortage or surplus against a perpetual stock balance.":"التغير هو الفرق بين جردين فعليين، وليس عجزًا أو زيادة مؤكدة مقارنة برصيد مخزون مستمر.")+'</p>';
+  const q=await db.from("inventory_sessions").select("*").eq("branch_id",id).order("created_at",{ascending:false});
+  if(q.error)throw q.error;
+  const list=q.data||[];
+  host.innerHTML=list.length?'<div class="stocktake-report-list">'+list.map(x=>'<section class="card report-session-row"><div><b>'+esc(x.title||"جرد")+'</b><p class="muted">'+esc(sessionLabel(x))+' · '+esc(x.status||"")+'</p></div><div class="row report-actions"><button onclick="viewStocktakeReport(\''+x.id+'\')">'+(language==="en"?"View / Print":"عرض / طباعة")+'</button><button class="soft" onclick="exportStocktakeReport(\''+x.id+'\')">'+(language==="en"?"Export Excel":"تصدير Excel")+'</button></div></section>').join("")+'</div>':'<div class="empty">'+(language==="en"?"No stocktake sessions for this branch yet.":"لا توجد جلسات جرد لهذا الفرع حتى الآن.")+'</div>';
  }catch(e){host.innerHTML='<div class="error">'+esc(e.message||String(e))+'</div>'}
 }
+async function getSingleStocktakeReport(id){
+ const session=window.__novaroSessions?.find(x=>x.id===id);
+ const q=await db.from("inventory_sessions").select("*").eq("id",id).single();if(q.error)throw q.error;
+ const r=await db.from("inventory_counts").select("counted_quantity,items(id,item_code,name_ar,name_en,unit_ar,unit_en)").eq("session_id",id);
+ if(r.error)throw r.error;
+ return {session:q.data,rows:(r.data||[]).filter(x=>x.items).map(x=>({...x.items,quantity:Number(x.counted_quantity||0)}))};
+}
+function stocktakeReportTable(data){
+ const rows=data.rows,en=language==="en";
+ return '<div class="single-stocktake-report"><h2>'+esc(data.session.title|| (en?"Stocktake report":"تقرير الجرد"))+'</h2><p class="muted">'+esc(sessionLabel(data.session))+' · '+rows.length+' '+(en?"items":"صنف")+'</p><div class="tablewrap"><table><thead><tr><th>'+(en?"Item":"الصنف")+'</th><th>'+(en?"Code":"الكود")+'</th><th>'+(en?"Unit":"الوحدة")+'</th><th>'+(en?"Counted quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+esc(x.item_code||"—")+'</td><td>'+esc(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+fmtQty(x.quantity)+'</td></tr>').join("")+'</tbody></table></div><p class="app-watermark">Designed &amp; Developed by <strong>Islam Mostafa</strong></p></div>';
+}
+async function viewStocktakeReport(id){
+ const host=$("reportContent");host.innerHTML='<div class="empty">'+(language==="en"?"Loading report...":"جاري تحميل التقرير...")+'</div>';
+ try{const data=await getSingleStocktakeReport(id);host.innerHTML='<div class="row report-toolbar"><button class="soft" onclick="reportsPage()">'+(language==="en"?"Back to stocktakes":"رجوع لكل الجردات")+'</button><button onclick="printStocktakeReport()">'+(language==="en"?"Print / PDF":"طباعة / PDF")+'</button><button class="soft" onclick="exportStocktakeReport(\''+id+'\')">'+(language==="en"?"Export Excel":"تصدير Excel")+'</button></div>'+stocktakeReportTable(data);window.__singleStocktakeReport=data;
+ }catch(e){host.innerHTML='<div class="error">'+esc(e.message||String(e))+'</div>'}
+}
+async function exportStocktakeReport(id){
+ try{const data=await getSingleStocktakeReport(id),en=language==="en",head=en?["Item","Code","Unit","Counted quantity"]:["الصنف","الكود","الوحدة","الكمية الفعلية"];
+ const rows=data.rows.map(x=>[en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en),x.quantity]);
+ const csv="\\uFEFF"+[head,...rows].map(r=>r.map(v=>'"'+String(v??"").split('"').join('""')+'"').join(",")).join("\\r\\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="NOVARO-Stocktake-"+String(data.session.inventory_date||data.session.id).slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);
+ }catch(e){alert(e.message||String(e))}
+}
+function printStocktakeReport(){document.body.classList.add("print-single-stocktake");window.print();setTimeout(()=>document.body.classList.remove("print-single-stocktake"),500)}
 function exportInventoryReport(){
  const rows=window.__reportRows||[];if(!rows.length)return alert(language==="en"?"No report data to export.":"لا توجد بيانات لتصديرها.");
  const head=language==="en"?["Item","Code","Previous count","Current count","Change"]:["الصنف","الكود","الجرد السابق","الجرد الحالي","التغير"];
