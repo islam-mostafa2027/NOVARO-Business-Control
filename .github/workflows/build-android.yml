@@ -43,6 +43,35 @@ jobs:
       - name: Generate Android project
         run: npx cap add android
 
+      - name: Enable Android WebView autofill support
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          files = list(Path("android/app/src/main/java").rglob("MainActivity.java"))
+          if not files:
+              raise SystemExit("MainActivity.java not found")
+          path = files[0]
+          source = path.read_text()
+          if "setImportantForAutofill" not in source:
+              lines = source.splitlines()
+              package_index = next(i for i, line in enumerate(lines) if line.startswith("package "))
+              lines[package_index + 1:package_index + 1] = [
+                  "",
+                  "import android.os.Build;",
+                  "import android.view.View;",
+              ]
+              source = "\n".join(lines) + "\n"
+              source = source.replace(
+                  "super.onCreate(savedInstanceState);",
+                  "super.onCreate(savedInstanceState);\n"
+                  "        if (Build.VERSION.SDK_INT >= 26 && getBridge() != null && getBridge().getWebView() != null) {\n"
+                  "            getBridge().getWebView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_YES);\n"
+                  "        }",
+                  1,
+              )
+              path.write_text(source)
+          print("Configured WebView autofill:", path)
+          PY
       - name: Sync Capacitor
         run: npx cap sync android
 
