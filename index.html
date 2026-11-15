@@ -351,6 +351,45 @@ button.soft{background:#e8f0f3!important;color:#244b5a!important;border:1px soli
 .stat-card b{color:#315f70}.app-watermark strong{color:#315f70}body:after{color:#315f70;opacity:.045}
 #splash{background:radial-gradient(circle at 50% 45%,#416f7e 0,#244b5a 42%,#183744 100%)}.splash-caption{color:#c5dce5}.splash-loader span{background:#8dc7c8}.auth-visual{background:linear-gradient(145deg,#315f70 0%,#244b5a 55%,#183744 100%)}
 @media print{body:after{display:none!important}.app-watermark{margin-top:18px}}\n@media print{body.print-single-stocktake #splash,body.print-single-stocktake #login,body.print-single-stocktake .app-header,body.print-single-stocktake .tabs,body.print-single-stocktake #reportBranch,body.print-single-stocktake .report-toolbar,body.print-single-stocktake .stocktake-report-list,body.print-single-stocktake .app-watermark:not(.single-stocktake-report .app-watermark){display:none!important}body.print-single-stocktake #reportContent{display:block!important}body.print-single-stocktake .single-stocktake-report{display:block!important}body.print-single-stocktake .wrap{max-width:none;padding:0}}
+
+/* NOVARO light-sky identity and readable internal branding */
+:root{--g:#77b9d2;--bg:#f1f8fb;--ink:#263b4a;--muted:#657d8b;--line:#dcebf1;--mint:#e7f4f8;--deep:#315b70;--accent:#a9d9e8}
+body{background:var(--bg);color:var(--ink)}
+.logo{background:linear-gradient(145deg,#d9f0f7,#a9d9e8 65%,#83c4da)!important;color:#23475a!important;border:1px solid #ffffff!important;box-shadow:0 6px 18px #4c91aa2b!important;font-size:27px!important;min-width:52px;min-height:52px}
+.logo:after{background:linear-gradient(90deg,#4f91aa,#315b70)!important}
+.app-header .brand b{color:#263b4a}
+.branch-symbol{background:#e1f1f6;color:#315b70}
+button:not(.soft):not(.language-control){background:linear-gradient(110deg,#79bdd5,#579fbd)!important;color:#173e51!important;box-shadow:0 5px 14px #579fbd25}
+button.soft{background:#e4f2f7!important;color:#315b70!important;border:1px solid #cde5ee!important}
+.tabs{background:linear-gradient(135deg,#e8f5f9,#f5fafc);border-color:#d7eaf1}
+.tabs button::after{background:linear-gradient(120deg,#a9d9e8,#579fbd)}
+.tabs button.active{border-color:#79bdd5!important;box-shadow:0 7px 18px #579fbd30!important}
+.tabs button:hover:not(.active){color:#315b70!important;border-color:#cde5ee!important}
+.field input:focus,.field select:focus,input:focus,select:focus{border-color:#79bdd5;box-shadow:0 0 0 3px #79bdd525}
+.stat-card b,.app-watermark strong{color:#315b70}
+body:after{color:#315b70;opacity:.045}
+#splash{background:radial-gradient(circle at 50% 40%,#eaf8fc 0,#ccebf4 52%,#a8d9e8 100%)!important;color:#23475a}
+.splash-mark{width:104px;height:104px;display:grid;place-items:center;border:1px solid #ffffffd9!important;border-radius:30px!important;background:linear-gradient(145deg,#f4fcff 0%,#c6eaf4 60%,#91cfe2 100%)!important;color:#28566b!important;box-shadow:0 0 0 10px #ffffff45,0 18px 45px #579fbd35!important;font-size:68px!important;letter-spacing:-5px}
+.splash-mark:after{background:linear-gradient(90deg,#579fbd,#315b70)!important;width:34px;height:6px;right:17px;bottom:18px}
+.splash-word{font-size:40px!important;font-weight:900;letter-spacing:.3em;padding-left:.3em;color:#23475a!important;text-shadow:0 2px 12px #ffffff80}
+.splash-caption{font-size:12px!important;letter-spacing:.32em;color:#315b70!important}
+.splash-credit{font-size:12px!important;color:#426a7c!important}
+.splash-credit strong{color:#23475a!important}
+.splash-loader{background:#ffffff9c!important}.splash-loader span{background:#579fbd!important}
+.splash-orbit{border-color:#ffffff70!important}
+.auth-visual{background:linear-gradient(145deg,#ccebf4 0%,#9fd3e4 55%,#78b9d2 100%)!important;color:#23475a}
+.visual-mark,.mini-mark{background:linear-gradient(145deg,#f4fcff,#c6eaf4 65%,#91cfe2)!important;color:#28566b!important;border:1px solid #ffffffd9!important;box-shadow:0 7px 18px #579fbd35!important}
+.visual-mark:after,.mini-mark:after{background:linear-gradient(90deg,#579fbd,#315b70)!important}
+.visual-brand,.visual-copy h1,.visual-copy p,.visual-foot{color:#23475a!important}
+.visual-copy h1 em{color:#315b70!important}
+@media(max-width:600px){
+ .splash-mark{width:94px;height:94px;font-size:62px!important}
+ .splash-word{font-size:35px!important}
+ .splash-caption{font-size:10px!important}
+ .splash-credit{font-size:11px!important}
+ .logo{min-width:48px;min-height:48px;font-size:25px!important}
+}
+
 </style></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
