@@ -1,0 +1,77 @@
+name: Build NOVARO Inventory Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Install Capacitor
+        run: npm install --no-audit --no-fund
+
+      - name: Prepare the shared NOVARO web app
+        run: |
+          mkdir -p www
+          cp index.html manifest.webmanifest sw.js icon.svg www/
+
+      - name: Generate Android project
+        run: npx cap add android
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Build installable APK
+        run: |
+          chmod +x android/gradlew
+          cd android
+          ./gradlew assembleDebug --stacktrace
+          cp app/build/outputs/apk/debug/app-debug.apk ../NOVARO-Inventory.apk
+
+      - name: Upload APK build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NOVARO-Inventory-Android-APK
+          path: NOVARO-Inventory.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish downloadable APK release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: novaro-apk-build-${{ github.run_number }}
+          name: NOVARO Inventory Android - Build ${{ github.run_number }}
+          make_latest: true
+          files: NOVARO-Inventory.apk
+          body: |
+            NOVARO Inventory Android APK.
+            This app connects to the same Supabase project as the NOVARO Inventory web version.
+            Install on Android. Internet access is required for live data and account sign-in.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
