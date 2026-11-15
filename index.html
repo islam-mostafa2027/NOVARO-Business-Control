@@ -1308,8 +1308,8 @@ async function submitNovaroLogin(e){
   if($("rememberMe").checked)localStorage.setItem("novaro-remembered-email",loginEmail);else localStorage.removeItem("novaro-remembered-email");
   const {data,error}=await db.auth.signInWithPassword({email:loginEmail,password:loginPassword});
   if(error)throw error;
-  await offerPasswordSave(loginEmail,loginPassword);
   if(!data?.user)throw Error(language==="en"?"Sign-in did not return a user.":"لم يتم إرجاع بيانات المستخدم بعد تسجيل الدخول.");
+  offerPasswordSave(loginEmail,loginPassword).catch(error=>console.debug("NOVARO password save was not available:",error));
   msg.textContent=language==="en"?"Opening workspace...":"تم التحقق من الحساب، جاري فتح البرنامج...";
   await openWorkspace(data.user);
  }catch(error){
@@ -1324,19 +1324,7 @@ $("loginBtn").onclick=()=>{
  if(!$("password").value){msg.textContent=language==="en"?"The saved account did not fill the password. Choose the saved password or enter it manually.":"اختيار الحساب لم يملأ كلمة المرور. اختَر كلمة المرور المحفوظة أو اكتبها.";return}
  $("loginForm").requestSubmit();
 };
-function scheduleNovaroAutoLogin(){
- clearTimeout(novaroAutoLoginTimer);
- novaroAutoLoginTimer=setTimeout(()=>{
-  if(novaroLoginInProgress)return;
-  if($("email").value.trim()&&$("password").value)$("loginForm").requestSubmit();
- },450);
-}
-[$("email"),$("password")].forEach(field=>{
- field.addEventListener("input",scheduleNovaroAutoLogin);
- field.addEventListener("change",scheduleNovaroAutoLogin);
-});
-$("loginForm").addEventListener("focusout",scheduleNovaroAutoLogin);
-setTimeout(scheduleNovaroAutoLogin,800);
+// Login is intentionally user-initiated to avoid autofill/focus races on mobile devices.
 $("logout").onclick=async()=>{if(!window.confirm(language==="en"?"Are you sure you want to sign out?":"هل أنت متأكد أنك تريد تسجيل الخروج؟"))return;const btn=$("logout");btn.disabled=true;try{const {error}=await db.auth.signOut();if(error)throw error;if(notificationChannel){await db.removeChannel(notificationChannel);notificationChannel=null}user=null;profile=null;branches=[];allBranches=[];items=[];cats=[];balances={};branchId="";page="home";notificationRows=[];openedUserId=null;openingUserId=null;$("notificationPanel")?.classList.add("hidden");$("loginForm")?.reset();const savedEmail=localStorage.getItem("novaro-remembered-email");if(savedEmail){$("email").value=savedEmail;$("rememberMe").checked=true;} $("loginErr").textContent="";$("loginBtn").disabled=false;$("app").classList.add("hidden");$("login").classList.remove("hidden");}catch(error){console.error("NOVARO sign-out error:",error);alert(error?.message||(language==="en"?"Could not sign out. Please try again.":"تعذر تسجيل الخروج. حاول مرة أخرى."));}finally{btn.disabled=false}};
 $("notificationBell").onclick=()=>{$("notificationPanel").classList.toggle("hidden");if(!$("notificationPanel").classList.contains("hidden"))loadNotifications()};
 $("notificationRefresh").onclick=loadNotifications;
