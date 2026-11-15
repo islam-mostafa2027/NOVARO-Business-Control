@@ -285,6 +285,13 @@ button.language-control:hover{background:#deeee5!important;color:#124735!importa
  .tabs button,.tabs button::after{transition:none!important}
 }
 
+
+/* NOVARO clean page navigation: keep content crisp and fully visible */
+#main{opacity:1!important;filter:none!important;transform:none}
+#main.page-enter{animation:novaroCleanEnter .18s ease-out both!important;filter:none!important}
+@keyframes novaroCleanEnter{from{transform:translateY(5px)}to{transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#main.page-enter{animation:none!important}}
+
 </style></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-loader"><span></span></div></div></div>
 <div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
@@ -443,8 +450,7 @@ async function enter(u){user=u;let r=await db.from("profiles").select("*").eq("i
 profile=r.data;if(!profile.is_active){await db.auth.signOut();throw Error("الحساب موقوف")} $("login").classList.add("hidden");$("app").classList.remove("hidden");$("who").textContent=esc(profile.display_name||u.email);await load();render()}
 async function load(){let q=db.from("branches").select("*").eq("is_active",true).order("name_ar");if(profile.role!=="owner_admin"){let m=await db.from("branch_members").select("branch_id").eq("user_id",user.id).eq("is_active",true);q=q.in("id",(m.data||[]).map(x=>x.branch_id))}const aq=profile.role==="owner_admin"?db.from("branches").select("*").order("name_ar"):q;let [b,ab,i,c,m]=await Promise.all([q,aq,db.from("items").select("*,categories(name_ar,name_en)").eq("is_active",true).order("name_ar"),db.from("categories").select("*").eq("is_active",true).order("sort_order"),db.from("stock_movements").select("branch_id,item_id,movement_type,quantity")]);if(b.error)throw b.error;if(ab.error)throw ab.error;if(i.error)throw i.error;if(c.error)throw c.error;if(m.error)throw m.error;branches=b.data||[];allBranches=ab.data||[];items=i.data||[];cats=(c.data||[]).sort((a,b)=>{const ao=/^(other|أخرى)$/i.test((a.name_en||a.name_ar||"").trim()),bo=/^(other|أخرى)$/i.test((b.name_en||b.name_ar||"").trim());return ao===bo?Number(a.sort_order||0)-Number(b.sort_order||0):ao?1:-1});balances={};for(const x of(m.data||[])){const k=x.branch_id+":"+x.item_id;const q=Number(x.quantity);balances[k]=(balances[k]||0)+(x.movement_type==="issue"?-q:q)}if(!branches.some(x=>x.id===branchId))branchId=branches[0]?.id}
 $("tabs").onclick=e=>{let b=e.target.closest("[data-p]");if(b){page=b.dataset.p;render()}};
-const pageMotionObserver=new MutationObserver(()=>{const el=$("main");el.classList.remove("page-enter");requestAnimationFrame(()=>el.classList.add("page-enter"))});
-pageMotionObserver.observe($("main"),{childList:true});
+
 const branchLocationOf=x=>language==="en"?(x?.address_en||x?.address||x?.address_ar||""):(x?.address_ar||x?.address||x?.address_en||""); const sel=()=>'<select id="branchSelect">'+branches.map(b=>'<option value="'+b.id+'">'+esc(nameOf(b))+(branchLocationOf(b)?' — '+esc(branchLocationOf(b)):'')+'</option>').join("")+'</select>';
 function nameOf(x){return language==="en"?(x?.name_en||x?.name_ar||""):(x?.name_ar||x?.name_en||"")}
 function categoryName(x){if(!x)return "—";if(language==="en")return x.name_en||x.name_ar||"—";const ar=x.name_ar||"",en=x.name_en||"";const map={"Other":"أخرى","Chinaware":"صيني","Silver":"سيلفر","China":"صيني","Glasses":"زجاجيات","Service Items":"أدوات الخدمة","Wood":"الأخشاب"};return map[ar]||map[en]||ar||en||"—"}
