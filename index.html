@@ -695,11 +695,54 @@ button:focus-visible,.tabs button:focus-visible{outline:3px solid #8bb4d2;outlin
 #splash .splash-credit strong{color:#173f60!important;font-weight:850!important}
 #splash .splash-mark{color:#173f60!important}
 
+/* NOVARO exterior readability correction — 2026-11-15 */
+#splash{
+ background:linear-gradient(145deg,#f5f8fc 0%,#eaf0f6 58%,#dfe8f1 100%)!important;
+ color:#203b55!important;
+}
+#splash .splash-orbit{border-color:#6f8eaa20!important}
+#splash .splash-mark{
+ color:#315f88!important;background:linear-gradient(145deg,#fff,#eaf1f7)!important;
+ border:1px solid #cbd8e4!important;box-shadow:0 0 0 10px #315f8808,0 16px 40px #315f8818!important;
+}
+#splash .splash-word{color:#203b55!important;text-shadow:none!important}
+#splash .splash-caption{color:#466681!important;font-size:12px!important;font-weight:750!important;letter-spacing:.18em!important}
+#splash .splash-credit{color:#526d85!important;font-size:11px!important}
+#splash .splash-credit strong{color:#294d6c!important}
+#splash .splash-loader{background:#315f8826!important}
+#splash .splash-loader span{background:#477da8!important}
+.auth-visual{
+ background:linear-gradient(145deg,#f1f6fb 0%,#e7eff6 56%,#dce8f1 100%)!important;
+ color:#203b55!important;box-shadow:0 20px 55px rgba(48,78,105,.10)!important;
+}
+.auth-visual .visual-grid{
+ opacity:.28!important;
+ background-image:linear-gradient(#567b9a12 1px,transparent 1px),linear-gradient(90deg,#567b9a12 1px,transparent 1px)!important;
+}
+.auth-visual .glow-a{background:radial-gradient(circle,#a9c4dc70,transparent 70%)!important}
+.auth-visual .glow-b{background:radial-gradient(circle,#b9d0e280,transparent 70%)!important}
+.auth-visual .visual-brand{color:#203b55!important}
+.auth-visual .visual-copy .eyebrow{color:#315f88!important;font-size:12px!important;font-weight:800!important;letter-spacing:.14em!important}
+.auth-visual .visual-copy h1{color:#203b55!important}
+.auth-visual .visual-copy h1 em{color:#477da8!important}
+.auth-visual .visual-copy p{color:#405f79!important;font-size:18px!important;font-weight:600!important;line-height:2!important}
+.auth-visual .visual-foot{color:#466681!important;font-weight:750!important}
+.auth-visual .visual-mark{color:#315f88!important;background:#fff!important;border:1px solid #cbd8e4!important;box-shadow:0 6px 18px #315f8818!important}
+.app-header .brand .muted{
+ color:#405f79!important;font-size:13px!important;font-weight:700!important;
+ line-height:1.55!important;letter-spacing:.01em!important;opacity:1!important;
+}
+.auth-mini-brand small{color:#526d85!important;font-size:12px!important;font-weight:650!important}
+@media(max-width:760px){
+ #splash .splash-caption{font-size:11px!important;letter-spacing:.12em!important}
+ .auth-visual .visual-copy p{font-size:14px!important}
+}
+
 </style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <script>(function(){var release=function(){var x=document.getElementById("splash");if(x){x.classList.add("splash-out");setTimeout(function(){x.remove()},700)}};setTimeout(release,3200)})();</script>
 <div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
-<section class="auth-panel"><div class="auth-panel-top"><div class="auth-mini-brand"><span class="mini-mark">N</span><span><b>NOVARO Inventory</b><small>إدارة مخزون أدوات الصالة والخدمة</small></span></div><button type="button" class="language-control" id="langToggle">English</button></div><div class="auth-form-wrap"><div class="auth-kicker">WELCOME BACK</div><h2>تسجيل الدخول</h2><p class="auth-subtitle">سجّل دخولك لمتابعة المخزون وإدارة الجرد.</p><form id="loginForm" autocomplete="on"><div class="field"><label>البريد الإلكتروني</label><input id="email" name="username" type="email" inputmode="email" autocapitalize="none" spellcheck="false" autocomplete="username" placeholder="name@company.com" required></div><div class="field"><label>كلمة المرور</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required></div><label class="remember-row"><input id="rememberMe" type="checkbox"><span>تذكرني على هذا الجهاز</span></label><button type="button" id="loginBtn" class="auth-submit">دخول إلى النظام <span>←</span></button></form><div id="loginErr" class="error"></div><div class="auth-switch"><span>مستخدم جديد؟</span><button type="button" class="soft" id="showSignup">إنشاء حساب</button><button type="button" class="soft hidden" id="showLogin">لدي حساب بالفعل</button></div><form id="signupForm" class="hidden"><h3>حساب جديد</h3><div class="field"><label>الاسم</label><input id="signupName" autocomplete="name" required></div><div class="field"><label>البريد الإلكتروني</label><input id="signupEmail" type="email" autocomplete="email" required></div><div class="field"><label>كلمة المرور (8 أحرف على الأقل)</label><input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required></div><button id="signupBtn" class="auth-submit">إنشاء الحساب <span>←</span></button><div id="signupErr" class="error"></div></form><p class="auth-note" id="loginHint">الحسابات تُفعّل من خلال مالك النظام. إذا كان لديك حساب فرع، استخدم بيانات الدخول المخصصة لفرعك.</p></div><div class="auth-panel-footer"><span>© NOVARO Inventory</span><span>Secure access · Branch ready</span></div></section></div>
+<section class="auth-panel"><div class="auth-panel-top"><div class="auth-mini-brand"><span class="mini-mark">N</span><span><b>NOVARO Inventory</b><small>إدارة مخزون أدوات الصالة والخدمة</small></span></div><button type="button" class="language-control" id="langToggle">English</button></div><div class="auth-form-wrap"><div class="auth-kicker">WELCOME BACK</div><h2>تسجيل الدخول</h2><p class="auth-subtitle">سجّل دخولك لمتابعة المخزون وإدارة الجرد.</p><form id="loginForm" autocomplete="on"><div class="field"><label>البريد الإلكتروني</label><input id="email" name="username" type="email" inputmode="email" autocapitalize="none" spellcheck="false" autocomplete="username" placeholder="name@company.com" required></div><div class="field"><label>كلمة المرور</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required></div><label class="remember-row"><input id="rememberMe" type="checkbox"><span>تذكرني على هذا الجهاز</span></label><button type="button" id="loginBtn" class="auth-submit">دخول إلى النظام <span>←</span></button></form><div id="loginErr" class="error"></div><p class="auth-note" id="loginHint">الحسابات تُفعّل من خلال مالك النظام. إذا كان لديك حساب فرع، استخدم بيانات الدخول المخصصة لفرعك.</p></div><div class="auth-panel-footer"><span>© NOVARO Inventory</span><span>Secure access · Branch ready</span></div></section></div>
 <div id="app" class="hidden"><div class="wrap"><header class="app-header"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">Front of House Inventory</div></div></div><div class="header-actions"><div class="notification-wrap"><button id="notificationBell" class="notification-bell soft" type="button" aria-label="الإشعارات">🔔<span id="notificationBadge" class="notification-badge hidden">0</span></button><div id="notificationPanel" class="notification-panel hidden"><div class="notification-panel-head"><b>الإشعارات</b><div class="row" style="gap:6px"><button id="enablePhoneNotifications" class="soft" type="button">تفعيل إشعارات الهاتف</button><button id="notificationRefresh" class="soft" type="button">تحديث</button></div></div><div id="notificationList"></div></div></div><button class="language-control" id="langToggleApp" type="button">◎ English</button><button type="button" class="soft logout-control" id="logout">خروج</button></div></header><div class="app-layout" id="appLayout"><nav class="tabs" id="tabs" aria-label="Main navigation"><div class="nav-caption">القائمة الرئيسية</div><button data-p="home" class="active"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg></span><span>الرئيسية</span></button><button data-p="items"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span><span>الأصناف</span></button><button data-p="counts"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8M8 2h8v4H8z"/><rect x="4" y="4" width="16" height="18" rx="2"/><path d="m8 13 2.2 2.2L16 9.5"/></svg></span><span>الجرد الفعلي</span></button><button data-p="reports"><span class="nav-icon report-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></span><span class="report-nav-label">التقارير</span></button><button data-p="branches"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span>الفروع</span></button></nav><div class="workspace-content"><main id="main"></main><footer class="app-watermark"><span>Designed &amp; Developed by</span><strong>Islam Mostafa</strong></footer></div></div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2'"></script><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script><script>
 
@@ -1178,10 +1221,6 @@ $("enablePhoneNotifications").onclick=async()=>{
 
 document.addEventListener("click",e=>{if(!e.target.closest(".notification-wrap"))$("notificationPanel")?.classList.add("hidden")});
 
-$("showSignup").onclick=()=>{$("loginForm").classList.add("hidden");$("loginErr").textContent="";$("signupForm").classList.remove("hidden");$("loginHint").classList.add("hidden");$("showSignup").classList.add("hidden");$("showLogin").classList.remove("hidden")};
-$("showLogin").onclick=()=>{$("signupForm").classList.add("hidden");$("loginForm").classList.remove("hidden");$("signupErr").textContent="";$("loginHint").classList.remove("hidden");$("showLogin").classList.add("hidden");$("showSignup").classList.remove("hidden")};
-$("signupForm").onsubmit=async e=>{e.preventDefault();const btn=$("signupBtn"),msg=$("signupErr");btn.disabled=true;msg.textContent=language==="en"?"Creating account...":"جاري إنشاء الحساب...";try{const {data,error}=await db.auth.signUp({email:$("signupEmail").value.trim(),password:$("signupPassword").value,options:{data:{display_name:$("signupName").value.trim()}}});if(error)throw error;if(data.session){msg.textContent=language==="en"?"Account created. Opening workspace...":"تم إنشاء الحساب، جاري فتح البرنامج..."}else{msg.textContent=language==="en"?"Account created. Check your email to confirm it, then sign in.":"تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب، ثم ارجع وسجّل الدخول."; $("signupForm").reset()}}catch(error){console.error("NOVARO sign-up error:",error);msg.textContent=error?.message||(language==="en"?"Could not create account. Please try again.":"تعذر إنشاء الحساب. حاول مرة أخرى.")}finally{btn.disabled=false}};
-
 async function enter(u){user=u;let r=await db.from("profiles").select("*").eq("id",u.id).maybeSingle();if(r.error)throw r.error;if(!r.data){$("login").classList.add("hidden");$("app").classList.remove("hidden");$("main").innerHTML='<section class="card"><h2>إعداد المالك لأول مرة</h2><p class="muted">أدخل اسمك واسم أول فرع. هذا الإجراء متاح للبريد المعتمد فقط.</p><div class="field"><label>اسم المالك</label><input id="ownerName"></div><div class="formgrid"><div class="field"><label>اسم الفرع بالعربية</label><input id="branchAr"></div><div class="field"><label>اسم الفرع بالإنجليزية</label><input id="branchEn"></div></div><button id="initOwner">تهيئة النظام</button><div id="initErr" class="error"></div></section>';$("initOwner").onclick=async()=>{let {error}=await db.rpc("initialize_inventory_owner",{p_display_name:$("ownerName").value,p_branch_name_ar:$("branchAr").value,p_branch_name_en:$("branchEn").value});if(error){$("initErr").textContent=error.message;return}await enter(u)};return}
 profile=r.data;if(profile.is_active===false||profile.is_active===0||profile.is_active==="false"){throw Error("الحساب موقوف. لم يتم تسجيل خروجك؛ تواصل مع مالك النظام لمراجعة حالة الحساب.")} $("login").classList.add("hidden");$("app").classList.remove("hidden");await load();render();await loadNotifications();startNotificationStream()}
 async function load(){let q=db.from("branches").select("*").eq("is_active",true).order("name_ar");if(profile.role!=="owner_admin"){let m=await db.from("branch_members").select("branch_id").eq("user_id",user.id).eq("is_active",true);q=q.in("id",(m.data||[]).map(x=>x.branch_id))}const aq=profile.role==="owner_admin"?db.from("branches").select("*").order("name_ar"):q;let [b,ab,i,c,m,s]=await Promise.all([q,aq,db.from("items").select("*,categories(name_ar,name_en)").eq("is_active",true).order("name_ar"),db.from("categories").select("*").eq("is_active",true).order("sort_order"),db.from("stock_movements").select("branch_id,item_id,movement_type,quantity,created_at"),db.from("inventory_sessions").select("id,branch_id,submitted_at").in("status",["submitted","reviewed","approved"]).not("submitted_at","is",null).order("submitted_at",{ascending:false})]);if(b.error)throw b.error;if(ab.error)throw ab.error;if(i.error)throw i.error;if(c.error)throw c.error;if(m.error)throw m.error;if(s.error)throw s.error;branches=b.data||[];allBranches=ab.data||[];const branchUserIds=[...new Set(allBranches.map(x=>x.branch_login_user_id).filter(Boolean))];if(branchUserIds.length){const pr=await db.from("profiles").select("id,display_name").in("id",branchUserIds);if(pr.error)throw pr.error;const names=new Map((pr.data||[]).map(x=>[x.id,x.display_name]));allBranches=allBranches.map(x=>({...x,branch_manager_name:names.get(x.branch_login_user_id)||""}));branches=branches.map(x=>({...x,branch_manager_name:names.get(x.branch_login_user_id)||""}));}items=i.data||[];cats=(c.data||[]).sort((a,b)=>{const ao=/^(other|أخرى)$/i.test((a.name_en||a.name_ar||"").trim()),bo=/^(other|أخرى)$/i.test((b.name_en||b.name_ar||"").trim());return ao===bo?Number(a.sort_order||0)-Number(b.sort_order||0):ao?1:-1});balances={};const sessionsById=new Map((s.data||[]).map(x=>[x.id,x]));const sessionIds=[...sessionsById.keys()];let baselineRows=[];if(sessionIds.length){const cr=await db.from("inventory_counts").select("session_id,item_id,counted_quantity").in("session_id",sessionIds);if(cr.error)throw cr.error;baselineRows=cr.data||[]}const baselineByItem=new Map();for(const x of baselineRows){const session=sessionsById.get(x.session_id);if(!session)continue;const k=session.branch_id+":"+x.item_id;if(!baselineByItem.has(k))baselineByItem.set(k,{quantity:Number(x.counted_quantity||0),submitted_at:session.submitted_at})}for(const [k,base] of baselineByItem)balances[k]=base.quantity;for(const x of(m.data||[])){const k=x.branch_id+":"+x.item_id,base=baselineByItem.get(k);if(base&&x.created_at&&new Date(x.created_at)<=new Date(base.submitted_at))continue;const q=Number(x.quantity);balances[k]=(balances[k]||0)+(x.movement_type==="issue"?-q:q)}if(!branches.some(x=>x.id===branchId))branchId=(profile.role!=="owner_admin"&&branches.length===1)?branches[0].id:""}
@@ -1333,51 +1372,8 @@ function printItemBarcode(id){
  try{window.JsBarcode(svg,item.item_code,{format:"CODE128",displayValue:true,font:"Arial",fontSize:16,height:72,margin:14,lineColor:"#183d30",textMargin:8});}
  catch(e){return alert(language==="en"?"This item code cannot be converted to a barcode.":"كود الصنف ده غير صالح للتحويل إلى باركود.");}
  const w=window.open("","_blank");if(!w)return alert(language==="en"?"Allow pop-ups to print the barcode.":"اسمح بفتح النوافذ المنبثقة لطباعة الباركود.");
-  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(nameOf(item))+'</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:30px;color:#183d30}svg{max-width:100%;height:auto}.label{font-size:18px;font-weight:bold;margin-bottom:8px}@media print{button{display:none}}
-/* NOVARO exterior readability correction — 2026-11-15 */
-#splash{
- background:linear-gradient(145deg,#f5f8fc 0%,#eaf0f6 58%,#dfe8f1 100%)!important;
- color:#203b55!important;
-}
-#splash .splash-orbit{border-color:#6f8eaa20!important}
-#splash .splash-mark{
- color:#315f88!important;background:linear-gradient(145deg,#fff,#eaf1f7)!important;
- border:1px solid #cbd8e4!important;box-shadow:0 0 0 10px #315f8808,0 16px 40px #315f8818!important;
-}
-#splash .splash-word{color:#203b55!important;text-shadow:none!important}
-#splash .splash-caption{color:#466681!important;font-size:12px!important;font-weight:750!important;letter-spacing:.18em!important}
-#splash .splash-credit{color:#526d85!important;font-size:11px!important}
-#splash .splash-credit strong{color:#294d6c!important}
-#splash .splash-loader{background:#315f8826!important}
-#splash .splash-loader span{background:#477da8!important}
-.auth-visual{
- background:linear-gradient(145deg,#f1f6fb 0%,#e7eff6 56%,#dce8f1 100%)!important;
- color:#203b55!important;box-shadow:0 20px 55px rgba(48,78,105,.10)!important;
-}
-.auth-visual .visual-grid{
- opacity:.28!important;
- background-image:linear-gradient(#567b9a12 1px,transparent 1px),linear-gradient(90deg,#567b9a12 1px,transparent 1px)!important;
-}
-.auth-visual .glow-a{background:radial-gradient(circle,#a9c4dc70,transparent 70%)!important}
-.auth-visual .glow-b{background:radial-gradient(circle,#b9d0e280,transparent 70%)!important}
-.auth-visual .visual-brand{color:#203b55!important}
-.auth-visual .visual-copy .eyebrow{color:#315f88!important;font-size:12px!important;font-weight:800!important;letter-spacing:.14em!important}
-.auth-visual .visual-copy h1{color:#203b55!important}
-.auth-visual .visual-copy h1 em{color:#477da8!important}
-.auth-visual .visual-copy p{color:#405f79!important;font-size:18px!important;font-weight:600!important;line-height:2!important}
-.auth-visual .visual-foot{color:#466681!important;font-weight:750!important}
-.auth-visual .visual-mark{color:#315f88!important;background:#fff!important;border:1px solid #cbd8e4!important;box-shadow:0 6px 18px #315f8818!important}
-.app-header .brand .muted{
- color:#405f79!important;font-size:13px!important;font-weight:700!important;
- line-height:1.55!important;letter-spacing:.01em!important;opacity:1!important;
-}
-.auth-mini-brand small{color:#526d85!important;font-size:12px!important;font-weight:650!important}
-@media(max-width:760px){
- #splash .splash-caption{font-size:11px!important;letter-spacing:.12em!important}
- .auth-visual .visual-copy p{font-size:14px!important}
-}
-</style></head><body><div class="label">'+esc(nameOf(item))+'</div>'+svg.outerHTML+'<p>'+esc(item.item_code)+'</p><button onclick="window.print()">طباعة الباركود</button></body></html>');
- w.document.close();
+ const page='<!doctype html><html><head><meta charset="utf-8"><title>'+esc(nameOf(item))+'</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:30px;color:#183d30}svg{max-width:100%;height:auto}.label{font-size:18px;font-weight:bold;margin-bottom:8px}@media print{button{display:none}}</style></head><body><div class="label">'+esc(nameOf(item))+'</div>'+svg.outerHTML+'<p>'+esc(item.item_code)+'</p><button onclick="window.print()">طباعة الباركود</button></body></html>';
+ w.document.open();w.document.write(page);w.document.close();
 }
 async function latest(){let r=await db.from("stock_movements").select("*,items(name_ar,name_en)").eq("branch_id",branchId).order("created_at",{ascending:false}).limit(8);$("latest").innerHTML=r.error?esc(r.error.message):r.data.length?tableMoves(r.data):"لا توجد حركات مسجلة"}
 function tableMoves(a){return '<div class="tablewrap"><table><tr><th>التاريخ</th><th>الصنف</th><th>النوع</th><th>الكمية</th></tr>'+a.map(x=>'<tr><td>'+new Date(x.created_at).toLocaleDateString(language==="en"?"en-GB":"ar-EG")+'</td><td>'+esc(nameOf(x.items))+'</td><td>'+(String(x.note||"").startsWith("تسوية مخزون:")?"تسوية":({receipt:"استلام",issue:"صرف",adjustment:"تسوية"}[x.movement_type]||x.movement_type))+'</td><td>'+x.quantity+'</td></tr>').join("")+'</table></div>'}
