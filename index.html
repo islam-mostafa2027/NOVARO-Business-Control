@@ -409,6 +409,32 @@ body:after{color:#315b70;opacity:.045}
 .notification-empty{padding:22px 8px;text-align:center;color:#81939d;font-size:12px}
 @media(max-width:600px){.notification-panel{right:auto;left:-78px;width:min(340px,calc(100vw - 24px))}.header-actions{gap:7px}.notification-bell{min-width:38px;padding:8px!important}}
 .notification-toast{position:fixed;z-index:200;top:18px;left:50%;transform:translateX(-50%);width:min(440px,calc(100vw - 28px));padding:13px 16px;border-radius:14px;background:#315b70;color:white;box-shadow:0 12px 35px #23475a40;font-size:13px;line-height:1.6;text-align:center;animation:notificationToastIn .22s ease-out}@keyframes notificationToastIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* Integrated navigation: keep the workspace visually continuous */
+.wrap{max-width:1240px}
+.app-layout{display:grid;grid-template-columns:190px minmax(0,1fr);gap:14px;align-items:start;direction:inherit}
+.app-layout.branch-not-selected{grid-template-columns:minmax(0,1fr)}
+.app-layout.branch-not-selected .tabs{display:none}
+.workspace-content{min-width:0}
+.app-layout .tabs{position:sticky;top:88px;display:flex;flex-direction:column;align-items:stretch;gap:5px;overflow:visible;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none}
+.app-layout .nav-caption{padding:8px 12px 10px;color:#82918a;font-size:11px;font-weight:750;letter-spacing:.04em}
+.app-layout .tabs button{width:100%;min-height:46px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:11px;padding:10px 12px;text-align:start;white-space:normal;border-radius:11px;background:transparent;color:#61736b;box-shadow:none}
+.app-layout .tabs button.active{background:#e7f1ec;color:#216e5e;box-shadow:none}
+.app-layout .tabs button .nav-icon{display:inline-grid;place-items:center;width:29px;height:29px;flex:none;border-radius:9px;background:#edf4f0;color:#287d6b;font-size:18px;line-height:1}
+.app-layout .tabs button.active .nav-icon{background:#287d6b;color:#fff}
+.app-layout .tabs button::before,.app-layout .tabs button::after{display:none!important}
+.workspace-content #main{min-width:0}
+@media(max-width:760px){
+ .wrap{padding:10px 10px 90px}
+ .app-layout{display:block}
+ .app-layout .tabs{position:fixed;z-index:50;left:10px;right:10px;bottom:10px;top:auto;display:flex;flex-direction:row;align-items:stretch;justify-content:space-around;gap:3px;overflow-x:auto;padding:6px;background:rgba(255,255,255,.97);border:1px solid #dfeae4;border-radius:17px;box-shadow:0 8px 30px #173d3025;backdrop-filter:blur(16px)}
+ .app-layout .nav-caption{display:none}
+ .app-layout .tabs button{flex:1;min-width:0;min-height:54px;flex-direction:column;justify-content:center;gap:3px;padding:5px 2px;text-align:center;font-size:10px;line-height:1.15;white-space:nowrap}
+ .app-layout .tabs button .nav-icon{width:25px;height:25px;font-size:16px}
+ .workspace-content{width:100%}
+ .workspace-content .card{padding:13px}
+}
+@media(max-width:380px){.app-layout .tabs button{font-size:9px}}
 </style></head><body>
 <div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-credit">Web Designed &amp; Developed by <strong>Islam Mostafa</strong></div><div class="splash-loader"><span></span></div></div></div>
 <script>(function(){var release=function(){var x=document.getElementById("splash");if(x){x.classList.add("splash-out");setTimeout(function(){x.remove()},700)}};setTimeout(release,3500);window.addEventListener("error",release,{once:true})})();</script>
@@ -800,8 +826,9 @@ function startNotificationStream(){
 let user,profile,branches=[],allBranches=[],items=[],cats=[],balances={},branchId,page="home";
 const $=x=>document.getElementById(x), esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function err(e){console.error(e);alert(e.message||"حدث خطأ")}
-async function init(){const {data:{session}}=await db.auth.getSession();if(session)await enter(session.user);db.auth.onAuthStateChange((ev,s)=>{if(s)enter(s.user);else{$("app").classList.add("hidden");$("login").classList.remove("hidden")}})}
-$("loginForm").onsubmit=async e=>{e.preventDefault();const btn=$("loginBtn"),msg=$("loginErr");btn.disabled=true;msg.textContent=language==="en"?"Signing in...":"جاري تسجيل الدخول...";try{const {data,error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;if(!data?.user)throw Error(language==="en"?"Sign-in did not return a user.":"لم يتم إرجاع بيانات المستخدم بعد تسجيل الدخول.");await enter(data.user);msg.textContent=""}catch(error){console.error("NOVARO sign-in error:",error);msg.textContent=error?.message||(language==="en"?"Could not sign in. Check your connection and try again.":"تعذر تسجيل الدخول. تأكد من الاتصال وحاول مرة أخرى.")}finally{btn.disabled=false}};
+function showAuthError(error){console.error("NOVARO authentication flow error:",error);$("app").classList.add("hidden");$("login").classList.remove("hidden");const msg=$("loginErr");if(msg)msg.textContent=error?.message||(language==="en"?"Could not open your workspace. Please try again.":"تم تسجيل الدخول لكن تعذر فتح البرنامج. حاول مرة أخرى.");}
+async function init(){db.auth.onAuthStateChange((ev,session)=>{if(!session){$("app").classList.add("hidden");$("login").classList.remove("hidden");return}if(ev==="INITIAL_SESSION"||ev==="SIGNED_IN"){Promise.resolve().then(()=>enter(session.user)).catch(showAuthError)}});}
+$("loginForm").onsubmit=async e=>{e.preventDefault();const btn=$("loginBtn"),msg=$("loginErr");btn.disabled=true;msg.textContent=language==="en"?"Signing in...":"جاري تسجيل الدخول...";try{const {data,error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;if(!data?.user)throw Error(language==="en"?"Sign-in did not return a user.":"لم يتم إرجاع بيانات المستخدم بعد تسجيل الدخول.");msg.textContent=language==="en"?"Opening workspace...":"تم التحقق من الحساب، جاري فتح البرنامج..."}catch(error){console.error("NOVARO sign-in error:",error);msg.textContent=error?.message||(language==="en"?"Could not sign in. Check your connection and try again.":"تعذر تسجيل الدخول. تأكد من الاتصال وحاول مرة أخرى.");btn.disabled=false}};
 $("logout").onclick=()=>db.auth.signOut();
 $("notificationBell").onclick=()=>{$("notificationPanel").classList.toggle("hidden");if(!$("notificationPanel").classList.contains("hidden"))loadNotifications()};
 $("notificationRefresh").onclick=loadNotifications;
@@ -815,7 +842,7 @@ document.addEventListener("click",e=>{if(!e.target.closest(".notification-wrap")
 
 $("showSignup").onclick=()=>{$("loginForm").classList.add("hidden");$("loginErr").textContent="";$("signupForm").classList.remove("hidden");$("loginHint").classList.add("hidden");$("showSignup").classList.add("hidden");$("showLogin").classList.remove("hidden")};
 $("showLogin").onclick=()=>{$("signupForm").classList.add("hidden");$("loginForm").classList.remove("hidden");$("signupErr").textContent="";$("loginHint").classList.remove("hidden");$("showLogin").classList.add("hidden");$("showSignup").classList.remove("hidden")};
-$("signupForm").onsubmit=async e=>{e.preventDefault();$("signupBtn").disabled=true;$("signupErr").textContent="";const {data,error}=await db.auth.signUp({email:$("signupEmail").value.trim(),password:$("signupPassword").value,options:{data:{display_name:$("signupName").value.trim()}}});$("signupBtn").disabled=false;if(error){$("signupErr").textContent=error.message;return}if(data.session){await enter(data.user)}else{$("signupErr").textContent="تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب، ثم ارجع وسجّل الدخول.";$("signupForm").reset()}};
+$("signupForm").onsubmit=async e=>{e.preventDefault();const btn=$("signupBtn"),msg=$("signupErr");btn.disabled=true;msg.textContent=language==="en"?"Creating account...":"جاري إنشاء الحساب...";try{const {data,error}=await db.auth.signUp({email:$("signupEmail").value.trim(),password:$("signupPassword").value,options:{data:{display_name:$("signupName").value.trim()}}});if(error)throw error;if(data.session){msg.textContent=language==="en"?"Account created. Opening workspace...":"تم إنشاء الحساب، جاري فتح البرنامج..."}else{msg.textContent=language==="en"?"Account created. Check your email to confirm it, then sign in.":"تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب، ثم ارجع وسجّل الدخول."; $("signupForm").reset()}}catch(error){console.error("NOVARO sign-up error:",error);msg.textContent=error?.message||(language==="en"?"Could not create account. Please try again.":"تعذر إنشاء الحساب. حاول مرة أخرى.")}finally{btn.disabled=false}};
 
 async function enter(u){user=u;let r=await db.from("profiles").select("*").eq("id",u.id).maybeSingle();if(r.error)throw r.error;if(!r.data){$("login").classList.add("hidden");$("app").classList.remove("hidden");$("main").innerHTML='<section class="card"><h2>إعداد المالك لأول مرة</h2><p class="muted">أدخل اسمك واسم أول فرع. هذا الإجراء متاح للبريد المعتمد فقط.</p><div class="field"><label>اسم المالك</label><input id="ownerName"></div><div class="formgrid"><div class="field"><label>اسم الفرع بالعربية</label><input id="branchAr"></div><div class="field"><label>اسم الفرع بالإنجليزية</label><input id="branchEn"></div></div><button id="initOwner">تهيئة النظام</button><div id="initErr" class="error"></div></section>';$("initOwner").onclick=async()=>{let {error}=await db.rpc("initialize_inventory_owner",{p_display_name:$("ownerName").value,p_branch_name_ar:$("branchAr").value,p_branch_name_en:$("branchEn").value});if(error){$("initErr").textContent=error.message;return}await enter(u)};return}
 profile=r.data;if(!profile.is_active){await db.auth.signOut();throw Error("الحساب موقوف")} $("login").classList.add("hidden");$("app").classList.remove("hidden");$("who").textContent=esc(profile.display_name||u.email);await load();render();await loadNotifications();startNotificationStream()}
