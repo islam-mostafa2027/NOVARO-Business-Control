@@ -73,13 +73,13 @@ jobs:
               private class NovaroAutofillBridge {
                   @JavascriptInterface public void commit() {
                       if (Build.VERSION.SDK_INT >= 26) runOnUiThread(() -> {
-                          AutofillManager manager = (AutofillManager) getSystemService(Context.AUTOFILL_SERVICE);
+                          AutofillManager manager = getSystemService(AutofillManager.class);
                           if (manager != null) manager.commit();
                       });
                   }
                   @JavascriptInterface public void cancel() {
                       if (Build.VERSION.SDK_INT >= 26) runOnUiThread(() -> {
-                          AutofillManager manager = (AutofillManager) getSystemService(Context.AUTOFILL_SERVICE);
+                          AutofillManager manager = getSystemService(AutofillManager.class);
                           if (manager != null) manager.cancel();
                       });
                   }
