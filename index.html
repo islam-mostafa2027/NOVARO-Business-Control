@@ -862,8 +862,8 @@ $("rememberMe").addEventListener("change",()=>{if(!$("rememberMe").checked)local
 async function offerPasswordSave(username,password){
  try{
   const nativeBridge=window.NOVAROAndroidAutofill;
-  if(nativeBridge&&typeof nativeBridge.commit==="function"){
-   setTimeout(()=>{try{nativeBridge.commit();}catch(error){console.debug("NOVARO Android autofill commit unavailable:",error);}},250);
+  if(nativeBridge&&typeof nativeBridge.save==="function"){
+   nativeBridge.save(username,password);
    return;
   }
   if(window.isSecureContext&&typeof PasswordCredential!=="undefined"&&navigator.credentials&&typeof navigator.credentials.store==="function"){
