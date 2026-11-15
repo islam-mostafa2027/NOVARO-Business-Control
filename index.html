@@ -1542,9 +1542,8 @@ async function submitStocktakeSession(){
   const c=await db.from("inventory_counts").select("id,is_counted").eq("session_id",v.id);
   if(c.error)throw c.error;
   if(!c.data?.length)throw Error(en?"There are no counted items in this session.":"لا توجد أصناف في جلسة الجرد.");
-  const pending=c.data.filter(x=>x.is_counted!==true);
-  if(pending.length)throw Error(en?pending.length+" items have not been counted and saved yet.":"يوجد "+pending.length+" صنف لم يتم إدخال كميته وحفظها بعد.");
-  const now=new Date().toISOString();
+  // Uncounted items are allowed; their default quantity remains zero.
+    const now=new Date().toISOString();
   const r=await db.from("inventory_sessions").update({status:"submitted",submitted_by:user.id,submitted_at:now,updated_at:now}).eq("id",v.id).in("status",["draft","in_progress"]);
   if(r.error)throw r.error;
   if(window.__novaroSessions){const x=window.__novaroSessions.find(z=>z.id===v.id);if(x)x.status="submitted"}
