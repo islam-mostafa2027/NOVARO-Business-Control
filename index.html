@@ -965,7 +965,7 @@ function stocktakeReportTable(data){
 }
 async function viewStocktakeReport(id){
  const host=$("reportContent");host.innerHTML='<div class="empty">'+(language==="en"?"Loading report...":"جاري تحميل التقرير...")+'</div>';
- try{const data=await getSingleStocktakeReport(id);host.innerHTML='<div class="row report-toolbar"><button class="soft" onclick="reportsPage()">'+(language==="en"?"Back to stocktakes":"رجوع لكل الجردات")+'</button><button onclick="printStocktakeReport()">'+(language==="en"?"Print / PDF":"طباعة / PDF")+'</button><button class="soft" onclick="exportStocktakeReport(\''+id+'\')">'+(language==="en"?"Export Excel":"تصدير Excel")+'</button></div>'+stocktakeReportTable(data);window.__singleStocktakeReport=data;
+ try{const data=await getSingleStocktakeReport(id);host.innerHTML='<div class="row report-toolbar"><button class="soft" onclick="reportsPage()">'+(language==="en"?"Back to stocktakes":"رجوع لكل الجردات")+'</button><button onclick="printStocktakeReport()">'+(language==="en"?"Print / PDF":"طباعة / PDF")+'</button><button class="soft" onclick="exportStocktakeReport(\''+id+'\')">'+(language==="en"?"Export Excel":"تصدير Excel")+'</button>'+(profile.role==="owner_admin"?'<button class="soft" onclick="deleteSession(\''+id+'\')">'+(language==="en"?"Delete report":"حذف التقرير")+'</button>':"")+'</div>'+stocktakeReportTable(data);window.__singleStocktakeReport=data;
  }catch(e){host.innerHTML='<div class="error">'+esc(e.message||String(e))+'</div>'}
 }
 async function exportStocktakeReport(id){
