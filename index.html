@@ -972,61 +972,57 @@ async function viewStocktakeReport(id){
 async function exportStocktakeReport(id){
  try{
   const data=await getSingleStocktakeReport(id),en=language==="en",branch=branchLabel(data.branch)||"—";
-  if(!window.ExcelJS)throw Error(en?"Excel export library could not be loaded. Check your internet connection and try again.":"تعذر تحميل مكتبة إنشاء Excel. تأكد من اتصال الإنترنت وحاول مرة أخرى.");
-  const wb=new ExcelJS.Workbook();wb.creator="NOVARO Inventory";wb.subject=en?"Stocktake report":"تقرير جرد";wb.title=(en?"Stocktake — ":"جرد — ")+sessionTitle(data.session);wb.created=new Date();
-  const ws=wb.addWorksheet(en?"Stocktake":"تقرير الجرد",{views:[{rightToLeft:!en,state:"frozen",ySplit:7}],pageSetup:{paperSize:9,orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:0,printTitlesRow:"1:7",margins:{left:.25,right:.25,top:.5,bottom:.5,header:.2,footer:.2}}});
-  ws.columns=[{width:8},{width:34},{width:19},{width:17},{width:18}];
-  const navy="244B5A",blue="315B70",pale="EAF3F7",line="C8D9E1",white="FFFFFF",ink="263B4A";
-  ws.mergeCells("A1:E1");ws.getCell("A1").value=en?"NOVARO | STOCKTAKE REPORT":"NOVARO | تقرير الجرد";
-  ws.getRow(1).height=32;ws.getCell("A1").font={name:"Arial",size:18,bold:true,color:{argb:white}};ws.getCell("A1").fill={type:"pattern",pattern:"solid",fgColor:{argb:navy}};ws.getCell("A1").alignment={horizontal:"center",vertical:"middle"};
-  ws.mergeCells("A2:E2");ws.getCell("A2").value=sessionTitle(data.session);ws.getRow(2).height=25;ws.getCell("A2").font={name:"Arial",size:13,bold:true,color:{argb:blue}};ws.getCell("A2").alignment={horizontal:"center",vertical:"middle"};
-  ws.mergeCells("A3:E3");ws.getCell("A3").value=(en?"Branch: ":"الفرع: ")+branch+"     |     "+sessionLabel(data.session);ws.getCell("A3").font={name:"Arial",size:11,color:{argb:ink}};ws.getCell("A3").alignment={horizontal:"center",vertical:"middle"};
-  const equip=data.rows.filter(x=>x.categories?.group_key!=="materials"),materials=data.rows.filter(x=>x.categories?.group_key==="materials");
-  ws.mergeCells("A4:E4");ws.getCell("A4").value=(en?"Total items: ":"إجمالي الأصناف: ")+data.rows.length+"     |     "+(en?"Equipment: ":"العُدّة: ")+equip.length+"     |     "+(en?"Materials: ":"الخامات: ")+materials.length;ws.getCell("A4").font={name:"Arial",size:10,bold:true,color:{argb:blue}};ws.getCell("A4").alignment={horizontal:"center"};
-  ws.addRow([]);ws.addRow([en?"No.":"م","Item name","Item code","Unit",en?"Counted quantity":"الكمية الفعلية"]);
-  const header=ws.getRow(6);header.height=26;header.eachCell(c=>{c.font={name:"Arial",size:11,bold:true,color:{argb:white}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:blue}};c.alignment={horizontal:"center",vertical:"middle"};c.border={top:{style:"thin",color:{argb:navy}},bottom:{style:"medium",color:{argb:navy}},left:{style:"thin",color:{argb:white}},right:{style:"thin",color:{argb:white}}}});
-  let n=0;
-  for(const [key,label,list] of [["equipment",en?"EQUIPMENT":"العُدّة",equip],["materials",en?"MATERIALS":"الخامات",materials]]){
-   const sectionRow=ws.addRow([label]);ws.mergeCells(sectionRow.number,1,sectionRow.number,5);sectionRow.height=23;const sc=sectionRow.getCell(1);sc.font={name:"Arial",size:11,bold:true,color:{argb:navy}};sc.fill={type:"pattern",pattern:"solid",fgColor:{argb:pale}};sc.alignment={horizontal:"right",vertical:"middle"};
-   for(const x of list){n++;const row=ws.addRow([n,en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"—",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—",Number(x.quantity||0)]);row.height=22;row.eachCell(c=>{c.font={name:"Arial",size:10,color:{argb:ink}};c.alignment={horizontal:c.col===2?"right":"center",vertical:"middle"};c.border={top:{style:"hair",color:{argb:line}},bottom:{style:"thin",color:{argb:line}},left:{style:"thin",color:{argb:line}},right:{style:"thin",color:{argb:line}}};if(n%2===0)c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"F5F9FB"}}});row.getCell(5).numFmt="#,##0.##";}
-  }
-  ws.autoFilter={from:"A6",to:"E6"};ws.eachRow(r=>r.eachCell(c=>{if(!c.alignment)c.alignment={vertical:"middle",horizontal:"center"}}));ws.headerFooter={oddFooter:"&L NOVARO Inventory&C"+(en?"Stocktake report":"تقرير الجرد")+"&RPage &P of &N"};
+  if(!window.ExcelJS)throw Error(en?"Excel library did not load. Check your connection and retry.":"مكتبة Excel لم يتم تحميلها. تأكد من الاتصال بالإنترنت وحاول مرة أخرى.");
+  const wb=new ExcelJS.Workbook();
+  wb.creator="NOVARO Inventory";wb.subject=en?"Stocktake report":"تقرير جرد";wb.title=(en?"Stocktake - ":"تقرير جرد - ")+sessionTitle(data.session);wb.created=new Date();
+  const ws=wb.addWorksheet(en?"Stocktake data":"بيانات الجرد",{views:[{rightToLeft:!en,state:"frozen",ySplit:6,activeCell:"A7"}],pageSetup:{paperSize:9,orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:.25,right:.25,top:.5,bottom:.5,header:.2,footer:.2}}});
+  ws.columns=[{header:en?"No.":"م",key:"num",width:8},{header:en?"Section":"القسم",key:"section",width:18},{header:en?"Item name":"اسم الصنف",key:"name",width:36},{header:en?"Item code":"كود الصنف",key:"code",width:20},{header:en?"Unit":"الوحدة",key:"unit",width:16},{header:en?"Actual quantity":"الكمية الفعلية",key:"qty",width:19}];
+  const navy="244B5A",blue="315B70",pale="EAF3F7",line="CBDCE3",ink="263B4A",white="FFFFFF";
+  ws.mergeCells("A1:F1");ws.getCell("A1").value=en?"NOVARO | STOCKTAKE REPORT":"NOVARO | تقرير الجرد";
+  ws.getRow(1).height=34;ws.getCell("A1").font={name:"Arial",size:18,bold:true,color:{argb:white}};ws.getCell("A1").fill={type:"pattern",pattern:"solid",fgColor:{argb:navy}};ws.getCell("A1").alignment={horizontal:"center",vertical:"middle"};
+  ws.mergeCells("A2:F2");ws.getCell("A2").value=(en?"Branch: ":"الفرع: ")+branch+"     |     "+(en?"Date: ":"التاريخ: ")+String(data.session.inventory_date||"").slice(0,10);
+  ws.getCell("A2").font={name:"Arial",size:11,bold:true,color:{argb:blue}};ws.getCell("A2").alignment={horizontal:"center",vertical:"middle"};ws.getRow(2).height=25;
+  ws.mergeCells("A3:F3");ws.getCell("A3").value=(en?"Period: ":"الفترة: ")+sessionLabel(data.session);
+  ws.getCell("A3").font={name:"Arial",size:11,color:{argb:ink}};ws.getCell("A3").alignment={horizontal:"center",vertical:"middle"};ws.getRow(3).height=23;
+  const equipment=data.rows.filter(x=>x.categories?.group_key!=="materials"),materials=data.rows.filter(x=>x.categories?.group_key==="materials");
+  ws.mergeCells("A4:F4");ws.getCell("A4").value=(en?"Total items: ":"إجمالي الأصناف: ")+data.rows.length+"     |     "+(en?"Equipment: ":"العُدّة: ")+equipment.length+"     |     "+(en?"Materials: ":"الخامات: ")+materials.length;
+  ws.getCell("A4").font={name:"Arial",size:10,bold:true,color:{argb:blue}};ws.getCell("A4").alignment={horizontal:"center",vertical:"middle"};ws.getRow(4).height=22;
+  ws.mergeCells("A5:F5");ws.getCell("A5").value=en?"Editable sheet: use the filter arrows, sort rows, and edit the actual quantity column.":"ورقة قابلة للتعديل: استخدم أسهم التصفية والفرز، ويمكنك تعديل عمود الكمية الفعلية مباشرة.";
+  ws.getCell("A5").font={name:"Arial",size:9,italic:true,color:{argb:"526B78"}};ws.getCell("A5").alignment={horizontal:"right",vertical:"middle"};ws.getRow(5).height=22;
+  const header=ws.getRow(6);header.values=ws.columns.map(c=>c.header);header.height=29;
+  header.eachCell(c=>{c.font={name:"Arial",size:11,bold:true,color:{argb:white}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:blue}};c.alignment={horizontal:"center",vertical:"middle",wrapText:true};c.border={top:{style:"thin",color:{argb:navy}},bottom:{style:"medium",color:{argb:navy}},left:{style:"thin",color:{argb:white}},right:{style:"thin",color:{argb:white}}};});
+  data.rows.forEach((x,i)=>{
+   const isMat=x.categories?.group_key==="materials";
+   const row=ws.addRow([i+1,en?(isMat?"Materials":"Equipment"):(isMat?"الخامات":"العُدّة"),en?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"",en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"",Number(x.quantity||0)]);
+   row.height=24;
+   row.eachCell((c,col)=>{c.font={name:"Arial",size:10,color:{argb:ink}};c.alignment={horizontal:col===3?"right":"center",vertical:"middle",wrapText:col===3};c.border={top:{style:"hair",color:{argb:line}},bottom:{style:"thin",color:{argb:line}},left:{style:"thin",color:{argb:line}},right:{style:"thin",color:{argb:line}}};if(i%2===1)c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"F3F8FA"}};});
+   row.getCell(6).numFmt="#,##0.##";
+   row.getCell(6).dataValidation={type:"decimal",operator:"greaterThanOrEqual",formulae:[0],allowBlank:false,showErrorMessage:true,errorTitle:en?"Invalid quantity":"كمية غير صحيحة",error:en?"Enter zero or a positive number.":"أدخل صفرًا أو رقمًا موجبًا."};
+  });
+  const last=Math.max(6,ws.rowCount);ws.autoFilter={from:"A6",to:"F"+last};
+  ws.views=[{rightToLeft:!en,state:"frozen",ySplit:6,activeCell:"A7"}];
+  ws.getColumn(1).alignment={horizontal:"center",vertical:"middle"};ws.getColumn(6).alignment={horizontal:"center",vertical:"middle"};
+  ws.printOptions={horizontalCentered:true};ws.pageSetup.printArea="A1:F"+last;ws.headerFooter={oddFooter:"&L NOVARO Inventory&C"+(en?"Stocktake report":"تقرير الجرد")+"&RPage &P of &N"};
+  const guide=wb.addWorksheet(en?"Read me":"إرشادات",{views:[{rightToLeft:!en}]});
+  guide.columns=[{width:28},{width:90}];
+  guide.mergeCells("A1:B1");guide.getCell("A1").value=en?"HOW TO USE THIS WORKBOOK":"طريقة استخدام ملف الجرد";guide.getRow(1).height=32;guide.getCell("A1").font={name:"Arial",size:16,bold:true,color:{argb:white}};guide.getCell("A1").fill={type:"pattern",pattern:"solid",fgColor:{argb:navy}};guide.getCell("A1").alignment={horizontal:"center",vertical:"middle"};
+  const tips=en?[["Filter","Use the dropdown arrows in row 6 to filter by section, item, code, or unit."],["Sort","Select a column filter and choose ascending or descending."],["Edit quantities","Change values directly in the Actual quantity column. The sheet is not protected."],["Add or remove rows","You can insert or delete rows in Excel as needed."],["Print","The data sheet is set to A4 landscape and repeatable column headings."]]:[["التصفية","استخدم أسهم التصفية في الصف 6 لتصفية القسم أو الصنف أو الكود أو الوحدة."],["الفرز","من سهم التصفية اختر الترتيب التصاعدي أو التنازلي."],["تعديل الكميات","عدّل الأرقام مباشرة في عمود الكمية الفعلية. الورقة غير محمية."],["إضافة وحذف","يمكنك إضافة صفوف أو حذفها من Excel حسب احتياجك."],["الطباعة","تم إعداد ورقة البيانات على A4 أفقي مع تكرار عناوين الأعمدة."]];
+  tips.forEach((t,i)=>{const r=guide.addRow(t);r.height=38;r.eachCell(c=>{c.font={name:"Arial",size:11,color:{argb:ink}};c.alignment={horizontal:"right",vertical:"middle",wrapText:true};c.border={bottom:{style:"thin",color:{argb:line}}};});r.getCell(1).font={name:"Arial",size:11,bold:true,color:{argb:blue}};if(i%2===0)r.eachCell(c=>c.fill={type:"pattern",pattern:"solid",fgColor:{argb:pale}});});
   const buffer=await wb.xlsx.writeBuffer(),blob=new Blob([buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="NOVARO-Stocktake-"+String(data.branch?.code||"Branch").slice(0,12)+"-"+String(data.session.inventory_date||data.session.id).slice(0,10)+".xlsx";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
- }catch(e){alert(e.message||String(e))}
+  a.href=url;a.download="NOVARO-Stocktake-"+String(data.branch?.code||"Branch").slice(0,12)+"-"+String(data.session.inventory_date||data.session.id).slice(0,10)+".xlsx";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+ }catch(e){alert(e.message||String(e));}
 }
 function printStocktakeReport(){
- document.body.classList.add("print-single-stocktake");
- const style=document.createElement("style");style.id="stocktake-print-style";
- style.textContent=`@page{size:A4 landscape;margin:12mm 10mm 14mm}
- @media print{
- body.print-single-stocktake{background:#fff!important;color:#203746!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
- body.print-single-stocktake #splash,body.print-single-stocktake #login,body.print-single-stocktake .app-header,body.print-single-stocktake .tabs,body.print-single-stocktake #reportBranch,body.print-single-stocktake .report-toolbar,body.print-single-stocktake .stocktake-report-list,body.print-single-stocktake .app-watermark:not(.single-stocktake-report .app-watermark){display:none!important}
- body.print-single-stocktake #reportContent{display:block!important;width:100%!important;margin:0!important;padding:0!important}
- body.print-single-stocktake .single-stocktake-report{display:block!important;font-family:Arial,Tahoma,sans-serif!important;font-size:9pt!important;color:#203746!important}
- body.print-single-stocktake .single-stocktake-report .print-report-head{display:block!important;text-align:center;border-bottom:2px solid #315b70;padding:0 0 9px;margin:0 0 12px}
- body.print-single-stocktake .single-stocktake-report .print-report-brand{font-size:19pt;font-weight:800;letter-spacing:2px;color:#244b5a;margin-bottom:4px}
- body.print-single-stocktake .single-stocktake-report h2{text-align:center;font-size:15pt;margin:4px 0;color:#244b5a}
- body.print-single-stocktake .single-stocktake-report .report-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:9pt;color:#496474;margin-top:7px}
- body.print-single-stocktake .single-stocktake-report .report-group{break-inside:auto;margin:13px 0 0!important}
- body.print-single-stocktake .single-stocktake-report .report-group h3{background:#eaf3f7!important;color:#244b5a!important;border-inline-start:4px solid #315b70;padding:7px 10px;margin:0 0 5px!important;font-size:10pt;break-after:avoid}
- body.print-single-stocktake .single-stocktake-report .tablewrap{overflow:visible!important}
- body.print-single-stocktake .single-stocktake-report table{width:100%!important;min-width:0!important;table-layout:fixed!important;border-collapse:collapse!important;font-size:9pt!important;margin:0 0 7px}
- body.print-single-stocktake .single-stocktake-report thead{display:table-header-group!important}
- body.print-single-stocktake .single-stocktake-report th{background:#315b70!important;color:#fff!important;border:1px solid #244b5a!important;padding:7px 6px!important;text-align:center!important;font-weight:700!important}
- body.print-single-stocktake .single-stocktake-report td{border:1px solid #c5d5dd!important;padding:6px!important;text-align:center!important;vertical-align:middle!important;overflow-wrap:anywhere}
- body.print-single-stocktake .single-stocktake-report tbody tr:nth-child(even){background:#f1f6f8!important}
- body.print-single-stocktake .single-stocktake-report tbody tr{break-inside:avoid!important}
- body.print-single-stocktake .single-stocktake-report .app-watermark{margin-top:14px!important;padding:7px!important;font-size:8pt!important}
- }`;
- document.head.appendChild(style);window.print();setTimeout(()=>{document.body.classList.remove("print-single-stocktake");style.remove()},1200);
-}
-function exportInventoryReport(){
- const rows=window.__reportRows||[];if(!rows.length)return alert(language==="en"?"No report data to export.":"لا توجد بيانات لتصديرها.");
- const head=language==="en"?["Item","Code","Previous count","Current count","Change"]:["الصنف","الكود","الجرد السابق","الجرد الحالي","التغير"];
- const data=rows.map(x=>[language==="en"?(x.name_en||x.name_ar):(x.name_ar||x.name_en),x.item_code||"",x.previous===null?"":x.previous,x.quantity,x.delta===null?"":x.delta]);
- const csv="\uFEFF"+[head,...data].map(r=>r.map(v=>'"'+String(v??"").split('"').join('""')+'"').join(",")).join("\r\n");
- const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="NOVARO-Inventory-Report.csv";a.click();URL.revokeObjectURL(url);
+ const data=window.__singleStocktakeReport;if(!data)return alert(language==="en"?"Open a stocktake report first.":"افتح تقرير الجرد أولاً.");
+ const en=language==="en",branch=branchLabel(data.branch)||"—",rows=data.rows||[];
+ const escHtml=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const body=rows.map((x,i)=>'<tr><td>'+ (i+1) +'</td><td>'+escHtml(x.categories?.group_key==="materials"?(en?"Materials":"الخامات"):(en?"Equipment":"العُدّة"))+'</td><td class="item">'+escHtml(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+escHtml(x.item_code||"—")+'</td><td>'+escHtml(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+escHtml(fmtQty(x.quantity))+'</td></tr>').join("");
+ const w=window.open("","_blank");if(!w)return alert(en?"Allow pop-ups to print the report.":"اسمح بفتح النوافذ المنبثقة لطباعة التقرير.");
+ const title=en?"STOCKTAKE REPORT":"تقرير الجرد",date=String(data.session.inventory_date||"").slice(0,10)||"—";
+ const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+
+ '*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:12px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start;width:30%}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:28px}}'+
+ '</style></head><body><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header><table><thead><tr><th style="width:6%">'+(en?"No.":"م")+'</th><th style="width:13%">'+(en?"Section":"القسم")+'</th><th style="width:31%">'+(en?"Item name":"اسم الصنف")+'</th><th style="width:18%">'+(en?"Item code":"كود الصنف")+'</th><th style="width:13%">'+(en?"Unit":"الوحدة")+'</th><th style="width:19%">'+(en?"Actual quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+body+'</tbody></table><div class="foot">NOVARO Inventory</div><script>window.onload=function(){setTimeout(function(){window.print()},350)};<\/script></body></html>';
+ w.document.open();w.document.write(html);w.document.close();
 }
 function render(){document.querySelectorAll("[data-p]").forEach(b=>b.classList.toggle("active",b.dataset.p===page));let m=$("main");if(!branches.length&&profile.role!=="owner_admin"){m.innerHTML='<section class="card empty">لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.</section>';return}
 if(page==="home")m.innerHTML='<section class="card branch-panel"><div class="branch-heading"><span class="branch-symbol">⌖</span><div><h3>'+(language==="en"?"Choose a branch":"اختيار الفرع")+'</h3><p>'+(language==="en"?"Select the branch you want to manage":"حدد الفرع الذي تريد إدارة مخزونه")+'</p></div></div><div class="branch-select-wrap"><label for="branchSelect">'+(language==="en"?"Current branch":"الفرع الحالي")+'</label>'+sel()+'</div></section><section class="stats"><div class="card stat-card"><span>'+(language==="en"?"Total items":"إجمالي الأصناف")+'</span><b>'+items.length+'</b></div><div class="card stat-card"><span>'+(language==="en"?"Available branches":"الفروع المتاحة")+'</span><b>'+branches.length+'</b></div><div class="card stat-card"><span>'+(language==="en"?"Current role":"صلاحية المستخدم")+'</span><b class="role-value">'+esc(roleName(profile.role))+'</b></div></section>';
