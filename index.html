@@ -108,8 +108,147 @@ td,th{font-size:15px;padding:15px 13px}
  .field label{font-size:14px}
  .field input,.field select,input,select{font-size:16px}
 }
+ 
+/* NOVARO Signature Experience — responsive visual system */
+:root{--g:#236e5d;--bg:#f3f7f5;--ink:#20372f;--muted:#718078;--line:#dfe9e3;--mint:#dff1e9;--deep:#123b32;--accent:#9ed7bf}
+body{background:radial-gradient(ellipse at 8% 0%,#e4f2eb 0,transparent 32%),linear-gradient(180deg,#f5f8f6 0%,#eef4f0 100%);color:var(--ink)}
+/* animated brand intro */
+#splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 45%,#225e50 0,#17483d 38%,#0d3029 100%);color:#fff;transition:opacity .65s ease,visibility .65s ease}
+#splash.splash-out{opacity:0;visibility:hidden;pointer-events:none}
+.splash-content{position:relative;z-index:2;display:flex;align-items:center;flex-direction:column;gap:12px}
+.splash-mark{width:82px;height:82px;display:grid;place-items:center;border:1px solid #b5e2cf80;border-radius:26px;background:linear-gradient(145deg,#ffffff22,#ffffff08);box-shadow:0 0 0 10px #ffffff08,0 18px 55px #061c17a0;font-size:48px;font-weight:850;letter-spacing:-5px;animation:markReveal .9s cubic-bezier(.2,.8,.2,1) both}
+.splash-word{font-size:30px;font-weight:850;letter-spacing:.28em;padding-left:.28em;opacity:0;animation:wordReveal .7s .35s ease forwards}
+.splash-caption{font-size:10px;letter-spacing:.3em;color:#b9ddcf;opacity:0;animation:wordReveal .7s .55s ease forwards}
+.splash-loader{height:2px;width:112px;margin-top:16px;background:#ffffff26;overflow:hidden;border-radius:9px}
+.splash-loader span{display:block;width:35%;height:100%;background:#b6e4ce;animation:loadLine 1.35s .25s ease-in-out infinite}
+.splash-orbit{position:absolute;border:1px solid #d7f4e51b;border-radius:50%;width:440px;height:440px;animation:orbitFloat 8s ease-in-out infinite}
+.orbit-one{transform:translate(-36%,-15%) scale(.85)}.orbit-two{width:620px;height:620px;transform:translate(28%,20%);animation-delay:-3s}
+@keyframes markReveal{from{opacity:0;transform:translateY(18px) scale(.82);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes wordReveal{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(10px)}}
+@keyframes loadLine{0%{transform:translateX(-120%)}100%{transform:translateX(360%)}}
+@keyframes orbitFloat{50%{translate:0 -18px;scale:1.04}}
+/* sign-in experience */
+.auth-shell{min-height:100svh;max-width:1440px;margin:auto;padding:28px;display:grid;grid-template-columns:minmax(0,1.04fr) minmax(420px,.96fr);gap:22px;align-items:stretch}
+.auth-visual{position:relative;min-height:680px;overflow:hidden;border-radius:32px;background:linear-gradient(145deg,#174b3e 0%,#10392f 55%,#0c2e27 100%);color:#fff;box-shadow:0 28px 80px #163e3025}
+.visual-grid{position:absolute;inset:0;opacity:.16;background-image:linear-gradient(#ffffff16 1px,transparent 1px),linear-gradient(90deg,#ffffff16 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(135deg,#000,transparent 78%)}
+.visual-glow{position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+.glow-a{width:420px;height:420px;right:-130px;top:-130px;background:radial-gradient(circle,#74c6a050,transparent 70%)}
+.glow-b{width:520px;height:520px;left:-210px;bottom:-240px;background:radial-gradient(circle,#5d9e8650,transparent 70%)}
+.visual-content{position:relative;z-index:1;min-height:680px;padding:42px 48px;display:flex;flex-direction:column}
+.visual-brand{display:flex;align-items:center;gap:13px;font-size:19px;font-weight:850;letter-spacing:.2em}
+.visual-mark{width:44px;height:44px;display:grid;place-items:center;border:1px solid #b7e4d04d;border-radius:14px;background:#ffffff12;font-size:25px;letter-spacing:-3px}
+.visual-copy{margin:auto 0;max-width:540px;padding:55px 0}
+.eyebrow,.auth-kicker{font-size:10px;letter-spacing:.22em;font-weight:800;color:#8ecdb1}
+.visual-copy h1{font-size:clamp(42px,5.4vw,72px);line-height:1.2;letter-spacing:-.04em;margin:22px 0;font-weight:850}
+.visual-copy h1 em{font-style:normal;color:#a6ddc1}
+.visual-copy p{max-width:390px;color:#c2d9ce;font-size:17px;line-height:2}
+.visual-foot{display:flex;align-items:center;gap:13px;color:#a6c8b8;font-size:10px;letter-spacing:.17em}
+.visual-foot i{width:4px;height:4px;border-radius:50%;background:#8fc9ae}
+.auth-panel{position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:680px;padding:32px clamp(25px,4vw,58px);border:1px solid #e0eae4;border-radius:32px;background:rgba(255,255,255,.88);box-shadow:0 24px 70px #173d3010;backdrop-filter:blur(18px)}
+.auth-panel-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.auth-mini-brand{display:flex;align-items:center;gap:10px}
+.mini-mark{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#2e806b,#175543);color:#fff;font-size:22px;font-weight:850;box-shadow:0 6px 16px #236e5d30}
+.auth-mini-brand b{display:block;font-size:14px;letter-spacing:.02em}
+.auth-mini-brand small{display:block;color:#819087;font-size:10px;letter-spacing:.06em}
+.auth-form-wrap{width:100%;max-width:420px;margin:40px auto}
+.auth-kicker{color:#3d8b70}
+.auth-form-wrap h2{font-size:32px;margin:10px 0 5px;letter-spacing:-.04em}
+.auth-subtitle{margin:0 0 28px;color:#78877f;font-size:14px}
+.auth-form-wrap .field{margin:18px 0}
+.auth-form-wrap .field label{font-size:13px;color:#43594f;margin-bottom:8px}
+.auth-form-wrap .field input{height:54px;border:1px solid #dce7e0;border-radius:14px;padding:0 16px;background:#fbfdfb;box-shadow:inset 0 1px 2px #153d3006}
+.auth-form-wrap .field input:focus{background:#fff;border-color:#67a88f;box-shadow:0 0 0 4px #2d80671a}
+.auth-submit{width:100%;height:54px;margin-top:10px;border-radius:14px;background:linear-gradient(105deg,#2a8069,#185b4b);box-shadow:0 10px 22px #226e5b30;display:flex;align-items:center;justify-content:center;gap:12px;font-weight:750}
+.auth-submit span{font-size:20px;transition:transform .2s}
+.auth-submit:hover span{transform:translateX(-4px)}
+.auth-switch{display:flex;align-items:center;gap:8px;margin-top:20px;color:#7c8982;font-size:13px}
+.auth-switch .soft{padding:7px 11px;background:#e9f4ee}
+.auth-note{margin-top:28px;padding:13px 15px;border-radius:12px;background:#f2f7f4;color:#718078;font-size:11px;line-height:1.9}
+.auth-panel-footer{display:flex;justify-content:space-between;gap:10px;color:#9aa69f;font-size:10px}
+.error{margin-top:9px;font-size:13px}
+/* main application shell */
+#app{min-height:100svh}
+#app>.wrap{max-width:1320px;padding:25px 28px 50px}
+.app-header{border-radius:22px;padding:16px 20px;background:#ffffffd9;border:1px solid #e0eae4;box-shadow:0 12px 34px #163e300b}
+.app-header .logo{border-radius:14px;background:linear-gradient(145deg,#2d806b,#185a49);box-shadow:0 7px 18px #236e5d2e}
+.app-header .brand b{font-size:18px;letter-spacing:.015em}
+.app-header .brand .muted{font-size:11px;letter-spacing:.11em;text-transform:uppercase}
+.tabs{padding:7px;background:#e8f0eb;border:1px solid #dce8e0;border-radius:17px;box-shadow:inset 0 1px 2px #183d3007}
+.tabs button{position:relative;border-radius:12px;font-weight:700;transition:background .22s,transform .22s,color .22s}
+.tabs button.active{background:#fff;color:#216d59;box-shadow:0 5px 16px #1b4b3c13}
+#main{min-height:58vh}
+#main.page-enter{animation:pageEnter .42s cubic-bezier(.2,.75,.25,1) both}
+@keyframes pageEnter{from{opacity:0;transform:translateY(14px) scale(.992);filter:blur(2px)}to{opacity:1;transform:none;filter:none}}
+.card{border:1px solid #e0eae4;border-radius:22px;background:linear-gradient(155deg,#fff 0%,#fcfefd 100%);box-shadow:0 10px 30px #173d300b;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.card:hover{box-shadow:0 16px 38px #173d3014;border-color:#d2e3d9}
+.stat-card{position:relative;overflow:hidden;border-radius:20px;min-height:132px}
+.stat-card:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:#dff1e9;left:-32px;bottom:-48px;opacity:.75}
+.stat-card b{position:relative;z-index:1;font-size:34px;color:#236e5d}
+.stat-card span{position:relative;z-index:1}
+.branch-panel{position:relative;overflow:hidden}
+.branch-panel:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;left:-100px;top:-120px;background:radial-gradient(circle,#cde9db88,transparent 70%);pointer-events:none}
+.branch-heading,.branch-select-wrap{position:relative;z-index:1}
+.branch-symbol{background:linear-gradient(145deg,#e2f3e9,#d4eadd);box-shadow:0 6px 16px #226c5614}
+button{border-radius:12px;font-weight:700}
+button:not(.soft){background:linear-gradient(110deg,#2c806a,#1d6653);box-shadow:0 5px 14px #216d5922}
+button.soft{background:#eaf4ee;color:#246b57;border:1px solid #dcebe2;box-shadow:none}
+button:focus-visible{outline:3px solid #7cc5a7;outline-offset:3px}
+.field input,.field select,input,select{border-radius:12px;border-color:#dce7e0;background:#fbfdfb}
+.tablewrap{border:1px solid #e4ece7;border-radius:15px;margin-top:14px}
+table{min-width:560px}
+th{background:#f1f6f3;color:#5c7166}
+td,th{border-bottom:1px solid #e8efeb}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#f3f8f5}
+.empty{border-radius:16px}
+@media(max-width:820px){
+ .auth-shell{grid-template-columns:1fr;max-width:620px;padding:14px;gap:12px}
+ .auth-visual{min-height:260px;border-radius:24px}
+ .visual-content{min-height:260px;padding:23px 25px}
+ .visual-copy{padding:24px 0 10px;margin:0}
+ .visual-copy h1{font-size:38px;margin:12px 0}
+ .visual-copy p{font-size:13px;margin:0}
+ .visual-foot{display:none}
+ .auth-panel{min-height:580px;border-radius:24px;padding:22px 24px}
+ .auth-form-wrap{margin:30px auto}
+}
+@media(max-width:600px){
+ .auth-shell{padding:0;gap:0;display:flex;flex-direction:column;background:#f7faf8}
+ .auth-visual{min-height:220px;border-radius:0 0 26px 26px}
+ .visual-content{min-height:220px;padding:19px 22px}
+ .visual-brand{font-size:15px}.visual-mark{width:36px;height:36px;font-size:20px}
+ .visual-copy{padding:22px 0 0}
+ .visual-copy h1{font-size:32px;margin:8px 0}
+ .visual-copy p{font-size:12px;line-height:1.7}
+ .eyebrow{font-size:8px}
+ .auth-panel{min-height:calc(100svh - 220px);border:0;border-radius:0;padding:18px 22px 20px;box-shadow:none;background:#f7faf8}
+ .auth-panel-top{margin-bottom:8px}
+ .auth-mini-brand b{font-size:13px}
+ .auth-form-wrap{margin:22px auto;max-width:440px}
+ .auth-form-wrap h2{font-size:27px}
+ .auth-subtitle{margin-bottom:20px;font-size:13px}
+ .auth-form-wrap .field{margin:14px 0}
+ .auth-form-wrap .field input{height:51px}
+ .auth-panel-footer{font-size:9px}
+ #app>.wrap{padding:12px 12px 98px}
+ .app-header{position:relative;top:auto;padding:12px;border-radius:17px}
+ .app-header .brand b{font-size:14px}
+ .app-header .brand .muted{font-size:9px}
+ .tabs{position:fixed;left:10px;right:10px;bottom:10px;z-index:60;margin:0;padding:6px;background:#ffffffed;box-shadow:0 12px 36px #183e302b;border:1px solid #d9e7df;backdrop-filter:blur(18px)}
+ .tabs button{font-size:12px;padding:12px 4px;min-width:0}
+ .card{padding:16px;border-radius:17px}
+ .stats{gap:9px}
+ .stat-card{min-height:112px}
+ .stat-card b{font-size:29px}
+ .tablewrap{margin-inline:-3px}
+}
+@media(prefers-reduced-motion:reduce){
+ #splash,.splash-mark,.splash-word,.splash-caption,.splash-loader span,.splash-orbit,#main.page-enter{animation:none!important;transition:none!important}
+}
 </style></head><body>
-<div id="login" class="wrap"><div class="card login"><div class="row" style="justify-content:flex-end"><button type="button" class="soft" id="langToggle">English</button></div><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">إدارة مخزون أدوات الصالة والخدمة</div></div></div><h2>تسجيل الدخول</h2><form id="loginForm"><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" required></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" required></div><button id="loginBtn">دخول</button></form><div id="loginErr" class="error"></div><div class="row" style="margin-top:14px"><button type="button" class="soft" id="showSignup">إنشاء حساب جديد</button><button type="button" class="soft" id="showLogin">لدي حساب بالفعل</button></div><form id="signupForm" class="hidden"><h3>حساب جديد</h3><div class="field"><label>الاسم</label><input id="signupName" required></div><div class="field"><label>البريد الإلكتروني</label><input id="signupEmail" type="email" required></div><div class="field"><label>كلمة المرور (8 أحرف على الأقل)</label><input id="signupPassword" type="password" minlength="8" required></div><button id="signupBtn">إنشاء الحساب</button><div id="signupErr" class="error"></div></form><p class="muted" id="loginHint">الحساب الأول المعتمد هو مالك النظام. حسابات الموظفين تُفعّل بعد إضافتها من المالك.</p></div></div>
+<div id="splash" aria-label="NOVARO"><div class="splash-orbit orbit-one"></div><div class="splash-orbit orbit-two"></div><div class="splash-content"><div class="splash-mark">N</div><div class="splash-word">NOVARO</div><div class="splash-caption">INVENTORY MANAGEMENT</div><div class="splash-loader"><span></span></div></div></div>
+<div id="login" class="auth-shell"><section class="auth-visual"><div class="visual-glow glow-a"></div><div class="visual-glow glow-b"></div><div class="visual-grid"></div><div class="visual-content"><div class="visual-brand"><span class="visual-mark">N</span><span>NOVARO</span></div><div class="visual-copy"><span class="eyebrow">SMART INVENTORY CONTROL</span><h1>إدارة أذكى.<br><em>رؤية أوضح.</em></h1><p>كل الفروع، كل الأصناف، وكل تفاصيل الجرد في مكان واحد.</p></div><div class="visual-foot"><span>CONTROL</span><i></i><span>CLARITY</span><i></i><span>GROWTH</span></div></div></section>
+<section class="auth-panel"><div class="auth-panel-top"><div class="auth-mini-brand"><span class="mini-mark">N</span><span><b>NOVARO Inventory</b><small>Front of House Inventory</small></span></div><button type="button" class="language-control" id="langToggle">English</button></div><div class="auth-form-wrap"><div class="auth-kicker">WELCOME BACK</div><h2>تسجيل الدخول</h2><p class="auth-subtitle">سجّل دخولك لمتابعة المخزون وإدارة الجرد.</p><form id="loginForm"><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="username" placeholder="name@company.com" required></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required></div><button id="loginBtn" class="auth-submit">دخول إلى النظام <span>←</span></button></form><div id="loginErr" class="error"></div><div class="auth-switch"><span>مستخدم جديد؟</span><button type="button" class="soft" id="showSignup">إنشاء حساب</button><button type="button" class="soft hidden" id="showLogin">لدي حساب بالفعل</button></div><form id="signupForm" class="hidden"><h3>حساب جديد</h3><div class="field"><label>الاسم</label><input id="signupName" autocomplete="name" required></div><div class="field"><label>البريد الإلكتروني</label><input id="signupEmail" type="email" autocomplete="email" required></div><div class="field"><label>كلمة المرور (8 أحرف على الأقل)</label><input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required></div><button id="signupBtn" class="auth-submit">إنشاء الحساب <span>←</span></button><div id="signupErr" class="error"></div></form><p class="auth-note" id="loginHint">الحسابات تُفعّل من خلال مالك النظام. إذا كان لديك حساب فرع، استخدم بيانات الدخول المخصصة لفرعك.</p></div><div class="auth-panel-footer"><span>© NOVARO Inventory</span><span>Secure access · Branch ready</span></div></section></div>
 <div id="app" class="hidden"><div class="wrap"><header class="app-header"><div class="brand"><div class="logo">N</div><div><b>NOVARO Inventory</b><div class="muted">Front of House Inventory</div></div></div><div class="header-actions"><span id="who" class="muted"></span><button class="language-control" id="langToggleApp" type="button">◎ English</button><button class="soft logout-control" id="logout">خروج</button></div></header><nav class="tabs" id="tabs" aria-label="Main navigation"><button data-p="home" class="active">الرئيسية</button><button data-p="items">الأصناف</button><button data-p="counts">الجرد الفعلي</button><button data-p="branches">الفروع</button></nav><main id="main"></main></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
@@ -277,7 +416,7 @@ if(page==="counts")m.innerHTML='<section class="card"><div class="row"><h3>ال�
 
 if(page==="branches")m.innerHTML='<section class="card"><div class="row"><h3>الفروع</h3>'+(profile.role==="owner_admin"?'<button onclick="addBranch()">＋ إضافة فرع</button>':'')+'</div><div class="tablewrap"><table><tr><th>الكود</th><th>اسم الفرع</th><th>العنوان</th><th>إيميل الدخول</th><th>الحالة</th><th>الإجراءات</th></tr>'+((profile.role==="owner_admin"?allBranches:branches).map(b=>'<tr><td>'+esc(b.code)+'</td><td>'+esc(nameOf(b))+'</td><td>'+esc(branchLocationOf(b)||"—")+'</td><td>'+esc(b.branch_login_email||"لم يُنشأ بعد") +'</td><td>'+(b.is_active?"نشط":"موقوف")+'</td><td>'+(profile.role==="owner_admin"?'<button class="soft" onclick="manageBranchAccount(&quot;'+b.id+'&quot;)">'+(b.branch_login_user_id?"تعديل حساب الدخول":"إنشاء حساب الدخول")+'</button> <button class="soft" onclick="editBranch(&quot;'+b.id+'&quot;)">تعديل</button> <button class="soft" onclick="deleteBranch(&quot;'+b.id+'&quot;)">حذف</button>':"—")+'</td></tr>').join(""))+'</table></div></section>';
 if($("branchSelect")){$("branchSelect").value=branchId;$("branchSelect").onchange=e=>{branchId=e.target.value;render()}}
-applyLanguage();if(page==="counts"&&!window.__openingStocktake)sessions();if(page==="items"){const filter=()=> $("itemRows").innerHTML=itemRows(items.filter(i=>(!$("categoryFilter").value||i.category_id===$("categoryFilter").value)&&nameOf(i).toLowerCase().includes($("search").value.toLowerCase())));$("search").oninput=filter;$("categoryFilter").onchange=filter}}
+m.classList.remove("page-enter");void m.offsetWidth;m.classList.add("page-enter");applyLanguage();if(page==="counts"&&!window.__openingStocktake)sessions();if(page==="items"){const filter=()=> $("itemRows").innerHTML=itemRows(items.filter(i=>(!$("categoryFilter").value||i.category_id===$("categoryFilter").value)&&nameOf(i).toLowerCase().includes($("search").value.toLowerCase())));$("search").oninput=filter;$("categoryFilter").onchange=filter}}
 function itemRows(a){return a.length?a.map(i=>'<tr><td>'+(i.image_url?'<img src="'+esc(i.image_url)+'" style="width:58px;height:58px;object-fit:cover;border-radius:9px">':'—')+'</td><td>'+esc(nameOf(i))+'</td><td>'+esc(categoryName(i.categories))+'</td><td>'+(profile.role==="owner_admin"?'<button class="soft" onclick="editItem(&quot;'+i.id+'&quot;)">'+(language==="en"?"Edit":"تعديل")+'</button> <button class="soft" onclick="deactivateItem(&quot;'+i.id+'&quot;)">'+(language==="en"?"Delete":"حذف")+'</button>':"—")+'</td></tr>').join(""):'<tr><td colspan="4" class="empty">'+(language==="en"?"No items found":"لا توجد أصناف")+'</td></tr>'}
 async function latest(){let r=await db.from("stock_movements").select("*,items(name_ar,name_en)").eq("branch_id",branchId).order("created_at",{ascending:false}).limit(8);$("latest").innerHTML=r.error?esc(r.error.message):r.data.length?tableMoves(r.data):"لا توجد حركات مسجلة"}
 function tableMoves(a){return '<div class="tablewrap"><table><tr><th>التاريخ</th><th>الصنف</th><th>النوع</th><th>الكمية</th></tr>'+a.map(x=>'<tr><td>'+new Date(x.created_at).toLocaleDateString(language==="en"?"en-GB":"ar-EG")+'</td><td>'+esc(nameOf(x.items))+'</td><td>'+({receipt:"استلام",issue:"صرف",adjustment:"تسوية"}[x.movement_type]||x.movement_type)+'</td><td>'+x.quantity+'</td></tr>').join("")+'</table></div>'}
@@ -310,5 +449,6 @@ async function sessions(){let q=db.from("inventory_sessions").select("*").order(
 async function openSession(id){const session=window.__novaroSessions?.find(x=>x.id===id);if(!session)return;const area=$("sessions"),en=language==="en";area.innerHTML=en?"Loading...":"تحميل...";try{const select="id,item_id,counted_quantity,condition,notes,items(name_ar,name_en,unit_ar,unit_en,image_url,category_id,categories(id,name_ar,name_en,sort_order))";let r=await db.from("inventory_counts").select(select).eq("session_id",id);if(r.error)throw r.error;const existing=new Set((r.data||[]).map(x=>x.item_id)),missing=items.filter(x=>x.is_active!==false&&!existing.has(x.id));if(missing.length){const add=await db.from("inventory_counts").insert(missing.map(x=>({session_id:id,item_id:x.id,counted_quantity:0,counted_by:user.id})));if(add.error)throw add.error;r=await db.from("inventory_counts").select(select).eq("session_id",id);if(r.error)throw r.error}window.__stocktakeView={id,session,rows:r.data||[],locked:!["draft","in_progress"].includes(session.status)};renderStocktakeCategories()}catch(e){area.innerHTML='<p class="error">'+esc(e.message||e)+'</p><button class="soft" onclick="sessions()">رجوع</button>'}}
 function renderStocktakeCategories(){const v=window.__stocktakeView;if(!v)return;const en=language==="en",area=$("sessions"),counts=new Map();for(const x of v.rows){const k=x.items?.category_id||"__none";counts.set(k,(counts.get(k)||0)+1)}const ordered=[...cats].sort((a,b)=>{const ao=/^(other|أخرى)$/i.test((a.name_en||a.name_ar||"").trim()),bo=/^(other|أخرى)$/i.test((b.name_en||b.name_ar||"").trim());return ao===bo?Number(a.sort_order||0)-Number(b.sort_order||0):ao?1:-1});const tiles=ordered.map(c=>'<button class="card" style="display:flex;align-items:center;justify-content:space-between;width:100%;background:#fff;color:var(--ink);text-align:start;padding:18px;margin:0;border:1px solid var(--line);box-shadow:none" onclick="showStocktakeCategory(\''+c.id+'\')"><b>'+esc(categoryName(c))+'</b><span class="muted">'+(counts.get(c.id)||0)+' '+(en?"items":"صنف")+'　›</span></button>').join("");const unc=counts.get("__none")||0;area.innerHTML='<div class="row"><div><h3>'+esc(v.session.title)+'</h3><p class="muted">'+esc(monthLabel(v.session.inventory_date))+' — '+v.rows.length+' '+(en?"items":"صنف")+'</p></div><button class="soft" onclick="sessions()">'+(en?"Back to sessions":"رجوع للجلسات")+'</button></div><section class="card"><h3>'+(en?"Choose a category":"اختار التصنيف")+'</h3><p class="muted">'+(en?"Open a category to view item photos and count quantities.":"اختار القسم عشان تشوف صور الأصناف وتسجل الكميات الموجودة.")+'</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px">'+tiles+(unc?'<button class="card" onclick="showStocktakeCategory(\'__none\')">'+(en?"Uncategorized":"بدون تصنيف")+' ('+unc+')</button>':"")+'</div></section>'+(v.locked?'<p class="muted">'+(en?"This session is locked.":"الجلسة مغلقة ولا تسمح بالتعديل.")+'</p>':'')}
 function showStocktakeCategory(categoryId){const v=window.__stocktakeView;if(!v)return;const en=language==="en",area=$("sessions"),cat=cats.find(c=>c.id===categoryId),title=categoryId==="__none"?(en?"Uncategorized":"بدون تصنيف"):categoryName(cat),rows=v.rows.filter(x=>(x.items?.category_id||"__none")===categoryId);const cards=rows.map(x=>'<article class="card" style="margin:0;display:flex;gap:13px;align-items:center;flex-wrap:wrap"><div style="width:92px;height:92px;flex:none;border-radius:14px;overflow:hidden;background:#eef3f0;display:grid;place-items:center">'+(x.items?.image_url?'<img src="'+esc(x.items.image_url)+'" alt="" style="width:100%;height:100%;object-fit:cover">':'<span style="font-size:30px">▧</span>')+'</div><div style="flex:1;min-width:130px"><b style="display:block;font-size:17px">'+esc(nameOf(x.items)||"صنف")+'</b><span class="muted">'+esc(unitOf(x.items)||"—")+'</span></div><div style="width:125px"><label style="display:block;font-size:13px;color:var(--muted);margin-bottom:5px">'+(en?"Actual quantity":"الكمية الموجودة")+'</label><input type="number" min="0" step="0.01" data-count-id="'+x.id+'" value="'+Number(x.counted_quantity||0)+'" '+(v.locked?"disabled":"")+' style="width:100%;padding:10px;border:1px solid var(--line);border-radius:10px"></div></article>').join("");area.innerHTML='<div class="row"><div><h3>'+esc(title)+'</h3><p class="muted">'+rows.length+' '+(en?"items":"صنف")+'</p></div><button class="soft" onclick="renderStocktakeCategories()">← '+(en?"All categories":"كل التصنيفات")+'</button></div>'+(rows.length?'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">'+cards+'</div>':'<section class="card empty">'+(en?"No items in this category yet":"لا توجد أصناف في هذا التصنيف حالياً")+'</section>')+(v.locked?'<p class="muted">'+(en?"This session is locked.":"الجلسة مغلقة.")+'</p>':'<div class="row" style="margin-top:16px"><button id="saveCategoryCounts">'+(en?"Save quantities":"حفظ الكميات")+'</button><span id="countSaveMsg" class="muted"></span></div>');if(!v.locked&&rows.length)$("saveCategoryCounts").onclick=async()=>{const btn=$("saveCategoryCounts");btn.disabled=true;try{for(const input of area.querySelectorAll("[data-count-id]")){const value=Number(input.value);if(!Number.isFinite(value)||value<0)throw Error(en?"Enter a valid quantity":"اكتب كمية صحيحة");const u=await db.from("inventory_counts").update({counted_quantity:value,counted_by:user.id,counted_at:new Date().toISOString()}).eq("id",input.dataset.countId);if(u.error)throw u.error;const row=v.rows.find(x=>x.id===input.dataset.countId);if(row)row.counted_quantity=value}$("countSaveMsg").textContent=en?"Saved successfully":"تم حفظ الكميات بنجاح"}catch(e){$("countSaveMsg").textContent=e.message||String(e)}finally{btn.disabled=false}}}
+setTimeout(()=>{const splash=document.getElementById("splash");if(splash){splash.classList.add("splash-out");setTimeout(()=>splash.remove(),700)}},2100);
 applyLanguage();init().catch(err);
 </script></body></html>
