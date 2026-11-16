@@ -1143,41 +1143,40 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 </style>
 
 
-<style id="novaro-branches-design-canonical-v1">
-/* One source of truth: mirror the Branches page shell on every screen except Home and Branches. */
+<style id="novaro-branches-design-canonical-v2">
+/* Canonical Branches-inspired visual system for every internal page.
+   Home and Branches are intentionally excluded. Preserve component layout and behavior. */
 #main.novaro-consistent-page{display:flex;flex-direction:column;align-items:stretch;gap:14px;min-width:0}
 #main.novaro-consistent-page>section.card:not(.branches-page){
- box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:0!important;padding:20px!important;
- border:1px solid #e0ebe5!important;border-radius:14px!important;
- background:linear-gradient(145deg,#fff,#f9fcfa)!important;
- box-shadow:0 3px 12px #173d3009!important;
+ box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;
+ margin:0!important;padding:20px!important;border:1px solid #e0ebe5!important;border-radius:14px!important;
+ background:linear-gradient(145deg,#fff,#f9fcfa)!important;box-shadow:0 3px 12px #173d3009!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) h2,
+#main.novaro-consistent-page>section.card:not(.branches-page) h3{
+ color:#243b34!important;font-size:17px!important;font-weight:800!important;line-height:1.45!important;
 }
 #main.novaro-consistent-page>section.card:not(.branches-page)>h2,
 #main.novaro-consistent-page>section.card:not(.branches-page)>h3,
 #main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3,
-#main.novaro-consistent-page>section.card:not(.branches-page)>.row h3{
- margin:0 0 14px!important;color:#243b34!important;font-size:17px!important;font-weight:800!important;line-height:1.45!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page)>.row,
-#main.novaro-consistent-page>section.card:not(.branches-page) .row{
- display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
-}
+#main.novaro-consistent-page>section.card:not(.branches-page)>.row h3{margin:0 0 14px!important}
+#main.novaro-consistent-page>section.card:not(.branches-page) .row{gap:10px!important;align-items:center;flex-wrap:wrap}
 #main.novaro-consistent-page>section.card:not(.branches-page) .field{margin:12px 0!important;min-width:0}
 #main.novaro-consistent-page>section.card:not(.branches-page) .field label,
 #main.novaro-consistent-page>section.card:not(.branches-page)>label{
- display:block;margin:0 0 7px!important;color:#64776d!important;font-size:13px!important;font-weight:700!important;
+ display:block!important;margin:0 0 7px!important;color:#64776d!important;font-size:13px!important;font-weight:700!important;
 }
 #main.novaro-consistent-page>section.card:not(.branches-page) input:not([type=checkbox]):not([type=radio]):not([type=range]),
 #main.novaro-consistent-page>section.card:not(.branches-page) select,
 #main.novaro-consistent-page>section.card:not(.branches-page) textarea{
- box-sizing:border-box;max-width:100%;min-height:42px;padding:10px 12px!important;
+ box-sizing:border-box!important;max-width:100%!important;min-height:42px!important;padding:10px 12px!important;
  border:1px solid #dce8e1!important;border-radius:10px!important;background:#fff!important;color:#263a35!important;
 }
 #main.novaro-consistent-page>section.card:not(.branches-page) .tablewrap{
- width:100%;max-width:100%;overflow-x:auto!important;margin-top:12px!important;
+ width:100%!important;max-width:100%!important;overflow-x:auto!important;margin-top:12px!important;
  border:1px solid #e0ebe5!important;border-radius:12px!important;background:#fff!important;
 }
-#main.novaro-consistent-page>section.card:not(.branches-page) table{width:100%;border-collapse:separate!important;border-spacing:0!important}
+#main.novaro-consistent-page>section.card:not(.branches-page) table{width:100%!important;border-collapse:separate!important;border-spacing:0!important}
 #main.novaro-consistent-page>section.card:not(.branches-page) th{
  background:#edf4f0!important;color:#315f50!important;font-weight:800!important;
 }
@@ -1194,13 +1193,22 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
  padding:16px!important;border:1px dashed #dce8e1!important;border-radius:12px!important;background:#fbfdfb!important;
 }
 #main.novaro-consistent-page>section.card:not(.branches-page) .muted{color:#78877f!important}
+/* Keep action controls consistent without changing their event handlers or disabled states. */
+#main.novaro-consistent-page>section.card:not(.branches-page) button:not(.items-tool):not(.items-group-tab):not(.language-choice):not([data-theme]){
+ min-height:34px!important;padding:6px 10px!important;border:1px solid #d5e3dc!important;border-radius:9px!important;
+ box-shadow:none!important;font-weight:700!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) button.soft{
+ background:#eaf4ee!important;color:#246b57!important;border-color:#dcebe2!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) button:not(.soft):not(.items-tool):not(.items-group-tab):not(.language-choice):not([data-theme]){
+ background:linear-gradient(110deg,#397f6c,#2c6d5b)!important;color:#fff!important;border-color:#367765!important;
+}
 @media(max-width:700px){
  #main.novaro-consistent-page{gap:10px}
  #main.novaro-consistent-page>section.card:not(.branches-page){padding:15px!important;border-radius:13px!important}
- #main.novaro-consistent-page>section.card:not(.branches-page)>h2,
- #main.novaro-consistent-page>section.card:not(.branches-page)>h3,
- #main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3,
- #main.novaro-consistent-page>section.card:not(.branches-page)>.row h3{font-size:16px!important}
+ #main.novaro-consistent-page>section.card:not(.branches-page) h2,
+ #main.novaro-consistent-page>section.card:not(.branches-page) h3{font-size:16px!important}
  #main.novaro-consistent-page>section.card:not(.branches-page) td,
  #main.novaro-consistent-page>section.card:not(.branches-page) th{padding:8px 9px!important}
 }
@@ -1703,11 +1711,13 @@ function applyNovaroAppearance(overridePrefs){
  const sizes={small:".92",medium:"1",large:"1.10",xlarge:"1.20"},scale=sizes[p.fontSize]||"1";
  let st=document.getElementById("novaro-live-appearance");if(!st){st=document.createElement("style");st.id="novaro-live-appearance";document.head.appendChild(st)}
  const density=p.density==="compact"?"7px":"12px";
- st.textContent='body,body *:not(svg):not(path){font-family:'+font+' !important}#app{zoom:'+scale+'}#app .card{padding:'+density+' !important}'+
+ st.textContent='body,body *:not(svg):not(path){font-family:'+font+' !important}#app{zoom:'+scale+'}'+
  '#app .app-header,#app .tabs{background:'+t[1]+' !important;border-color:'+t[3]+' !important;color:'+t[2]+' !important}'+
  '#app .card{border-color:'+t[3]+' !important}#app .tabs button.active,#app button.primary,#app .auth-submit{background:'+t[0]+' !important;color:#fff !important}'+
  '#app .soft,#app .language-control{border-color:'+t[3]+' !important;color:'+t[0]+' !important}'+
- '#app .tabs{background:'+t[1]+' !important}#app .tabs button.active{background:#fff !important;color:'+t[0]+' !important}';
+ '#app .tabs{background:'+t[1]+' !important}#app .tabs button.active{background:#fff !important;color:'+t[0]+' !important}'+
+ '#main.novaro-consistent-page>section.card:not(.branches-page){padding:20px !important;border:1px solid #e0ebe5 !important;border-radius:14px !important;background:linear-gradient(145deg,#fff,#f9fcfa) !important;box-shadow:0 3px 12px #173d3009 !important}'+
+ '@media(max-width:700px){#main.novaro-consistent-page>section.card:not(.branches-page){padding:15px !important;border-radius:13px !important}}';
  document.querySelectorAll("[data-theme]").forEach(b=>{const c=(novaroThemeMap()[b.dataset.theme]||novaroThemeMap().default)[0];b.style.setProperty("background-color",c,"important");b.style.setProperty("background-image","none","important");b.classList.toggle("selected",b.dataset.theme===p.theme)});
 }
 const NOVARO_SOUND_LIBRARY={
