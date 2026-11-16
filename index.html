@@ -2245,7 +2245,7 @@ $("tabs").onclick=e=>{let b=e.target.closest("button[data-p]");if(b)novaroNaviga
 $("openSettings").onclick=()=>novaroNavigate("settings");$("openAbout").onclick=()=>novaroNavigate("about");
 document.addEventListener("change",e=>{const id=e.target.id;if(!novaroSettingsDraft)return;const map={settingsLanguage:"language",programFont:"font",fontSize:"fontSize",displayDensity:"density",alertVolume:"volume"};if(map[id])novaroSettingsDraft[map[id]]=id==="alertVolume"?Number(e.target.value):e.target.value;if(id==="programFont"||id==="fontSize"||id==="displayDensity")syncSettingsControls()});
 document.addEventListener("input",e=>{if(e.target.id==="alertVolume"&&novaroSettingsDraft){novaroSettingsDraft.volume=Number(e.target.value);const v=$("alertVolumeValue");if(v)v.textContent=e.target.value+"%";if(novaroSoundMaster&&novaroSoundContext)novaroSoundMaster.gain.setTargetAtTime(Math.max(.01,novaroSettingsDraft.volume/100*.48),novaroSoundContext.currentTime,.025)}});
-document.addEventListener("click",e=>{
+document.addEventListener("click",async e=>{
  const languageChoice=e.target.closest("[data-language-choice]");
  if(languageChoice){const next=languageChoice.dataset.languageChoice==="en"?"en":"ar";if(novaroSettingsDraft)novaroSettingsDraft.language=next;setLanguage(next);return;}
  const changeOwnerEmail=e.target.closest("#requestOwnerEmailChange");
