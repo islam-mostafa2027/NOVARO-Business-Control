@@ -1917,15 +1917,26 @@ function itemForm(existing=null){
  window.__novaroEditedItemImage=null;
  function processItemImage(source,inputEl){
   window.__novaroEditedItemImage=null;
-  if(!source)return;
-  if(typeof source.size!=="number"||source.size<=0||typeof source.slice!=="function"){alert(en?"The camera or gallery did not return a readable image. Please try again.":"الكاميرا أو الاستوديو لم يُرجع ملف صورة قابلًا للقراءة. حاول مرة أخرى.");return}if(source.type&&!source.type.startsWith("image/")){alert(en?"Please choose an image file.":"اختار ملف صورة صحيح.");return}
+  const resetImageProcessing=()=>{itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}};
+  if(!source){resetImageProcessing();return}
+  if(typeof source.size!=="number"||source.size<=0||typeof source.slice!=="function"){resetImageProcessing();alert(en?"The camera or gallery did not return a readable image. Please try again.":"الكاميرا أو الاستوديو لم يُرجع ملف صورة قابلًا للقراءة. حاول مرة أخرى.");return}
+  if(source.type&&!source.type.startsWith("image/")){resetImageProcessing();alert(en?"Please choose an image file.":"اختار ملف صورة صحيح.");return}
   const img=new Image();
-  const reader=new FileReader();
-  reader.onerror=()=>{itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}alert(en?"Could not read the selected image. Please try again.":"تعذرت قراءة الصورة المختارة. حاول مرة أخرى.")};
-  reader.onabort=()=>{itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}alert(en?"Image loading was cancelled.":"تم إلغاء تحميل الصورة.")};
-  reader.onload=()=>{if(typeof reader.result!=="string"){itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}alert(en?"Invalid image data.":"بيانات الصورة غير صالحة.");return}img.src=reader.result};
-  reader.readAsDataURL(source);
+  let imageObjectUrl=null,imageLoadTimer=null,imageLoadFinished=false;
+  const failImageLoad=message=>{
+   if(imageLoadFinished)return;
+   imageLoadFinished=true;
+   if(imageLoadTimer)clearTimeout(imageLoadTimer);
+   if(imageObjectUrl){URL.revokeObjectURL(imageObjectUrl);imageObjectUrl=null}
+   resetImageProcessing();
+   alert(message);
+  };
   img.onload=()=>{
+   if(imageLoadFinished)return;
+   imageLoadFinished=true;
+   if(imageLoadTimer)clearTimeout(imageLoadTimer);
+   if(imageObjectUrl){URL.revokeObjectURL(imageObjectUrl);imageObjectUrl=null}
+   if(!img.naturalWidth||!img.naturalHeight){resetImageProcessing();alert(en?"The selected file contains no readable image. Please try another photo.":"ملف الصورة لا يحتوي على صورة قابلة للقراءة. جرّب صورة أخرى.");return}
    const prior=document.getElementById("novaroImageEditor");if(prior)prior.remove();
    document.body.insertAdjacentHTML("beforeend",'<div id="novaroImageEditor" style="position:fixed;inset:0;background:#0009;z-index:99999;display:flex;align-items:center;justify-content:center;padding:14px"><div style="background:var(--card,#fff);color:var(--text);width:min(100%,440px);max-height:94vh;overflow:auto;border-radius:16px;padding:16px;box-shadow:0 12px 40px #0004"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>'+(en?"Edit item image":"تعديل صورة الصنف")+'</b><button type="button" id="novaroCropCancel" class="soft">×</button></div><p class="muted" style="font-size:12px">'+(en?"Adjust the crop, zoom and position.":"ظبط القص والتكبير ومكان الصورة.")+'</p><canvas id="novaroCropCanvas" style="width:100%;aspect-ratio:4/3;display:block;background:#eee;border-radius:10px;touch-action:pan-y"></canvas><div class="field"><label>'+(en?"Zoom":"التكبير")+'</label><input id="novaroCropZoom" type="range" min="1" max="3" step=".01" value="1"></div><div class="field"><label>'+(en?"Rotate image":"تدوير الصورة")+'</label><div style="display:flex;gap:8px"><button type="button" class="soft" id="novaroRotateLeft" style="flex:1">↶　'+(en?"Rotate left":"لف لليسار")+'</button><button type="button" class="soft" id="novaroRotateRight" style="flex:1">↷　'+(en?"Rotate right":"لف لليمين")+'</button></div></div><div class="field"><label>'+(en?"Horizontal position":"الموضع الأفقي")+'</label><input id="novaroCropX" type="range" min="-100" max="100" value="0"></div><div class="field"><label>'+(en?"Vertical position":"الموضع الرأسي")+'</label><input id="novaroCropY" type="range" min="-100" max="100" value="0"></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button type="button" class="soft" id="novaroCropReset">'+(en?"Reset":"إعادة ضبط")+'</button><button type="button" id="novaroCropApply">'+(en?"Use image":"استخدام الصورة")+'</button></div></div></div>');
    const modal=$("novaroImageEditor"),canvas=$("novaroCropCanvas"),ctx=canvas.getContext("2d"),zoom=$("novaroCropZoom"),sx=$("novaroCropX"),sy=$("novaroCropY");
@@ -1954,7 +1965,10 @@ function itemForm(existing=null){
     },"image/jpeg",.88);
    };
   };
-  img.onerror=()=>{itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}alert(en?"Could not open this image. Please choose or capture it again.":"تعذر فتح الصورة. اختار الصورة أو صوّرها مرة أخرى.")};
+  img.onerror=()=>failImageLoad(en?"Could not open this image. Please choose or capture it again.":"تعذر فتح الصورة. اختار الصورة أو صوّرها مرة أخرى.");
+  imageLoadTimer=window.setTimeout(()=>failImageLoad(en?"The image is taking too long to open. Please try capturing it again.":"الصورة استغرقت وقتًا طويلًا في الفتح. حاول تصويرها مرة أخرى."),20000);
+  try{imageObjectUrl=URL.createObjectURL(source);img.src=imageObjectUrl}
+  catch(error){console.error("NOVARO image URL creation failed:",error);failImageLoad(en?"Could not prepare this image. Please try again.":"تعذر تجهيز الصورة للفتح. حاول مرة أخرى.")}
  }
 
  $("itemImageChoose").onclick=()=>{
