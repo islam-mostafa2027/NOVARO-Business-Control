@@ -1898,9 +1898,9 @@ function itemForm(existing=null){
   if(typeof source.size!=="number"||source.size<=0||typeof source.slice!=="function"){alert(en?"The camera or gallery did not return a readable image. Please try again.":"الكاميرا أو الاستوديو لم يُرجع ملف صورة قابلًا للقراءة. حاول مرة أخرى.");return}if(source.type&&!source.type.startsWith("image/")){alert(en?"Please choose an image file.":"اختار ملف صورة صحيح.");return}
   const img=new Image();
   const reader=new FileReader();
-  reader.onerror=()=>{if(inputEl)inputEl.value="";alert(en?"Could not read the selected image. Please try again.":"تعذرت قراءة الصورة المختارة. حاول مرة أخرى.")};
-  reader.onabort=()=>{if(inputEl)inputEl.value="";alert(en?"Image loading was cancelled.":"تم إلغاء تحميل الصورة.")};
-  reader.onload=()=>{if(typeof reader.result!=="string"){if(inputEl)inputEl.value="";alert(en?"Invalid image data.":"بيانات الصورة غير صالحة.");return}img.src=reader.result};
+  reader.onerror=()=>{itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}alert(en?"Could not read the selected image. Please try again.":"تعذرت قراءة الصورة المختارة. حاول مرة أخرى.")};
+  reader.onabort=()=>{itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}alert(en?"Image loading was cancelled.":"تم إلغاء تحميل الصورة.")};
+  reader.onload=()=>{if(typeof reader.result!=="string"){itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}alert(en?"Invalid image data.":"بيانات الصورة غير صالحة.");return}img.src=reader.result};
   reader.readAsDataURL(source);
   img.onload=()=>{
    const prior=document.getElementById("novaroImageEditor");if(prior)prior.remove();
@@ -1931,7 +1931,7 @@ function itemForm(existing=null){
     },"image/jpeg",.88);
    };
   };
-  img.onerror=()=>{if(inputEl)inputEl.value="";alert(en?"Could not open this image. Please choose or capture it again.":"تعذر فتح الصورة. اختار الصورة أو صوّرها مرة أخرى.")};
+  img.onerror=()=>{itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}alert(en?"Could not open this image. Please choose or capture it again.":"تعذر فتح الصورة. اختار الصورة أو صوّرها مرة أخرى.")};
  }
 
  $("itemImageChoose").onclick=()=>{
