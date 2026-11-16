@@ -1604,7 +1604,6 @@ async function offerPasswordSave(username,password){
   }
  }catch(error){console.debug("NOVARO password save was not available:",error);}
 }
-let novaroCredentialPickerOpen=false;
 window.NOVAROFillCredentials=function(username,password){
  $("email").value=username||"";
  $("password").value=password||"";
@@ -1615,21 +1614,14 @@ window.NOVAROFillCredentials=function(username,password){
  $("email").dispatchEvent(new Event("change",{bubbles:true}));
  $("password").dispatchEvent(new Event("change",{bubbles:true}));
 };
-async function requestSavedCredentials(){
- // Web Chrome uses its native password autofill. The Credential Management API
- // picker caused navigation/session instability on some Android Chrome builds.
+function requestAndroidAutofill(){
  const nativeBridge=window.NOVAROAndroidAutofill;
- if(nativeBridge&&typeof nativeBridge.get==="function"){
-  try{nativeBridge.get();}catch(error){console.debug("NOVARO native credential picker unavailable:",error);}
+ if(nativeBridge&&typeof nativeBridge.request==="function"){
+  try{nativeBridge.request();}catch(error){console.debug("NOVARO Android autofill request unavailable:",error);}
  }
 }
-// Open Android's saved-password picker from a direct tap on the email field.
-$("email").addEventListener("click",()=>{
- if(novaroCredentialPickerOpen)return;
- novaroCredentialPickerOpen=true;
- requestSavedCredentials();
- window.setTimeout(()=>{novaroCredentialPickerOpen=false;},1500);
-});
+// Ask Android's Autofill service to fill the focused WebView form field.
+$("email").addEventListener("click",requestAndroidAutofill);
 
 
 async function init(){const {data,error}=await db.auth.getSession();if(error)throw error;if(data?.session?.user)await openWorkspace(data.session.user);db.auth.onAuthStateChange((ev,session)=>{if(ev==="SIGNED_OUT"){openedUserId=null;openingUserId=null;$("app").classList.add("hidden");$("login").classList.remove("hidden");return}if(session&&ev==="SIGNED_IN")setTimeout(()=>openWorkspace(session.user).catch(showAuthError),0);});}
