@@ -2006,7 +2006,7 @@ function findScannedItem(){
  closeBarcodeScanner();showScannedItem(item);
 }
 async function openBarcodeScanner(){
- if(!branchId){alert(language==="en"?"Choose a branch first.":"اختار الفرع الأول.");return}
+ if(!branchId&&profile.role!=="owner_admin"){alert(language==="en"?"Choose a branch first.":"اختار الفرع الأول.");return}
  if(!$("novaroScanner")){
   document.body.insertAdjacentHTML("beforeend",'<div id="novaroScanner"><div class="scan-panel"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0">'+(language==="en"?"Scan product barcode":"مسح باركود الصنف")+'</h3><button class="secondary" onclick="closeBarcodeScanner()">×</button></div><video id="novaroScanVideo" playsinline muted></video><div id="novaroScanStatus" class="scan-status"></div><label for="novaroScanCode">'+(language==="en"?"Or enter item code":"أو أدخل كود الصنف")+'</label><input id="novaroScanCode" autocomplete="off" placeholder="'+(language==="en"?"Item code":"كود الصنف")+'"><div style="margin-top:10px"><button onclick="findScannedItem()">'+(language==="en"?"Open product":"فتح الصنف")+'</button><button class="secondary" onclick="closeBarcodeScanner()">'+(language==="en"?"Close":"إغلاق")+'</button></div></div></div><div id="novaroItemDetails" onclick="if(event.target===this)closeScannedItem()"></div>');
  }
