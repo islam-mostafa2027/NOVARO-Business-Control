@@ -1853,7 +1853,7 @@ if(!window.__novaroActionTextObserver){
  window.__novaroActionTextObserver=new MutationObserver(()=>applyWhiteActionText());
  window.__novaroActionTextObserver.observe(document.documentElement,{childList:true,subtree:true,characterData:true});
 }
-function form(title,fields,save){let html='<section class="card"><div class="row"><h3>'+title+'</h3><button class="soft" onclick="render()">رجوع</button></div>'+fields+'<button id="save">حفظ</button><div id="formErr" class="error"></div></section>';$("main").innerHTML=html;novaroBackButton();applyLanguage();$("save").onclick=async()=>{try{$("save").disabled=true;await save();await load();const nextStocktake=window.__openStocktakeAfterSave||null;window.__openStocktakeAfterSave=null;if(nextStocktake){window.__openingStocktake=true;render();await sessions();await openSession(nextStocktake);window.__openingStocktake=false}else render()}catch(e){window.__openingStocktake=false;$("formErr").textContent=e.message;$("save").disabled=false}}}
+function form(title,fields,save){let html='<section class="card"><div class="row"><h3>'+title+'</h3></div>'+fields+'<button id="save">حفظ</button><div id="formErr" class="error"></div></section>';$("main").innerHTML=html;novaroBackButton();applyLanguage();$("save").onclick=async()=>{try{$("save").disabled=true;await save();await load();const nextStocktake=window.__openStocktakeAfterSave||null;window.__openStocktakeAfterSave=null;if(nextStocktake){window.__openingStocktake=true;render();await sessions();await openSession(nextStocktake);window.__openingStocktake=false}else render()}catch(e){window.__openingStocktake=false;$("formErr").textContent=e.message;$("save").disabled=false}}}
 function inp(label,id,extra=""){return '<div class="field"><label>'+label+'</label><input id="'+id+'" '+extra+'></div>'}
 function itemForm(existing=null){
  if(profile.role!=="owner_admin")return alert(language==="en"?"Only the system owner can add or edit items":"إضافة وتعديل الأصناف متاحان للمالك فقط");
@@ -1881,7 +1881,7 @@ function itemForm(existing=null){
  function processItemImage(source,inputEl){
   window.__novaroEditedItemImage=null;
   if(!source)return;
-  if(!source.type.startsWith("image/")){alert(en?"Please choose an image file.":"اختار ملف صورة صحيح.");return}
+  if(!(source instanceof Blob)||!source.size){alert(en?"The camera or gallery did not return an image. Please try again.":"الكاميرا أو الاستوديو لم يُرجع صورة. حاول مرة أخرى.");return}if(source.type&&!source.type.startsWith("image/")){alert(en?"Please choose an image file.":"اختار ملف صورة صحيح.");return}
   const url=URL.createObjectURL(source),img=new Image();
   img.onload=()=>{
    const prior=document.getElementById("novaroImageEditor");if(prior)prior.remove();
@@ -1912,7 +1912,7 @@ function itemForm(existing=null){
     },"image/jpeg",.88);
    };
   };
-  img.onerror=()=>{URL.revokeObjectURL(url);alert(en?"Could not open this image.":"تعذر فتح الصورة.")};
+  img.onerror=()=>{URL.revokeObjectURL(url);if(inputEl)inputEl.value="";alert(en?"Could not open this image. Please choose or capture it again.":"تعذر فتح الصورة. اختار الصورة أو صوّرها مرة أخرى.")};
   img.src=url;
  }
 
