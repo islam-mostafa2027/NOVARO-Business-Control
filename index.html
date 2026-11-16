@@ -1672,8 +1672,22 @@ function categoryName(x){if(!x)return "—";if(language==="en")return x.name_en|
 function categoryGroupLabel(key){return key==="materials"?(language==="en"?"Materials":"الخامات"):key==="tools"?(language==="en"?"Tools":"العدة"):(language==="en"?"Assets":"المعدات")}
 function categoryOptions(selected="",group=null){
  const groups=group?[group]:["materials","tools","equipment"];
- const tree=(g,parent,depth)=>cats.filter(c=>(c.parent_id||null)===(parent||null)&&(c.group_key||"equipment")===g).map(c=>'<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+(depth?"　".repeat(Math.min(depth,5))+"↳ ":"")+esc(categoryName(c))+'</option>'+tree(g,c.id,depth+1)).join("");
- return groups.map(g=>'<optgroup label="'+categoryGroupLabel(g)+'">'+tree(g,null,0)+'</optgroup>').join("");
+ return groups.map(g=>{
+  const rows=cats.filter(c=>(c.group_key||"equipment")===g),byParent=new Map();
+  rows.forEach(c=>{const key=c.parent_id||null;if(!byParent.has(key))byParent.set(key,[]);byParent.get(key).push(c)});
+  const roots=byParent.get(null)||[],stack=[];
+  for(let i=roots.length-1;i>=0;i--)stack.push({item:roots[i],depth:0,path:new Set()});
+  let html="";
+  while(stack.length){
+   const node=stack.pop(),c=node.item;
+   if(node.path.has(c.id))continue;
+   html+='<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+(node.depth?"　".repeat(Math.min(node.depth,5))+"↳ ":"")+esc(categoryName(c))+'</option>';
+   const path=new Set(node.path);path.add(c.id);
+   const children=byParent.get(c.id)||[];
+   for(let i=children.length-1;i>=0;i--)stack.push({item:children[i],depth:node.depth+1,path});
+  }
+  return '<optgroup label="'+categoryGroupLabel(g)+'">'+html+'</optgroup>';
+ }).join("");
 }
 function unitOf(x){return language==="en"?(x?.unit_en||x?.unit_ar||""):(x?.unit_ar||x?.unit_en||"")}
 function roleName(role){return ({owner_admin:language==="en"?"System owner":"مالك النظام",inventory_staff:language==="en"?"Inventory staff":"موظف مخزون",branch_manager:language==="en"?"Branch manager":"مدير فرع",viewer:language==="en"?"View only":"مشاهدة فقط"})[role]||role||"—"}
@@ -1956,7 +1970,14 @@ function itemForm(existing=null){
  });$("cat").value=i.category_id||"";$("unit").value=unitChoices.some(x=>x[0]===(i.unit_ar||"قطعة"))?(i.unit_ar||"قطعة"):"__other__";$("unitEn").value=unitChoices.some(x=>x[1]===(i.unit_en||"Piece"))?(i.unit_en||"Piece"):"__other__";$("unitCustom").value=unitChoices.some(x=>x[0]===(i.unit_ar||"قطعة"))?"":(i.unit_ar||"");$("unitEnCustom").value=unitChoices.some(x=>x[1]===(i.unit_en||"Piece"))?"":(i.unit_en||"");$("unit").onchange=()=>{$("unitCustom").style.display=$("unit").value==="__other__"?"block":"none"};$("unitEn").onchange=()=>{$("unitEnCustom").style.display=$("unitEn").value==="__other__"?"block":"none"};$("minStock").value=Number(i.min_stock||0);
  const help=$("categoryHelp");if(help&&!cats.some(c=>(c.group_key||"equipment")===$("itemGroup").value))help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات للقسم ده لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
 }
-function addItem(){itemForm()}
+function addItem(){
+ try{itemForm()}
+ catch(error){
+  console.error("NOVARO add-item form failed:",error);
+  const main=$("main");
+  if(main)main.innerHTML='<section class="card"><h3>تعذر فتح نموذج إضافة الصنف</h3><p class="error">'+esc(error?.message||String(error))+'</p><button type="button" class="soft" onclick="render()">رجوع</button></section>';
+ }
+}
 function manageBranchAccount(id){
  if(profile.role!=="owner_admin")return alert("غير مصرح");
  const b=allBranches.find(x=>x.id===id);if(!b)return;
