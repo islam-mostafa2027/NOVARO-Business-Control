@@ -2010,15 +2010,36 @@ function showItemFormFailure(error,source="add-item"){
  console.error("NOVARO item form failure:",source,error);
  const main=$("main");if(!main)return;
  const message=error?.message||String(error||"Unknown error");
- main.innerHTML='<section class="card" style="border:1px solid #d97757"><h3>تعذر فتح نموذج إضافة الصنف</h3><p>تم إيقاف فتح النموذج بسبب خطأ برمجي، ولم يتم تغيير أي بيانات.</p><pre dir="ltr" style="white-space:pre-wrap;overflow-wrap:anywhere;background:#fff4f0;color:#7c2d12;padding:12px;border-radius:8px;font-size:12px">'+esc(message)+'</pre><button type="button" class="soft" onclick="render()">رجوع</button></section>';
+ main.innerHTML='<section id="novaroItemFormFailure" class="card" style="border:1px solid #d97757"><h3>تعذر فتح نموذج إضافة الصنف</h3><p>تم إيقاف فتح النموذج بسبب خطأ برمجي، ولم يتم تغيير أي بيانات.</p><p class="muted">تفاصيل التشخيص:</p><pre dir="ltr" style="white-space:pre-wrap;overflow-wrap:anywhere;background:#fff4f0;color:#7c2d12;padding:12px;border-radius:8px;font-size:12px">'+esc(message)+'</pre><button type="button" class="soft" onclick="render()">رجوع</button></section>';
 }
 function addItem(){
+ window.__novaroItemFormOpening=true;
  try{
   console.info("NOVARO add-item: opening form",{categories:Array.isArray(cats)?cats.length:typeof cats,role:profile?.role,language});
   itemForm();
   const main=$("main");
   if(!main?.querySelector("#itemGroup")||!main?.querySelector("#cat"))throw new Error("The item form was created without its required category controls.");
  }catch(error){showItemFormFailure(error,"addItem()")}
+ finally{
+  window.setTimeout(()=>{
+   if(page!=="items"||!window.__novaroItemFormOpening)return;
+   const main=$("main");
+   if(main&&!main.querySelector("#save")&&!main.querySelector("#novaroItemFormFailure"))
+    showItemFormFailure(window.__novaroLastItemFormError||new Error("The item form did not remain visible after opening. Check the browser console for the first runtime error."),"post-render verification");
+   window.__novaroItemFormOpening=false;
+  },180);
+ }
+}
+if(!window.__novaroItemFormGlobalDiagnostics){
+ window.__novaroItemFormGlobalDiagnostics=true;
+ window.addEventListener("error",event=>{
+  if(page==="items"&&window.__novaroItemFormOpening)
+   window.__novaroLastItemFormError=event.error||new Error(event.message||"Unknown browser error");
+ });
+ window.addEventListener("unhandledrejection",event=>{
+  if(page==="items"&&window.__novaroItemFormOpening)
+   window.__novaroLastItemFormError=event.reason||new Error("Unhandled promise rejection");
+ });
 }
 if(!window.__novaroItemFormDiagnostics){
  window.__novaroItemFormDiagnostics=true;
