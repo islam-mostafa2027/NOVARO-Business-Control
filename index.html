@@ -1955,7 +1955,7 @@ function itemForm(existing=null){
     ctx.translate(canvas.width/2+offsetX,canvas.height/2+offsetY);ctx.rotate(rad);ctx.drawImage(img,-w/2,-h/2,w,h);ctx.restore();ctx.filter="none";
     if(activeTool==="crop"&&cropSelection){
      const q=cropSelection,x=Math.min(q.x1,q.x2),y=Math.min(q.y1,q.y2),rw=Math.abs(q.x2-q.x1),rh=Math.abs(q.y2-q.y1);
-     if(rw>2&&rh>2){ctx.save();ctx.fillStyle="rgba(0,0,0,.48)";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.clearRect(x,y,rw,rh);ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.setLineDash([10,6]);ctx.strokeRect(x,y,rw,rh);ctx.setLineDash([]);ctx.fillStyle="#fff";ctx.font="24px sans-serif";ctx.fillText("↘",x+rw-28,y+rh-8);ctx.restore();}
+     if(rw>2&&rh>2){ctx.save();ctx.beginPath();ctx.rect(0,0,canvas.width,canvas.height);ctx.rect(x,y,rw,rh);ctx.fillStyle="rgba(0,0,0,.48)";ctx.fill("evenodd");ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.setLineDash([10,6]);ctx.strokeRect(x,y,rw,rh);ctx.setLineDash([]);ctx.fillStyle="#fff";ctx.font="24px sans-serif";ctx.fillText("↘",x+rw-28,y+rh-8);ctx.restore();}
     }
    };
    const setTool=tool=>{
@@ -1967,7 +1967,7 @@ function itemForm(existing=null){
     else if(tool==="light")panel.innerHTML='<div style="width:100%;display:grid;gap:8px"><label style="display:flex;justify-content:space-between;font-size:12px"><span>'+(en?"Brightness":"السطوع")+'</span><input id="novaroBrightness" type="range" min="60" max="150" value="'+brightness+'"></label><label style="display:flex;justify-content:space-between;font-size:12px"><span>'+(en?"Contrast":"التباين")+'</span><input id="novaroContrast" type="range" min="70" max="140" value="'+contrast+'"></label><label style="display:flex;justify-content:space-between;font-size:12px"><span>'+(en?"Saturation":"تشبع الألوان")+'</span><input id="novaroSaturation" type="range" min="0" max="160" value="'+saturation+'"></label></div>';
     else panel.innerHTML='<div class="novaro-tool-control"><button type="button" id="novaroAutoEnhance">✧　'+(en?"Auto enhance":"تحسين تلقائي")+'</button><button type="button" id="novaroEnhanceReset">'+(en?"Original":"إرجاع للأصل")+'</button></div>';
     if(tool==="crop"){
-     ["novaroCropZoom","novaroCropX","novaroCropY"].forEach(id=>$(id).addEventListener("input",draw));
+     ["novaroCropZoom"].forEach(id=>$(id).addEventListener("input",draw));
      $("novaroCropReset").onclick=()=>{cropSelection=null;$("novaroCropZoom").value=1;draw()};
     }
     if(tool==="rotate"){
