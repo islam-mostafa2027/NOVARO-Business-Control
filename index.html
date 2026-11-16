@@ -1527,6 +1527,70 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 #passwordResetView .auth-submit{width:100%!important;min-height:50px!important}
 #passwordResetView .field input{width:100%!important;min-height:52px!important}
 </style>
+
+<style id="novaro-branches-design-unification">
+/* All application pages use the Branches page visual language; Home is deliberately excluded. */
+#main.novaro-consistent-page{display:flex;flex-direction:column;gap:14px;min-width:0}
+#main.novaro-consistent-page>.card:not(.branches-page),
+#main.novaro-consistent-page>.novaro-page-shell{
+ width:100%;max-width:100%;min-width:0;margin:0!important;padding:20px!important;
+ border:1px solid #e0ebe5!important;border-radius:16px!important;
+ background:linear-gradient(145deg,#fff 0%,#f9fcfa 100%)!important;
+ box-shadow:0 3px 12px #173d3009!important;
+}
+#main.novaro-consistent-page>.card:not(.branches-page)>h2,
+#main.novaro-consistent-page>.card:not(.branches-page)>h3,
+#main.novaro-consistent-page>.novaro-page-shell>h2,
+#main.novaro-consistent-page>.novaro-page-shell>h3,
+#main.novaro-consistent-page>.card:not(.branches-page) .row h3,
+#main.novaro-consistent-page>.novaro-page-shell .row h3{
+ margin:0 0 14px!important;color:#24483b!important;font-size:18px!important;
+ font-weight:800!important;line-height:1.45!important;
+}
+#main.novaro-consistent-page>.card:not(.branches-page) .row,
+#main.novaro-consistent-page>.novaro-page-shell .row{
+ display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+#main.novaro-consistent-page .field{margin:13px 0!important}
+#main.novaro-consistent-page .field label,
+#main.novaro-consistent-page> .card:not(.branches-page)>label{
+ display:block;margin:0 0 7px!important;color:#63766d!important;
+ font-size:13px!important;font-weight:700!important;
+}
+#main.novaro-consistent-page input:not([type=checkbox]):not([type=radio]):not([type=range]),
+#main.novaro-consistent-page select,
+#main.novaro-consistent-page textarea{
+ min-height:43px;border:1px solid #d9e6de!important;border-radius:11px!important;
+ background:#fff!important;color:#263a35!important;padding:10px 12px!important;
+}
+#main.novaro-consistent-page .tablewrap{
+ overflow-x:auto!important;border:1px solid #e0ebe5!important;border-radius:13px!important;
+ background:#fff!important;margin-top:14px!important;
+}
+#main.novaro-consistent-page table{border-collapse:separate!important;border-spacing:0!important}
+#main.novaro-consistent-page th{background:#edf4f0!important;color:#315f50!important;font-weight:800!important}
+#main.novaro-consistent-page td,#main.novaro-consistent-page th{padding:10px 12px}
+#main.novaro-consistent-page .card:not(.branches-page){
+ border:1px solid #e0ebe5;border-radius:14px;
+ background:linear-gradient(145deg,#fff,#f9fcfa);
+ box-shadow:0 3px 12px #173d3009;
+}
+#main.novaro-consistent-page button{border-radius:10px;font-weight:700}
+#main.novaro-consistent-page button.soft{
+ background:#eaf4ee;color:#246b57;border:1px solid #dcebe2;box-shadow:none;
+}
+#main.novaro-consistent-page .muted{color:#78877f}
+@media(max-width:700px){
+ #main.novaro-consistent-page{gap:11px}
+ #main.novaro-consistent-page>.card:not(.branches-page),
+ #main.novaro-consistent-page>.novaro-page-shell{padding:15px!important;border-radius:14px!important}
+ #main.novaro-consistent-page>.card:not(.branches-page)>h2,
+ #main.novaro-consistent-page>.card:not(.branches-page)>h3,
+ #main.novaro-consistent-page>.novaro-page-shell>h2,
+ #main.novaro-consistent-page>.novaro-page-shell>h3{font-size:17px!important}
+ #main.novaro-consistent-page .tablewrap{max-width:100%}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
