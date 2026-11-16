@@ -2561,5 +2561,5 @@ applyLanguage();init().catch(err);
 })();
 
 </script><script>
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(error=>console.warn("NOVARO offline shell:",error)));}
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=22",{updateViaCache:"none"}).catch(error=>console.warn("NOVARO offline shell:",error)));}
 </script></body></html>
