@@ -984,6 +984,18 @@ html[lang="en"] .novaro-back-button svg{transform:none}
  .app-header.novaro-header-column .logo{width:54px!important;height:54px!important;min-width:54px!important;min-height:54px!important;font-size:29px!important}
 }</style>
 <style id="novaro-group-tab-text-white">.items-group-tabs .items-group-tab,.items-group-tabs .items-group-tab:active,.items-group-tabs .items-group-tab:hover,.items-group-tabs .items-group-tab.active{color:#fff!important;-webkit-text-fill-color:#fff!important}</style>
+<style id="novaro-mobile-form-fix">
+/* Keep the workspace and item form inside the Android viewport. */
+@media(max-width:760px){
+ html,body{max-width:100%;overflow-x:hidden}
+ #app{width:100%;max-width:100%;zoom:1!important;overflow-x:clip}
+ #app>.wrap{width:100%;max-width:100%;min-width:0;padding-inline:10px!important}
+ .app-layout{display:flex!important;flex-direction:column!important;grid-template-columns:minmax(0,1fr)!important;width:100%;min-width:0;gap:10px!important}
+ .workspace-content,#main{width:100%;max-width:100%;min-width:0}
+ #main .card{width:100%;max-width:100%;min-width:0}
+ #itemImageChoose{touch-action:manipulation;pointer-events:auto}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
