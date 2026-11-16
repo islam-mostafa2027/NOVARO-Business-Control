@@ -1390,6 +1390,79 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
  #main.novaro-consistent-page>section.card:not(.branches-page) th{padding:8px 9px!important}
 }
 </style>
+
+<style id="novaro-page-design-v5">
+/* Branches-inspired page system. Home is intentionally excluded. */
+#main.novaro-consistent-page{display:flex;flex-direction:column;gap:14px}
+#main.novaro-consistent-page>.novaro-page-shell{
+ min-width:0;padding:20px!important;margin:0 0 2px!important;
+ border:1px solid #dfe9e3!important;border-radius:16px!important;
+ background:linear-gradient(145deg,#fff 0%,#f8fbf9 100%)!important;
+ box-shadow:0 4px 16px #173d300a!important;
+}
+#main.novaro-consistent-page>.novaro-page-shell>.row,
+#main.novaro-consistent-page>.novaro-page-shell>.items-page-heading,
+#main.novaro-consistent-page>.novaro-page-shell>.branches-page-head{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+ margin-bottom:15px;
+}
+#main.novaro-consistent-page>.novaro-page-shell>h2,
+#main.novaro-consistent-page>.novaro-page-shell>h3,
+#main.novaro-consistent-page>.novaro-page-shell .row h2,
+#main.novaro-consistent-page>.novaro-page-shell .row h3,
+#main.novaro-consistent-page>.novaro-page-shell .items-page-heading h3{
+ margin:0 0 13px!important;color:#243b34;font-size:19px;line-height:1.45;font-weight:800;
+}
+#main.novaro-consistent-page>.novaro-page-shell .field{margin:13px 0}
+#main.novaro-consistent-page>.novaro-page-shell .field label,
+#main.novaro-consistent-page>.novaro-page-shell>label{
+ display:block;margin:0 0 7px;color:#61766c;font-size:13px;font-weight:750;
+}
+#main.novaro-consistent-page>.novaro-page-shell input:not([type=checkbox]):not([type=radio]):not([type=range]),
+#main.novaro-consistent-page>.novaro-page-shell select,
+#main.novaro-consistent-page>.novaro-page-shell textarea{
+ width:100%;min-height:46px;padding:10px 13px;border:1px solid #d7e4dc!important;
+ border-radius:11px!important;background:#fff!important;color:#263c34;
+}
+#main.novaro-consistent-page>.novaro-page-shell input:focus,
+#main.novaro-consistent-page>.novaro-page-shell select:focus,
+#main.novaro-consistent-page>.novaro-page-shell textarea:focus{
+ outline:none;border-color:#78ae98!important;box-shadow:0 0 0 3px #287d6b16!important;
+}
+#main.novaro-consistent-page>.novaro-page-shell .tablewrap{
+ width:100%;max-width:100%;overflow:auto;border:1px solid #dfe9e3;border-radius:12px;background:#fff;
+}
+#main.novaro-consistent-page>.novaro-page-shell table{width:100%;border-collapse:separate;border-spacing:0}
+#main.novaro-consistent-page>.novaro-page-shell th{
+ background:#edf4f0!important;color:#315f50;font-size:13px;font-weight:800;white-space:nowrap;
+}
+#main.novaro-consistent-page>.novaro-page-shell td,
+#main.novaro-consistent-page>.novaro-page-shell th{padding:11px 12px;border-bottom:1px solid #edf2ef}
+#main.novaro-consistent-page>.novaro-page-shell tbody tr:last-child td{border-bottom:0}
+#main.novaro-consistent-page>.novaro-page-shell .card:not(.branches-page){
+ border:1px solid #e1ebe5!important;border-radius:13px!important;
+ background:linear-gradient(145deg,#fff,#f9fcfa)!important;box-shadow:0 2px 9px #173d3008!important;
+}
+#main.novaro-consistent-page>.novaro-page-shell .empty{
+ border:1px dashed #d8e5dd;border-radius:12px;background:#fbfdfb;padding:18px;color:#718078;
+}
+#main.novaro-consistent-page>.novaro-page-shell .muted{color:#718078}
+#main.novaro-consistent-page>.novaro-page-shell button{min-height:40px}
+@media(max-width:700px){
+ #main.novaro-consistent-page{gap:10px}
+ #main.novaro-consistent-page>.novaro-page-shell{padding:15px!important;border-radius:14px!important}
+ #main.novaro-consistent-page>.novaro-page-shell>h2,
+ #main.novaro-consistent-page>.novaro-page-shell>h3,
+ #main.novaro-consistent-page>.novaro-page-shell .row h3,
+ #main.novaro-consistent-page>.novaro-page-shell .items-page-heading h3{font-size:17px}
+ #main.novaro-consistent-page>.novaro-page-shell .tablewrap{border-radius:10px}
+ #main.novaro-consistent-page>.novaro-page-shell td,
+ #main.novaro-consistent-page>.novaro-page-shell th{padding:9px 10px;font-size:13px}
+ #main.novaro-consistent-page>.novaro-page-shell .row{align-items:stretch}
+ #main.novaro-consistent-page>.novaro-page-shell .row>button{flex:0 0 auto}
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
