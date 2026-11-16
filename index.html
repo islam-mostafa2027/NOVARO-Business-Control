@@ -881,79 +881,6 @@ html[lang="en"] .novaro-back-button svg{transform:none}
  .items-group-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0 16px;padding:4px;background:#edf3f1;border:1px solid #dce9e4;border-radius:13px}.items-group-tab{min-height:46px;border:1px solid #367d68;border-radius:10px;background:#397f6c;color:#fff!important;font-size:14px;font-weight:800;padding:8px 5px;cursor:pointer;box-shadow:0 2px 6px #173d3018}.items-group-tab.active{background:#174d3d!important;color:#fff!important;border-color:#123f32;box-shadow:inset 0 0 0 1px #ffffff20,0 3px 9px #173d3028}.items-group-tab:hover{background:#2d705e;color:#fff!important}.items-group-caption{font-size:12px;font-weight:700;color:#668075;margin:10px 2px 7px}.items-group-tabs button:focus-visible{outline:2px solid #72b69c;outline-offset:2px}@media(max-width:380px){.items-group-tab{font-size:12px;min-height:43px}}
 .novaro-white-action-text{color:#fff!important;-webkit-text-fill-color:#fff!important}
 
-/* Consistent page design: match the Branches page across every page except Home */
-#main.novaro-consistent-page{display:flex;flex-direction:column;gap:14px}
-#main.novaro-consistent-page>section.card:not(.branches-page){
- padding:20px!important;
- border:1px solid #e0ebe5!important;
- border-radius:14px!important;
- background:linear-gradient(145deg,#fff,#f9fcfa)!important;
- box-shadow:0 3px 12px #173d3009!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page)>h3,
-#main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3{
- margin:0 0 14px!important;
- color:#243b34;
- font-size:17px;
- font-weight:800;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .row{
- gap:10px;
- align-items:center;
- flex-wrap:wrap;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .field{margin:12px 0}
-#main.novaro-consistent-page>section.card:not(.branches-page) .field label,
-#main.novaro-consistent-page>section.card:not(.branches-page)>label{
- display:block;
- margin-bottom:6px;
- color:#64776d;
- font-size:12px;
- font-weight:700;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) input:not([type=checkbox]):not([type=radio]):not([type=range]),
-#main.novaro-consistent-page>section.card:not(.branches-page) select,
-#main.novaro-consistent-page>section.card:not(.branches-page) textarea{
- border:1px solid #dce8e1!important;
- border-radius:10px!important;
- background:#fff!important;
- min-height:40px;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .tablewrap{
- overflow-x:auto;
- border:1px solid #e0ebe5;
- border-radius:12px;
- background:#fff;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) table{border-collapse:separate;border-spacing:0}
-#main.novaro-consistent-page>section.card:not(.branches-page) th{
- background:#edf4f0;
- color:#315f50;
- font-weight:800;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) td,
-#main.novaro-consistent-page>section.card:not(.branches-page) th{padding:10px 12px}
-#main.novaro-consistent-page>section.card:not(.branches-page) .muted{color:#78877f}
-#main.novaro-consistent-page>section.card:not(.branches-page) .empty{
- border:1px dashed #dce8e1;
- border-radius:12px;
- background:#fbfdfb;
- padding:16px;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .card{
- border:1px solid #e0ebe5!important;
- border-radius:12px!important;
- background:linear-gradient(145deg,#fff,#f9fcfa)!important;
- box-shadow:0 2px 8px #173d3008!important;
-}
-@media(max-width:700px){
- #main.novaro-consistent-page{gap:10px}
- #main.novaro-consistent-page>section.card:not(.branches-page){padding:15px!important;border-radius:13px!important}
- #main.novaro-consistent-page>section.card:not(.branches-page)>h3{font-size:16px}
- #main.novaro-consistent-page>section.card:not(.branches-page) td,
- #main.novaro-consistent-page>section.card:not(.branches-page) th{padding:8px 9px}
-}
-
 /* Compact branch management cards */
 .branches-page{padding:20px}
 .branches-page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
@@ -1025,68 +952,7 @@ button.branch-delete-btn,button.danger,button.delete-btn{
 }
 button.branch-delete-btn:hover,button.danger:hover,button.delete-btn:hover{background:#fbe4e4!important}
 button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
-<style id="novaro-page-design-v4">
-/* NOVARO v4: apply the Branches page shell to every non-home page */
-#main.novaro-consistent-page>.novaro-page-shell{
- width:100%!important;max-width:100%!important;min-width:0!important;
- margin:0!important;padding:20px!important;
- border:1px solid #e0ebe5!important;border-radius:16px!important;
- background:linear-gradient(145deg,#fff 0%,#f9fcfa 100%)!important;
- box-shadow:0 3px 12px #173d3009!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell>h2,
-#main.novaro-consistent-page>.novaro-page-shell>h3,
-#main.novaro-consistent-page>.novaro-page-shell>.row h3,
-#main.novaro-consistent-page>.novaro-page-shell .items-page-heading h3{
- margin:0 0 14px!important;color:#24483b!important;
- font-size:18px!important;font-weight:800!important;line-height:1.45!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell>.row{
- display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-}
-#main.novaro-consistent-page>.novaro-page-shell .field{margin:13px 0!important}
-#main.novaro-consistent-page>.novaro-page-shell .field label,
-#main.novaro-consistent-page>.novaro-page-shell>label{
- display:block;margin:0 0 7px!important;color:#63766d!important;font-size:13px!important;font-weight:700!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell input:not([type=checkbox]):not([type=radio]):not([type=range]),
-#main.novaro-consistent-page>.novaro-page-shell select,
-#main.novaro-consistent-page>.novaro-page-shell textarea{
- min-height:43px;border:1px solid #d9e6de!important;border-radius:11px!important;
- background:#fff!important;color:#263a35!important;padding:10px 12px!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell .tablewrap{
- overflow-x:auto!important;border:1px solid #e0ebe5!important;border-radius:13px!important;
- background:#fff!important;margin-top:14px!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell table{width:100%;border-collapse:separate!important;border-spacing:0!important}
-#main.novaro-consistent-page>.novaro-page-shell th{
- background:#edf4f0!important;color:#315f50!important;font-weight:800!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell td,
-#main.novaro-consistent-page>.novaro-page-shell th{
- padding:11px 12px!important;border-bottom:1px solid #edf2ef!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell .card:not(.branch-card){
- border:1px solid #e0ebe5!important;border-radius:13px!important;
- background:linear-gradient(145deg,#fff,#f9fcfa)!important;box-shadow:0 2px 8px #173d3008!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell .empty{
- border:1px dashed #dce8e1!important;border-radius:12px!important;background:#fbfdfb!important;padding:17px!important;
-}
-@media(max-width:700px){
- #main.novaro-consistent-page{gap:10px!important}
- #main.novaro-consistent-page>.novaro-page-shell{padding:15px!important;border-radius:14px!important}
- #main.novaro-consistent-page>.novaro-page-shell>h2,
- #main.novaro-consistent-page>.novaro-page-shell>h3,
- #main.novaro-consistent-page>.novaro-page-shell>.row h3,
- #main.novaro-consistent-page>.novaro-page-shell .items-page-heading h3{font-size:16px!important;margin-bottom:12px!important}
- #main.novaro-consistent-page>.novaro-page-shell td,
- #main.novaro-consistent-page>.novaro-page-shell th{padding:9px!important}
-}
 
-.forgot-password-link,.auth-back-link{display:inline-flex;align-items:center;justify-content:center;margin:8px 0 2px;padding:7px 0;background:transparent!important;color:#287d6b!important;box-shadow:none!important;font-size:13px;font-weight:750;text-decoration:underline;text-underline-offset:4px}.forgot-password-link:hover,.auth-back-link:hover{transform:none;box-shadow:none!important;color:#174f41!important}.auth-flow-view{width:100%;animation:pageEnter .28s ease both}.auth-flow-view h2{font-size:30px;margin:10px 0 5px}.auth-flow-view .auth-subtitle{line-height:1.9}.auth-flow-view .field input{width:100%;height:54px;border:1px solid #dce7e0;border-radius:14px;padding:0 16px;background:#fbfdfb}.auth-flow-view .auth-submit{margin-top:8px}.auth-flow-view .error{min-height:20px;line-height:1.7}.auth-back-link{margin-top:18px}
-</style>
 </style><style id="novaro-settings-v2">.header-icon-button{width:38px;height:38px;min-width:38px;padding:8px!important;display:inline-flex;align-items:center;justify-content:center}.header-icon-button svg{width:21px;height:21px}.settings-swatches{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}.settings-swatches button{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #cbd8d1;cursor:pointer;padding:0}.settings-swatches button.selected{box-shadow:0 0 0 3px var(--g),0 0 0 5px #fff}.sound-choice-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.sound-choice{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font:inherit;font-size:13px;cursor:pointer}.sound-choice.selected{border-color:var(--g);background:color-mix(in srgb,var(--g) 9%,white)}.sound-choice-mark{font-size:12px;color:var(--g)}.sound-volume-field{margin-top:14px!important}.settings-footer{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-top:20px}.settings-footer button{min-height:40px}.settings-page #fontPreview{min-height:64px;display:flex;align-items:center}@media(max-width:420px){.sound-choice-list{grid-template-columns:1fr}.settings-footer{justify-content:stretch}.settings-footer button{flex:1}}</style><style id="novaro-settings-fixes">.header-actions{display:flex;align-items:center;justify-content:flex-end}.header-tools-stack{display:flex;flex-direction:column;align-items:center;gap:6px}.header-icon-row{display:flex;align-items:center;justify-content:center;gap:8px}.logout-control{width:84px;height:32px;min-height:32px;padding:5px 10px!important;border-radius:9px!important;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px!important}.logout-control svg{width:15px;height:15px}.settings-swatches button{background-image:none!important;flex:0 0 34px}.font-preview-button{width:100%;border:1px dashed var(--g);cursor:pointer;color:var(--g);font-weight:700;justify-content:center}.font-preview-button:active{transform:scale(.99)}.sound-picker-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 13px;border-radius:11px}.sound-picker-panel{margin-top:9px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}.sound-picker-panel.hidden{display:none}.sound-activate-button{width:100%;margin-top:12px;min-height:40px}.sound-volume-field{margin-top:12px!important}@media(max-width:600px){.header-actions{gap:0}.header-tools-stack{gap:5px}.header-icon-row{gap:7px}.logout-control{width:84px;height:31px}}</style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script><style id="novaro-ai-styles">
 #novaro-ai-launcher{position:fixed;z-index:10040;width:62px;height:62px;padding:0;border:1px solid #bcebd966;border-radius:50%;background:radial-gradient(circle at 32% 24%,#fff9 0,#eafaf36b 40%,#c6ecdc55 100%);box-shadow:0 5px 18px #103d3018;opacity:.32;transition:opacity .2s ease,box-shadow .2s ease;display:none;align-items:center;justify-content:center;touch-action:none;cursor:grab;user-select:none}
 #novaro-ai-launcher:focus-visible{outline:none}\n#novaro-ai-launcher:active{cursor:grabbing}
@@ -1204,264 +1070,12 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 }
 </style>
 
-<style id="novaro-layout-and-branch-address-v2">
-/* Final shared page system: same clean card language as Branches, never Home. */
-#main.novaro-consistent-page{display:flex!important;flex-direction:column!important;gap:14px!important}
-#main.novaro-consistent-page>.card:not(.branches-page){
- width:100%;max-width:100%;min-width:0;
- padding:20px!important;margin:0!important;
- border:1px solid #dfe9e3!important;border-radius:16px!important;
- background:linear-gradient(145deg,#fff 0%,#f8fbf9 100%)!important;
- box-shadow:0 5px 18px #173d300c!important;
-}
-#main.novaro-consistent-page>.card:not(.branches-page)>h2,
-#main.novaro-consistent-page>.card:not(.branches-page)>h3,
-#main.novaro-consistent-page>.card:not(.branches-page)>.row h3{
- color:#24483b!important;font-weight:800!important;letter-spacing:0!important;
-}
-#main.novaro-consistent-page>.card:not(.branches-page) .field{margin:12px 0!important}
-#main.novaro-consistent-page>.card:not(.branches-page) .field label,
-#main.novaro-consistent-page>.card:not(.branches-page)>label{
- color:#63766d!important;font-weight:700!important
-}
-#main.novaro-consistent-page>.card:not(.branches-page) input:not([type=checkbox]):not([type=radio]):not([type=range]),
-#main.novaro-consistent-page>.card:not(.branches-page) select,
-#main.novaro-consistent-page>.card:not(.branches-page) textarea{
- border:1px solid #d9e6de!important;border-radius:11px!important;background:#fff!important
-}
-#main.novaro-consistent-page>.card:not(.branches-page) .tablewrap{
- border:1px solid #e0ebe5!important;border-radius:13px!important;overflow-x:auto;background:#fff
-}
-#main.novaro-consistent-page>.card:not(.branches-page) th{background:#edf4f0!important;color:#315f50!important}
-#main.novaro-consistent-page>.card:not(.branches-page) .empty{
- border:1px dashed #d9e6de;border-radius:12px;background:#fbfdfb
-}
-.branch-card-name{display:flex!important;flex:1;min-width:0;flex-direction:row!important;flex-wrap:wrap!important;align-items:baseline!important;column-gap:9px!important;row-gap:1px!important}
-.branch-card-name strong{display:inline!important;flex:none}
-.branch-card-name .branch-card-address{display:inline!important;min-width:0;color:#60786d;font-size:12px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
-.branch-card-name>small{flex-basis:100%;font-size:10px!important}
-@media(max-width:700px){
- #main.novaro-consistent-page{gap:10px!important}
- #main.novaro-consistent-page>.card:not(.branches-page){padding:15px!important;border-radius:14px!important}
- .branch-card-name{column-gap:7px!important}
- .branch-card-name .branch-card-address{font-size:11px}
-}
-</style>
 
-<style id="novaro-page-design-v3">
-/* Make every non-home screen visibly follow the Branches visual language. */
-#main.novaro-consistent-page{
- display:flex!important;flex-direction:column!important;align-items:stretch!important;
- gap:14px!important;padding:0!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page){
- box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;
- margin:0 0 2px!important;padding:18px!important;
- border:1px solid #dce9e1!important;border-radius:15px!important;
- background:linear-gradient(150deg,#ffffff 0%,#f8fbf9 100%)!important;
- box-shadow:0 3px 13px rgba(27,70,52,.07)!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page)>h3,
-#main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3{
- display:flex!important;align-items:center!important;gap:9px!important;
- min-height:34px;margin:0 0 15px!important;padding:0 0 10px!important;
- border-bottom:1px solid #e7efe9!important;
- color:#285342!important;font-size:16px!important;font-weight:800!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .row{
- display:flex;align-items:center;gap:9px!important;flex-wrap:wrap!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .field{
- margin:11px 0!important;min-width:0;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .field label,
-#main.novaro-consistent-page>section.card:not(.branches-page)>label{
- display:block!important;margin:0 0 6px!important;
- color:#61766b!important;font-size:12px!important;font-weight:700!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) input:not([type=checkbox]):not([type=radio]):not([type=range]),
-#main.novaro-consistent-page>section.card:not(.branches-page) select,
-#main.novaro-consistent-page>section.card:not(.branches-page) textarea{
- box-sizing:border-box!important;max-width:100%!important;min-height:42px!important;
- border:1px solid #d9e6de!important;border-radius:10px!important;
- background:#fff!important;box-shadow:0 1px 3px rgba(20,55,40,.035)!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) button:not(.items-tool):not(.language-choice):not(.sound-choice){
- min-height:36px;border-radius:9px!important;font-weight:700;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .tablewrap{
- width:100%;max-width:100%;overflow-x:auto!important;
- border:1px solid #e0ebe4!important;border-radius:12px!important;background:#fff!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) table{border-collapse:separate!important;border-spacing:0!important}
-#main.novaro-consistent-page>section.card:not(.branches-page) th{
- background:#edf4ef!important;color:#315b4b!important;font-weight:800!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) td,
-#main.novaro-consistent-page>section.card:not(.branches-page) th{
- padding:10px 11px!important;border-bottom:1px solid #edf2ee!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .card:not(.branch-card){
- border:1px solid #e2ece5!important;border-radius:12px!important;
- background:#fbfdfb!important;box-shadow:0 2px 8px rgba(27,70,52,.045)!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .muted{color:#7a8981!important}
-#main.novaro-consistent-page>section.card:not(.branches-page) .items-toolbar{
- display:flex;gap:8px;flex-wrap:wrap;margin:0 0 13px;
-}
-@media(max-width:700px){
- #main.novaro-consistent-page{gap:10px!important}
- #main.novaro-consistent-page>section.card:not(.branches-page){
-  padding:14px!important;border-radius:13px!important;
- }
- #main.novaro-consistent-page>section.card:not(.branches-page)>h3,
- #main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3{
-  font-size:15px!important;margin-bottom:12px!important;
- }
-}
-</style>
-<style id="novaro-branches-unified-v5">
-/* Match every non-home page to the Branches page visual language */
-#main.novaro-consistent-page>section.card:not(.branches-page){
- width:100%;max-width:100%;min-width:0;
- margin:0 0 14px!important;padding:20px!important;
- border:1px solid #e0ebe5!important;border-radius:14px!important;
- background:linear-gradient(145deg,#fff,#f9fcfa)!important;
- box-shadow:0 3px 12px #173d3009!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page)>h2,
-#main.novaro-consistent-page>section.card:not(.branches-page)>h3,
-#main.novaro-consistent-page>section.card:not(.branches-page)>.row h3,
-#main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3{
- color:#243b34!important;font-size:17px!important;font-weight:800!important;
- line-height:1.45;margin:0 0 14px!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page)>.row{
- display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .field{margin:12px 0!important}
-#main.novaro-consistent-page>section.card:not(.branches-page) .field label,
-#main.novaro-consistent-page>section.card:not(.branches-page)>label{
- display:block;margin:0 0 7px!important;color:#64776d!important;
- font-size:13px!important;font-weight:700!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) input:not([type=checkbox]):not([type=radio]):not([type=range]),
-#main.novaro-consistent-page>section.card:not(.branches-page) select,
-#main.novaro-consistent-page>section.card:not(.branches-page) textarea{
- min-height:42px;border:1px solid #dce8e1!important;border-radius:10px!important;
- background:#fff!important;color:#263a35!important;padding:10px 12px!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .tablewrap{
- overflow-x:auto!important;border:1px solid #e0ebe5!important;border-radius:12px!important;
- background:#fff!important;margin-top:12px!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) table{
- width:100%;border-collapse:separate!important;border-spacing:0!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) th{
- background:#edf4f0!important;color:#315f50!important;font-weight:800!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) td,
-#main.novaro-consistent-page>section.card:not(.branches-page) th{
- padding:10px 12px!important;border-bottom:1px solid #edf2ef!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .card{
- margin:10px 0!important;padding:14px 15px!important;
- border:1px solid #e0ebe5!important;border-radius:14px!important;
- background:linear-gradient(145deg,#fff,#f9fcfa)!important;
- box-shadow:0 3px 12px #173d3009!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .empty{
- border:1px dashed #dce8e1!important;border-radius:12px!important;
- background:#fbfdfb!important;padding:17px!important;
-}
-#main.novaro-consistent-page>section.card:not(.branches-page) .muted{color:#78877f!important}
-@media(max-width:700px){
- #main.novaro-consistent-page>section.card:not(.branches-page){
-  padding:15px!important;border-radius:13px!important;margin-bottom:10px!important;
- }
- #main.novaro-consistent-page>section.card:not(.branches-page)>h2,
- #main.novaro-consistent-page>section.card:not(.branches-page)>h3,
- #main.novaro-consistent-page>section.card:not(.branches-page)>.row h3,
- #main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3{
-  font-size:16px!important;margin-bottom:12px!important;
- }
- #main.novaro-consistent-page>section.card:not(.branches-page) td,
- #main.novaro-consistent-page>section.card:not(.branches-page) th{padding:8px 9px!important}
-}
-</style>
 
-<style id="novaro-page-design-v5">
-/* Branches-inspired page system. Home is intentionally excluded. */
-#main.novaro-consistent-page{display:flex;flex-direction:column;gap:14px}
-#main.novaro-consistent-page>.novaro-page-shell{
- min-width:0;padding:20px!important;margin:0 0 2px!important;
- border:1px solid #dfe9e3!important;border-radius:16px!important;
- background:linear-gradient(145deg,#fff 0%,#f8fbf9 100%)!important;
- box-shadow:0 4px 16px #173d300a!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell>.row,
-#main.novaro-consistent-page>.novaro-page-shell>.items-page-heading,
-#main.novaro-consistent-page>.novaro-page-shell>.branches-page-head{
- display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
- margin-bottom:15px;
-}
-#main.novaro-consistent-page>.novaro-page-shell>h2,
-#main.novaro-consistent-page>.novaro-page-shell>h3,
-#main.novaro-consistent-page>.novaro-page-shell .row h2,
-#main.novaro-consistent-page>.novaro-page-shell .row h3,
-#main.novaro-consistent-page>.novaro-page-shell .items-page-heading h3{
- margin:0 0 13px!important;color:#243b34;font-size:19px;line-height:1.45;font-weight:800;
-}
-#main.novaro-consistent-page>.novaro-page-shell .field{margin:13px 0}
-#main.novaro-consistent-page>.novaro-page-shell .field label,
-#main.novaro-consistent-page>.novaro-page-shell>label{
- display:block;margin:0 0 7px;color:#61766c;font-size:13px;font-weight:750;
-}
-#main.novaro-consistent-page>.novaro-page-shell input:not([type=checkbox]):not([type=radio]):not([type=range]),
-#main.novaro-consistent-page>.novaro-page-shell select,
-#main.novaro-consistent-page>.novaro-page-shell textarea{
- width:100%;min-height:46px;padding:10px 13px;border:1px solid #d7e4dc!important;
- border-radius:11px!important;background:#fff!important;color:#263c34;
-}
-#main.novaro-consistent-page>.novaro-page-shell input:focus,
-#main.novaro-consistent-page>.novaro-page-shell select:focus,
-#main.novaro-consistent-page>.novaro-page-shell textarea:focus{
- outline:none;border-color:#78ae98!important;box-shadow:0 0 0 3px #287d6b16!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell .tablewrap{
- width:100%;max-width:100%;overflow:auto;border:1px solid #dfe9e3;border-radius:12px;background:#fff;
-}
-#main.novaro-consistent-page>.novaro-page-shell table{width:100%;border-collapse:separate;border-spacing:0}
-#main.novaro-consistent-page>.novaro-page-shell th{
- background:#edf4f0!important;color:#315f50;font-size:13px;font-weight:800;white-space:nowrap;
-}
-#main.novaro-consistent-page>.novaro-page-shell td,
-#main.novaro-consistent-page>.novaro-page-shell th{padding:11px 12px;border-bottom:1px solid #edf2ef}
-#main.novaro-consistent-page>.novaro-page-shell tbody tr:last-child td{border-bottom:0}
-#main.novaro-consistent-page>.novaro-page-shell .card:not(.branches-page){
- border:1px solid #e1ebe5!important;border-radius:13px!important;
- background:linear-gradient(145deg,#fff,#f9fcfa)!important;box-shadow:0 2px 9px #173d3008!important;
-}
-#main.novaro-consistent-page>.novaro-page-shell .empty{
- border:1px dashed #d8e5dd;border-radius:12px;background:#fbfdfb;padding:18px;color:#718078;
-}
-#main.novaro-consistent-page>.novaro-page-shell .muted{color:#718078}
-#main.novaro-consistent-page>.novaro-page-shell button{min-height:40px}
-@media(max-width:700px){
- #main.novaro-consistent-page{gap:10px}
- #main.novaro-consistent-page>.novaro-page-shell{padding:15px!important;border-radius:14px!important}
- #main.novaro-consistent-page>.novaro-page-shell>h2,
- #main.novaro-consistent-page>.novaro-page-shell>h3,
- #main.novaro-consistent-page>.novaro-page-shell .row h3,
- #main.novaro-consistent-page>.novaro-page-shell .items-page-heading h3{font-size:17px}
- #main.novaro-consistent-page>.novaro-page-shell .tablewrap{border-radius:10px}
- #main.novaro-consistent-page>.novaro-page-shell td,
- #main.novaro-consistent-page>.novaro-page-shell th{padding:9px 10px;font-size:13px}
- #main.novaro-consistent-page>.novaro-page-shell .row{align-items:stretch}
- #main.novaro-consistent-page>.novaro-page-shell .row>button{flex:0 0 auto}
-}
-</style>
+
+
+
+
 
 <style id="novaro-branch-inline-v2">
 /* Branch name and address share one compact, readable line. */
@@ -1528,67 +1142,67 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 #passwordResetView .field input{width:100%!important;min-height:52px!important}
 </style>
 
-<style id="novaro-branches-design-unification">
-/* All application pages use the Branches page visual language; Home is deliberately excluded. */
-#main.novaro-consistent-page{display:flex;flex-direction:column;gap:14px;min-width:0}
-#main.novaro-consistent-page>.card:not(.branches-page),
-#main.novaro-consistent-page>.novaro-page-shell{
- width:100%;max-width:100%;min-width:0;margin:0!important;padding:20px!important;
- border:1px solid #e0ebe5!important;border-radius:16px!important;
- background:linear-gradient(145deg,#fff 0%,#f9fcfa 100%)!important;
+
+<style id="novaro-branches-design-canonical-v1">
+/* One source of truth: mirror the Branches page shell on every screen except Home and Branches. */
+#main.novaro-consistent-page{display:flex;flex-direction:column;align-items:stretch;gap:14px;min-width:0}
+#main.novaro-consistent-page>section.card:not(.branches-page){
+ box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:0!important;padding:20px!important;
+ border:1px solid #e0ebe5!important;border-radius:14px!important;
+ background:linear-gradient(145deg,#fff,#f9fcfa)!important;
  box-shadow:0 3px 12px #173d3009!important;
 }
-#main.novaro-consistent-page>.card:not(.branches-page)>h2,
-#main.novaro-consistent-page>.card:not(.branches-page)>h3,
-#main.novaro-consistent-page>.novaro-page-shell>h2,
-#main.novaro-consistent-page>.novaro-page-shell>h3,
-#main.novaro-consistent-page>.card:not(.branches-page) .row h3,
-#main.novaro-consistent-page>.novaro-page-shell .row h3{
- margin:0 0 14px!important;color:#24483b!important;font-size:18px!important;
- font-weight:800!important;line-height:1.45!important;
+#main.novaro-consistent-page>section.card:not(.branches-page)>h2,
+#main.novaro-consistent-page>section.card:not(.branches-page)>h3,
+#main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3,
+#main.novaro-consistent-page>section.card:not(.branches-page)>.row h3{
+ margin:0 0 14px!important;color:#243b34!important;font-size:17px!important;font-weight:800!important;line-height:1.45!important;
 }
-#main.novaro-consistent-page>.card:not(.branches-page) .row,
-#main.novaro-consistent-page>.novaro-page-shell .row{
+#main.novaro-consistent-page>section.card:not(.branches-page)>.row,
+#main.novaro-consistent-page>section.card:not(.branches-page) .row{
  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
 }
-#main.novaro-consistent-page .field{margin:13px 0!important}
-#main.novaro-consistent-page .field label,
-#main.novaro-consistent-page> .card:not(.branches-page)>label{
- display:block;margin:0 0 7px!important;color:#63766d!important;
- font-size:13px!important;font-weight:700!important;
+#main.novaro-consistent-page>section.card:not(.branches-page) .field{margin:12px 0!important;min-width:0}
+#main.novaro-consistent-page>section.card:not(.branches-page) .field label,
+#main.novaro-consistent-page>section.card:not(.branches-page)>label{
+ display:block;margin:0 0 7px!important;color:#64776d!important;font-size:13px!important;font-weight:700!important;
 }
-#main.novaro-consistent-page input:not([type=checkbox]):not([type=radio]):not([type=range]),
-#main.novaro-consistent-page select,
-#main.novaro-consistent-page textarea{
- min-height:43px;border:1px solid #d9e6de!important;border-radius:11px!important;
- background:#fff!important;color:#263a35!important;padding:10px 12px!important;
+#main.novaro-consistent-page>section.card:not(.branches-page) input:not([type=checkbox]):not([type=radio]):not([type=range]),
+#main.novaro-consistent-page>section.card:not(.branches-page) select,
+#main.novaro-consistent-page>section.card:not(.branches-page) textarea{
+ box-sizing:border-box;max-width:100%;min-height:42px;padding:10px 12px!important;
+ border:1px solid #dce8e1!important;border-radius:10px!important;background:#fff!important;color:#263a35!important;
 }
-#main.novaro-consistent-page .tablewrap{
- overflow-x:auto!important;border:1px solid #e0ebe5!important;border-radius:13px!important;
- background:#fff!important;margin-top:14px!important;
+#main.novaro-consistent-page>section.card:not(.branches-page) .tablewrap{
+ width:100%;max-width:100%;overflow-x:auto!important;margin-top:12px!important;
+ border:1px solid #e0ebe5!important;border-radius:12px!important;background:#fff!important;
 }
-#main.novaro-consistent-page table{border-collapse:separate!important;border-spacing:0!important}
-#main.novaro-consistent-page th{background:#edf4f0!important;color:#315f50!important;font-weight:800!important}
-#main.novaro-consistent-page td,#main.novaro-consistent-page th{padding:10px 12px}
-#main.novaro-consistent-page .card:not(.branches-page){
- border:1px solid #e0ebe5;border-radius:14px;
- background:linear-gradient(145deg,#fff,#f9fcfa);
- box-shadow:0 3px 12px #173d3009;
+#main.novaro-consistent-page>section.card:not(.branches-page) table{width:100%;border-collapse:separate!important;border-spacing:0!important}
+#main.novaro-consistent-page>section.card:not(.branches-page) th{
+ background:#edf4f0!important;color:#315f50!important;font-weight:800!important;
 }
-#main.novaro-consistent-page button{border-radius:10px;font-weight:700}
-#main.novaro-consistent-page button.soft{
- background:#eaf4ee;color:#246b57;border:1px solid #dcebe2;box-shadow:none;
+#main.novaro-consistent-page>section.card:not(.branches-page) td,
+#main.novaro-consistent-page>section.card:not(.branches-page) th{
+ padding:10px 12px!important;border-bottom:1px solid #edf2ef!important;
 }
-#main.novaro-consistent-page .muted{color:#78877f}
+#main.novaro-consistent-page>section.card:not(.branches-page) .card:not(.branch-card){
+ margin:10px 0!important;padding:14px 15px!important;border:1px solid #e0ebe5!important;
+ border-radius:14px!important;background:linear-gradient(145deg,#fff,#f9fcfa)!important;
+ box-shadow:0 3px 12px #173d3009!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) .empty{
+ padding:16px!important;border:1px dashed #dce8e1!important;border-radius:12px!important;background:#fbfdfb!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) .muted{color:#78877f!important}
 @media(max-width:700px){
- #main.novaro-consistent-page{gap:11px}
- #main.novaro-consistent-page>.card:not(.branches-page),
- #main.novaro-consistent-page>.novaro-page-shell{padding:15px!important;border-radius:14px!important}
- #main.novaro-consistent-page>.card:not(.branches-page)>h2,
- #main.novaro-consistent-page>.card:not(.branches-page)>h3,
- #main.novaro-consistent-page>.novaro-page-shell>h2,
- #main.novaro-consistent-page>.novaro-page-shell>h3{font-size:17px!important}
- #main.novaro-consistent-page .tablewrap{max-width:100%}
+ #main.novaro-consistent-page{gap:10px}
+ #main.novaro-consistent-page>section.card:not(.branches-page){padding:15px!important;border-radius:13px!important}
+ #main.novaro-consistent-page>section.card:not(.branches-page)>h2,
+ #main.novaro-consistent-page>section.card:not(.branches-page)>h3,
+ #main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3,
+ #main.novaro-consistent-page>section.card:not(.branches-page)>.row h3{font-size:16px!important}
+ #main.novaro-consistent-page>section.card:not(.branches-page) td,
+ #main.novaro-consistent-page>section.card:not(.branches-page) th{padding:8px 9px!important}
 }
 </style>
 </head><body><script>
@@ -2524,38 +2138,6 @@ function printStocktakeReport(){
  const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.print-actions{position:sticky;top:0;z-index:5;display:flex;justify-content:center;gap:10px;padding:12px;background:#eaf3f7;border-bottom:1px solid #cbdce3}.print-actions button{border:0;border-radius:8px;padding:11px 22px;background:#315b70;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}.group{margin:18px 0 22px;break-inside:auto}.group h2{font-size:16px;color:#244b5a;background:#eaf3f7;border-right:4px solid #315b70;padding:8px 10px;margin:0 0 8px}.group h2 small{font-size:11px;color:#607987}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 10px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start}.empty{padding:8px;color:#718894}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{.print-actions{display:none!important}body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:18px}}</style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header>'+tables+'<div class="foot">NOVARO Inventory</div></body></html>';
  w.document.open();w.document.write(html);w.document.close();
 }
-function novaroEnforceBranchesPageDesign(){
- if(page==="home"||page==="branches")return;
- const main=$("main");if(!main)return;
- main.querySelectorAll(":scope > .card:not(.branches-page)").forEach(card=>{
-  card.classList.add("novaro-page-shell");
-  const styles={padding:"20px",border:"1px solid #e0ebe5",borderRadius:"16px",background:"linear-gradient(145deg,#fff 0%,#f9fcfa 100%)",boxShadow:"0 3px 12px #173d3009",width:"100%",maxWidth:"100%",boxSizing:"border-box"};
-  Object.entries(styles).forEach(([k,v])=>card.style.setProperty(k.replace(/[A-Z]/g,m=>"-"+m.toLowerCase()),v,"important"));
-  card.querySelectorAll(":scope > h2,:scope > h3,.items-page-heading h3,.row h3").forEach(h=>{
-   h.style.setProperty("color","#24483b","important");h.style.setProperty("font-size","18px","important");
-   h.style.setProperty("font-weight","800","important");h.style.setProperty("margin-bottom","14px","important");
-  });
- });
- main.querySelectorAll(".field").forEach(f=>f.style.setProperty("margin","13px 0","important"));
- main.querySelectorAll(".field label").forEach(l=>{
-  l.style.setProperty("color","#63766d","important");l.style.setProperty("font-size","13px","important");
-  l.style.setProperty("font-weight","700","important");l.style.setProperty("margin-bottom","7px","important");
- });
- main.querySelectorAll("input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea").forEach(el=>{
-  el.style.setProperty("min-height","43px","important");el.style.setProperty("border","1px solid #d9e6de","important");
-  el.style.setProperty("border-radius","11px","important");el.style.setProperty("background","#fff","important");
-  el.style.setProperty("color","#263a35","important");el.style.setProperty("box-sizing","border-box","important");
- });
- main.querySelectorAll(".tablewrap").forEach(el=>{
-  el.style.setProperty("overflow-x","auto","important");el.style.setProperty("border","1px solid #e0ebe5","important");
-  el.style.setProperty("border-radius","13px","important");el.style.setProperty("background","#fff","important");
- });
- main.querySelectorAll("table th").forEach(el=>{
-  el.style.setProperty("background","#edf4f0","important");el.style.setProperty("color","#315f50","important");
-  el.style.setProperty("font-weight","800","important");
- });
- main.querySelectorAll("button").forEach(el=>el.style.setProperty("border-radius","10px","important"));
-}
 function render(){novaroEnsureBrowserHistory();const headerUserName=$("headerUserName");if(headerUserName)headerUserName.textContent=(profile&&profile.display_name)|| (user&&user.email)||"";if(page!=="settings")novaroSettingsDraft=null;document.querySelectorAll("#tabs button[data-p]").forEach(b=>{const active=b.dataset.p===page;b.classList.toggle("active",active);b.setAttribute("aria-current",active?"page":"false")});let m=$("main");m.classList.toggle("novaro-consistent-page",page!=="home");if(!branches.length&&profile.role!=="owner_admin"){m.innerHTML='<section class="card empty">لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.</section>';return}
 
 if(page==="settings")m.innerHTML='<section class="card settings-page"><h3>'+(language==="en"?"Program settings":"إعدادات NOVARO")+'</h3><p class="muted">'+(language==="en"?"Personalize your workspace. Changes are applied when saved.":"خصص البرنامج بالطريقة اللي تريحك. التغييرات تُحفظ عند الضغط على حفظ.")+'</p><h3>'+(language==="en"?"Appearance & colors":"المظهر والألوان")+'</h3><div class="field"><label>'+(language==="en"?"Choose a color theme":"اختار ألوان البرنامج")+'</label><div class="settings-swatches" id="themeChoices"><button type="button" data-theme="default" aria-label="NOVARO original" title="NOVARO original" style="background:#287d6b"></button><button type="button" data-theme="ocean" aria-label="Calm blue" title="Calm blue" style="background:#3478a8"></button><button type="button" data-theme="sage" aria-label="Soft sage" title="Soft sage" style="background:#71896f"></button><button type="button" data-theme="lavender" aria-label="Lavender" title="Lavender" style="background:#8275a8"></button><button type="button" data-theme="sand" aria-label="Warm sand" title="Warm sand" style="background:#b08b61"></button><button type="button" data-theme="slate" aria-label="Blue gray" title="Blue gray" style="background:#5d7483"></button></div></div><h3>'+(language==="en"?"Fonts & text size":"الخطوط وحجم الكتابة")+'</h3><div class="field"><label>'+(language==="en"?"Font family":"نوع الخط")+'</label><select id="programFont"><option value="ibm">IBM Plex Sans Arabic</option><option value="cairo">Cairo</option><option value="tajawal">Tajawal</option><option value="noto">Noto Sans Arabic</option><option value="tahoma">Tahoma</option><option value="system">'+(language==="en"?"System default":"الخط الافتراضي")+'</option></select></div><div class="field"><label>'+(language==="en"?"Text size":"حجم الكتابة")+'</label><select id="fontSize"><option value="small">'+(language==="en"?"Small":"صغير")+'</option><option value="medium">'+(language==="en"?"Medium":"متوسط")+'</option><option value="large">'+(language==="en"?"Large":"كبير")+'</option><option value="xlarge">'+(language==="en"?"Extra large":"كبير جدًا")+'</option></select></div><div class="field"><label>'+(language==="en"?"Layout spacing":"كثافة العرض")+'</label><select id="displayDensity"><option value="comfortable">'+(language==="en"?"Comfortable":"مريح")+'</option><option value="compact">'+(language==="en"?"Compact":"مضغوط")+'</option></select></div><button type="button" id="fontPreview" class="card font-preview-button" style="margin:8px 0 16px">معاينة الخط</button><h3>'+(language==="en"?"Sound & notifications":"الصوت والتنبيهات")+'</h3><div class="field sound-picker-field"><button type="button" class="soft sound-picker-toggle" id="soundPickerToggle" aria-expanded="false"><span>♫</span> '+(language==="en"?"Notification tones":"نغمات التنبيه")+' <span class="muted" id="activeSoundName"></span> <span>⌄</span></button><div class="sound-picker-panel hidden" id="soundPickerPanel"><div class="sound-choice-list" id="soundChoices">'+Object.keys(NOVARO_SOUND_LIBRARY).map(k=>'<button type="button" class="sound-choice" data-sound="'+k+'"><span>'+NOVARO_SOUND_LIBRARY[k].label[language]+'</span><span class="sound-choice-mark">▶</span></button>').join("")+'</div><div class="field sound-volume-field"><label>'+(language==="en"?"Volume":"مستوى الصوت")+' <b id="alertVolumeValue">85%</b></label><input id="alertVolume" type="range" min="10" max="100" step="5" value="85" style="width:100%"></div><button type="button" class="primary sound-activate-button" id="activateSound">'+(language==="en"?"Activate tone":"اعتماد النغمة")+'</button></div></div>'+'<div class="field"><label>'+(language==="en"?"Program language":"لغة البرنامج")+'</label><div class="language-choice-row"><button type="button" class="language-choice '+(language==="ar"?"active":"")+'" data-language-choice="ar" aria-pressed="'+(language==="ar"?"true":"false")+'">العربية</button><button type="button" class="language-choice '+(language==="en"?"active":"")+'" data-language-choice="en" aria-pressed="'+(language==="en"?"true":"false")+'">English</button></div></div>'+'<div class="field"><label>'+(language==="en"?"Signed-in account":"الحساب الحالي")+'</label><div class="card" style="margin:0;background:#f7faf8">'+esc(user?.email||"—")+'<div class="muted">'+esc(roleName(profile.role))+'</div></div></div>'+(profile.role==="owner_admin"?'<h3>'+(language==="en"?"Change owner email":"تغيير بريد المالك")+'</h3><div class="field"><label for="ownerNewEmail">'+(language==="en"?"New owner email":"البريد الجديد لحساب المالك")+'</label><input id="ownerNewEmail" type="email" autocomplete="email" value="novaro.system@gmail.com" inputmode="email"><small class="muted">'+(language==="en"?"The same account, password, permissions and data will be kept. Confirmation may be required at both email addresses.":"سيظل نفس الحساب وكلمة المرور والصلاحيات والبيانات. قد يُطلب تأكيد البريدين الحالي والجديد.")+'</small></div><button type="button" class="soft" id="requestOwnerEmailChange">'+(language==="en"?"Send confirmation emails":"إرسال رسائل التأكيد")+'</button><p id="ownerEmailChangeStatus" class="muted" role="status"></p>':"")+'<div class="settings-footer"><button type="button" class="soft" id="settingsBack" aria-label="'+(language==="en"?"Back":"رجوع")+'">'+(language==="en"?"← Back":"رجوع ←")+'</button><button type="button" class="soft" id="cancelProgramSettings">'+(language==="en"?"Cancel":"إلغاء")+'</button><button type="button" class="primary" id="saveProgramSettings">'+(language==="en"?"Save":"حفظ")+'</button></div></section>';if(page==="about")m.innerHTML='<section class="card"><h3>'+(language==="en"?"About NOVARO Inventory":"عن NOVARO Inventory")+'</h3><p class="muted">'+(language==="en"?"A focused inventory and stocktaking application for managing items and branch stocktakes.":"برنامج متخصص في إدارة الأصناف وتنفيذ ومتابعة عمليات الجرد بالمخازن والفروع.")+'</p><div class="tablewrap"><table><tbody><tr><th>'+(language==="en"?"Program name":"اسم البرنامج")+'</th><td>NOVARO Inventory</td></tr><tr><th>'+(language==="en"?"Program type":"نوع البرنامج")+'</th><td>'+(language==="en"?"Inventory & Stocktaking":"إدارة المخزون والجرد")+'</td></tr><tr><th>'+(language==="en"?"Developer":"التطوير")+'</th><td>Islam Mostafa</td></tr></tbody></table></div></section>';
@@ -2567,7 +2149,7 @@ if(page==="counts")m.innerHTML='<section class="card"><div class="row"><h3>ال�
 if(page==="reports")m.innerHTML='<section class="card"><div class="row"><div><h3>'+(language==="en"?"Inventory reports":"تقارير المخزون")+'</h3><p class="muted">'+(language==="en"?"Review stocktakes by branch or across all branches.":"راجع الجرد حسب فرع معين أو كل الفروع.")+'</p></div></div><div class="field"><label>'+(language==="en"?"Branch":"الفرع")+'</label><select id="reportBranch">'+(profile.role==="owner_admin"?'<option value="">'+(language==="en"?"All branches":"كل الفروع")+'</option>':"")+branches.map(b=>'<option value="'+b.id+'">'+esc(branchLabel(b))+'</option>').join("")+'</select></div><div id="reportContent" class="empty">'+(language==="en"?"Loading report...":"جاري تحميل التقرير...")+'</div></section>';
 if(page==="branches")m.innerHTML='<section class="card branches-page"><div class="branches-page-head"><h3>الفروع</h3><div class="row" style="gap:7px;flex-wrap:wrap">'+(profile.role==="owner_admin"?'<button type="button" class="soft branch-action-btn" onclick="toggleBranchArchive()"><span>▤</span> الأرشيف ('+archivedBranches.length+')</button><button type="button" class="soft branch-action-btn" onclick="addBranch()"><span>＋</span> إضافة فرع</button>':'')+'</div></div><div class="branches-grid">'+((profile.role==="owner_admin"?allBranches:branches).map(b=>'<article class="branch-card"><div class="branch-card-head"><span class="branch-card-symbol">⌂</span><div class="branch-card-name"><strong>'+esc(nameOf(b))+'</strong><span class="branch-card-address">'+esc(branchLocationOf(b)||"—")+'</span><small>'+esc(b.code||"—")+'</small></div><span class="branch-status '+(b.is_active?"active":"inactive")+'">'+(b.is_active?"نشط":"موقوف")+'</span></div><div class="branch-card-info"><div><small>إيميل الدخول</small><span>'+esc(b.branch_login_email||"لم يُنشأ بعد")+'</span></div></div>'+(profile.role==="owner_admin"?'<div class="branch-card-actions"><button type="button" class="soft branch-action-btn" title="'+(b.branch_login_user_id?"تعديل حساب الدخول":"إنشاء حساب الدخول")+'" onclick="manageBranchAccount(&quot;'+b.id+'&quot;)"><span>♙</span> الحساب</button><button type="button" class="soft branch-action-btn" title="تعديل" onclick="editBranch(&quot;'+b.id+'&quot;)"><span>✎</span> تعديل</button><button type="button" class="soft branch-action-btn branch-delete-btn" title="أرشفة" onclick="deleteBranch(&quot;'+b.id+'&quot;)"><span>⌫</span> أرشفة</button></div>':'')+'</article>').join(""))+'</div>'+(profile.role==="owner_admin"?'<section class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between;align-items:center"><div><h3>طلبات استعادة كلمات المرور</h3><p class="muted">طلبات الفروع تصل هنا للمراجعة من مالك النظام.</p></div><button type="button" class="soft branch-action-btn" onclick="loadBranchRecoveryRequests()">تحديث الطلبات</button></div><div id="branchRecoveryRequests" class="empty">اضغط «تحديث الطلبات» لعرض الطلبات.</div></section>':"")+'<section id="branchArchivePanel" class="card" style="display:none;margin-top:16px"><div class="row" style="justify-content:space-between;align-items:center"><h3>أرشيف الفروع</h3><button type="button" class="soft branch-action-btn" onclick="toggleBranchArchive(false)">إغلاق</button></div><p class="muted">الفروع المؤرشفة وبياناتها محفوظة ويمكن استعادتها في أي وقت.</p><div class="branches-grid">'+archivedBranches.map(b=>'<article class="branch-card"><div class="branch-card-head"><span class="branch-card-symbol">▤</span><div class="branch-card-name"><strong>'+esc(nameOf(b))+'</strong><span class="branch-card-address">'+esc(branchLocationOf(b)||"—")+'</span><small>'+esc(b.code||"—")+', أرشيف '+(b.archived_at?new Date(b.archived_at).toLocaleDateString("ar-EG"):"")+'</small></div><span class="branch-status inactive">مؤرشف</span></div><div class="branch-card-info"><div><small>إيميل الدخول</small><span>'+esc(b.branch_login_email||"—")+'</span></div></div><div class="branch-card-actions"><button type="button" class="soft branch-action-btn" onclick="restoreBranch(&quot;'+b.id+'&quot;)"><span>↶</span> استعادة الفرع</button></div></article>').join("")+(archivedBranches.length?"":'<p class="muted">لا توجد فروع مؤرشفة حاليًا.</p>')+'</div></section></section>';
 if($("branchSelect")){$("branchSelect").value=branchId;$("branchSelect").onchange=e=>{branchId=e.target.value;render()}}
-m.classList.remove("page-enter");void m.offsetWidth;m.classList.add("page-enter");novaroBackButton();applyNovaroAppearance();novaroEnforceBranchesPageDesign();if(page==="settings")syncSettingsControls();applyLanguage();if(page==="counts"&&!window.__openingStocktake)sessions();if(page==="items"){document.querySelectorAll(".items-tool").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".items-tool").forEach(x=>x.classList.remove("is-selected"));btn.classList.add("is-selected")},{capture:true}));renderItemQRCodes();const filter=()=>{const group=window.__itemsGroupView||"materials";const query=$("search").value.trim().toLowerCase();const list=items.filter(i=>{const category=cats.find(c=>c.id===i.category_id),cg=category?.group_key||"equipment";const searchable=[i.name_ar||"",i.name_en||"",nameOf(i),categoryName(category),categoryGroupLabel(cg)].join(" ").toLowerCase();return query ? searchable.includes(query) : cg===group});$("itemRows").innerHTML=itemRows(list);$("itemsGroupCaption").textContent=(query?(language==="en"?"Search results across all items":"نتائج البحث في كل الأصناف"):(language==="en"?(group==="materials"?"Raw materials":group==="tools"?"Tools":"Assets"):(group==="materials"?"الخامات":"العُدّة والمعدات")))+" · "+list.length+" "+(language==="en"?"items":"صنف");renderItemQRCodes()};document.querySelectorAll("[data-items-group]").forEach(btn=>btn.onclick=()=>{window.__itemsGroupView=btn.dataset.itemsGroup;document.querySelectorAll("[data-items-group]").forEach(x=>x.classList.toggle("active",x===btn));filter()});$("search").oninput=filter;filter()}if(page!=="home"){m.querySelectorAll(":scope > .card:not(.branches-page)").forEach(function(card){card.classList.add("novaro-page-shell")})}if(page==="home"&&branchId)homeDashboard();if(page==="reports")reportsPage();const layout=$("appLayout");if(layout)layout.classList.toggle("branch-not-selected",!branchId&&profile.role!=="owner_admin")}
+m.classList.remove("page-enter");void m.offsetWidth;m.classList.add("page-enter");novaroBackButton();applyNovaroAppearance();if(page==="settings")syncSettingsControls();applyLanguage();if(page==="counts"&&!window.__openingStocktake)sessions();if(page==="items"){document.querySelectorAll(".items-tool").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".items-tool").forEach(x=>x.classList.remove("is-selected"));btn.classList.add("is-selected")},{capture:true}));renderItemQRCodes();const filter=()=>{const group=window.__itemsGroupView||"materials";const query=$("search").value.trim().toLowerCase();const list=items.filter(i=>{const category=cats.find(c=>c.id===i.category_id),cg=category?.group_key||"equipment";const searchable=[i.name_ar||"",i.name_en||"",nameOf(i),categoryName(category),categoryGroupLabel(cg)].join(" ").toLowerCase();return query ? searchable.includes(query) : cg===group});$("itemRows").innerHTML=itemRows(list);$("itemsGroupCaption").textContent=(query?(language==="en"?"Search results across all items":"نتائج البحث في كل الأصناف"):(language==="en"?(group==="materials"?"Raw materials":group==="tools"?"Tools":"Assets"):(group==="materials"?"الخامات":"العُدّة والمعدات")))+" · "+list.length+" "+(language==="en"?"items":"صنف");renderItemQRCodes()};document.querySelectorAll("[data-items-group]").forEach(btn=>btn.onclick=()=>{window.__itemsGroupView=btn.dataset.itemsGroup;document.querySelectorAll("[data-items-group]").forEach(x=>x.classList.toggle("active",x===btn));filter()});$("search").oninput=filter;filter()}if(page==="home"&&branchId)homeDashboard();if(page==="reports")reportsPage();const layout=$("appLayout");if(layout)layout.classList.toggle("branch-not-selected",!branchId&&profile.role!=="owner_admin")}
 function itemBarcodeMarkup(item){
  if(!item?.item_code)return '<span class="muted">—</span>';
  const url=window.location.origin+window.location.pathname+'?item='+encodeURIComponent(item.item_code);
