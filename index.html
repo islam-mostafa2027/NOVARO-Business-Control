@@ -1472,19 +1472,19 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 @media(max-width:380px){.branches-grid .branch-card-name{column-gap:6px}.branches-grid .branch-card-name strong{font-size:14px}.branches-grid .branch-card-name .branch-card-address{font-size:11px}}
 </style>
 <style id="novaro-auth-recovery-fix-v1">
-#loginView .forgot-password-link{
- display:flex!important;width:100%!important;min-height:44px!important;height:44px!important;
+#forgotPasswordLink.forgot-password-link{
+ display:flex!important;width:100%!important;min-width:100%!important;max-width:100%!important;min-height:44px!important;height:44px!important;
  align-items:center!important;justify-content:center!important;box-sizing:border-box!important;
  margin:12px 0 0!important;padding:0 14px!important;border:1px solid #d9e9ef!important;
  border-radius:12px!important;background:#f1f8fb!important;color:#315b70!important;
  box-shadow:0 3px 10px #315b7010!important;text-decoration:none!important;
  font-size:14px!important;font-weight:750!important;line-height:1.2!important;
 }
-#loginView .forgot-password-link:hover{
+#forgotPasswordLink.forgot-password-link:hover{
  background:#e7f3f8!important;border-color:#bcdce8!important;
  transform:translateY(-1px)!important;box-shadow:0 5px 13px #315b7018!important;
 }
-#loginView .forgot-password-link:focus-visible{
+#forgotPasswordLink.forgot-password-link:focus-visible{
  outline:3px solid #77b9d255!important;outline-offset:2px!important;
 }
 #passwordResetView .auth-submit{width:100%!important;min-height:50px!important}
@@ -1930,22 +1930,16 @@ const languageObserver=new MutationObserver(()=>{if(languageUpdatePending)return
 window.__novaroObserver=languageObserver;
 languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
 
-const db=supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz");
+const db=supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz",{auth:{flowType:"pkce",detectSessionInUrl:false}});
 
-// Register the auth listener immediately so the recovery event cannot be missed.
+// Handle recovery callbacks explicitly before showing the password form.
 const novaroRecoveryRequested=new URLSearchParams(location.search).get("password-reset")==="1";
 const novaroRecoveryError="رابط استعادة كلمة المرور غير صالح أو انتهت صلاحيته. ارجع لصفحة الدخول واطلب رابط استعادة جديدًا.";
+let novaroRecoverySessionReady=false;
 db.auth.onAuthStateChange((event,session)=>{
- if(event==="PASSWORD_RECOVERY"||(event==="INITIAL_SESSION"&&novaroRecoveryRequested&&session)){
-  showPasswordResetView();
-  return;
- }
- if(event==="INITIAL_SESSION"&&novaroRecoveryRequested&&!session){
-  showPasswordResetView();
-  $("resetErr").textContent=novaroRecoveryError;
-  return;
- }
+ if(event==="PASSWORD_RECOVERY"){novaroRecoverySessionReady=!!session;showPasswordResetView();return;}
  if(event==="SIGNED_OUT"){
+  if(novaroRecoveryRequested)return;
   openedUserId=null;openingUserId=null;
   $("app").classList.add("hidden");$("login").classList.remove("hidden");
   return;
@@ -2145,7 +2139,35 @@ $("forgotPasswordLink").addEventListener("click",()=>{ $("recoveryEmail").value=
 $("backToLogin").addEventListener("click",()=>showAuthPanelView("loginView"));
 $("sendRecoveryLink").addEventListener("click",async()=>{const email=$("recoveryEmail").value.trim(),btn=$("sendRecoveryLink"),msg=$("recoveryErr");msg.textContent="";if(!email){msg.textContent=language==="en"?"Enter your account email.":"اكتب البريد الإلكتروني الخاص بحسابك.";return}btn.disabled=true;msg.textContent=language==="en"?"Sending recovery email...":"جاري إرسال رسالة الاستعادة...";try{const redirectTo=location.origin+location.pathname+"?password-reset=1";const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo});if(error)throw error;msg.textContent=language==="en"?"If this email belongs to an active NOVARO account, a secure reset link has been sent. Check your inbox.":"إذا كان هذا البريد مرتبطًا بحساب NOVARO نشط، فسيصلك رابط آمن لإعادة تعيين كلمة المرور. راجع صندوق الوارد."; }catch(error){msg.textContent=error?.message||(language==="en"?"Could not send the recovery email.":"تعذر إرسال رسالة الاستعادة.");}finally{btn.disabled=false}});
 $("saveNewPassword").addEventListener("click",async()=>{const password=$("newPassword").value,confirm=$("confirmNewPassword").value,btn=$("saveNewPassword"),msg=$("resetErr");msg.textContent="";if(password.length<8){msg.textContent=language==="en"?"Password must be at least 8 characters.":"كلمة المرور يجب ألا تقل عن 8 أحرف.";return}if(password!==confirm){msg.textContent=language==="en"?"The passwords do not match.":"كلمتا المرور غير متطابقتين.";return}btn.disabled=true;msg.textContent=language==="en"?"Updating password...":"جاري تحديث كلمة المرور...";try{const {data,error}=await db.auth.updateUser({password});if(error)throw error;if(!data?.user)throw Error(language==="en"?"Password update could not be confirmed.":"لم يتم تأكيد تحديث كلمة المرور.");await db.auth.signOut();$("newPassword").value="";$("confirmNewPassword").value="";$("email").value="";$("password").value="";if(location.search.includes("password-reset"))history.replaceState({},document.title,location.pathname);msg.textContent=language==="en"?"Password updated. Please sign in with your new password.":"تم تغيير كلمة المرور بنجاح. سجّل الدخول الآن باستخدام كلمة المرور الجديدة.";showAuthPanelView("loginView");$("loginErr").textContent=msg.textContent;}catch(error){msg.textContent=error?.message||(language==="en"?"Could not update the password. Request a new recovery link.":"تعذر تحديث كلمة المرور. اطلب رابط استعادة جديدًا.");}finally{btn.disabled=false}});
-async function init(){const {data,error}=await db.auth.getSession();if(error)throw error;if(novaroRecoveryRequested){showPasswordResetView();if(!data?.session)$("resetErr").textContent=novaroRecoveryError;return;}if(data?.session?.user)await openWorkspace(data.session.user);}
+async function init(){
+ if(novaroRecoveryRequested){
+  const url=new URL(location.href);
+  const code=url.searchParams.get("code");
+  const hash=new URLSearchParams(url.hash.startsWith("#")?url.hash.slice(1):url.hash);
+  let recoverySession=null;
+  if(code){
+   const {data,error}=await db.auth.exchangeCodeForSession(code);
+   if(error)throw Error("تعذر التحقق من رابط الاستعادة: "+error.message);
+   recoverySession=data?.session||null;
+  }else if(hash.get("type")==="recovery"&&hash.get("access_token")&&hash.get("refresh_token")){
+   const {data,error}=await db.auth.setSession({access_token:hash.get("access_token"),refresh_token:hash.get("refresh_token")});
+   if(error)throw Error("تعذر التحقق من رابط الاستعادة: "+error.message);
+   recoverySession=data?.session||null;
+  }else{
+   const {data,error}=await db.auth.getSession();
+   if(error)throw error;
+   recoverySession=data?.session||null;
+  }
+  if(!recoverySession)throw Error(novaroRecoveryError);
+  novaroRecoverySessionReady=true;
+  history.replaceState({},document.title,location.pathname+"?password-reset=1");
+  showPasswordResetView();
+  return;
+ }
+ const {data,error}=await db.auth.getSession();
+ if(error)throw error;
+ if(data?.session?.user)await openWorkspace(data.session.user);
+}
 let novaroLoginInProgress=false,novaroAutoLoginTimer=null;
 async function submitNovaroLogin(e){
  e.preventDefault();
