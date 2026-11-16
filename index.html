@@ -1921,13 +1921,13 @@ function itemForm(existing=null){
    $("novaroRotateRight").onclick=()=>{rotation=(rotation+90)%360;draw()};
    draw();
    $("novaroCropReset").onclick=()=>{zoom.value=1;sx.value=0;sy.value=0;rotation=0;draw()};
-   $("novaroCropCancel").onclick=()=>{modal.remove();if(inputEl)inputEl.value=""};
+   $("novaroCropCancel").onclick=()=>{modal.remove();itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}};
    $("novaroCropApply").onclick=()=>{
     canvas.toBlob(blob=>{
-     if(!blob){alert(en?"Could not process this image.":"تعذر تجهيز الصورة.");return}
+     if(!blob){itemImageProcessing=false;alert(en?"Could not process this image.":"تعذر تجهيز الصورة.");return}
      window.__novaroEditedItemImage=new File([blob],"item-image.jpg",{type:"image/jpeg",lastModified:Date.now()});
      $("itemImagePreview").innerHTML='<img src="'+URL.createObjectURL(blob)+'" style="width:110px;height:82px;object-fit:cover;border-radius:9px"><small class="muted" style="display:block">'+(en?"Edited image ready":"الصورة بعد التعديل جاهزة")+'</small>';
-     modal.remove();
+     itemImageProcessing=false;modal.remove();
     },"image/jpeg",.88);
    };
   };
@@ -1939,11 +1939,39 @@ function itemForm(existing=null){
   document.body.insertAdjacentHTML("beforeend",'<div id="novaroImageSource" style="position:fixed;inset:0;background:#0008;z-index:99998;display:flex;align-items:center;justify-content:center;padding:18px"><div style="width:min(100%,360px);background:white;color:#243b34;border-radius:18px;padding:20px;box-shadow:0 12px 40px #0003"><b style="display:block;font-size:18px;margin-bottom:6px">'+(en?"Choose image source":"اختار مصدر الصورة")+'</b><p class="muted" style="margin:0 0 16px">'+(en?"How would you like to add the item photo?":"تحب تضيف صورة الصنف منين؟")+'</p><div style="display:grid;gap:10px"><button type="button" id="itemSourceGallery" class="soft" style="width:100%">▣　'+(en?"Choose from Gallery":"اختيار من الاستوديو")+'</button><button type="button" id="itemSourceCamera" style="width:100%">◎　'+(en?"Take a photo with Camera":"التصوير بالكاميرا")+'</button><button type="button" id="itemSourceCancel" class="soft" style="width:100%">'+(en?"Cancel":"إلغاء")+'</button></div></div></div>');
   const modal=$("novaroImageSource");
   $("itemSourceCancel").onclick=()=>modal.remove();
-  $("itemSourceGallery").onclick=()=>{modal.remove();$("itemImageGallery").click()};
-  $("itemSourceCamera").onclick=()=>{modal.remove();$("itemImageCamera").click()};
+  const openItemImagePicker=(id)=>{
+   const input=$(id);if(!input)return;
+   input.value="";
+   modal.remove();
+   try{if(typeof input.showPicker==="function")input.showPicker();else input.click()}
+   catch(error){console.warn("NOVARO image picker showPicker fallback:",error);input.click()}
+  };
+  $("itemSourceGallery").onclick=()=>openItemImagePicker("itemImageGallery");
+  $("itemSourceCamera").onclick=()=>openItemImagePicker("itemImageCamera");
  };
- const handleItemImageInput=e=>{const f=e.target.files&&e.target.files[0];if(f){if(e.target.id==="itemImageCamera")$("itemImageGallery").value="";else $("itemImageCamera").value="";processItemImage(f,e.target)}else if(e.target.id==="itemImageCamera"||e.target.id==="itemImageGallery"){console.warn("NOVARO: image picker returned no file",e.target.id,e.target.value);}};
+ let itemImageProcessing=false;
+ const handleItemImageInput=e=>{
+  const input=e.target;if(!input||!/^itemImage(Camera|Gallery)$/.test(input.id))return;
+  const f=input.files&&input.files[0];if(!f)return;
+  const signature=[f.name,f.size,f.lastModified].join(":");
+  if(input.dataset.novaroProcessed===signature||itemImageProcessing)return;
+  input.dataset.novaroProcessed=signature;itemImageProcessing=true;
+  if(input.id==="itemImageCamera")$("itemImageGallery").value="";else $("itemImageCamera").value="";
+  try{processItemImage(f,input)}catch(error){itemImageProcessing=false;input.dataset.novaroProcessed="";console.error("NOVARO image editor failed:",error);alert(en?"Could not open the image editor. Please try again.":"تعذر فتح محرر الصورة. حاول مرة أخرى.");}
+ };
  ["itemImageGallery","itemImageCamera"].forEach(id=>{const el=$(id);el.addEventListener("change",handleItemImageInput);});
+ const recoverCameraImage=()=>{
+  if(document.visibilityState==="hidden")return;
+  window.setTimeout(()=>{
+   if(itemImageProcessing)return;
+   for(const id of ["itemImageCamera","itemImageGallery"]){
+    const input=$(id),file=input?.files?.[0];if(file){handleItemImageInput({target:input});break;}
+   }
+  },350);
+ };
+ window.addEventListener("focus",recoverCameraImage);
+ document.addEventListener("visibilitychange",recoverCameraImage);
+ window.addEventListener("pageshow",recoverCameraImage);
  $("itemGroup").value=initialGroup;
  $("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup);
  $("itemGroup").onchange=()=>{$("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions("",$("itemGroup").value);$("cat").value="";};
