@@ -1549,11 +1549,12 @@ function novaroEnsureBrowserHistory(){
  window.__novaroHistoryReady=true;
  try{history.replaceState({novaroApp:true,kind:"root"},"",location.href);history.pushState({novaroApp:true,kind:"root"},"",location.href)}catch(error){console.warn("NOVARO browser history initialization failed:",error)}
 }
-function novaroNavigate(next){if(page==="settings"&&next!=="settings")novaroSettingsDraft=null;if(next==="settings"&&page!=="settings")novaroSettingsDraft={...getNovaroPrefs(),language};if(page!==next){novaroPageHistory.push(page);try{history.pushState({novaroApp:true,kind:"page",page:next},"",location.href)}catch(error){console.warn("NOVARO page history update failed:",error)}page=next;}render();}
+function novaroStopItemFormCameraRecovery(){if(window.__novaroItemFormCameraAbort){window.__novaroItemFormCameraAbort.abort();window.__novaroItemFormCameraAbort=null;}document.getElementById("novaroImageEditor")?.remove();document.getElementById("novaroImageSource")?.remove();}
+function novaroNavigate(next){if(page==="items"&&next!=="items")novaroStopItemFormCameraRecovery();if(page==="settings"&&next!=="settings")novaroSettingsDraft=null;if(next==="settings"&&page!=="settings")novaroSettingsDraft={...getNovaroPrefs(),language};if(page!==next){novaroPageHistory.push(page);try{history.pushState({novaroApp:true,kind:"page",page:next},"",location.href)}catch(error){console.warn("NOVARO page history update failed:",error)}page=next;}render();}
 function novaroGoBack(fromPopState=false){
  if(!fromPopState&&window.__novaroHistoryReady&&history.state?.novaroApp){history.back();return;}
  const main=$("main");
- if(main&&main.querySelector("#save")){render();return;}
+ if(main&&main.querySelector("#save")){novaroStopItemFormCameraRecovery();render();return;}
  if(window.__novaroStocktakeSubView==="category"){window.__novaroStocktakeSubView="categories";renderStocktakeCategories();return;}
  if(window.__novaroStocktakeSubView==="categories"){window.__novaroStocktakeSubView=null;window.__stocktakeView=null;sessions();return;}
  if(novaroPageHistory.length){page=novaroPageHistory.pop();render();return;}
@@ -1879,6 +1880,8 @@ function form(title,fields,save){let html='<section class="card"><div class="row
 function inp(label,id,extra=""){return '<div class="field"><label>'+label+'</label><input id="'+id+'" '+extra+'></div>'}
 function itemForm(existing=null){
  if(profile.role!=="owner_admin")return alert(language==="en"?"Only the system owner can add or edit items":"إضافة وتعديل الأصناف متاحان للمالك فقط");
+ novaroStopItemFormCameraRecovery();
+ const cameraEvents=new AbortController();window.__novaroItemFormCameraAbort=cameraEvents;
  const i=existing||{},en=language==="en",initialGroup=cats.find(c=>c.id===i.category_id)?.group_key||"equipment";
  const groupField='<div class="field"><label>'+(en?"Item type":"نوع الصنف")+'</label><select id="itemGroup"><option value="materials">'+(en?"Materials — consumables and ingredients":"الخامات — مواد ومكونات تُستهلك")+'</option><option value="tools">'+(en?"Tools — utensils and small tools":"العدة — أدوات ومستلزمات التشغيل")+'</option><option value="equipment">'+(en?"Assets — machines and equipment":"المعدات — الأجهزة والمعدات")+'</option></select></div>';
  const categoryField='<div class="field"><label>'+(en?"Category":"التصنيف")+'</label><select id="cat"><option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup)+'</select><small class="muted" id="categoryHelp"></small></div>';
@@ -1971,15 +1974,15 @@ function itemForm(existing=null){
  const recoverCameraImage=()=>{
   if(document.visibilityState==="hidden")return;
   window.setTimeout(()=>{
-   if(itemImageProcessing)return;
+   if(window.__novaroItemFormCameraAbort!==cameraEvents||itemImageProcessing)return;
    for(const id of ["itemImageCamera","itemImageGallery"]){
     const input=$(id),file=input?.files?.[0];if(file){handleItemImageInput({target:input});break;}
    }
   },350);
  };
- window.addEventListener("focus",recoverCameraImage);
- document.addEventListener("visibilitychange",recoverCameraImage);
- window.addEventListener("pageshow",recoverCameraImage);
+ window.addEventListener("focus",recoverCameraImage,{signal:cameraEvents.signal});
+ document.addEventListener("visibilitychange",recoverCameraImage,{signal:cameraEvents.signal});
+ window.addEventListener("pageshow",recoverCameraImage,{signal:cameraEvents.signal});
  $("itemGroup").value=initialGroup;
  $("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup);
  $("itemGroup").onchange=()=>{$("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions("",$("itemGroup").value);$("cat").value="";};
