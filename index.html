@@ -1938,32 +1938,62 @@ function itemForm(existing=null){
    if(imageObjectUrl){URL.revokeObjectURL(imageObjectUrl);imageObjectUrl=null}
    if(!img.naturalWidth||!img.naturalHeight){resetImageProcessing();alert(en?"The selected file contains no readable image. Please try another photo.":"ملف الصورة لا يحتوي على صورة قابلة للقراءة. جرّب صورة أخرى.");return}
    const prior=document.getElementById("novaroImageEditor");if(prior)prior.remove();
-   document.body.insertAdjacentHTML("beforeend",'<div id="novaroImageEditor" style="position:fixed;inset:0;background:#0009;z-index:99999;display:flex;align-items:center;justify-content:center;padding:14px"><div style="background:var(--card,#fff);color:var(--text);width:min(100%,440px);max-height:94vh;overflow:auto;border-radius:16px;padding:16px;box-shadow:0 12px 40px #0004"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>'+(en?"Edit item image":"تعديل صورة الصنف")+'</b><button type="button" id="novaroCropCancel" class="soft">×</button></div><p class="muted" style="font-size:12px">'+(en?"Adjust the crop, zoom and position.":"ظبط القص والتكبير ومكان الصورة.")+'</p><canvas id="novaroCropCanvas" style="width:100%;aspect-ratio:4/3;display:block;background:#eee;border-radius:10px;touch-action:pan-y"></canvas><div class="field"><label>'+(en?"Zoom":"التكبير")+'</label><input id="novaroCropZoom" type="range" min="1" max="3" step=".01" value="1"></div><div class="field"><label>'+(en?"Rotate image":"تدوير الصورة")+'</label><div style="display:flex;gap:8px"><button type="button" class="soft" id="novaroRotateLeft" style="flex:1">↶　'+(en?"Rotate left":"لف لليسار")+'</button><button type="button" class="soft" id="novaroRotateRight" style="flex:1">↷　'+(en?"Rotate right":"لف لليمين")+'</button></div></div><div class="field"><label>'+(en?"Horizontal position":"الموضع الأفقي")+'</label><input id="novaroCropX" type="range" min="-100" max="100" value="0"></div><div class="field"><label>'+(en?"Vertical position":"الموضع الرأسي")+'</label><input id="novaroCropY" type="range" min="-100" max="100" value="0"></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button type="button" class="soft" id="novaroCropReset">'+(en?"Reset":"إعادة ضبط")+'</button><button type="button" id="novaroCropApply">'+(en?"Use image":"استخدام الصورة")+'</button></div></div></div>');
-   const modal=$("novaroImageEditor"),canvas=$("novaroCropCanvas"),ctx=canvas.getContext("2d"),zoom=$("novaroCropZoom"),sx=$("novaroCropX"),sy=$("novaroCropY");
+   document.body.insertAdjacentHTML("beforeend",'<div id="novaroImageEditor" style="position:fixed;inset:0;z-index:99999;background:#101412;color:#fff;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);font-family:inherit"><div style="height:54px;flex:0 0 54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #ffffff20"><button type="button" id="novaroCropCancel" style="background:transparent;border:0;color:#fff;font-size:27px;padding:4px 10px">×</button><b style="font-size:16px">'+(en?"Edit photo":"تعديل الصورة")+'</b><button type="button" id="novaroCropApply" style="background:#dcefe5;color:#183b2d;border:0;border-radius:22px;padding:9px 16px;font-weight:700">'+(en?"Done":"تم")+'</button></div><div style="flex:1;min-height:120px;display:flex;align-items:center;justify-content:center;padding:12px 10px;overflow:hidden"><canvas id="novaroCropCanvas" style="width:min(100%,560px);max-height:100%;aspect-ratio:4/3;display:block;background:#202522;object-fit:contain;border-radius:8px"></canvas></div><div style="flex:0 0 auto;background:#1b211e;border-top:1px solid #ffffff20;padding:10px 12px calc(12px + env(safe-area-inset-bottom))"><div id="novaroEditorToolTabs" style="display:flex;justify-content:space-around;gap:4px;overflow-x:auto;padding:0 0 10px"><button type="button" data-tool="crop" class="novaro-editor-tab active">⌗<small>'+(en?"Crop":"قص")+'</small></button><button type="button" data-tool="rotate" class="novaro-editor-tab">↻<small>'+(en?"Rotate":"تدوير")+'</small></button><button type="button" data-tool="filters" class="novaro-editor-tab">◐<small>'+(en?"Filters":"فلاتر")+'</small></button><button type="button" data-tool="light" class="novaro-editor-tab">☼<small>'+(en?"Light":"إضاءة")+'</small></button><button type="button" data-tool="enhance" class="novaro-editor-tab">✧<small>'+(en?"Enhance":"تحسين")+'</small></button></div><div id="novaroEditorToolPanel" style="min-height:82px;display:flex;align-items:center;justify-content:center"></div></div></div><style id="novaroEditorStyles">#novaroImageEditor button{font:inherit;cursor:pointer}#novaroImageEditor .novaro-editor-tab{flex:1;min-width:58px;border:0;background:transparent;color:#b9c5be;padding:7px 4px;border-radius:10px;font-size:22px;display:flex;flex-direction:column;align-items:center;gap:4px}#novaroImageEditor .novaro-editor-tab small{font-size:11px}#novaroImageEditor .novaro-editor-tab.active{background:#34443b;color:#fff}#novaroImageEditor .novaro-tool-control{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}#novaroImageEditor .novaro-tool-control button{border:1px solid #ffffff30;background:#303a34;color:#fff;border-radius:12px;padding:10px 14px}#novaroImageEditor input[type=range]{accent-color:#b8ddc7;width:min(58vw,250px)}#novaroImageEditor .novaro-filter{min-width:58px;display:flex;flex-direction:column;align-items:center;gap:5px}#novaroImageEditor .novaro-filter-swatch{width:48px;height:38px;border-radius:8px;border:2px solid #ffffff35;background:#8c9b91}#novaroImageEditor .novaro-filter.active .novaro-filter-swatch{border-color:#c4e8d1}#novaroImageEditor .novaro-filter small{font-size:10px;color:#fff}</style>');
+   const modal=$("novaroImageEditor"),canvas=$("novaroCropCanvas"),ctx=canvas.getContext("2d"),panel=$("novaroEditorToolPanel");
    canvas.width=1200;canvas.height=900;
-   let rotation=0;
+   let rotation=0,activeTool="crop",brightness=100,contrast=100,saturation=100,filterName="original";
+   const filterValues={original:"none",vivid:"saturate(1.35) contrast(1.08)",warm:"sepia(.18) saturate(1.15)",mono:"grayscale(1)",cool:"saturate(.9) hue-rotate(12deg)"};
    const draw=()=>{
     const rad=rotation*Math.PI/180,cos=Math.abs(Math.cos(rad)),sin=Math.abs(Math.sin(rad));
     const rotatedW=cos*img.naturalWidth+sin*img.naturalHeight,rotatedH=sin*img.naturalWidth+cos*img.naturalHeight;
-    const base=Math.max(canvas.width/rotatedW,canvas.height/rotatedH),scale=base*Number(zoom.value),w=img.naturalWidth*scale,h=img.naturalHeight*scale;
+    const zoomValue=Number($("novaroCropZoom")?.value||1),xValue=Number($("novaroCropX")?.value||0),yValue=Number($("novaroCropY")?.value||0);
+    const base=Math.max(canvas.width/rotatedW,canvas.height/rotatedH),scale=base*zoomValue,w=img.naturalWidth*scale,h=img.naturalHeight*scale;
     const boundsW=rotatedW*scale,boundsH=rotatedH*scale,maxX=Math.max(0,(boundsW-canvas.width)/2),maxY=Math.max(0,(boundsH-canvas.height)/2);
-    const offsetX=-(Number(sx.value)/100)*maxX,offsetY=-(Number(sy.value)/100)*maxY;
-    ctx.clearRect(0,0,canvas.width,canvas.height);ctx.save();ctx.translate(canvas.width/2+offsetX,canvas.height/2+offsetY);ctx.rotate(rad);ctx.drawImage(img,-w/2,-h/2,w,h);ctx.restore();
+    const offsetX=-(xValue/100)*maxX,offsetY=-(yValue/100)*maxY;
+    ctx.clearRect(0,0,canvas.width,canvas.height);ctx.save();
+    ctx.filter=(filterValues[filterName]||"none")+" brightness("+brightness+"%) contrast("+contrast+"%) saturate("+saturation+"%)";
+    ctx.translate(canvas.width/2+offsetX,canvas.height/2+offsetY);ctx.rotate(rad);ctx.drawImage(img,-w/2,-h/2,w,h);ctx.restore();ctx.filter="none";
    };
-   [zoom,sx,sy].forEach(el=>el.addEventListener("input",draw));
-   $("novaroRotateLeft").onclick=()=>{rotation=(rotation-90+360)%360;draw()};
-   $("novaroRotateRight").onclick=()=>{rotation=(rotation+90)%360;draw()};
-   draw();
-   $("novaroCropReset").onclick=()=>{zoom.value=1;sx.value=0;sy.value=0;rotation=0;draw()};
-   $("novaroCropCancel").onclick=()=>{modal.remove();itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}};
+   const setTool=tool=>{
+    activeTool=tool;
+    modal.querySelectorAll(".novaro-editor-tab").forEach(btn=>btn.classList.toggle("active",btn.dataset.tool===tool));
+    if(tool==="crop")panel.innerHTML='<div class="novaro-tool-control"><label style="font-size:12px">'+(en?"Zoom":"تكبير")+'</label><input id="novaroCropZoom" type="range" min="1" max="3" step=".01" value="1"><button type="button" id="novaroCropReset">'+(en?"Reset":"إعادة ضبط")+'</button></div><div style="width:100%;display:flex;justify-content:center;gap:18px;margin-top:8px"><label style="font-size:11px">'+(en?"Horizontal":"أفقي")+' <input id="novaroCropX" type="range" min="-100" max="100" value="0"></label><label style="font-size:11px">'+(en?"Vertical":"رأسي")+' <input id="novaroCropY" type="range" min="-100" max="100" value="0"></label></div>';
+    else if(tool==="rotate")panel.innerHTML='<div class="novaro-tool-control"><button type="button" id="novaroRotateLeft">↶　'+(en?"Rotate left":"لف لليسار")+'</button><button type="button" id="novaroRotateRight">↷　'+(en?"Rotate right":"لف لليمين")+'</button><button type="button" id="novaroRotateReset">'+(en?"Reset":"إعادة ضبط")+'</button></div>';
+    else if(tool==="filters")panel.innerHTML='<div class="novaro-tool-control">'+[['original',en?"Original":"أصلية","none"],['vivid',en?"Vivid":"حيوية","saturate(1.35)"],['warm',en?"Warm":"دافئة","sepia(.25)"],['mono',en?"B&W":"أبيض وأسود","grayscale(1)"],['cool',en?"Cool":"باردة","hue-rotate(12deg)"]].map(x=>'<button type="button" class="novaro-filter '+(filterName===x[0]?'active':'')+'" data-filter="'+x[0]+'"><span class="novaro-filter-swatch" style="filter:'+x[2]+'"></span><small>'+x[1]+'</small></button>').join("")+'</div>';
+    else if(tool==="light")panel.innerHTML='<div style="width:100%;display:grid;gap:8px"><label style="display:flex;justify-content:space-between;font-size:12px"><span>'+(en?"Brightness":"السطوع")+'</span><input id="novaroBrightness" type="range" min="60" max="150" value="'+brightness+'"></label><label style="display:flex;justify-content:space-between;font-size:12px"><span>'+(en?"Contrast":"التباين")+'</span><input id="novaroContrast" type="range" min="70" max="140" value="'+contrast+'"></label><label style="display:flex;justify-content:space-between;font-size:12px"><span>'+(en?"Saturation":"تشبع الألوان")+'</span><input id="novaroSaturation" type="range" min="0" max="160" value="'+saturation+'"></label></div>';
+    else panel.innerHTML='<div class="novaro-tool-control"><button type="button" id="novaroAutoEnhance">✧　'+(en?"Auto enhance":"تحسين تلقائي")+'</button><button type="button" id="novaroEnhanceReset">'+(en?"Original":"إرجاع للأصل")+'</button></div>';
+    if(tool==="crop"){
+     ["novaroCropZoom","novaroCropX","novaroCropY"].forEach(id=>$(id).addEventListener("input",draw));
+     $("novaroCropReset").onclick=()=>{$("novaroCropZoom").value=1;$("novaroCropX").value=0;$("novaroCropY").value=0;draw()};
+    }
+    if(tool==="rotate"){
+     $("novaroRotateLeft").onclick=()=>{rotation=(rotation-90+360)%360;draw()};
+     $("novaroRotateRight").onclick=()=>{rotation=(rotation+90)%360;draw()};
+     $("novaroRotateReset").onclick=()=>{rotation=0;draw()};
+    }
+    if(tool==="filters")panel.querySelectorAll("[data-filter]").forEach(btn=>btn.onclick=()=>{filterName=btn.dataset.filter;setTool("filters");draw()});
+    if(tool==="light"){
+     $("novaroBrightness").oninput=e=>{brightness=Number(e.target.value);draw()};
+     $("novaroContrast").oninput=e=>{contrast=Number(e.target.value);draw()};
+     $("novaroSaturation").oninput=e=>{saturation=Number(e.target.value);draw()};
+    }
+    if(tool==="enhance"){
+     $("novaroAutoEnhance").onclick=()=>{brightness=108;contrast=112;saturation=115;filterName="original";draw()};
+     $("novaroEnhanceReset").onclick=()=>{brightness=100;contrast=100;saturation=100;filterName="original";setTool("enhance");draw()};
+    }
+    draw();
+   };
+   modal.querySelectorAll(".novaro-editor-tab").forEach(btn=>btn.onclick=()=>setTool(btn.dataset.tool));
+   $("novaroCropCancel").onclick=()=>{modal.remove();$("novaroEditorStyles")?.remove();itemImageProcessing=false;if(inputEl){inputEl.value="";inputEl.dataset.novaroProcessed=""}};
    $("novaroCropApply").onclick=()=>{
     canvas.toBlob(blob=>{
      if(!blob){itemImageProcessing=false;alert(en?"Could not process this image.":"تعذر تجهيز الصورة.");return}
      window.__novaroEditedItemImage=new File([blob],"item-image.jpg",{type:"image/jpeg",lastModified:Date.now()});
      $("itemImagePreview").innerHTML='<img src="'+URL.createObjectURL(blob)+'" style="width:110px;height:82px;object-fit:cover;border-radius:9px"><small class="muted" style="display:block">'+(en?"Edited image ready":"الصورة بعد التعديل جاهزة")+'</small>';
-     itemImageProcessing=false;modal.remove();
-    },"image/jpeg",.88);
+     itemImageProcessing=false;modal.remove();$("novaroEditorStyles")?.remove();
+    },"image/jpeg",.9);
    };
+   setTool("crop");
   };
   img.onerror=()=>failImageLoad(en?"Could not open this image. Please choose or capture it again.":"تعذر فتح الصورة. اختار الصورة أو صوّرها مرة أخرى.");
   imageLoadTimer=window.setTimeout(()=>failImageLoad(en?"The image is taking too long to open. Please try capturing it again.":"الصورة استغرقت وقتًا طويلًا في الفتح. حاول تصويرها مرة أخرى."),20000);
