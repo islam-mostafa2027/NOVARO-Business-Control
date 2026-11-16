@@ -1970,13 +1970,17 @@ languageObserver.observe(document.body,{childList:true,subtree:true,characterDat
 const db=supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz",{auth:{flowType:"pkce",detectSessionInUrl:false}});
 
 // Handle recovery callbacks explicitly before showing the password form.
-const novaroRecoveryUrl=new URL(location.href);
+const novaroEmailChangeUrl=new URL(location.href);
+const novaroEmailChangeRequested=novaroEmailChangeUrl.searchParams.get("email-change")==="1";
+const novaroRecoveryUrl=novaroEmailChangeUrl;
 const novaroRecoveryHash=new URLSearchParams(novaroRecoveryUrl.hash.startsWith("#")?novaroRecoveryUrl.hash.slice(1):novaroRecoveryUrl.hash);
 const novaroRecoveryRequested=
- novaroRecoveryUrl.searchParams.get("password-reset")==="1"||
- novaroRecoveryUrl.searchParams.has("code")||
- novaroRecoveryHash.get("type")==="recovery"||
- (novaroRecoveryUrl.searchParams.has("error_code")&&novaroRecoveryUrl.searchParams.has("error_description"));
+ !novaroEmailChangeRequested&&(
+  novaroRecoveryUrl.searchParams.get("password-reset")==="1"||
+  novaroRecoveryUrl.searchParams.has("code")||
+  novaroRecoveryHash.get("type")==="recovery"||
+  (novaroRecoveryUrl.searchParams.has("error_code")&&novaroRecoveryUrl.searchParams.has("error_description"))
+ );
 const novaroRecoveryError="رابط استعادة كلمة المرور غير صالح أو انتهت صلاحيته. ارجع لصفحة الدخول واطلب رابط استعادة جديدًا.";
 let novaroRecoverySessionReady=false;
 db.auth.onAuthStateChange((event,session)=>{
@@ -2183,6 +2187,34 @@ $("backToLogin").addEventListener("click",()=>showAuthPanelView("loginView"));
 $("sendRecoveryLink").addEventListener("click",async()=>{const email=$("recoveryEmail").value.trim(),btn=$("sendRecoveryLink"),msg=$("recoveryErr");msg.textContent="";if(!email){msg.textContent=language==="en"?"Enter your account email.":"اكتب البريد الإلكتروني الخاص بحسابك.";return}btn.disabled=true;msg.textContent=language==="en"?"Sending recovery email...":"جاري إرسال رسالة الاستعادة...";try{const redirectTo=location.origin+location.pathname+"?password-reset=1";const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo});if(error)throw error;msg.textContent=language==="en"?"If this email belongs to an active NOVARO account, a secure reset link has been sent. Check your inbox.":"إذا كان هذا البريد مرتبطًا بحساب NOVARO نشط، فسيصلك رابط آمن لإعادة تعيين كلمة المرور. راجع صندوق الوارد."; }catch(error){msg.textContent=error?.message||(language==="en"?"Could not send the recovery email.":"تعذر إرسال رسالة الاستعادة.");}finally{btn.disabled=false}});
 $("saveNewPassword").addEventListener("click",async()=>{const password=$("newPassword").value,confirm=$("confirmNewPassword").value,btn=$("saveNewPassword"),msg=$("resetErr");msg.textContent="";if(password.length<8){msg.textContent=language==="en"?"Password must be at least 8 characters.":"كلمة المرور يجب ألا تقل عن 8 أحرف.";return}if(password!==confirm){msg.textContent=language==="en"?"The passwords do not match.":"كلمتا المرور غير متطابقتين.";return}btn.disabled=true;msg.textContent=language==="en"?"Updating password...":"جاري تحديث كلمة المرور...";try{const {data,error}=await db.auth.updateUser({password});if(error)throw error;if(!data?.user)throw Error(language==="en"?"Password update could not be confirmed.":"لم يتم تأكيد تحديث كلمة المرور.");await db.auth.signOut();$("newPassword").value="";$("confirmNewPassword").value="";$("email").value="";$("password").value="";if(location.search.includes("password-reset"))history.replaceState({},document.title,location.pathname);msg.textContent=language==="en"?"Password updated. Please sign in with your new password.":"تم تغيير كلمة المرور بنجاح. سجّل الدخول الآن باستخدام كلمة المرور الجديدة.";showAuthPanelView("loginView");$("loginErr").textContent=msg.textContent;}catch(error){msg.textContent=error?.message||(language==="en"?"Could not update the password. Request a new recovery link.":"تعذر تحديث كلمة المرور. اطلب رابط استعادة جديدًا.");}finally{btn.disabled=false}});
 async function init(){
+ if(novaroEmailChangeRequested){
+  const url=new URL(location.href);
+  const hash=new URLSearchParams(url.hash.startsWith("#")?url.hash.slice(1):url.hash);
+  const callbackError=url.searchParams.get("error_description")||hash.get("error_description");
+  if(callbackError)throw Error("تعذر تأكيد تغيير البريد: "+callbackError);
+  let callbackSession=null;
+  const code=url.searchParams.get("code");
+  if(code){
+   const {data,error}=await db.auth.exchangeCodeForSession(code);
+   if(error)throw Error("تعذر معالجة رابط تأكيد البريد: "+error.message);
+   callbackSession=data?.session||null;
+  }else{
+   const {data,error}=await db.auth.getSession();
+   if(error)throw error;
+   callbackSession=data?.session||null;
+  }
+  history.replaceState({},document.title,location.pathname);
+  if(callbackSession?.user){
+   const {data,error}=await db.auth.getUser();
+   if(error)throw error;
+   await openWorkspace(data?.user||callbackSession.user);
+   alert("تمت معالجة رابط التأكيد. راجع البريد الظاهر في بيانات الحساب للتأكد من اكتمال تغيير العنوان. إذا وصلك رابط تأكيد آخر، افتحه أيضًا.");
+  }else{
+   $("app").classList.add("hidden");$("login").classList.remove("hidden");showAuthPanelView("loginView");
+   $("loginErr").textContent="تم فتح رابط التأكيد، لكن لا توجد جلسة دخول على هذا المتصفح. سجّل الدخول ثم راجع حالة البريد من إعدادات المالك.";
+  }
+  return;
+ }
  if(novaroRecoveryRequested){
   const url=new URL(location.href);
   const code=url.searchParams.get("code");
@@ -2258,7 +2290,8 @@ document.addEventListener("click",async e=>{
   if(!confirm(language==="en"?"Send email-change confirmations for "+nextEmail+"?":"إرسال طلب تغيير البريد إلى "+nextEmail+"؟"))return;
   btn.disabled=true;if(status)status.textContent=language==="en"?"Sending confirmation request...":"جاري إرسال طلب التأكيد...";
   try{
-   const {data,error}=await db.auth.updateUser({email:nextEmail});
+   const emailChangeRedirect=new URL(location.pathname,location.origin);emailChangeRedirect.searchParams.set("email-change","1");
+   const {data,error}=await db.auth.updateUser({email:nextEmail},{emailRedirectTo:emailChangeRedirect.toString()});
    if(error)throw error;
    if(!data?.user||String(data.user.id)!==String(user.id))throw Error(language==="en"?"The account identity could not be verified.":"تعذر التحقق من هوية الحساب.");
    const pending=data.user.new_email||nextEmail;
