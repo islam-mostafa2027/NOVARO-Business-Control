@@ -1846,7 +1846,27 @@ function itemForm(existing=null){
  $("itemGroup").value=initialGroup;
  $("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup);
  $("itemGroup").onchange=()=>{$("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions("",$("itemGroup").value);$("cat").value="";};
- $("n").value=i.name_ar||"";$("en").value=i.name_en||"";$("code").value=i.item_code||"";$("cat").value=i.category_id||"";$("unit").value=unitChoices.some(x=>x[0]===(i.unit_ar||"قطعة"))?(i.unit_ar||"قطعة"):"__other__";$("unitEn").value=unitChoices.some(x=>x[1]===(i.unit_en||"Piece"))?(i.unit_en||"Piece"):"__other__";$("unitCustom").value=unitChoices.some(x=>x[0]===(i.unit_ar||"قطعة"))?"":(i.unit_ar||"");$("unitEnCustom").value=unitChoices.some(x=>x[1]===(i.unit_en||"Piece"))?"":(i.unit_en||"");$("unit").onchange=()=>{$("unitCustom").style.display=$("unit").value==="__other__"?"block":"none"};$("unitEn").onchange=()=>{$("unitEnCustom").style.display=$("unitEn").value==="__other__"?"block":"none"};$("minStock").value=Number(i.min_stock||0);
+ $("n").value=i.name_ar||"";$("en").value=i.name_en||"";$("code").value=i.item_code||"";
+ let translationTimer=null,translationRequest=0,lastAutoTranslation="",englishEdited=false;
+ $("en").addEventListener("input",()=>{if($("en").value.trim()!==lastAutoTranslation)englishEdited=true;});
+ $("n").addEventListener("input",()=>{
+  clearTimeout(translationTimer);
+  const arabic=$("n").value.trim(),request=++translationRequest;
+  if(!arabic){if(!englishEdited)$("en").value="";lastAutoTranslation="";return}
+  if(englishEdited)return;
+  translationTimer=setTimeout(async()=>{
+   try{
+    const url="https://api.mymemory.translated.net/get?q="+encodeURIComponent(arabic)+"&langpair=ar|en";
+    const response=await fetch(url);
+    if(!response.ok)throw Error("Translation service unavailable");
+    const data=await response.json();
+    const translated=(data?.responseData?.translatedText||"").replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,"&").trim();
+    if(request!==translationRequest||$("n").value.trim()!==arabic||englishEdited||!translated)return;
+    lastAutoTranslation=translated;
+    $("en").value=translated;
+   }catch(error){console.warn("Automatic item-name translation failed:",error)}
+  },450);
+ });$("cat").value=i.category_id||"";$("unit").value=unitChoices.some(x=>x[0]===(i.unit_ar||"قطعة"))?(i.unit_ar||"قطعة"):"__other__";$("unitEn").value=unitChoices.some(x=>x[1]===(i.unit_en||"Piece"))?(i.unit_en||"Piece"):"__other__";$("unitCustom").value=unitChoices.some(x=>x[0]===(i.unit_ar||"قطعة"))?"":(i.unit_ar||"");$("unitEnCustom").value=unitChoices.some(x=>x[1]===(i.unit_en||"Piece"))?"":(i.unit_en||"");$("unit").onchange=()=>{$("unitCustom").style.display=$("unit").value==="__other__"?"block":"none"};$("unitEn").onchange=()=>{$("unitEnCustom").style.display=$("unitEn").value==="__other__"?"block":"none"};$("minStock").value=Number(i.min_stock||0);
  const help=$("categoryHelp");if(help&&!cats.some(c=>(c.group_key||"equipment")===$("itemGroup").value))help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات للقسم ده لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
 }
 function addItem(){itemForm()}
