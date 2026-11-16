@@ -1623,6 +1623,13 @@ async function requestSavedCredentials(){
   try{nativeBridge.get();}catch(error){console.debug("NOVARO native credential picker unavailable:",error);}
  }
 }
+// Open Android's saved-password picker from a direct tap on the email field.
+$("email").addEventListener("click",()=>{
+ if(novaroCredentialPickerOpen)return;
+ novaroCredentialPickerOpen=true;
+ requestSavedCredentials();
+ window.setTimeout(()=>{novaroCredentialPickerOpen=false;},1500);
+});
 
 
 async function init(){const {data,error}=await db.auth.getSession();if(error)throw error;if(data?.session?.user)await openWorkspace(data.session.user);db.auth.onAuthStateChange((ev,session)=>{if(ev==="SIGNED_OUT"){openedUserId=null;openingUserId=null;$("app").classList.add("hidden");$("login").classList.remove("hidden");return}if(session&&ev==="SIGNED_IN")setTimeout(()=>openWorkspace(session.user).catch(showAuthError),0);});}
