@@ -1684,8 +1684,8 @@ function applyNovaroAppearance(overridePrefs){
  '#app .card{border-color:'+t[3]+' !important}#app .tabs button.active,#app button.primary,#app .auth-submit{background:'+t[0]+' !important;color:#fff !important}'+
  '#app .soft,#app .language-control{border-color:'+t[3]+' !important;color:'+t[0]+' !important}'+
  '#app .tabs{background:'+t[1]+' !important}#app .tabs button.active{background:#fff !important;color:'+t[0]+' !important}'+
- '#app #main.novaro-consistent-page>section.card:not(.branches-page){padding:17px !important;border:1px solid #dce8e2 !important;border-radius:17px !important;background:linear-gradient(145deg,#fff 0%,#fbfdfc 100%) !important;box-shadow:0 4px 18px #173d300b !important}'+
- '@media(max-width:700px){#app #main.novaro-consistent-page>section.card:not(.branches-page){padding:17px !important;border-radius:17px !important}}';
+  ''+
+  '';
  document.querySelectorAll("[data-theme]").forEach(b=>{const c=(novaroThemeMap()[b.dataset.theme]||novaroThemeMap().default)[0];b.style.setProperty("background-color",c,"important");b.style.setProperty("background-image","none","important");b.classList.toggle("selected",b.dataset.theme===p.theme)});
 }
 const NOVARO_SOUND_LIBRARY={
