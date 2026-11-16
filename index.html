@@ -1484,8 +1484,21 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
  background:#e7f3f8!important;border-color:#bcdce8!important;
  transform:translateY(-1px)!important;box-shadow:0 5px 13px #315b7018!important;
 }
-#forgotPasswordLink.forgot-password-link:focus-visible{
+#forgotPasswordLink.forgot-password-link:focus-visible,
+#backToLogin.auth-back-link:focus-visible{
  outline:3px solid #77b9d255!important;outline-offset:2px!important;
+}
+#backToLogin.auth-back-link{
+ display:flex!important;width:100%!important;min-width:100%!important;max-width:100%!important;min-height:44px!important;height:44px!important;
+ align-items:center!important;justify-content:center!important;box-sizing:border-box!important;
+ margin:12px 0 0!important;padding:0 14px!important;border:1px solid #d9e9ef!important;
+ border-radius:12px!important;background:#f1f8fb!important;color:#315b70!important;
+ box-shadow:0 3px 10px #315b7010!important;text-decoration:none!important;
+ font-size:14px!important;font-weight:750!important;line-height:1.2!important;
+}
+#backToLogin.auth-back-link:hover{
+ background:#e7f3f8!important;border-color:#bcdce8!important;
+ transform:translateY(-1px)!important;box-shadow:0 5px 13px #315b7018!important;
 }
 #passwordResetView .auth-submit{width:100%!important;min-height:50px!important}
 #passwordResetView .field input{width:100%!important;min-height:52px!important}
@@ -1933,7 +1946,13 @@ languageObserver.observe(document.body,{childList:true,subtree:true,characterDat
 const db=supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz",{auth:{flowType:"pkce",detectSessionInUrl:false}});
 
 // Handle recovery callbacks explicitly before showing the password form.
-const novaroRecoveryRequested=new URLSearchParams(location.search).get("password-reset")==="1";
+const novaroRecoveryUrl=new URL(location.href);
+const novaroRecoveryHash=new URLSearchParams(novaroRecoveryUrl.hash.startsWith("#")?novaroRecoveryUrl.hash.slice(1):novaroRecoveryUrl.hash);
+const novaroRecoveryRequested=
+ novaroRecoveryUrl.searchParams.get("password-reset")==="1"||
+ novaroRecoveryUrl.searchParams.has("code")||
+ novaroRecoveryHash.get("type")==="recovery"||
+ (novaroRecoveryUrl.searchParams.has("error_code")&&novaroRecoveryUrl.searchParams.has("error_description"));
 const novaroRecoveryError="رابط استعادة كلمة المرور غير صالح أو انتهت صلاحيته. ارجع لصفحة الدخول واطلب رابط استعادة جديدًا.";
 let novaroRecoverySessionReady=false;
 db.auth.onAuthStateChange((event,session)=>{
