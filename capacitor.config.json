@@ -4,6 +4,7 @@
   "webDir": "www",
   "backgroundColor": "#f3f7f5",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "hostname": "islammostafa702-commits.github.io"
   }
 }
