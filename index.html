@@ -1185,6 +1185,79 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
  .branch-card-name .branch-card-address{font-size:11px}
 }
 </style>
+
+<style id="novaro-page-design-v3">
+/* Make every non-home screen visibly follow the Branches visual language. */
+#main.novaro-consistent-page{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ gap:14px!important;padding:0!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page){
+ box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;
+ margin:0 0 2px!important;padding:18px!important;
+ border:1px solid #dce9e1!important;border-radius:15px!important;
+ background:linear-gradient(150deg,#ffffff 0%,#f8fbf9 100%)!important;
+ box-shadow:0 3px 13px rgba(27,70,52,.07)!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page)>h3,
+#main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3{
+ display:flex!important;align-items:center!important;gap:9px!important;
+ min-height:34px;margin:0 0 15px!important;padding:0 0 10px!important;
+ border-bottom:1px solid #e7efe9!important;
+ color:#285342!important;font-size:16px!important;font-weight:800!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) .row{
+ display:flex;align-items:center;gap:9px!important;flex-wrap:wrap!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) .field{
+ margin:11px 0!important;min-width:0;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) .field label,
+#main.novaro-consistent-page>section.card:not(.branches-page)>label{
+ display:block!important;margin:0 0 6px!important;
+ color:#61766b!important;font-size:12px!important;font-weight:700!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) input:not([type=checkbox]):not([type=radio]):not([type=range]),
+#main.novaro-consistent-page>section.card:not(.branches-page) select,
+#main.novaro-consistent-page>section.card:not(.branches-page) textarea{
+ box-sizing:border-box!important;max-width:100%!important;min-height:42px!important;
+ border:1px solid #d9e6de!important;border-radius:10px!important;
+ background:#fff!important;box-shadow:0 1px 3px rgba(20,55,40,.035)!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) button:not(.items-tool):not(.language-choice):not(.sound-choice){
+ min-height:36px;border-radius:9px!important;font-weight:700;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) .tablewrap{
+ width:100%;max-width:100%;overflow-x:auto!important;
+ border:1px solid #e0ebe4!important;border-radius:12px!important;background:#fff!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) table{border-collapse:separate!important;border-spacing:0!important}
+#main.novaro-consistent-page>section.card:not(.branches-page) th{
+ background:#edf4ef!important;color:#315b4b!important;font-weight:800!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) td,
+#main.novaro-consistent-page>section.card:not(.branches-page) th{
+ padding:10px 11px!important;border-bottom:1px solid #edf2ee!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) .card:not(.branch-card){
+ border:1px solid #e2ece5!important;border-radius:12px!important;
+ background:#fbfdfb!important;box-shadow:0 2px 8px rgba(27,70,52,.045)!important;
+}
+#main.novaro-consistent-page>section.card:not(.branches-page) .muted{color:#7a8981!important}
+#main.novaro-consistent-page>section.card:not(.branches-page) .items-toolbar{
+ display:flex;gap:8px;flex-wrap:wrap;margin:0 0 13px;
+}
+@media(max-width:700px){
+ #main.novaro-consistent-page{gap:10px!important}
+ #main.novaro-consistent-page>section.card:not(.branches-page){
+  padding:14px!important;border-radius:13px!important;
+ }
+ #main.novaro-consistent-page>section.card:not(.branches-page)>h3,
+ #main.novaro-consistent-page>section.card:not(.branches-page) .items-page-heading h3{
+  font-size:15px!important;margin-bottom:12px!important;
+ }
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
