@@ -1853,10 +1853,10 @@ function itemForm(existing=null){
  const unitSelect=(id,customId,current,english)=>{const val=current||"",known=unitChoices.some(x=>x[english?1:0]===val),selected=known?val:"__other__",opts=unitChoices.map(x=>{const v=x[english?1:0];return '<option value="'+esc(v)+'"'+(v===selected?' selected':'')+'>'+esc(v)+'</option>'}).join("");return '<div class="field"><label>'+(english?"Unit (English)":"وحدة القياس بالعربية")+'</label><select id="'+id+'">'+opts+'<option value="__other__"'+(selected==="__other__"?' selected':'')+'>'+(english?"Other":"أخرى")+'</option></select><input id="'+customId+'" style="margin-top:7px;'+(selected==="__other__"?'':'display:none;')+'" placeholder="'+(english?"Enter unit":"اكتب وحدة القياس")+'" value="'+(known?"":esc(val))+'"></div>'};
 
  form(en?(existing?"Edit item":"Add item"):(existing?"تعديل الصنف":"إضافة صنف"),
- groupField+categoryField+inp(en?"Item name (Arabic)":"اسم الصنف بالعربية","n","required")+inp(en?"Item name (English)":"اسم الصنف بالإنجليزية","en","required")+inp(en?"Item code (optional)":"كود الصنف (اختياري)","code")+unitSelect("unit","unitCustom",i.unit_ar||"قطعة",false)+unitSelect("unitEn","unitEnCustom",i.unit_en||"Piece",true)+inp(en?"Minimum stock level (0 = disabled)":"الحد الأدنى للمخزون (0 = بدون تنبيه)","minStock",'type="number" min="0" step="0.01"')+'<div class="field"><label>'+(en?"Item image":"صورة الصنف")+'</label><input id="itemImage" type="file" accept="image/*"><small class="muted">'+(en?"Choose an image or take a photo, then edit its crop and size.":"اختار صورة من الاستوديو أو صوّر بالكاميرا، وبعدها عدّل القص والحجم.")+'</small><div id="itemImagePreview" style="margin-top:8px"></div></div>'+(i.image_url?'<img src="'+esc(i.image_url)+'" style="max-width:120px;border-radius:10px">':""),
+ groupField+categoryField+inp(en?"Item name (Arabic)":"اسم الصنف بالعربية","n","required")+inp(en?"Item name (English)":"اسم الصنف بالإنجليزية","en","required")+inp(en?"Item code (optional)":"كود الصنف (اختياري)","code")+unitSelect("unit","unitCustom",i.unit_ar||"قطعة",false)+unitSelect("unitEn","unitEnCustom",i.unit_en||"Piece",true)+inp(en?"Minimum stock level (0 = disabled)":"الحد الأدنى للمخزون (0 = بدون تنبيه)","minStock",'type="number" min="0" step="0.01"')+'<div class="field"><label>'+(en?"Item image":"صورة الصنف")+'</label><button type="button" class="soft" id="itemImageChoose" style="width:100%">'+(en?"Choose image source":"اختيار صورة الصنف")+'</button><input id="itemImageGallery" type="file" accept="image/*" style="display:none"><input id="itemImageCamera" type="file" accept="image/*" capture="environment" style="display:none"><small class="muted">'+(en?"Choose Gallery or Camera, then crop and resize the image.":"اختار الاستوديو أو الكاميرا، وبعدها عدّل قص الصورة وحجمها.")+'</small><div id="itemImagePreview" style="margin-top:8px"></div></div>'+(i.image_url?'<img src="'+esc(i.image_url)+'" style="max-width:120px;border-radius:10px">':""),
  async()=>{
   if(!$("cat").value)throw Error(en?"Choose a category for this item.":"اختار تصنيف للصنف قبل الحفظ.");
-  let imageUrl=i.image_url||null;const file=window.__novaroEditedItemImage||$("itemImage").files[0];
+  let imageUrl=i.image_url||null;const file=window.__novaroEditedItemImage||$("itemImageGallery").files[0]||$("itemImageCamera").files[0];
   if(file){if(file.size>5*1024*1024)throw Error(en?"Image size must not exceed 5 MB":"حجم الصورة يجب ألا يتجاوز 5 ميجابايت");const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";const path=(i.id||crypto.randomUUID())+"/"+Date.now()+"."+ext;const up=await db.storage.from("inventory-items").upload(path,file,{contentType:file.type,upsert:true});if(up.error)throw up.error;imageUrl=db.storage.from("inventory-items").getPublicUrl(path).data.publicUrl}
   const code=$("code").value.trim()||null;
   if(code){let check=await db.from("items").select("id,name_ar,name_en").eq("item_code",code).maybeSingle();if(check.error)throw check.error;if(check.data&&check.data.id!==i.id)throw Error(en?("This item code is already used by: "+(check.data.name_en||check.data.name_ar)+". Enter a different code or leave it blank."):"كود الصنف مستخدم بالفعل للصنف: "+(check.data.name_ar||check.data.name_en)+". اكتب كودًا مختلفًا أو اترك الخانة فارغة.");}
@@ -1867,9 +1867,9 @@ function itemForm(existing=null){
  });
 
  window.__novaroEditedItemImage=null;
- $("itemImage").addEventListener("change",()=>{
+ function processItemImage(source,inputEl){
   window.__novaroEditedItemImage=null;
-  const source=$("itemImage").files[0];if(!source)return;
+  if(!source)return;
   if(!source.type.startsWith("image/")){alert(en?"Please choose an image file.":"اختار ملف صورة صحيح.");return}
   const url=URL.createObjectURL(source),img=new Image();
   img.onload=()=>{
@@ -1885,7 +1885,7 @@ function itemForm(existing=null){
    };
    [zoom,sx,sy].forEach(el=>el.addEventListener("input",draw));draw();
    $("novaroCropReset").onclick=()=>{zoom.value=1;sx.value=0;sy.value=0;draw()};
-   $("novaroCropCancel").onclick=()=>{modal.remove();URL.revokeObjectURL(url);$("itemImage").value=""};
+   $("novaroCropCancel").onclick=()=>{modal.remove();URL.revokeObjectURL(url);if(inputEl)inputEl.value=""};
    $("novaroCropApply").onclick=()=>{
     canvas.toBlob(blob=>{
      if(!blob){alert(en?"Could not process this image.":"تعذر تجهيز الصورة.");return}
@@ -1897,7 +1897,18 @@ function itemForm(existing=null){
   };
   img.onerror=()=>{URL.revokeObjectURL(url);alert(en?"Could not open this image.":"تعذر فتح الصورة.")};
   img.src=url;
- });
+ }
+
+ $("itemImageChoose").onclick=()=>{
+  const prior=document.getElementById("novaroImageSource");if(prior)prior.remove();
+  document.body.insertAdjacentHTML("beforeend",'<div id="novaroImageSource" style="position:fixed;inset:0;background:#0008;z-index:99998;display:flex;align-items:center;justify-content:center;padding:18px"><div style="width:min(100%,360px);background:white;color:#243b34;border-radius:18px;padding:20px;box-shadow:0 12px 40px #0003"><b style="display:block;font-size:18px;margin-bottom:6px">'+(en?"Choose image source":"اختار مصدر الصورة")+'</b><p class="muted" style="margin:0 0 16px">'+(en?"How would you like to add the item photo?":"تحب تضيف صورة الصنف منين؟")+'</p><div style="display:grid;gap:10px"><button type="button" id="itemSourceGallery" class="soft" style="width:100%">▣　'+(en?"Choose from Gallery":"اختيار من الاستوديو")+'</button><button type="button" id="itemSourceCamera" style="width:100%">◎　'+(en?"Take a photo with Camera":"التصوير بالكاميرا")+'</button><button type="button" id="itemSourceCancel" class="soft" style="width:100%">'+(en?"Cancel":"إلغاء")+'</button></div></div></div>');
+  const modal=$("novaroImageSource");
+  $("itemSourceCancel").onclick=()=>modal.remove();
+  $("itemSourceGallery").onclick=()=>{modal.remove();$("itemImageGallery").click()};
+  $("itemSourceCamera").onclick=()=>{modal.remove();$("itemImageCamera").click()};
+ };
+ $("itemImageGallery").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(f){$("itemImageCamera").value="";processItemImage(f,e.target)}});
+ $("itemImageCamera").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(f){$("itemImageGallery").value="";processItemImage(f,e.target)}});
  $("itemGroup").value=initialGroup;
  $("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup);
  $("itemGroup").onchange=()=>{$("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions("",$("itemGroup").value);$("cat").value="";};
