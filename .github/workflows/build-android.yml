@@ -129,12 +129,7 @@ jobs:
               "import androidx.credentials.CredentialManager;",
               "import androidx.credentials.CreatePasswordRequest;",
               "import androidx.credentials.CreateCredentialResponse;",
-              "import androidx.credentials.GetCredentialRequest;",
-              "import androidx.credentials.GetCredentialResponse;",
-              "import androidx.credentials.GetPasswordOption;",
-              "import androidx.credentials.PasswordCredential;",
               "import androidx.credentials.exceptions.CreateCredentialException;",
-              "import androidx.credentials.exceptions.GetCredentialException;",
               "import androidx.credentials.CredentialManagerCallback;",
               "import java.util.concurrent.Executors;"
           ]
@@ -164,32 +159,14 @@ jobs:
                       }
                   });
               }
-              @JavascriptInterface public void get() {
+              @JavascriptInterface public void request() {
                   runOnUiThread(() -> {
-                      try {
-                          CredentialManager manager = CredentialManager.create(MainActivity.this);
-                          GetCredentialRequest request = new GetCredentialRequest.Builder()
-                              .addCredentialOption(new GetPasswordOption())
-                              .build();
-                          manager.getCredentialAsync(MainActivity.this, request, null,
-                              Executors.newSingleThreadExecutor(),
-                              new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
-                                  @Override public void onResult(GetCredentialResponse result) {
-                                      if (result.getCredential() instanceof PasswordCredential) {
-                                          PasswordCredential credential = (PasswordCredential) result.getCredential();
-                                          String js = "window.NOVAROFillCredentials && window.NOVAROFillCredentials("
-                                              + org.json.JSONObject.quote(credential.getId()) + ","
-                                              + org.json.JSONObject.quote(credential.getPassword()) + ");";
-                                          getBridge().getWebView().post(() ->
-                                              getBridge().getWebView().evaluateJavascript(js, null));
-                                      }
-                                  }
-                                  @Override public void onError(GetCredentialException e) {
-                                      android.util.Log.i("NOVARO", "No saved credential selected or retrieval cancelled", e);
-                                  }
-                              });
-                      } catch (Exception e) {
-                          android.util.Log.w("NOVARO", "Credential retrieval unavailable", e);
+                      if (Build.VERSION.SDK_INT >= 26) {
+                          android.webkit.WebView webView = getBridge().getWebView();
+                          AutofillManager manager = getSystemService(AutofillManager.class);
+                          if (manager != null && manager.isEnabled()) {
+                              webView.post(() -> manager.requestAutofill(webView));
+                          }
                       }
                   });
               }"""
