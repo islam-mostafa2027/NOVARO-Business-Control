@@ -1970,13 +1970,28 @@ function itemForm(existing=null){
  });$("cat").value=i.category_id||"";$("unit").value=unitChoices.some(x=>x[0]===(i.unit_ar||"قطعة"))?(i.unit_ar||"قطعة"):"__other__";$("unitEn").value=unitChoices.some(x=>x[1]===(i.unit_en||"Piece"))?(i.unit_en||"Piece"):"__other__";$("unitCustom").value=unitChoices.some(x=>x[0]===(i.unit_ar||"قطعة"))?"":(i.unit_ar||"");$("unitEnCustom").value=unitChoices.some(x=>x[1]===(i.unit_en||"Piece"))?"":(i.unit_en||"");$("unit").onchange=()=>{$("unitCustom").style.display=$("unit").value==="__other__"?"block":"none"};$("unitEn").onchange=()=>{$("unitEnCustom").style.display=$("unitEn").value==="__other__"?"block":"none"};$("minStock").value=Number(i.min_stock||0);
  const help=$("categoryHelp");if(help&&!cats.some(c=>(c.group_key||"equipment")===$("itemGroup").value))help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات للقسم ده لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
 }
+function showItemFormFailure(error,source="add-item"){
+ console.error("NOVARO item form failure:",source,error);
+ const main=$("main");if(!main)return;
+ const message=error?.message||String(error||"Unknown error");
+ main.innerHTML='<section class="card" style="border:1px solid #d97757"><h3>تعذر فتح نموذج إضافة الصنف</h3><p>تم إيقاف فتح النموذج بسبب خطأ برمجي، ولم يتم تغيير أي بيانات.</p><pre dir="ltr" style="white-space:pre-wrap;overflow-wrap:anywhere;background:#fff4f0;color:#7c2d12;padding:12px;border-radius:8px;font-size:12px">'+esc(message)+'</pre><button type="button" class="soft" onclick="render()">رجوع</button></section>';
+}
 function addItem(){
- try{itemForm()}
- catch(error){
-  console.error("NOVARO add-item form failed:",error);
+ try{
+  console.info("NOVARO add-item: opening form",{categories:Array.isArray(cats)?cats.length:typeof cats,role:profile?.role,language});
+  itemForm();
   const main=$("main");
-  if(main)main.innerHTML='<section class="card"><h3>تعذر فتح نموذج إضافة الصنف</h3><p class="error">'+esc(error?.message||String(error))+'</p><button type="button" class="soft" onclick="render()">رجوع</button></section>';
- }
+  if(!main?.querySelector("#itemGroup")||!main?.querySelector("#cat"))throw new Error("The item form was created without its required category controls.");
+ }catch(error){showItemFormFailure(error,"addItem()")}
+}
+if(!window.__novaroItemFormDiagnostics){
+ window.__novaroItemFormDiagnostics=true;
+ window.addEventListener("error",event=>{
+  if(page==="items"&&$("main")?.querySelector("#save")&&!$("main")?.querySelector("#itemGroup"))showItemFormFailure(event.error||event.message,"window.error");
+ });
+ window.addEventListener("unhandledrejection",event=>{
+  if(page==="items"&&$("main")?.querySelector("#save")&&!$("main")?.querySelector("#itemGroup"))showItemFormFailure(event.reason,"unhandledrejection");
+ });
 }
 function manageBranchAccount(id){
  if(profile.role!=="owner_admin")return alert("غير مصرح");
