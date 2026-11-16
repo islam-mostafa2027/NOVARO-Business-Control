@@ -1846,6 +1846,7 @@ function itemForm(existing=null){
 
  window.__novaroEditedItemImage=null;
  $("itemImage").addEventListener("change",()=>{
+  window.__novaroEditedItemImage=null;
   const source=$("itemImage").files[0];if(!source)return;
   if(!source.type.startsWith("image/")){alert(en?"Please choose an image file.":"اختار ملف صورة صحيح.");return}
   const url=URL.createObjectURL(source),img=new Image();
