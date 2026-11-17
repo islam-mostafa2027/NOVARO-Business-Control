@@ -602,3 +602,13 @@
 #main .item-card-qr-column .item-qrcode{width:40px!important;height:40px!important;min-width:40px!important}
 #main .item-card-qr-column .item-qrcode img,#main .item-card-qr-column .item-qrcode canvas{width:38px!important;height:38px!important;max-width:38px!important;max-height:38px!important}
 }
+
+/* Match item name typography exactly to the category and item-code pills. */
+#main .item-card-title strong{
+  font-size:11px!important;
+  line-height:1.35!important;
+  font-weight:700!important;
+}
+@media(max-width:700px){
+  #main .item-card-title strong{font-size:10px!important;line-height:1.35!important}
+}
