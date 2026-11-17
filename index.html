@@ -1248,6 +1248,60 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px!impo
  button.header-icon-button{width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:7px!important}
 }
 </style>
+
+<style id="novaro-mobile-nav-fixed-size">
+/* Keep the mobile bottom navigation at one fixed compact size on every page. */
+@media(max-width:760px){
+ #appLayout #tabs button,
+ #appLayout #tabs button:hover,
+ #appLayout #tabs button:active,
+ #appLayout #tabs button:focus,
+ #appLayout #tabs button:focus-visible,
+ #appLayout #tabs button.active,
+ #appLayout #tabs button.active:hover,
+ #appLayout #tabs button.active:active,
+ #appLayout #tabs button.active:focus{
+  box-sizing:border-box!important;
+  flex:1 1 0%!important;
+  width:auto!important;
+  min-width:0!important;
+  height:55px!important;
+  min-height:55px!important;
+  max-height:55px!important;
+  padding:5px 2px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  font-size:10px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  transform:none!important;
+  transition:none!important;
+ }
+ #appLayout #tabs button .nav-icon{
+  box-sizing:border-box!important;
+  width:25px!important;
+  height:24px!important;
+  min-width:25px!important;
+  min-height:24px!important;
+  max-width:25px!important;
+  max-height:24px!important;
+  flex:0 0 24px!important;
+  margin:0!important;
+ }
+ #appLayout #tabs button>span:not(.nav-icon){
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:10px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+ }
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
