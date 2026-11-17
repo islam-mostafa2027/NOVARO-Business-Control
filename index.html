@@ -1153,7 +1153,7 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 #app #main.novaro-consistent-page .settings-footer{display:flex!important;gap:9px!important;flex-wrap:wrap!important;justify-content:flex-end!important;margin-top:18px!important}
 @media(max-width:700px){#app #main.novaro-consistent-page{gap:11px!important}#app #main.novaro-consistent-page>section.card,#app #main.novaro-consistent-page .card:not(.branch-card){padding:16px!important;border-radius:15px!important}#app #main.novaro-consistent-page h2,#app #main.novaro-consistent-page h3{font-size:17px!important}#app #main.novaro-consistent-page td,#app #main.novaro-consistent-page th{padding:9px!important}#app #main.novaro-consistent-page .settings-footer{justify-content:stretch!important}#app #main.novaro-consistent-page .settings-footer button{flex:1 1 auto!important}}
 </style>
-<link rel="stylesheet" href="./items-lab-v1.css?release=20261117h">
+<link rel="stylesheet" href="./items-lab-v1.css?release=20261117i">
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -2104,7 +2104,7 @@ m.classList.remove("page-enter");void m.offsetWidth;m.classList.add("page-enter"
 function itemBarcodeMarkup(item){
  if(!item?.item_code)return '<span class="muted">—</span>';
  const url=window.location.origin+window.location.pathname+'?item='+encodeURIComponent(item.item_code);
- return '<span class="item-qrcode-wrap"><span class="item-qrcode" data-item-url="'+esc(url)+'" aria-label="QR code for '+esc(item.item_code)+'"></span><small>'+esc(item.item_code)+'</small></span>';
+ return '<span class="item-qrcode-wrap" onclick="openItemQR(this)" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openItemQR(this)}" title="'+(language==="en"?"View larger QR code":"تكبير QR Code")+'"><span class="item-qrcode" data-item-url="'+esc(url)+'" aria-label="QR code for '+esc(item.item_code)+'"></span><small>'+esc(item.item_code)+'</small></span>';
 }
 function renderItemQRCodes(){
  if(typeof window.QRCode!=="function")return;
@@ -2115,6 +2115,28 @@ function renderItemQRCodes(){
   catch(e){el.textContent="QR";}
  });
 }
+function openItemQR(wrap){
+ if(!wrap)return;
+ const code=wrap.querySelector("small")?.textContent||"";
+ const qr=wrap.querySelector(".item-qrcode");
+ if(!qr)return;
+ let src="";
+ const canvas=qr.querySelector("canvas");
+ const image=qr.querySelector("img");
+ try{if(canvas)src=canvas.toDataURL("image/png");else if(image)src=image.currentSrc||image.src;}catch(e){}
+ if(!src)return;
+ let modal=document.getElementById("novaroQRPreview");
+ if(!modal){
+  modal=document.createElement("div");modal.id="novaroQRPreview";modal.className="novaro-qr-preview";
+  modal.innerHTML='<button type="button" class="novaro-image-close" aria-label="Close" onclick="closeItemQR()">×</button><div class="novaro-qr-large"><img alt="Item QR code"></div><div class="novaro-qr-caption"></div>';
+  modal.addEventListener("click",e=>{if(e.target===modal)closeItemQR()});
+  document.body.appendChild(modal);
+ }
+ const view=modal.querySelector("img");view.src=src;view.alt="QR code "+code;
+ modal.querySelector(".novaro-qr-caption").textContent=code;
+ modal.style.display="flex";
+}
+function closeItemQR(){const modal=document.getElementById("novaroQRPreview");if(modal)modal.style.display="none"}
 function openLinkedItemFromUrl(){
  const params=new URLSearchParams(window.location.search),code=params.get("item");
  if(!code)return;
