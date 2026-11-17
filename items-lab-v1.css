@@ -939,3 +939,53 @@
   #app #main.novaro-card-pages:has(#sessions) .stocktake-session-actions{flex-wrap:wrap!important}
   #app #main.novaro-card-pages:has(#reportBranch) .report-session-row>.report-actions{flex-wrap:wrap!important}
 }
+
+
+/* MOBILE LANDSCAPE CARD LAYOUT: keep Stocktake and Reports content side-by-side even on narrow phones. */
+#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
+#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+}
+#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid>.stocktake-session-card{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 104px!important;
+  grid-template-rows:auto auto!important;
+  align-items:center!important;
+  gap:7px 10px!important;
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+#app #main.novaro-card-pages:has(#sessions) .stocktake-session-card-head{grid-column:1!important;grid-row:1!important;min-width:0!important}
+#app #main.novaro-card-pages:has(#sessions) .stocktake-session-meta{grid-column:1!important;grid-row:2!important;min-width:0!important;display:flex!important;flex-wrap:wrap!important}
+#app #main.novaro-card-pages:has(#sessions) .stocktake-session-actions{
+  grid-column:2!important;grid-row:1 / span 2!important;
+  display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;
+  align-items:stretch!important;justify-content:center!important;gap:6px!important;
+  min-width:0!important;padding:0!important;border:0!important;
+}
+#app #main.novaro-card-pages:has(#sessions) .stocktake-session-actions button{
+  width:100%!important;min-width:0!important;white-space:normal!important;
+  padding:7px 5px!important;font-size:11px!important;
+}
+#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 112px!important;
+  align-items:center!important;gap:8px 10px!important;
+  width:100%!important;min-width:0!important;box-sizing:border-box!important;
+}
+#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row>div:first-child{
+  grid-column:1!important;grid-row:1!important;min-width:0!important;overflow-wrap:anywhere!important;
+}
+#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row>.report-actions{
+  grid-column:2!important;grid-row:1!important;
+  display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;
+  align-items:stretch!important;justify-content:center!important;gap:6px!important;
+  min-width:0!important;
+}
+#app #main.novaro-card-pages:has(#reportBranch) .report-session-row>.report-actions button{
+  width:100%!important;min-width:0!important;white-space:normal!important;
+  padding:7px 5px!important;font-size:11px!important;
+}
