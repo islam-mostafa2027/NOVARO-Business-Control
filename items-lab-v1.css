@@ -691,3 +691,74 @@
  #app #main.novaro-card-pages .settings-footer{justify-content:stretch!important}
  #app #main.novaro-card-pages .settings-footer button{flex:1 1 auto!important}
 }
+
+
+/* Unified full-width cards and readable action capsules across internal pages. */
+#app #main.novaro-card-pages{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+#app #main.novaro-card-pages>section.card,
+#app #main.novaro-card-pages .card:not(.branch-card),
+#app #main.novaro-card-pages .stocktake-session-card,
+#app #main.novaro-card-pages .report-session-row{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
+#app #main.novaro-card-pages .stocktake-session-grid,
+#app #main.novaro-card-pages .stocktake-report-list{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:none!important;
+}
+#app #main.novaro-card-pages button:not(.items-tool):not(.items-group-tab):not(.language-choice):not([data-theme]){
+  box-sizing:border-box!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:40px!important;
+  padding:8px 14px!important;
+  border-radius:999px!important;
+  font-size:13px!important;
+  font-weight:750!important;
+  line-height:1.25!important;
+  white-space:normal!important;
+  opacity:1!important;
+  text-shadow:none!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+#app #main.novaro-card-pages button:not(.items-tool):not(.items-group-tab):not(.language-choice):not([data-theme]) *,
+#app #main.novaro-card-pages button:not(.items-tool):not(.items-group-tab):not(.language-choice):not([data-theme]) span{
+  opacity:1!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+#app #main.novaro-card-pages button.primary{
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+#app #main.novaro-card-pages button:not(.primary):not(.danger):not(.delete){
+  color:#285e4d!important;
+  -webkit-text-fill-color:#285e4d!important;
+}
+#app #main.novaro-card-pages button.danger,
+#app #main.novaro-card-pages button.delete{
+  color:#a13f3f!important;
+  -webkit-text-fill-color:#a13f3f!important;
+}
+@media(max-width:700px){
+  #app #main.novaro-card-pages>section.card,
+  #app #main.novaro-card-pages .card:not(.branch-card){padding:13px!important}
+  #app #main.novaro-card-pages button:not(.items-tool):not(.items-group-tab):not(.language-choice):not([data-theme]){
+    min-height:40px!important;
+    padding:8px 12px!important;
+    font-size:12px!important;
+  }
+}
