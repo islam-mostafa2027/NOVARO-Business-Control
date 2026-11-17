@@ -309,7 +309,7 @@ body{background:#f4f5fb;color:#2d354b}.logo{position:relative;isolation:isolate;
  --nv-btn-radius:12px;
  --nv-btn-height:42px;
 }
-button:not(#novaro-ai-launcher):not([data-theme]){
+button:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]){
  box-sizing:border-box!important;
  display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
  min-height:var(--nv-btn-height)!important;height:auto!important;
@@ -324,26 +324,26 @@ button:not(#novaro-ai-launcher):not([data-theme]){
  cursor:pointer!important;
  transition:background .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease,filter .16s ease!important;
 }
-button:not(#novaro-ai-launcher):not([data-theme]) *{color:inherit!important;-webkit-text-fill-color:currentColor!important}
-button:not(#novaro-ai-launcher):not([data-theme]):hover{filter:brightness(.97)!important;transform:translateY(-1px)!important}
-button:not(#novaro-ai-launcher):not([data-theme]):active{transform:scale(.985)!important}
-button:not(#novaro-ai-launcher):not([data-theme]):focus-visible{outline:3px solid color-mix(in srgb,var(--nv-btn-primary) 42%,transparent)!important;outline-offset:2px!important}
-button:not(#novaro-ai-launcher):disabled{opacity:.55!important;cursor:not-allowed!important;transform:none!important;filter:none!important}
-button.soft,button.secondary,button.novaro-back-button,button#settingsBack,
-button.sound-choice,button.sound-picker-toggle,button.font-preview-button,
-button.language-toggle-capsule,button.logout-control,button.ai-mic{
+button:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]) *{color:inherit!important;-webkit-text-fill-color:currentColor!important}
+button:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):hover{filter:brightness(.97)!important;transform:translateY(-1px)!important}
+button:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):active{transform:scale(.985)!important}
+button:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):focus-visible{outline:3px solid color-mix(in srgb,var(--nv-btn-primary) 42%,transparent)!important;outline-offset:2px!important}
+button:not(#tabs button):not(#novaro-ai-launcher):disabled{opacity:.55!important;cursor:not-allowed!important;transform:none!important;filter:none!important}
+button.soft:not(#tabs button),button.secondary:not(#tabs button),button.novaro-back-button:not(#tabs button),button#settingsBack:not(#tabs button),
+button.sound-choice:not(#tabs button),button.sound-picker-toggle:not(#tabs button),button.font-preview-button:not(#tabs button),
+button.language-toggle-capsule:not(#tabs button),button.logout-control:not(#tabs button),button.ai-mic:not(#tabs button){
  background:var(--nv-btn-soft-bg)!important;background-image:none!important;
  color:var(--nv-btn-soft-text)!important;-webkit-text-fill-color:var(--nv-btn-soft-text)!important;
  border-color:var(--nv-btn-border)!important;box-shadow:none!important;
 }
-button.danger,button.delete-btn,button.branch-delete-btn{
+button.danger:not(#tabs button),button.delete-btn:not(#tabs button),button.branch-delete-btn:not(#tabs button){
  background:var(--nv-btn-danger-bg)!important;background-image:none!important;
  color:var(--nv-btn-danger-text)!important;-webkit-text-fill-color:var(--nv-btn-danger-text)!important;
  border-color:#edcccc!important;box-shadow:none!important;
 }
-button.danger:hover,button.delete-btn:hover,button.branch-delete-btn:hover{background:#fbe4e4!important}
+button.danger:not(#tabs button):hover,button.delete-btn:not(#tabs button):hover,button.branch-delete-btn:not(#tabs button):hover{background:#fbe4e4!important}
 button.active:not(.tabs button),button.is-selected:not(.tabs button),button[aria-pressed="true"]:not(.tabs button),
-button[aria-current="page"]:not(.tabs button),button.items-group-tab.active,button.items-tool.is-selected{
+button[aria-current="page"]:not(.tabs button),button.items-group-tab.active:not(#tabs button),button.items-tool.is-selected:not(#tabs button){
  background:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;
  background-image:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;
  color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:var(--nv-btn-primary)!important;
@@ -429,7 +429,7 @@ a.auth-back-link:hover{background:#e3eee8!important}
 #novaro-ai-panel .ai-actions .ai-send{margin-inline-start:auto!important}
 #novaro-ai-launcher{border-radius:50%!important}
 @media(max-width:760px){
- button:not(#novaro-ai-launcher):not([data-theme]){min-height:40px!important;padding:8px 11px!important;font-size:12px!important}
+ button:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]){min-height:40px!important;padding:8px 11px!important;font-size:12px!important}
  #appLayout .tabs button,.app-layout .tabs button,.tabs button{font-size:10px!important}
  #reportContent .report-actions{gap:5px!important}
  #reportContent .report-actions button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:4px 3px!important;font-size:10px!important}
