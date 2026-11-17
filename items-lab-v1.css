@@ -989,3 +989,43 @@
   width:100%!important;min-width:0!important;white-space:normal!important;
   padding:7px 5px!important;font-size:11px!important;
 }
+
+
+/* ROOT CAUSE FIX: On mobile, workspace-content was a flex row, placing the footer beside the page.
+   Stack the page and footer vertically so Stocktake and Reports can use the full viewport width. */
+@media(max-width:760px){
+  #app:has(#main.novaro-card-pages) .workspace-content{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+  }
+  #app:has(#main.novaro-card-pages) #main.novaro-card-pages{
+    display:flex!important;
+    flex:0 0 auto!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    align-self:stretch!important;
+  }
+  #app:has(#main.novaro-card-pages) .workspace-content>.app-watermark{
+    display:flex!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:24px 0 0!important;
+    justify-content:center!important;
+  }
+  #app:has(#main.novaro-card-pages) #main.novaro-card-pages>section.card{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+}
