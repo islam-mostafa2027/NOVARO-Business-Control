@@ -153,3 +153,24 @@
  #main.novaro-items-experiment .item-card-symbol .item-qrcode img,
  #main.novaro-items-experiment .item-card-symbol .item-qrcode canvas{width:48px!important;height:48px!important;max-width:48px!important;max-height:48px!important}
 }
+
+
+/* Fix approved item-card layout: #main has no novaro-items-experiment class. */
+#main .item-card-top{direction:ltr!important;gap:12px!important}
+#main .item-card-symbol{order:1!important;flex:0 0 64px!important;width:64px!important;height:64px!important;min-width:64px!important;padding:2px!important}
+#main .item-card-title{order:2!important;flex:1 1 0!important;min-width:0!important;text-align:center!important;align-items:center!important}
+#main .item-card-picture{order:3!important;width:64px!important;height:64px!important;flex:0 0 64px!important}
+#main .item-card-symbol .item-qr-label{display:none!important}
+#main .item-card-symbol .item-qr-block,
+#main .item-card-symbol .item-qrcode-wrap{width:100%!important;height:100%!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:0!important;padding:0!important}
+#main .item-card-symbol .item-qrcode{width:56px!important;height:56px!important;min-width:56px!important;padding:1px!important}
+#main .item-card-symbol .item-qrcode img,
+#main .item-card-symbol .item-qrcode canvas{width:54px!important;height:54px!important;max-width:54px!important;max-height:54px!important}
+#main .item-card-symbol .item-qrcode-wrap small{display:none!important}
+@media(max-width:700px){
+ #main .item-card-picture{width:58px!important;height:58px!important;flex-basis:58px!important}
+ #main .item-card-symbol{flex-basis:58px!important;width:58px!important;height:58px!important;min-width:58px!important}
+ #main .item-card-symbol .item-qrcode{width:50px!important;height:50px!important;min-width:50px!important}
+ #main .item-card-symbol .item-qrcode img,
+ #main .item-card-symbol .item-qrcode canvas{width:48px!important;height:48px!important;max-width:48px!important;max-height:48px!important}
+}
