@@ -32,3 +32,28 @@
  #main.novaro-items-experiment .items-group-tab{min-height:32px!important;padding:5px 10px!important;font-size:11px!important}
  #main.novaro-items-experiment th,#main.novaro-items-experiment td{padding:9px 8px!important;font-size:11px!important}
 }
+
+/* Items: real card layout matching Branches cards (not the legacy table). */
+#main.novaro-items-experiment .items-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;margin-top:12px!important}
+#main.novaro-items-experiment .item-card{display:flex!important;flex-direction:column!important;gap:0!important;min-width:0!important;padding:14px 15px!important;border:1px solid #e0ebe5!important;border-radius:14px!important;background:linear-gradient(145deg,#fff,#f9fcfa)!important;box-shadow:0 3px 12px #173d3009!important}
+#main.novaro-items-experiment .item-card .branch-card-head{align-items:center!important;min-width:0!important}
+#main.novaro-items-experiment .item-card-picture{width:54px!important;height:54px!important;flex:none!important;display:grid!important;place-items:center!important;overflow:hidden!important;border-radius:12px!important;background:#e8f3ed!important;color:#287d6b!important}
+#main.novaro-items-experiment .item-card-image{width:100%!important;height:100%!important;object-fit:cover!important;border:0!important;border-radius:0!important}
+#main.novaro-items-experiment .item-card-placeholder{font-size:25px!important}
+#main.novaro-items-experiment .item-card .branch-card-name{gap:4px!important}
+#main.novaro-items-experiment .item-card .branch-card-name small{font-size:11px!important;color:#78877f!important}
+#main.novaro-items-experiment .item-card .branch-card-info{grid-template-columns:1fr 1fr!important;align-items:start!important}
+#main.novaro-items-experiment .item-stock-value{display:flex!important;flex-direction:column!important;gap:3px!important}
+#main.novaro-items-experiment .item-stock-value>b{font-size:16px!important;color:#287d6b!important}
+#main.novaro-items-experiment .item-stock-branches{display:block!important;font-size:10px!important;line-height:1.6!important;color:#71827c!important}
+#main.novaro-items-experiment .item-low-stock{display:block!important;font-size:10px!important}
+#main.novaro-items-experiment .item-card-footer{display:flex!important;justify-content:flex-start!important;margin-top:11px!important;padding-top:9px!important;border-top:1px solid #edf2ef!important}
+#main.novaro-items-experiment .item-card-code{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important}
+#main.novaro-items-experiment .item-card-code>small{font-size:10px!important;color:#829088!important}
+#main.novaro-items-experiment .item-qrcode-wrap{flex-direction:row!important;align-items:center!important;gap:6px!important}
+#main.novaro-items-experiment .item-qrcode{width:42px!important;height:42px!important;padding:2px!important}
+#main.novaro-items-experiment .item-qrcode canvas,#main.novaro-items-experiment .item-qrcode img{width:38px!important;height:38px!important}
+#main.novaro-items-experiment .item-qrcode-wrap small{font-size:10px!important}
+#main.novaro-items-experiment .item-empty{grid-column:1/-1!important}
+@media(max-width:700px){#main.novaro-items-experiment .items-grid{grid-template-columns:1fr!important;gap:9px!important}#main.novaro-items-experiment .item-card{padding:12px 13px!important}#main.novaro-items-experiment .item-card-picture{width:48px!important;height:48px!important}}
+@media(min-width:701px) and (max-width:980px){#main.novaro-items-experiment .items-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
