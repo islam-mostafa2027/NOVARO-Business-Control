@@ -2419,7 +2419,7 @@ function itemForm(existing=null){
  $("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup);
  $("itemGroup").onchange=()=>{$("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions("",$("itemGroup").value);$("cat").value="";};
  $("n").value=i.name_ar||"";$("en").value=i.name_en||"";if($("n").__novaroTranslationManual){$("n").__novaroTranslationManual[0]=!!i.name_ar;$("en").__novaroTranslationManual[1]=!!i.name_en}$("code").value=i.item_code||"";
-$("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";$("minStock").value=Number(i.min_stock||0);
+$("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";if($("unit").__novaroTranslationManual){$("unit").__novaroTranslationManual[0]=!!i.unit_ar;$("unitEn").__novaroTranslationManual[1]=!!i.unit_en}$("minStock").value=Number(i.min_stock||0);
  const help=$("categoryHelp");if(help&&!cats.some(c=>(c.group_key||"equipment")===$("itemGroup").value))help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات للقسم ده لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
 }
 function showItemFormFailure(error,source="add-item"){
