@@ -1153,7 +1153,7 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 #app #main.novaro-consistent-page .settings-footer{display:flex!important;gap:9px!important;flex-wrap:wrap!important;justify-content:flex-end!important;margin-top:18px!important}
 @media(max-width:700px){#app #main.novaro-consistent-page{gap:11px!important}#app #main.novaro-consistent-page>section.card,#app #main.novaro-consistent-page .card:not(.branch-card){padding:16px!important;border-radius:15px!important}#app #main.novaro-consistent-page h2,#app #main.novaro-consistent-page h3{font-size:17px!important}#app #main.novaro-consistent-page td,#app #main.novaro-consistent-page th{padding:9px!important}#app #main.novaro-consistent-page .settings-footer{justify-content:stretch!important}#app #main.novaro-consistent-page .settings-footer button{flex:1 1 auto!important}}
 </style>
-<link rel="stylesheet" href="./items-lab-v1.css?release=20261117b">
+<link rel="stylesheet" href="./items-lab-v1.css?release=20261117c">
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -1652,7 +1652,7 @@ function applyNovaroAppearance(overridePrefs){
  const sizes={small:".92",medium:"1",large:"1.10",xlarge:"1.20"},scale=sizes[p.fontSize]||"1";
  let st=document.getElementById("novaro-live-appearance");if(!st){st=document.createElement("style");st.id="novaro-live-appearance";document.head.appendChild(st)}
  const density=p.density==="compact"?"7px":"12px";
- st.textContent='body,body *:not(svg):not(path){font-family:'+font+' !important}#app{zoom:'+scale+'}'+
+ st.textContent='body,body *:not(svg):not(path):not(.items-experiment-panel):not(.items-experiment-panel *){font-family:'+font+' !important}#app{zoom:'+scale+'}'+
  '#app .app-header,#app .tabs{background:'+t[1]+' !important;border-color:'+t[3]+' !important;color:'+t[2]+' !important}'+
  '#app .card{border-color:'+t[3]+' !important}#app .tabs button.active,#app button.primary,#app .auth-submit{background:'+t[0]+' !important;color:#fff !important}'+
  '#app .soft,#app .language-control{border-color:'+t[3]+' !important;color:'+t[0]+' !important}'+
