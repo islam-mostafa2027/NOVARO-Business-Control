@@ -1219,36 +1219,6 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 }
 </style>
 
-<style id="novaro-button-consistency">
-/* One consistent shape and sizing system for all NOVARO action and navigation buttons. */
-button:not(#novaro-ai-launcher):not([data-theme]){
- box-sizing:border-box!important;
- min-height:42px!important;
- padding:10px 15px!important;
- border-radius:11px!important;
- border-width:1px!important;
- border-style:solid!important;
- font-family:inherit!important;
- font-size:14px!important;
- font-weight:700!important;
- line-height:1.25!important;
- letter-spacing:0!important;
- display:inline-flex!important;
- align-items:center!important;
- justify-content:center!important;
- gap:8px!important;
- transition:background .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease,filter .18s ease!important;
-}
-button.header-icon-button{width:42px!important;min-width:42px!important;height:42px!important;min-height:42px!important;padding:8px!important}
-button.ai-close{width:42px!important;min-width:42px!important;height:42px!important;min-height:42px!important;padding:8px!important}
-button:disabled{cursor:not-allowed!important;opacity:.55!important;transform:none!important;filter:none!important}
-button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px!important}
-@media(max-width:600px){
- button:not(#novaro-ai-launcher):not([data-theme]){min-height:40px!important;padding:9px 12px!important;font-size:13px!important}
- button.header-icon-button{width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:7px!important}
-}
-</style>
-
 <style id="novaro-mobile-nav-fixed-size">
 /* Keep the mobile bottom navigation at one fixed compact size on every page. */
 @media(max-width:760px){
@@ -1303,122 +1273,74 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px!impo
 </style>
 
 
-<style id="novaro-internal-buttons-unified-v1">
-/* One shared visual system for in-page action buttons, including every contextual Back button. */
-#main button:not(.settings-swatches button):not(.sound-choice):not(.font-preview-button):not(.sound-picker-toggle),
-.novaro-page-backbar .novaro-back-button,
-#settingsBack,
-#novaroScanner button,
-#novaroItemDetails button{
+
+<style id="novaro-unified-button-system-v1">
+/* Single button design system: shared geometry and typography, semantic colors, preserved navigation layout. */
+button:not(#novaro-ai-launcher):not([data-theme]){
  box-sizing:border-box!important;
  min-height:42px!important;
  padding:9px 14px!important;
- border:1px solid #d5e3dc!important;
- border-radius:11px!important;
- font-family:inherit!important;
- font-size:13px!important;
- font-weight:700!important;
- line-height:1.25!important;
- letter-spacing:0!important;
- display:inline-flex!important;
- align-items:center!important;
- justify-content:center!important;
- gap:8px!important;
- box-shadow:0 2px 7px #173d3018!important;
-}
-#main button.soft,
-#main .soft,
-.novaro-page-backbar .novaro-back-button,
-#settingsBack,
-#novaroScanner button.secondary,
-#novaroItemDetails button.secondary{
- background:#edf3f0!important;
- color:#315f70!important;
- -webkit-text-fill-color:#315f70!important;
- border-color:#d5e3dc!important;
- box-shadow:0 1px 4px #173d300b!important;
-}
-#main button.danger,
-#main button.delete-btn,
-#main button.branch-delete-btn{
- background:#fff0f0!important;
- color:#a33e3e!important;
- -webkit-text-fill-color:#a33e3e!important;
- border-color:#edcccc!important;
-}
-#main button:not(.settings-swatches button):not(.sound-choice):not(.font-preview-button):not(.sound-picker-toggle):hover,
-.novaro-page-backbar .novaro-back-button:hover,
-#settingsBack:hover,
-#novaroScanner button:hover,
-#novaroItemDetails button:hover{
- transform:translateY(-1px)!important;
-}
-#main button:not(.settings-swatches button):not(.sound-choice):not(.font-preview-button):not(.sound-picker-toggle):active,
-.novaro-page-backbar .novaro-back-button:active,
-#settingsBack:active,
-#novaroScanner button:active,
-#novaroItemDetails button:active{
- transform:translateY(0) scale(.985)!important;
-}
-@media(max-width:600px){
- #main button:not(.settings-swatches button):not(.sound-choice):not(.font-preview-button):not(.sound-picker-toggle),
- .novaro-page-backbar .novaro-back-button,
- #settingsBack,
- #novaroScanner button,
- #novaroItemDetails button{
-  min-height:40px!important;
-  padding:8px 11px!important;
-  font-size:12px!important;
- }
-}
-</style>
-
-
-<style id="novaro-back-buttons-final-unified">
-/* Normalize every actual Back action, regardless of the page or component that renders it. */
-button.novaro-back-unified,
-button.novaro-back-button,
-button#settingsBack{
- box-sizing:border-box!important;
- display:inline-flex!important;
- align-items:center!important;
- justify-content:center!important;
- gap:8px!important;
- width:auto!important;
- min-width:0!important;
- height:auto!important;
- min-height:42px!important;
- max-height:none!important;
- margin:0!important;
- padding:9px 14px!important;
- border:1px solid #d5e3dc!important;
- border-radius:11px!important;
- background:#edf3f0!important;
- background-image:none!important;
- color:#315f70!important;
- -webkit-text-fill-color:#315f70!important;
- box-shadow:0 1px 4px #173d300b!important;
+ border:1px solid color-mix(in srgb,var(--g,#287d6b) 82%,#fff)!important;
+ border-radius:12px!important;
+ background:linear-gradient(110deg,var(--g,#287d6b),color-mix(in srgb,var(--g,#287d6b) 78%,#000))!important;
+ background-image:linear-gradient(110deg,var(--g,#287d6b),color-mix(in srgb,var(--g,#287d6b) 78%,#000))!important;
+ color:#fff!important;
+ -webkit-text-fill-color:#fff!important;
+ box-shadow:0 2px 7px color-mix(in srgb,var(--g,#287d6b) 16%,transparent)!important;
  font-family:inherit!important;
  font-size:13px!important;
  font-weight:700!important;
  line-height:1.25!important;
  letter-spacing:0!important;
  text-transform:none!important;
- white-space:normal!important;
+ display:inline-flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ gap:8px!important;
+ transition:background .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease!important;
 }
-button.novaro-back-unified *,
-button.novaro-back-button *,
-button#settingsBack *{color:inherit!important;-webkit-text-fill-color:currentColor!important}
-button.novaro-back-unified:hover,
-button.novaro-back-button:hover,
-button#settingsBack:hover{background:#e3eee8!important;border-color:#cbded3!important;transform:translateY(-1px)!important}
-button.novaro-back-unified:active,
-button.novaro-back-button:active,
-button#settingsBack:active{background:#d9e9e0!important;transform:scale(.985)!important}
-@media(max-width:600px){
- button.novaro-back-unified,
- button.novaro-back-button,
- button#settingsBack{min-height:40px!important;padding:8px 11px!important;font-size:12px!important}
+button:not(#novaro-ai-launcher):not([data-theme]):hover{filter:brightness(.97)!important;transform:translateY(-1px)!important}
+button:not(#novaro-ai-launcher):not([data-theme]):active{transform:translateY(0) scale(.985)!important}
+button:not(#novaro-ai-launcher):not([data-theme]):disabled{opacity:.55!important;cursor:not-allowed!important;transform:none!important;filter:none!important}
+button.soft,button.secondary,.soft,.language-control,
+button.novaro-back-unified,button.novaro-back-button,button#settingsBack{
+ background:#edf3f0!important;background-image:none!important;
+ color:#315f70!important;-webkit-text-fill-color:#315f70!important;
+ border:1px solid #d5e3dc!important;box-shadow:0 1px 4px #173d300b!important;
+}
+button.soft *,button.secondary *,button.novaro-back-unified *,button.novaro-back-button *,button#settingsBack *{color:inherit!important;-webkit-text-fill-color:currentColor!important}
+button.danger,button.delete-btn,button.branch-delete-btn{
+ background:#fff0f0!important;background-image:none!important;color:#a33e3e!important;
+ -webkit-text-fill-color:#a33e3e!important;border-color:#edcccc!important;box-shadow:none!important;
+}
+button.danger:hover,button.delete-btn:hover,button.branch-delete-btn:hover{background:#fbe4e4!important}
+button.active:not(.tabs button),button.is-selected:not(.tabs button),button[aria-pressed="true"]:not(.tabs button),button[aria-current="page"]:not(.tabs button){
+ background:linear-gradient(110deg,var(--g,#287d6b),color-mix(in srgb,var(--g,#287d6b) 78%,#000))!important;
+ color:#fff!important;-webkit-text-fill-color:#fff!important;
+}
+/* Page navigation uses the same shape, border, typography and theme color while retaining its layout. */
+.tabs button{
+ box-sizing:border-box!important;border:1px solid color-mix(in srgb,var(--g,#287d6b) 24%,#fff)!important;
+ border-radius:12px!important;font-family:inherit!important;font-weight:700!important;
+ letter-spacing:0!important;box-shadow:none!important;
+}
+.tabs button:not(.active){background:#edf3f0!important;background-image:none!important;color:#315f70!important;-webkit-text-fill-color:#315f70!important}
+.tabs button.active{
+ background:linear-gradient(110deg,var(--g,#287d6b),color-mix(in srgb,var(--g,#287d6b) 78%,#000))!important;
+ background-image:linear-gradient(110deg,var(--g,#287d6b),color-mix(in srgb,var(--g,#287d6b) 78%,#000))!important;
+ color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:var(--g,#287d6b)!important;
+ box-shadow:0 3px 10px color-mix(in srgb,var(--g,#287d6b) 22%,transparent)!important;
+}
+.tabs button:focus-visible,button:focus-visible{outline:3px solid color-mix(in srgb,var(--g,#287d6b) 45%,transparent)!important;outline-offset:2px!important}
+/* Icon-only controls keep their compact square footprint, not a different button design. */
+button.header-icon-button,button.ai-close{width:42px!important;min-width:42px!important;height:42px!important;min-height:42px!important;padding:8px!important;border-radius:12px!important}
+button.header-icon-button{flex-direction:column!important}
+button.settings-swatches, .settings-swatches button{border-radius:50%!important}
+/* Compact bottom navigation dimensions and icon/text arrangement remain intact. */
+@media(max-width:760px){
+ button:not(#novaro-ai-launcher):not([data-theme]){min-height:40px!important;padding:8px 11px!important;font-size:12px!important}
+ button.header-icon-button,button.ai-close{width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:7px!important}
+ .tabs button{font-size:10px!important}
 }
 </style>
 </head><body><script>
