@@ -1,55 +1,34 @@
-/* NOVARO Inventory — Items visual experiment 01. Completely isolated from every other page. */
-#main.novaro-items-experiment{display:block!important;min-width:0!important;color:#17152b!important;font-family:inherit!important}
-#main.novaro-items-experiment .items-experiment-panel{box-sizing:border-box!important;width:100%!important;margin:0!important;padding:0 0 18px!important;overflow:hidden!important;border:1px solid #292344!important;border-radius:4px 28px 4px 28px!important;background:#f6f3ff!important;box-shadow:12px 12px 0 #d9d1f0!important}
-#main.novaro-items-experiment .items-experiment-topline{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:13px 18px!important;background:#211d38!important;color:#fff!important}
-#main.novaro-items-experiment .items-experiment-kicker{font-size:10px!important;font-weight:900!important;letter-spacing:2px!important;color:#d8ff54!important}
-#main.novaro-items-experiment .items-experiment-version{padding:5px 9px!important;border:1px solid #d8ff54!important;border-radius:2px!important;color:#d8ff54!important;font-size:9px!important;font-weight:900!important;letter-spacing:1px!important}
-#main.novaro-items-experiment .items-page-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin:0!important;padding:24px 20px 17px!important;border-bottom:2px solid #211d38!important}
-#main.novaro-items-experiment .items-page-heading h3{margin:0!important;color:#211d38!important;font-size:29px!important;font-weight:950!important;letter-spacing:-1px!important}
-#main.novaro-items-experiment .items-experiment-note{color:#6f668b!important;font-size:11px!important;font-weight:800!important}
-#main.novaro-items-experiment .items-toolbar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;margin:18px 18px 16px!important}
-#main.novaro-items-experiment .items-toolbar .items-tool{display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;min-width:0!important;min-height:48px!important;padding:8px 6px!important;border:1px solid #211d38!important;border-radius:3px 13px 3px 13px!important;background:#fff!important;color:#211d38!important;box-shadow:3px 3px 0 #c9c0e5!important;font-size:12px!important;font-weight:900!important;white-space:nowrap!important}
-#main.novaro-items-experiment .items-toolbar .items-tool-primary{background:#d8ff54!important;color:#211d38!important;border-color:#211d38!important}
-#main.novaro-items-experiment .items-toolbar .items-tool-icon{font-size:17px!important;color:inherit!important}
-#main.novaro-items-experiment .items-toolbar .items-tool span{color:inherit!important}
-#main.novaro-items-experiment .items-group-tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;margin:0 18px 17px!important;padding:0!important;border:2px solid #211d38!important;border-radius:3px!important;background:#fff!important;overflow:hidden!important}
-#main.novaro-items-experiment .items-group-tabs .items-group-tab{min-width:0!important;min-height:48px!important;padding:9px 4px!important;border:0!important;border-inline-end:1px solid #211d38!important;border-radius:0!important;background:#fff!important;color:#554c70!important;box-shadow:none!important;font-size:13px!important;font-weight:900!important}
-#main.novaro-items-experiment .items-group-tabs .items-group-tab:last-child{border-inline-end:0!important}
-#main.novaro-items-experiment .items-group-tabs .items-group-tab.active{background:#211d38!important;color:#d8ff54!important;box-shadow:inset 0 -4px 0 #d8ff54!important}
-#main.novaro-items-experiment #search{box-sizing:border-box!important;display:block!important;width:calc(100% - 36px)!important;min-height:50px!important;margin:0 18px 10px!important;padding:12px 15px!important;border:2px solid #211d38!important;border-radius:3px 14px 3px 14px!important;background:#fff!important;color:#211d38!important;font:inherit!important;font-size:14px!important;box-shadow:4px 4px 0 #d9d1f0!important}
-#main.novaro-items-experiment #search:focus{outline:3px solid #d8ff54!important;outline-offset:2px!important}
-#main.novaro-items-experiment .items-group-caption{margin:14px 19px 9px!important;color:#655b83!important;font-size:12px!important;font-weight:900!important}
-#main.novaro-items-experiment .tablewrap{width:calc(100% - 36px)!important;margin:0 18px!important;overflow-x:auto!important;border:2px solid #211d38!important;border-radius:4px 18px 4px 18px!important;background:#fff!important}
+/* Items page styling: reuse the approved Branches page visual language. */
+#main.novaro-items-experiment{display:block!important;min-width:0!important;color:#263b35!important}
+#main.novaro-items-experiment .items-page{box-sizing:border-box!important;width:100%!important;min-width:0!important;padding:20px!important;border:1px solid #dce9e2!important;border-radius:16px!important;background:linear-gradient(135deg,#fff 0%,#f6fbf8 100%)!important;box-shadow:0 5px 18px #183e3010!important}
+#main.novaro-items-experiment .branches-page-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin-bottom:16px!important}
+#main.novaro-items-experiment .branches-page-head h3{margin:0!important;color:#263b35!important;font-size:19px!important;font-weight:800!important}
+#main.novaro-items-experiment .items-toolbar{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:7px!important;margin:0 0 14px!important}
+#main.novaro-items-experiment .items-toolbar .branch-action-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;min-height:34px!important;padding:6px 10px!important;border:1px solid #d5e3dc!important;border-radius:9px!important;background:#edf3f0!important;color:#315f70!important;box-shadow:none!important;font-size:12px!important;font-weight:700!important}
+#main.novaro-items-experiment .items-toolbar .items-tool-primary{background:linear-gradient(110deg,#397f6c,#2c6d5b)!important;border-color:#367765!important;color:#fff!important}
+#main.novaro-items-experiment .items-toolbar .items-tool-icon{font-size:15px!important;line-height:1!important;color:inherit!important}
+#main.novaro-items-experiment .items-group-tabs{display:flex!important;flex-wrap:wrap!important;gap:7px!important;margin:0 0 13px!important;padding:0!important;border:0!important;background:transparent!important;overflow:visible!important}
+#main.novaro-items-experiment .items-group-tab{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:34px!important;padding:6px 13px!important;border:1px solid #d5e3dc!important;border-radius:9px!important;background:#edf3f0!important;color:#315f70!important;box-shadow:none!important;font-size:12px!important;font-weight:700!important}
+#main.novaro-items-experiment .items-group-tab.active{background:#287d6b!important;border-color:#287d6b!important;color:#fff!important;box-shadow:0 2px 7px #173d3018!important}
+#main.novaro-items-experiment #search{box-sizing:border-box!important;display:block!important;width:100%!important;min-height:44px!important;margin:0 0 10px!important;padding:10px 13px!important;border:1px solid #cbded3!important;border-radius:11px!important;background:#fff!important;color:#263b35!important;font:inherit!important;font-size:13px!important;box-shadow:0 3px 12px #183e3008!important}
+#main.novaro-items-experiment #search:focus{outline:none!important;border-color:#287d6b!important;box-shadow:0 0 0 4px #287d6b18!important}
+#main.novaro-items-experiment .items-group-caption{margin:10px 2px 8px!important;color:#71827a!important;font-size:12px!important;font-weight:700!important}
+#main.novaro-items-experiment .tablewrap{width:100%!important;max-width:100%!important;overflow-x:auto!important;margin-top:10px!important;border:1px solid #dce9e2!important;border-radius:13px!important;background:#fff!important}
 #main.novaro-items-experiment table{width:100%!important;min-width:560px!important;border-collapse:separate!important;border-spacing:0!important}
-#main.novaro-items-experiment th{padding:14px 12px!important;background:#ded7f2!important;color:#211d38!important;border-bottom:2px solid #211d38!important;font-size:12px!important;font-weight:950!important;white-space:nowrap!important}
-#main.novaro-items-experiment td{padding:12px!important;border-bottom:1px solid #e7e1f4!important;color:#29243d!important;font-size:13px!important;vertical-align:middle!important}
-#main.novaro-items-experiment tbody tr:nth-child(even){background:#faf8ff!important}
-#main.novaro-items-experiment tbody tr:hover{background:#f0ffd0!important}
+#main.novaro-items-experiment th{padding:11px 12px!important;background:#e8f3ed!important;color:#315f50!important;border-bottom:1px solid #edf2ef!important;font-size:12px!important;font-weight:800!important;white-space:nowrap!important}
+#main.novaro-items-experiment td{padding:11px 12px!important;border-bottom:1px solid #edf2ef!important;color:#263b35!important;font-size:12px!important;vertical-align:middle!important}
 #main.novaro-items-experiment tbody tr:last-child td{border-bottom:0!important}
-#main.novaro-items-experiment td img{width:52px!important;height:52px!important;border:2px solid #211d38!important;border-radius:3px 12px 3px 12px!important;object-fit:cover!important}
+#main.novaro-items-experiment tbody tr:hover{background:#f6fbf8!important}
+#main.novaro-items-experiment td img{width:52px!important;height:52px!important;object-fit:cover!important;border-radius:9px!important;border:1px solid #e0ebe5!important}
 #main.novaro-items-experiment .item-qrcode-wrap{display:inline-flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important}
-#main.novaro-items-experiment .item-qrcode{padding:4px!important;border:1px solid #bdb4d7!important;border-radius:4px!important;background:#fff!important}
-#main.novaro-items-experiment .item-qrcode-wrap small{color:#655b83!important;font-size:9px!important}
-@media(max-width:600px){
- #main.novaro-items-experiment .items-experiment-panel{border-radius:3px 20px 3px 20px!important;box-shadow:7px 7px 0 #d9d1f0!important}
- #main.novaro-items-experiment .items-experiment-topline{padding:11px 13px!important}
- #main.novaro-items-experiment .items-page-heading{align-items:flex-start!important;flex-direction:column!important;padding:19px 14px 14px!important;gap:4px!important}
- #main.novaro-items-experiment .items-page-heading h3{font-size:25px!important}
- #main.novaro-items-experiment .items-toolbar{gap:6px!important;margin:15px 12px 14px!important}
- #main.novaro-items-experiment .items-toolbar .items-tool{min-height:47px!important;flex-direction:column!important;gap:3px!important;padding:5px 2px!important;font-size:10px!important;white-space:normal!important}
- #main.novaro-items-experiment .items-toolbar .items-tool-icon{font-size:16px!important}
- #main.novaro-items-experiment .items-group-tabs{margin:0 12px 14px!important}
- #main.novaro-items-experiment .items-group-tabs .items-group-tab{min-height:45px!important;font-size:11px!important}
- #main.novaro-items-experiment #search{width:calc(100% - 24px)!important;margin:0 12px 9px!important;font-size:13px!important}
- #main.novaro-items-experiment .items-group-caption{margin:12px 13px 8px!important}
- #main.novaro-items-experiment .tablewrap{width:calc(100% - 24px)!important;margin:0 12px!important}
- #main.novaro-items-experiment th,#main.novaro-items-experiment td{padding:10px 8px!important;font-size:11px!important}
+#main.novaro-items-experiment .item-qrcode{padding:4px!important;border:1px solid #dce9e2!important;border-radius:8px!important;background:#fff!important}
+#main.novaro-items-experiment .item-qrcode-wrap small{color:#71827a!important;font-size:9px!important}
+@media(max-width:700px){
+ #main.novaro-items-experiment .items-page{padding:15px!important;border-radius:15px!important}
+ #main.novaro-items-experiment .branches-page-head{align-items:flex-start!important;flex-direction:column!important;gap:9px!important}
+ #main.novaro-items-experiment .items-toolbar{gap:6px!important}
+ #main.novaro-items-experiment .items-toolbar .branch-action-btn{min-height:32px!important;padding:5px 8px!important;font-size:11px!important}
+ #main.novaro-items-experiment .items-group-tabs{gap:6px!important}
+ #main.novaro-items-experiment .items-group-tab{min-height:32px!important;padding:5px 10px!important;font-size:11px!important}
+ #main.novaro-items-experiment th,#main.novaro-items-experiment td{padding:9px 8px!important;font-size:11px!important}
 }
-@media(max-width:360px){
- #main.novaro-items-experiment .items-experiment-kicker{font-size:9px!important;letter-spacing:1px!important}
- #main.novaro-items-experiment .items-toolbar{gap:4px!important}
- #main.novaro-items-experiment .items-toolbar .items-tool{font-size:9px!important}
-}
-
-/* EXPERIMENT 01 isolation: prevent the app-wide live font rule from overriding this page. */
-#main.novaro-items-experiment,#main.novaro-items-experiment *:not(svg):not(path){font-family:Arial,Tahoma,sans-serif!important}
