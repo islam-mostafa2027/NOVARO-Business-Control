@@ -1153,6 +1153,49 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
  .app-header.novaro-header-column .language-toggle-capsule{font-size:10px!important}
 }
 </style>
+
+<style id="novaro-reports-actions-layout">
+/* Reports: equal action capsules in one clean horizontal row */
+#reportContent .report-session-row{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr)!important;
+ gap:12px!important;
+ align-items:stretch!important;
+}
+#reportContent .report-session-row>div:first-child{min-width:0!important}
+#reportContent .report-actions{
+ display:grid!important;
+ grid-template-columns:repeat(auto-fit,minmax(0,1fr))!important;
+ grid-auto-flow:column!important;
+ grid-auto-columns:minmax(0,1fr)!important;
+ gap:7px!important;
+ width:100%!important;
+ min-width:0!important;
+ align-items:stretch!important;
+}
+#reportContent .report-actions button{
+ box-sizing:border-box!important;
+ width:100%!important;
+ min-width:0!important;
+ min-height:44px!important;
+ height:44px!important;
+ margin:0!important;
+ padding:5px 4px!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ white-space:nowrap!important;
+ overflow:hidden!important;
+ text-overflow:ellipsis!important;
+ font-size:clamp(10px,2.7vw,13px)!important;
+ line-height:1.15!important;
+}
+@media(max-width:600px){
+ #reportContent .report-session-row{padding:12px!important}
+ #reportContent .report-actions{gap:5px!important}
+ #reportContent .report-actions button{height:42px!important;min-height:42px!important;padding:4px 2px!important;font-size:10px!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
