@@ -1566,6 +1566,23 @@ Object.assign(translations,{
   ,"تعديل":"Edit"
   ,"حذف":"Delete"
   ,"رجوع":"Back"
+  ,"الأرشيف":"Archive"
+  ,"إضافة فرع":"Add branch"
+  ,"الحساب":"Account"
+  ,"طلبات استعادة كلمات المرور":"Password recovery requests"
+  ,"طلبات الفروع":"Branch requests"
+  ,"تصل هنا للمراجعة من":"are shown here for review by"
+  ,"اضغط «Refresh الطلبات» لعرض الطلبات.":"Select “Refresh requests” to display requests."
+  ,"Refresh الطلبات":"Refresh requests"
+  ,"كل Branches":"All branches"
+  ,"كل الفروع":"All branches"
+  ,"جديد":"New"
+  ,"قيد التنفيذ":"In progress"
+  ,"مكتمل":"Completed"
+  ,"مُرسل":"Submitted"
+  ,"مراجَع":"Reviewed"
+  ,"معتمد":"Approved"
+  ,"in_progress":"In progress"
 
 });
 const reverseTranslations=Object.fromEntries(Object.entries(translations).map(([a,b])=>[b,a]));
@@ -1624,6 +1641,13 @@ function applyLanguage(){
  };
  walk(document.body);
  document.title=translateText("NOVARO Inventory");
+ const headerLabels=document.querySelectorAll(".header-icon-label");
+ headerLabels.forEach(label=>{
+  if(label.closest("#openSettings"))label.textContent=language==="en"?"Settings":"الإعدادات";
+  else if(label.closest("#openAbout"))label.textContent=language==="en"?"About":"عن البرنامج";
+ });
+ const logoutLabel=document.querySelector("#logout span");
+ if(logoutLabel)logoutLabel.textContent=language==="en"?"Sign out":"خروج";
  const reportTab=document.querySelector('[data-p="reports"]');
  const reportLabel=reportTab?.querySelector(".report-nav-label");
  if(reportLabel)reportLabel.textContent=language==="en"?"Reports":"التقارير";
