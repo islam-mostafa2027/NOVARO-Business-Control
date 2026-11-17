@@ -1824,8 +1824,8 @@ function addCategory(){
   novaroCategoryNameInput(en?"Main category name (Arabic)":"اسم التصنيف الرئيسي بالعربية",en?"Main category name (English)":"اسم التصنيف الرئيسي بالإنجليزية","catMain")+
   '<h4>'+(en?"Subcategory (optional)":"التصنيف الفرعي (اختياري)")+'</h4>'+
   '<div class="muted">'+(en?"Leave both fields empty if you only need a main category.":"سيب الحقلين فاضيين لو عايز تضيف تصنيف رئيسي فقط.")+'</div>'+
-  '<div class="field"><label>'+(en?"Subcategory name (Arabic)":"اسم التصنيف الفرعي بالعربية")+'</label><input id="catSubAr" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\\'catSubAr\\',\\'catSubEn\\',\\'ar\\')"></div>'+
-  '<div class="field"><label>'+(en?"Subcategory name (English)":"اسم التصنيف الفرعي بالإنجليزية")+'</label><input id="catSubEn" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\\'catSubEn\\',\\'catSubAr\\',\\'en\\')"></div>';
+  '<div class="field"><label>'+(en?"Subcategory name (Arabic)":"اسم التصنيف الفرعي بالعربية")+'</label><input id="catSubAr" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\'catSubAr\',\'catSubEn\',\'ar\')"></div>'+
+  '<div class="field"><label>'+(en?"Subcategory name (English)":"اسم التصنيف الفرعي بالإنجليزية")+'</label><input id="catSubEn" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\'catSubEn\',\'catSubAr\',\'en\')"></div>';
  form(en?"Add category":"إضافة تصنيف",fields,async()=>{
   const group=$("catGroup").value,mainAr=$("catMainAr").value.trim(),mainEn=$("catMainEn").value.trim(),subAr=$("catSubAr").value.trim(),subEn=$("catSubEn").value.trim();
   if(!mainAr||!mainEn)throw Error(en?"Enter the main category name in both languages.":"اكتب اسم التصنيف الرئيسي باللغتين.");
