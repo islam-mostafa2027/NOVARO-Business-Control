@@ -50,3 +50,6 @@
  #main.novaro-items-experiment .items-toolbar{gap:4px!important}
  #main.novaro-items-experiment .items-toolbar .items-tool{font-size:9px!important}
 }
+
+/* EXPERIMENT 01 isolation: prevent the app-wide live font rule from overriding this page. */
+#main.novaro-items-experiment,#main.novaro-items-experiment *:not(svg):not(path){font-family:Arial,Tahoma,sans-serif!important}
