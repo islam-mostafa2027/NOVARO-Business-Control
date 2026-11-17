@@ -435,6 +435,52 @@ a.auth-back-link:hover{background:#e3eee8!important}
  #reportContent .report-actions button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:4px 3px!important;font-size:10px!important}
 }
 </style>
+
+<style id="novaro-stocktake-reports-page-unified-v1">
+/* Match stocktake and reports content surfaces to the shared NOVARO page system. */
+#sessions .stocktake-session-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))!important;gap:12px!important;width:100%!important}
+#sessions .stocktake-session-card,#reportContent .report-session-row{
+ box-sizing:border-box!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:12px!important;
+ width:100%!important;min-width:0!important;margin:0!important;padding:16px!important;
+ background:var(--card,#fff)!important;border:1px solid var(--line,#dce5e9)!important;border-radius:16px!important;
+ box-shadow:0 5px 18px #173d300b!important;
+}
+#sessions .stocktake-session-card-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;min-width:0!important}
+#sessions .stocktake-session-card-title,#reportContent .report-session-info>b{display:block!important;color:var(--ink,#263b4a)!important;font-size:15px!important;font-weight:750!important;line-height:1.45!important;overflow-wrap:anywhere!important}
+#sessions .stocktake-session-meta{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:7px!important;color:var(--muted,#657d8b)!important;font-size:12px!important;line-height:1.4!important}
+#sessions .stocktake-session-meta span{display:inline-flex!important;align-items:center!important;padding:5px 9px!important;border:1px solid var(--line,#dce5e9)!important;border-radius:9px!important;background:var(--bg,#f1f8fb)!important}
+#sessions .stocktake-session-actions,#reportContent .report-actions{
+ display:flex!important;flex-wrap:wrap!important;align-items:stretch!important;gap:8px!important;width:100%!important;margin:0!important;
+}
+#sessions .stocktake-session-actions button,#reportContent .report-actions button{
+ box-sizing:border-box!important;flex:1 1 105px!important;width:auto!important;min-width:0!important;max-width:100%!important;
+ min-height:40px!important;height:auto!important;max-height:none!important;margin:0!important;padding:9px 12px!important;
+ border-radius:12px!important;font-size:12px!important;line-height:1.25!important;white-space:normal!important;
+}
+#sessions>.row{display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:wrap!important;gap:10px!important}
+#sessions>section.card{box-sizing:border-box!important;margin:12px 0!important;padding:17px!important;border:1px solid var(--line,#dce5e9)!important;border-radius:16px!important;background:var(--card,#fff)!important;box-shadow:0 5px 20px #173d3010!important}
+#sessions section[style*="margin:12px 0"]{margin:12px 0!important;padding:14px!important;border:1px solid var(--line,#dce5e9)!important;border-radius:14px!important;background:var(--card,#fff)!important}
+#sessions button.card{
+ box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;
+ width:100%!important;min-height:58px!important;height:auto!important;margin:0!important;padding:12px 14px!important;
+ border:1px solid var(--line,#dce5e9)!important;border-radius:12px!important;background:var(--card,#fff)!important;
+ color:var(--ink,#263b4a)!important;-webkit-text-fill-color:var(--ink,#263b4a)!important;
+ box-shadow:none!important;text-align:start!important;
+}
+#reportContent .report-session-info{display:flex!important;flex-direction:column!important;gap:5px!important;min-width:0!important;width:100%!important}
+#reportContent .report-session-info>p{margin:0!important;line-height:1.5!important;overflow-wrap:anywhere!important}
+#reportContent .report-toolbar{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:8px!important;margin:0 0 14px!important}
+#reportContent .report-toolbar button{flex:1 1 120px!important;min-width:0!important;min-height:40px!important}
+#reportContent .single-stocktake-report{box-sizing:border-box!important;width:100%!important;max-width:100%!important;margin:0!important;padding:18px!important;border:1px solid var(--line,#dce5e9)!important;border-radius:16px!important;background:var(--card,#fff)!important;color:var(--ink,#263b4a)!important;box-shadow:0 5px 20px #173d3010!important}
+#reportContent .single-stocktake-report .report-group{margin:14px 0!important;padding:14px!important;border:1px solid var(--line,#dce5e9)!important;border-radius:13px!important;background:var(--card,#fff)!important}
+#reportContent .single-stocktake-report .report-group h3{margin:0 0 10px!important;color:var(--ink,#263b4a)!important;font-size:14px!important}
+@media(max-width:600px){
+ #sessions .stocktake-session-card,#reportContent .report-session-row{padding:13px!important;border-radius:14px!important}
+ #sessions .stocktake-session-actions button,#reportContent .report-actions button{flex:1 1 calc(50% - 8px)!important}
+ #reportContent .single-stocktake-report{padding:12px!important}
+ #reportContent .single-stocktake-report .report-group{padding:10px!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
