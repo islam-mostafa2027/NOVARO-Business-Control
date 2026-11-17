@@ -2313,7 +2313,40 @@ if(!window.__novaroActionTextObserver){
  window.__novaroActionTextObserver=new MutationObserver(()=>applyWhiteActionText());
  window.__novaroActionTextObserver.observe(document.documentElement,{childList:true,subtree:true,characterData:true});
 }
-function form(title,fields,save){let html='<section class="card"><div class="row"><h3>'+title+'</h3></div>'+fields+'<button id="save">حفظ</button><div id="formErr" class="error"></div></section>';$("main").innerHTML=html;try{if(window.__novaroHistoryReady&&!history.state?.novaroForm)history.pushState({novaroApp:true,novaroForm:true,kind:"form",page},"",location.href)}catch(error){console.warn("NOVARO form history update failed:",error)}novaroBackButton();applyLanguage();$("save").onclick=async()=>{try{$("save").disabled=true;await save();await load();try{if(history.state?.novaroForm)history.replaceState({novaroApp:true,kind:"page",page},"",location.href)}catch(historyError){console.warn("NOVARO form history cleanup failed:",historyError)}const nextStocktake=window.__openStocktakeAfterSave||null;window.__openStocktakeAfterSave=null;if(nextStocktake){window.__openingStocktake=true;render();await sessions();await openSession(nextStocktake);window.__openingStocktake=false}else render()}catch(e){window.__openingStocktake=false;$("formErr").textContent=e.message;$("save").disabled=false}}}
+function bindBilingualTranslationPairs(root=document){
+ const pairs=[["n","en"],["unit","unitEn"],["branchNameAr","branchNameEn"],["branchAddressAr","branchAddressEn"],["catNameAr","catNameEn"],["branchAr","branchEn"]];
+ pairs.forEach(([arId,enId])=>{
+  const ar=root.getElementById?root.getElementById(arId):document.getElementById(arId);
+  const en=root.getElementById?root.getElementById(enId):document.getElementById(enId);
+  if(!ar||!en||ar.dataset.novaroTranslationBound==="1"||en.dataset.novaroTranslationBound==="1")return;
+  ar.dataset.novaroTranslationBound="1";en.dataset.novaroTranslationBound="1";
+  const fields=[ar,en],manual=[!!ar.value.trim(),!!en.value.trim()],timers=[null,null],requests=[0,0];
+  const decode=value=>{const el=document.createElement("textarea");el.innerHTML=value;return el.value};
+  const translate=async(sourceIndex)=>{
+   const source=fields[sourceIndex],target=fields[1-sourceIndex],value=source.value.trim(),request=++requests[sourceIndex];
+   clearTimeout(timers[sourceIndex]);
+   if(!value||manual[1-sourceIndex]||/^[\\d\\s.,:/_+()-]+$/.test(value)||!/[A-Za-z\\u0600-\\u06FF]/.test(value))return;
+   timers[sourceIndex]=setTimeout(async()=>{
+    try{
+     const from=sourceIndex===0?"ar":"en",to=sourceIndex===0?"en":"ar";
+     const url="https://api.mymemory.translated.net/get?q="+encodeURIComponent(value)+"&langpair="+from+"|"+to;
+     const response=await fetch(url,{headers:{"Accept":"application/json"}});
+     if(!response.ok)throw Error("Translation service unavailable");
+     const data=await response.json();
+     const translated=decode(String(data?.responseData?.translatedText||"")).trim();
+     if(request!==requests[sourceIndex]||source.value.trim()!==value||manual[1-sourceIndex]||!translated)return;
+     target.value=translated;
+     target.dispatchEvent(new Event("novaro:auto-translation",{bubbles:false}));
+    }catch(error){console.warn("NOVARO automatic translation unavailable:",error)}
+   },600);
+  };
+  fields.forEach((field,index)=>field.addEventListener("input",()=>{
+   manual[index]=!!field.value.trim();
+   translate(index);
+  }));
+ });
+}
+function form(title,fields,save){let html='<section class="card"><div class="row"><h3>'+title+'</h3></div>'+fields+'<button id="save">حفظ</button><div id="formErr" class="error"></div></section>';$("main").innerHTML=html;try{bindBilingualTranslationPairs(document.getElementById("main")||document)}catch(translationBindError){console.warn("NOVARO translation binding failed:",translationBindError)}try{if(window.__novaroHistoryReady&&!history.state?.novaroForm)history.pushState({novaroApp:true,novaroForm:true,kind:"form",page},"",location.href)}catch(error){console.warn("NOVARO form history update failed:",error)}novaroBackButton();applyLanguage();$("save").onclick=async()=>{try{$("save").disabled=true;await save();await load();try{if(history.state?.novaroForm)history.replaceState({novaroApp:true,kind:"page",page},"",location.href)}catch(historyError){console.warn("NOVARO form history cleanup failed:",historyError)}const nextStocktake=window.__openStocktakeAfterSave||null;window.__openStocktakeAfterSave=null;if(nextStocktake){window.__openingStocktake=true;render();await sessions();await openSession(nextStocktake);window.__openingStocktake=false}else render()}catch(e){window.__openingStocktake=false;$("formErr").textContent=e.message;$("save").disabled=false}}}
 function inp(label,id,extra=""){return '<div class="field"><label>'+label+'</label><input id="'+id+'" '+extra+'></div>'}
 function itemForm(existing=null){
  if(profile.role!=="owner_admin")return alert(language==="en"?"Only the system owner can add or edit items":"إضافة وتعديل الأصناف متاحان للمالك فقط");
@@ -2386,26 +2419,7 @@ function itemForm(existing=null){
  $("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup);
  $("itemGroup").onchange=()=>{$("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions("",$("itemGroup").value);$("cat").value="";};
  $("n").value=i.name_ar||"";$("en").value=i.name_en||"";$("code").value=i.item_code||"";
- let translationTimer=null,translationRequest=0,lastAutoTranslation="",englishEdited=false;
- $("en").addEventListener("input",()=>{if($("en").value.trim()!==lastAutoTranslation)englishEdited=true;});
- $("n").addEventListener("input",()=>{
-  clearTimeout(translationTimer);
-  const arabic=$("n").value.trim(),request=++translationRequest;
-  if(!arabic){if(!englishEdited)$("en").value="";lastAutoTranslation="";return}
-  if(englishEdited)return;
-  translationTimer=setTimeout(async()=>{
-   try{
-    const url="https://api.mymemory.translated.net/get?q="+encodeURIComponent(arabic)+"&langpair=ar|en";
-    const response=await fetch(url);
-    if(!response.ok)throw Error("Translation service unavailable");
-    const data=await response.json();
-    const translated=(data?.responseData?.translatedText||"").replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,"&").trim();
-    if(request!==translationRequest||$("n").value.trim()!==arabic||englishEdited||!translated)return;
-    lastAutoTranslation=translated;
-    $("en").value=translated;
-   }catch(error){console.warn("Automatic item-name translation failed:",error)}
-  },450);
- });$("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";$("minStock").value=Number(i.min_stock||0);
+$("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";$("minStock").value=Number(i.min_stock||0);
  const help=$("categoryHelp");if(help&&!cats.some(c=>(c.group_key||"equipment")===$("itemGroup").value))help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات للقسم ده لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
 }
 function showItemFormFailure(error,source="add-item"){
