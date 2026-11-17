@@ -1302,6 +1302,77 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px!impo
 }
 </style>
 
+
+<style id="novaro-internal-buttons-unified-v1">
+/* One shared visual system for in-page action buttons, including every contextual Back button. */
+#main button:not(.settings-swatches button):not(.sound-choice):not(.font-preview-button):not(.sound-picker-toggle),
+.novaro-page-backbar .novaro-back-button,
+#settingsBack,
+#novaroScanner button,
+#novaroItemDetails button{
+ box-sizing:border-box!important;
+ min-height:42px!important;
+ padding:9px 14px!important;
+ border:1px solid #d5e3dc!important;
+ border-radius:11px!important;
+ font-family:inherit!important;
+ font-size:13px!important;
+ font-weight:700!important;
+ line-height:1.25!important;
+ letter-spacing:0!important;
+ display:inline-flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ gap:8px!important;
+ box-shadow:0 2px 7px #173d3018!important;
+}
+#main button.soft,
+#main .soft,
+.novaro-page-backbar .novaro-back-button,
+#settingsBack,
+#novaroScanner button.secondary,
+#novaroItemDetails button.secondary{
+ background:#edf3f0!important;
+ color:#315f70!important;
+ -webkit-text-fill-color:#315f70!important;
+ border-color:#d5e3dc!important;
+ box-shadow:0 1px 4px #173d300b!important;
+}
+#main button.danger,
+#main button.delete-btn,
+#main button.branch-delete-btn{
+ background:#fff0f0!important;
+ color:#a33e3e!important;
+ -webkit-text-fill-color:#a33e3e!important;
+ border-color:#edcccc!important;
+}
+#main button:not(.settings-swatches button):not(.sound-choice):not(.font-preview-button):not(.sound-picker-toggle):hover,
+.novaro-page-backbar .novaro-back-button:hover,
+#settingsBack:hover,
+#novaroScanner button:hover,
+#novaroItemDetails button:hover{
+ transform:translateY(-1px)!important;
+}
+#main button:not(.settings-swatches button):not(.sound-choice):not(.font-preview-button):not(.sound-picker-toggle):active,
+.novaro-page-backbar .novaro-back-button:active,
+#settingsBack:active,
+#novaroScanner button:active,
+#novaroItemDetails button:active{
+ transform:translateY(0) scale(.985)!important;
+}
+@media(max-width:600px){
+ #main button:not(.settings-swatches button):not(.sound-choice):not(.font-preview-button):not(.sound-picker-toggle),
+ .novaro-page-backbar .novaro-back-button,
+ #settingsBack,
+ #novaroScanner button,
+ #novaroItemDetails button{
+  min-height:40px!important;
+  padding:8px 11px!important;
+  font-size:12px!important;
+ }
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
