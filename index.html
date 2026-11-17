@@ -1177,6 +1177,36 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 #reportContent .report-actions button{box-sizing:border-box!important;width:100%!important;min-width:0!important;height:44px!important;min-height:44px!important;max-height:44px!important;margin:0!important;padding:5px 3px!important;display:flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;font-size:clamp(10px,2.7vw,13px)!important;line-height:1.15!important}
 @media(max-width:600px){#reportContent .report-session-row{padding:12px!important;gap:12px!important;border-radius:14px!important}#reportContent .report-actions{gap:5px!important}#reportContent .report-actions button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:4px 2px!important;font-size:10px!important}}
 </style>
+<style id="novaro-mobile-nav-stable-v1">
+@media(max-width:760px){
+ .app-layout .tabs button,
+ .app-layout .tabs button:active,
+ .app-layout .tabs button:focus,
+ .app-layout .tabs button:focus-visible{
+  -webkit-tap-highlight-color:transparent!important;
+  outline:none;
+  transform:none!important;
+  transition:none!important;
+  filter:none!important;
+ }
+ .app-layout .tabs button.active,
+ .app-layout .tabs button.active:active,
+ .app-layout .tabs button.active:focus{
+  background:#fff!important;
+  color:#294f70!important;
+  opacity:1!important;
+  box-shadow:0 5px 15px #10263a30!important;
+ }
+ .app-layout .tabs button.active .nav-icon,
+ .app-layout .tabs button.active:active .nav-icon{
+  background:transparent!important;
+  color:#315f88!important;
+  opacity:1!important;
+  filter:none!important;
+ }
+ .app-layout .tabs button.active .nav-icon svg{opacity:1!important;visibility:visible!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -2181,36 +2211,6 @@ function printStocktakeReport(){
  const w=window.open("","_blank");if(!w)return alert(en?"Allow pop-ups to open the printable report.":"اسمح بفتح النوافذ المنبثقة لعرض التقرير القابل للطباعة.");
  const title=en?"STOCKTAKE REPORT":"تقرير الجرد",date=String(data.session.inventory_date||"").slice(0,10)||"—";
  const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.print-actions{position:sticky;top:0;z-index:5;display:flex;justify-content:center;gap:10px;padding:12px;background:#eaf3f7;border-bottom:1px solid #cbdce3}.print-actions button{border:0;border-radius:8px;padding:11px 22px;background:#315b70;color:#fff;font-size:15px;font-weight:700;cursor:pointer}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}.group{margin:18px 0 22px;break-inside:auto}.group h2{font-size:16px;color:#244b5a;background:#eaf3f7;border-right:4px solid #315b70;padding:8px 10px;margin:0 0 8px}.group h2 small{font-size:11px;color:#607987}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 10px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start}.empty{padding:8px;color:#718894}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{.print-actions{display:none!important}body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:18px}}</style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header>'+tables+'<div class="foot">NOVARO Inventory</div>
-<style id="novaro-mobile-nav-stable-v1">
-@media(max-width:760px){
- .app-layout .tabs button,
- .app-layout .tabs button:active,
- .app-layout .tabs button:focus,
- .app-layout .tabs button:focus-visible{
-  -webkit-tap-highlight-color:transparent!important;
-  outline:none;
-  transform:none!important;
-  transition:none!important;
-  filter:none!important;
- }
- .app-layout .tabs button.active,
- .app-layout .tabs button.active:active,
- .app-layout .tabs button.active:focus{
-  background:#fff!important;
-  color:#294f70!important;
-  opacity:1!important;
-  box-shadow:0 5px 15px #10263a30!important;
- }
- .app-layout .tabs button.active .nav-icon,
- .app-layout .tabs button.active:active .nav-icon{
-  background:transparent!important;
-  color:#315f88!important;
-  opacity:1!important;
-  filter:none!important;
- }
- .app-layout .tabs button.active .nav-icon svg{opacity:1!important;visibility:visible!important}
-}
-</style>
 </body></html>';
  w.document.open();w.document.write(html);w.document.close();
 }
