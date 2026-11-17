@@ -1809,7 +1809,7 @@ function novaroTranslateCategory(value,source){
 function novaroSyncCategoryLanguage(source,target,sourceLang){
  const from=$(source),to=$(target);if(!from||!to)return;
  const translated=novaroTranslateCategory(from.value,sourceLang);
- if(translated)to.value=translated;
+ to.value=translated;
 }
 function novaroCategoryNameInput(arLabel,enLabel,id,lang){
  return '<div class="field"><label>'+arLabel+'</label><input id="'+id+'Ar" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\''+id+'Ar\',\''+id+'En\',\'ar\')" required></div>'+
