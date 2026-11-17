@@ -1596,8 +1596,8 @@ Object.assign(translations,{
   ,"طلبات استعادة كلمات المرور":"Password recovery requests"
   ,"طلبات الفروع":"Branch requests"
   ,"تصل هنا للمراجعة من":"are shown here for review by"
-  ,"اضغط «Refresh الطلبات» لعرض الطلبات.":"Select “Refresh requests” to display requests."
-  ,"Refresh الطلبات":"Refresh requests"
+  ,"اضغط «تحديث الطلبات» لعرض الطلبات.":"Select “Refresh requests” to display requests."
+  ,"تحديث الطلبات":"Refresh requests"
   ,"كل Branches":"All branches"
   ,"كل الفروع":"All branches"
   ,"جديد":"New"
@@ -2418,7 +2418,22 @@ if(!window.__novaroItemFormDiagnostics){
  });
 }
 
-async function loadBranchRecoveryRequests(){if(profile?.role!=="owner_admin")return;const host=$("branchRecoveryRequests");if(!host)return;host.textContent="جاري تحميل الطلبات...";try{const {data,error}=await db.functions.invoke("branch-password-recovery",{body:{action:"list"}});if(error)throw error;if(data?.error)throw Error(data.error);const rows=data?.requests||[];if(!rows.length){host.innerHTML='<p class="muted">لا توجد طلبات استعادة معلقة حاليًا.</p>';return}host.innerHTML='<div style="overflow:auto"><table><thead><tr><th>الفرع</th><th>إيميل الدخول</th><th>تاريخ الطلب</th><th>الإجراء</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+esc(r.branch?.name_ar||r.branch?.name_en||r.branch?.code||"فرع")+'</td><td>'+esc(r.branch_email)+'</td><td>'+new Date(r.requested_at).toLocaleString("ar-EG")+'</td><td><button class="soft" onclick="issueBranchRecoveryLink(\''+r.id+'\')">إنشاء رابط آمن</button> '+(r.status==="pending"?'<button class="soft" onclick="rejectBranchRecoveryRequest(\''+r.id+'\')">رفض</button>':"")+'</td></tr>').join("")+'</tbody></table></div>'}catch(e){host.innerHTML='<p class="error">'+esc(e.message||String(e))+'</p>'}}
+async function loadBranchRecoveryRequests(){
+ if(profile?.role!=="owner_admin")return;
+ const host=$("branchRecoveryRequests");if(!host)return;
+ const en=language==="en";
+ host.textContent=en?"Loading requests...":"جاري تحميل الطلبات...";
+ try{
+  const {data,error}=await db.functions.invoke("branch-password-recovery",{body:{action:"list"}});
+  if(error)throw error;if(data?.error)throw Error(data.error);
+  const rows=data?.requests||[];
+  if(!rows.length){host.innerHTML='<p class="muted">'+(en?"There are no pending recovery requests.":"لا توجد طلبات استعادة معلقة حاليًا.")+'</p>';return}
+  const headers=en?["Branch","Login email","Request date","Action"]:["الفرع","إيميل الدخول","تاريخ الطلب","الإجراء"];
+  host.innerHTML='<div style="overflow:auto"><table><thead><tr>'+headers.map(x=>'<th>'+x+'</th>').join("")+'</tr></thead><tbody>'+
+   rows.map(r=>'<tr><td>'+esc(en?(r.branch?.name_en||r.branch?.name_ar||r.branch?.code||"Branch"):(r.branch?.name_ar||r.branch?.name_en||r.branch?.code||"فرع"))+'</td><td>'+esc(r.branch_email)+'</td><td>'+new Date(r.requested_at).toLocaleString(en?"en-GB":"ar-EG")+'</td><td><button class="soft" onclick="issueBranchRecoveryLink(\''+r.id+'\')">'+(en?"Create secure link":"إنشاء رابط آمن")+'</button> '+(r.status==="pending"?'<button class="soft" onclick="rejectBranchRecoveryRequest(\''+r.id+'\')">'+(en?"Reject":"رفض")+'</button>':"")+'</td></tr>').join("")+
+   '</tbody></table></div>';
+ }catch(e){host.innerHTML='<p class="error">'+esc(e.message||String(e))+'</p>'}
+}
 async function issueBranchRecoveryLink(id){if(profile?.role!=="owner_admin")return;try{const {data,error}=await db.functions.invoke("branch-password-recovery",{body:{action:"issue_link",request_id:id}});if(error)throw error;if(data?.error)throw Error(data.error);const link=data?.action_link;if(!link)throw Error("لم يتم إنشاء الرابط");prompt("انسخ الرابط لمشاركته مع مدير الفرع عبر قناة موثوقة. الرابط يستخدم مرة واحدة:",link);await loadBranchRecoveryRequests()}catch(e){alert(e.message||String(e))}}
 async function rejectBranchRecoveryRequest(id){if(profile?.role!=="owner_admin"||!confirm("هل تريد رفض طلب الاستعادة؟"))return;try{const {data,error}=await db.functions.invoke("branch-password-recovery",{body:{action:"reject",request_id:id}});if(error)throw error;if(data?.error)throw Error(data.error);await loadBranchRecoveryRequests()}catch(e){alert(e.message||String(e))}}
 function manageBranchAccount(id){
