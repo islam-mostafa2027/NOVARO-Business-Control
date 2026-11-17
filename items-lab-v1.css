@@ -674,20 +674,12 @@
 #app #main.novaro-card-pages table{width:100%!important;border-collapse:separate!important;border-spacing:0!important}
 #app #main.novaro-card-pages th{background:#e8f3ed!important;color:#315f50!important;font-weight:800!important;white-space:nowrap!important}
 #app #main.novaro-card-pages td,#app #main.novaro-card-pages th{padding:10px!important;border-bottom:1px solid #edf2ef!important}
-#app #main.novaro-card-pages .stocktake-session-grid,#app #main.novaro-card-pages .stocktake-report-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:100%!important}
-#app #main.novaro-card-pages .stocktake-session-card,#app #main.novaro-card-pages .report-session-row{display:flex!important;flex-direction:column!important;justify-content:space-between!important;gap:12px!important;min-width:0!important;margin:0!important;padding:15px!important;border:1px solid #dfe9e3!important;border-radius:15px!important;background:linear-gradient(145deg,#fff,#f8fbf9)!important;box-shadow:0 3px 12px #173d3009!important}
-#app #main.novaro-card-pages .stocktake-session-card-head{display:flex!important;justify-content:space-between!important;align-items:flex-start!important;gap:8px!important}
-#app #main.novaro-card-pages .stocktake-session-card-title{font-weight:800!important;color:#263b35!important}
-#app #main.novaro-card-pages .stocktake-session-meta{display:flex!important;flex-wrap:wrap!important;gap:6px!important}
-#app #main.novaro-card-pages .stocktake-session-meta span{display:inline-flex!important;align-items:center!important;padding:4px 9px!important;border-radius:20px!important;background:#e8f2ed!important;color:#397765!important;font-size:11px!important;font-weight:700!important}
-#app #main.novaro-card-pages .stocktake-session-actions{display:flex!important;flex-wrap:wrap!important;gap:7px!important;padding-top:10px!important;border-top:1px solid #edf2ef!important}
 #app #main.novaro-card-pages .settings-page>h3:not(:first-child){margin-top:19px!important;padding-top:13px!important;border-top:1px solid #e7efea!important}
 #app #main.novaro-card-pages .settings-footer{display:flex!important;gap:8px!important;flex-wrap:wrap!important;justify-content:flex-end!important;margin-top:18px!important}
 @media(max-width:700px){
  #app #main.novaro-card-pages{gap:10px!important}
  #app #main.novaro-card-pages>section.card,#app #main.novaro-card-pages .card:not(.branch-card){padding:15px!important;border-radius:15px!important}
  #app #main.novaro-card-pages h2,#app #main.novaro-card-pages h3{font-size:16px!important}
- #app #main.novaro-card-pages .stocktake-session-grid,#app #main.novaro-card-pages .stocktake-report-list{grid-template-columns:1fr!important;gap:9px!important}
  #app #main.novaro-card-pages .settings-footer{justify-content:stretch!important}
  #app #main.novaro-card-pages .settings-footer button{flex:1 1 auto!important}
 }
@@ -705,19 +697,11 @@
 }
 #app #main.novaro-card-pages>section.card,
 #app #main.novaro-card-pages .card:not(.branch-card),
-#app #main.novaro-card-pages .stocktake-session-card,
-#app #main.novaro-card-pages .report-session-row{
   box-sizing:border-box!important;
   width:100%!important;
   max-width:none!important;
   min-width:0!important;
 }
-#app #main.novaro-card-pages .stocktake-session-grid,
-#app #main.novaro-card-pages .stocktake-report-list{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  width:100%!important;
-  max-width:none!important;
 }
 #app #main.novaro-card-pages button:not(.items-tool):not(.items-group-tab):not(.language-choice):not([data-theme]){
   box-sizing:border-box!important;
@@ -784,8 +768,6 @@
 }
 #app:has(#main.novaro-card-pages) #main.novaro-card-pages>section.card,
 #app:has(#main.novaro-card-pages) #main.novaro-card-pages .card:not(.branch-card),
-#app:has(#main.novaro-card-pages) #main.novaro-card-pages .stocktake-session-card,
-#app:has(#main.novaro-card-pages) #main.novaro-card-pages .report-session-row{
   width:100%!important;
   max-width:none!important;
   min-width:0!important;
@@ -855,139 +837,6 @@
 }
 
 
-/* FINAL FIX: horizontal two-column card layout ONLY on Stocktake and Reports pages. */
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
-#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-auto-flow:row!important;
-  align-items:stretch!important;
-  width:100%!important;
-  max-width:none!important;
-  gap:10px!important;
-}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid>.stocktake-session-card,
-#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row{
-  box-sizing:border-box!important;
-  width:auto!important;
-  max-width:none!important;
-  min-width:0!important;
-  margin:0!important;
-}
-@media(max-width:760px){
-  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
-  #app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid>.stocktake-session-card,
-  #app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row{
-    padding:10px!important;
-  }
-}
-
-
-/* FINAL CARD ORIENTATION FIX: only Stocktake sessions and Reports cards. */
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
-#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr)!important;
-  gap:10px!important;
-  width:100%!important;
-}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid>.stocktake-session-card{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) auto!important;
-  grid-template-rows:auto auto!important;
-  align-items:center!important;
-  gap:8px 14px!important;
-  width:100%!important;
-  min-width:0!important;
-  padding:13px 15px!important;
-}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-card-head{grid-column:1!important;grid-row:1!important;min-width:0!important}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-meta{grid-column:1!important;grid-row:2!important;min-width:0!important}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-actions{grid-column:2!important;grid-row:1 / span 2!important;justify-content:flex-end!important;align-items:center!important;padding:0!important;border:0!important;min-width:0!important}
-#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) auto!important;
-  align-items:center!important;
-  gap:10px 14px!important;
-  width:100%!important;
-  min-width:0!important;
-  padding:13px 15px!important;
-}
-#app #main.novaro-card-pages:has(#reportBranch) .report-session-row>.report-actions{
-  justify-content:flex-end!important;
-  align-items:center!important;
-  min-width:0!important;
-}
-@media(max-width:520px){
-  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid>.stocktake-session-card,
-  #app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row{
-    grid-template-columns:minmax(0,1fr)!important;
-    gap:8px!important;
-  }
-  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-card-head,
-  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-meta,
-  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-actions,
-  #app #main.novaro-card-pages:has(#reportBranch) .report-session-row>.report-actions{
-    grid-column:1!important;
-    grid-row:auto!important;
-    justify-content:flex-start!important;
-  }
-  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-actions{flex-wrap:wrap!important}
-  #app #main.novaro-card-pages:has(#reportBranch) .report-session-row>.report-actions{flex-wrap:wrap!important}
-}
-
-
-/* MOBILE LANDSCAPE CARD LAYOUT: keep Stocktake and Reports content side-by-side even on narrow phones. */
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
-#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr)!important;
-  width:100%!important;
-}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid>.stocktake-session-card{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) 104px!important;
-  grid-template-rows:auto auto!important;
-  align-items:center!important;
-  gap:7px 10px!important;
-  width:100%!important;
-  min-width:0!important;
-  box-sizing:border-box!important;
-}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-card-head{grid-column:1!important;grid-row:1!important;min-width:0!important}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-meta{grid-column:1!important;grid-row:2!important;min-width:0!important;display:flex!important;flex-wrap:wrap!important}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-actions{
-  grid-column:2!important;grid-row:1 / span 2!important;
-  display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;
-  align-items:stretch!important;justify-content:center!important;gap:6px!important;
-  min-width:0!important;padding:0!important;border:0!important;
-}
-#app #main.novaro-card-pages:has(#sessions) .stocktake-session-actions button{
-  width:100%!important;min-width:0!important;white-space:normal!important;
-  padding:7px 5px!important;font-size:11px!important;
-}
-#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) 112px!important;
-  align-items:center!important;gap:8px 10px!important;
-  width:100%!important;min-width:0!important;box-sizing:border-box!important;
-}
-#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row>div:first-child{
-  grid-column:1!important;grid-row:1!important;min-width:0!important;overflow-wrap:anywhere!important;
-}
-#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row>.report-actions{
-  grid-column:2!important;grid-row:1!important;
-  display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;
-  align-items:stretch!important;justify-content:center!important;gap:6px!important;
-  min-width:0!important;
-}
-#app #main.novaro-card-pages:has(#reportBranch) .report-session-row>.report-actions button{
-  width:100%!important;min-width:0!important;white-space:normal!important;
-  padding:7px 5px!important;font-size:11px!important;
 }
 
 
@@ -1077,10 +926,6 @@
     margin-right:0!important;
   }
   #app:has(#main.novaro-card-pages) #main.novaro-card-pages>section.card,
-  #app #main.novaro-card-pages:has(#sessions) #sessions,
-  #app #main.novaro-card-pages:has(#reportBranch) #reportContent,
-  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
-  #app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
     box-sizing:border-box!important;
     width:100%!important;
     max-width:none!important;
@@ -1094,35 +939,3 @@
 }
 
 
-/* Stocktake only: make each session card span the same inner width as the branch selector. */
-#app #main.novaro-card-pages:has(#countBranch)>section.card #sessions{
-  box-sizing:border-box!important;
-  display:block!important;
-  width:100%!important;
-  max-width:none!important;
-  min-width:0!important;
-}
-#app #main.novaro-card-pages:has(#countBranch)>section.card #sessions>.stocktake-session-grid{
-  box-sizing:border-box!important;
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr)!important;
-  width:100%!important;
-  max-width:none!important;
-  min-width:0!important;
-}
-#app #main.novaro-card-pages:has(#countBranch)>section.card #sessions>.stocktake-session-grid>.stocktake-session-card{
-  box-sizing:border-box!important;
-  width:100%!important;
-  max-width:none!important;
-  min-width:0!important;
-}
-/* Fix stocktake session inset: #sessions keeps the legacy .empty padding after loading. */
-#app #main.novaro-card-pages:has(#countBranch)>section.card>#sessions.empty{
-  padding:0!important;
-  text-align:initial!important;
-}
-/* Reports only: remove legacy .empty inset from the report list host. */
-#app #main.novaro-card-pages:has(#reportBranch)>section.card>#reportContent.empty{
-  padding:0!important;
-  text-align:initial!important;
-}
