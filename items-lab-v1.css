@@ -853,3 +853,35 @@
   #app:has(#main.novaro-card-pages)>.wrap{padding-left:22px!important;padding-right:22px!important}
   #app:has(#main.novaro-card-pages) .workspace-content{width:100%!important}
 }
+
+
+/* FINAL FIX: horizontal two-column card layout ONLY on Stocktake and Reports pages. */
+#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
+#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-auto-flow:row!important;
+  align-items:stretch!important;
+  width:100%!important;
+  max-width:none!important;
+  gap:10px!important;
+}
+#app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid>.stocktake-session-card,
+#app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row{
+  box-sizing:border-box!important;
+  width:auto!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+}
+@media(max-width:760px){
+  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
+  #app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid>.stocktake-session-card,
+  #app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list>.report-session-row{
+    padding:10px!important;
+  }
+}
