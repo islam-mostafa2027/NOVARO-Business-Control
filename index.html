@@ -1608,13 +1608,12 @@ function itemForm(existing=null){
  if(profile.role!=="owner_admin")return alert(language==="en"?"Only the system owner can add or edit items":"إضافة وتعديل الأصناف متاحان للمالك فقط");
  novaroStopItemFormCameraRecovery();
  const cameraEvents=new AbortController();window.__novaroItemFormCameraAbort=cameraEvents;
- const i=existing||{},en=language==="en",initialGroup=cats.find(c=>c.id===i.category_id)?.group_key||"equipment";
- const groupField='<div class="field"><label>'+(en?"Item type":"نوع الصنف")+'</label><select id="itemGroup"><option value="materials">'+(en?"Materials — consumables and ingredients":"الخامات — مواد ومكونات تُستهلك")+'</option><option value="tools">'+(en?"Tools — utensils and small tools":"العدة — أدوات ومستلزمات التشغيل")+'</option><option value="equipment">'+(en?"Equipment — operating equipment":"المعدات — معدات التشغيل")+'</option><option value="assets">'+(en?"Assets — property owned by the business":"الأصول — ممتلكات المكان وأجهزته")+'</option><option value="other">'+(en?"Other":"أخرى")+'</option></select></div>';
- const categoryField='<div class="field"><label>'+(en?"Category":"التصنيف")+'</label><select id="cat"><option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup)+'</select><small class="muted" id="categoryHelp"></small></div>';
+ const i=existing||{},en=language==="en";
+ const categoryField='<div class="field"><label>'+(en?"Category":"التصنيف")+'</label><select id="cat"><option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"")+'</select><small class="muted" id="categoryHelp"></small></div>';
  const unitSelect=(id,customId,current,english)=>'<div class="field"><label>'+(english?"Unit (English)":"وحدة القياس بالعربية")+'</label><input id="'+id+'" value="'+esc(current||"")+'" placeholder="'+(english?"Type any unit name":"اكتب اسم أي وحدة قياس")+'" autocomplete="off"></div>';
 
  form(en?(existing?"Edit item":"Add item"):(existing?"تعديل الصنف":"إضافة صنف"),
- groupField+categoryField+inp(en?"Item name (Arabic)":"اسم الصنف بالعربية","n","required")+inp(en?"Item name (English)":"اسم الصنف بالإنجليزية","en","required")+inp(en?"Item code (optional)":"كود الصنف (اختياري)","code")+unitSelect("unit","unitCustom",i.unit_ar||"",false)+unitSelect("unitEn","unitEnCustom",i.unit_en||"",true)+inp(en?"Minimum stock level (0 = disabled)":"الحد الأدنى للمخزون (0 = بدون تنبيه)","minStock",'type="number" min="0" step="0.01"')+'<div class="field"><label>'+(en?"Item image":"صورة الصنف")+'</label><button type="button" class="soft" id="itemImageChoose" style="width:100%">'+(en?"Choose image source":"اختيار صورة الصنف")+'</button><input id="itemImageGallery" type="file" accept="image/*" style="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0"><input id="itemImageCamera" type="file" accept="image/*" capture="environment" style="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0"><small class="muted">'+(en?"Choose Gallery or Camera. The photo will be added as selected.":"اختار الاستوديو أو الكاميرا، والصورة هتضاف زي ما هي.")+'</small><div id="itemImagePreview" style="margin-top:8px"></div></div>'+(i.image_url?'<img src="'+esc(i.image_url)+'" style="max-width:120px;border-radius:10px">':""),
+ categoryField+inp(en?"Item name (Arabic)":"اسم الصنف بالعربية","n","required")+inp(en?"Item name (English)":"اسم الصنف بالإنجليزية","en","required")+inp(en?"Item code (optional)":"كود الصنف (اختياري)","code")+unitSelect("unit","unitCustom",i.unit_ar||"",false)+unitSelect("unitEn","unitEnCustom",i.unit_en||"",true)+inp(en?"Minimum stock level (0 = disabled)":"الحد الأدنى للمخزون (0 = بدون تنبيه)","minStock",'type="number" min="0" step="0.01"')+'<div class="field"><label>'+(en?"Item image":"صورة الصنف")+'</label><button type="button" class="soft" id="itemImageChoose" style="width:100%">'+(en?"Choose image source":"اختيار صورة الصنف")+'</button><input id="itemImageGallery" type="file" accept="image/*" style="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0"><input id="itemImageCamera" type="file" accept="image/*" capture="environment" style="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0"><small class="muted">'+(en?"Choose Gallery or Camera. The photo will be added as selected.":"اختار الاستوديو أو الكاميرا، والصورة هتضاف زي ما هي.")+'</small><div id="itemImagePreview" style="margin-top:8px"></div></div>'+(i.image_url?'<img src="'+esc(i.image_url)+'" style="max-width:120px;border-radius:10px">':""),
  async()=>{
   if(!$("cat").value)throw Error(en?"Choose a category for this item.":"اختار تصنيف للصنف قبل الحفظ.");
   let imageUrl=i.image_url||null;const file=$("itemImageGallery").files[0]||$("itemImageCamera").files[0];
@@ -1671,12 +1670,9 @@ function itemForm(existing=null){
  window.addEventListener("focus",recoverCameraImage,{signal:cameraEvents.signal});
  document.addEventListener("visibilitychange",recoverCameraImage,{signal:cameraEvents.signal});
  window.addEventListener("pageshow",recoverCameraImage,{signal:cameraEvents.signal});
- $("itemGroup").value=initialGroup;
- $("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions(i.category_id||"",initialGroup);
- $("itemGroup").onchange=()=>{$("cat").innerHTML='<option value="">'+(en?"Choose a category":"اختر التصنيف")+'</option>'+categoryOptions("",$("itemGroup").value);$("cat").value="";};
  $("n").value=i.name_ar||"";$("en").value=i.name_en||"";if($("n").__novaroTranslationManual){$("n").__novaroTranslationManual[0]=!!i.name_ar;$("en").__novaroTranslationManual[1]=!!i.name_en}$("code").value=i.item_code||"";
 $("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";if($("unit").__novaroTranslationManual){$("unit").__novaroTranslationManual[0]=!!i.unit_ar;$("unitEn").__novaroTranslationManual[1]=!!i.unit_en}$("minStock").value=Number(i.min_stock||0);
- const help=$("categoryHelp");if(help&&!cats.some(c=>(c.group_key||"equipment")===$("itemGroup").value))help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات للقسم ده لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
+ const help=$("categoryHelp");if(help&&!cats.length)help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات متاحة لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
 }
 function showItemFormFailure(error,source="add-item"){
  console.error("NOVARO item form failure:",source,error);
@@ -1694,7 +1690,7 @@ function addItem(){
   console.info("NOVARO add-item: opening form",{categories:Array.isArray(cats)?cats.length:typeof cats,role:profile?.role,language});
   itemForm();
   const main=$("main");
-  if(!main?.querySelector("#itemGroup")||!main?.querySelector("#cat"))throw new Error("The item form was created without its required category controls.");
+  if(!main?.querySelector("#cat")||main.querySelector("#itemGroup"))throw new Error("The item form category controls are missing or contain a redundant item type field.");
  }catch(error){showItemFormFailure(error,"addItem()")}
  finally{
   window.setTimeout(()=>{
