@@ -1,8 +1,7 @@
 name: Build NOVARO Inventory Android APK
 
 on:
-  push:
-    branches: [main]
+  # APK builds are manual only; never run automatically on web updates.
   workflow_dispatch:
 
 permissions:
