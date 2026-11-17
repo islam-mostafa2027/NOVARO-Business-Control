@@ -1822,14 +1822,13 @@ function addCategory(){
  const fields='<div class="field"><label>'+(en?"Category group":"مجموعة التصنيف")+'</label><select id="catGroup">'+groupOptions+'</select><small class="muted">'+(en?"Choose the fixed inventory group; category names below are free text.":"اختار مجموعة المخزون، واكتب أسماء التصنيفات بحرية في الحقول التالية.")+'</small></div>'+
   '<h4>'+(en?"Main category":"التصنيف الرئيسي")+'</h4>'+
   novaroCategoryNameInput(en?"Main category name (Arabic)":"اسم التصنيف الرئيسي بالعربية",en?"Main category name (English)":"اسم التصنيف الرئيسي بالإنجليزية","catMain")+
-  '<h4>'+(en?"Subcategory (optional)":"التصنيف الفرعي (اختياري)")+'</h4>'+
-  '<div class="muted">'+(en?"Leave both fields empty if you only need a main category.":"سيب الحقلين فاضيين لو عايز تضيف تصنيف رئيسي فقط.")+'</div>'+
-  '<div class="field"><label>'+(en?"Subcategory name (Arabic)":"اسم التصنيف الفرعي بالعربية")+'</label><input id="catSubAr" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\'catSubAr\',\'catSubEn\',\'ar\')"></div>'+
-  '<div class="field"><label>'+(en?"Subcategory name (English)":"اسم التصنيف الفرعي بالإنجليزية")+'</label><input id="catSubEn" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\'catSubEn\',\'catSubAr\',\'en\')"></div>';
+  '<h4>'+(en?"Subcategory":"التصنيف الفرعي")+'</h4>'+
+  '<div class="field"><label>'+(en?"Subcategory name (Arabic)":"اسم التصنيف الفرعي بالعربية")+'</label><input id="catSubAr" type="text" autocomplete="off" required oninput="novaroSyncCategoryLanguage(\'catSubAr\',\'catSubEn\',\'ar\')"></div>'+
+  '<div class="field"><label>'+(en?"Subcategory name (English)":"اسم التصنيف الفرعي بالإنجليزية")+'</label><input id="catSubEn" type="text" autocomplete="off" required oninput="novaroSyncCategoryLanguage(\'catSubEn\',\'catSubAr\',\'en\')"></div>';
  form(en?"Add category":"إضافة تصنيف",fields,async()=>{
   const group=$("catGroup").value,mainAr=$("catMainAr").value.trim(),mainEn=$("catMainEn").value.trim(),subAr=$("catSubAr").value.trim(),subEn=$("catSubEn").value.trim();
   if(!mainAr||!mainEn)throw Error(en?"Enter the main category name in both languages.":"اكتب اسم التصنيف الرئيسي باللغتين.");
-  if((subAr&&!subEn)||(!subAr&&subEn))throw Error(en?"Complete both subcategory names or leave both empty.":"اكتب اسم التصنيف الفرعي باللغتين أو اترك الحقلين فارغين.");
+  if(!subAr||!subEn)throw Error(en?"Enter the subcategory name in both languages.":"اكتب اسم التصنيف الفرعي باللغتين.");
   let main=cats.find(c=>(c.group_key||"equipment")===group&&!c.parent_id&&c.is_active!==false&&c.name_ar.trim().toLocaleLowerCase()===mainAr.toLocaleLowerCase());
   if(main&&main.name_en.trim().toLocaleLowerCase()!==mainEn.toLocaleLowerCase())throw Error(en?"This Arabic main category already exists with a different English name.":"التصنيف الرئيسي ده موجود بالفعل باسم إنجليزي مختلف.");
   if(!main){
