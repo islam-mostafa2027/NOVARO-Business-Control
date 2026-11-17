@@ -2520,6 +2520,7 @@ if(!window.__novaroActionTextObserver){
  window.__novaroActionTextObserver=new MutationObserver(()=>applyWhiteActionText());
  window.__novaroActionTextObserver.observe(document.documentElement,{childList:true,subtree:true,characterData:true});
 }
+applyWhiteActionText();
 function bindBilingualTranslationPairs(root=document){
  const pairs=[["n","en"],["unit","unitEn"],["branchNameAr","branchNameEn"],["branchAddressAr","branchAddressEn"],["catNameAr","catNameEn"],["branchAr","branchEn"]];
  pairs.forEach(([arId,enId])=>{
