@@ -38,7 +38,7 @@ jobs:
       - name: Prepare the shared NOVARO web app
         run: |
           mkdir -p www
-          cp index.html manifest.webmanifest sw.js icon.svg www/
+          cp index.html manifest.webmanifest sw.js icon.svg items-lab-v1.css www/
 
       - name: Generate Android project
         run: npx cap add android
