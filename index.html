@@ -1815,39 +1815,30 @@ function novaroCategoryNameInput(arLabel,enLabel,id,lang){
  return '<div class="field"><label>'+arLabel+'</label><input id="'+id+'Ar" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\''+id+'Ar\',\''+id+'En\',\'ar\')" required></div>'+
  '<div class="field"><label>'+enLabel+'</label><input id="'+id+'En" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\''+id+'En\',\''+id+'Ar\',\'en\')" required></div>';
 }
+function novaroCategoryMainOptions(group,selected=""){
+ const select=$("catMain");if(!select)return;
+ const options=cats.filter(c=>(c.group_key||"equipment")===group&&!c.parent_id&&c.is_active!==false);
+ select.innerHTML='<option value="">'+(language==="en"?"Choose kitchen or dining area":"اختر المطبخ أو الصالة")+'</option>'+options.map(c=>'<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+esc(categoryName(c))+'</option>').join("");
+}
 function addCategory(){
  const en=language==="en";if(profile.role!=="owner_admin")return alert(en?"Only the system owner can manage categories":"إدارة التصنيفات متاحة لمالك النظام فقط");
  const groupOptions=[["materials",en?"Materials":"الخامات"],["tools",en?"Tools":"العدة"],["equipment",en?"Equipment":"المعدات"],["assets",en?"Assets":"الأصول"],["other",en?"Other":"أخرى"]]
   .map(([v,label])=>'<option value="'+v+'">'+label+'</option>').join("");
- const fields='<div class="field"><label>'+(en?"Category group":"مجموعة التصنيف")+'</label><select id="catGroup">'+groupOptions+'</select><small class="muted">'+(en?"Choose the fixed inventory group; category names below are free text.":"اختار مجموعة المخزون، واكتب أسماء التصنيفات بحرية في الحقول التالية.")+'</small></div>'+
-  '<h4>'+(en?"Main category":"التصنيف الرئيسي")+'</h4>'+
-  novaroCategoryNameInput(en?"Main category name (Arabic)":"اسم التصنيف الرئيسي بالعربية",en?"Main category name (English)":"اسم التصنيف الرئيسي بالإنجليزية","catMain")+
+ const fields='<div class="field"><label>'+(en?"Main group":"التصنيف الرئيسي")+'</label><select id="catGroup" onchange="novaroCategoryMainOptions(this.value)">'+groupOptions+'</select></div>'+
+  '<div class="field"><label>'+(en?"Kitchen / Dining area":"المطبخ / الصالة")+'</label><select id="catMain"><option value="">'+(en?"Choose kitchen or dining area":"اختر المطبخ أو الصالة")+'</option>'+cats.filter(c=>(c.group_key||"equipment")==="materials"&&!c.parent_id&&c.is_active!==false).map(c=>'<option value="'+c.id+'">'+esc(categoryName(c))+'</option>').join("")+'</select><small class="muted">'+(en?"Choose one of the two existing main categories.":"اختار واحد من التصنيفين الموجودين: المطبخ أو الصالة.")+'</small></div>'+
   '<h4>'+(en?"Subcategory":"التصنيف الفرعي")+'</h4>'+
-  '<div class="field"><label>'+(en?"Subcategory name (Arabic)":"اسم التصنيف الفرعي بالعربية")+'</label><input id="catSubAr" type="text" autocomplete="off" required oninput="novaroSyncCategoryLanguage(\'catSubAr\',\'catSubEn\',\'ar\')"></div>'+
-  '<div class="field"><label>'+(en?"Subcategory name (English)":"اسم التصنيف الفرعي بالإنجليزية")+'</label><input id="catSubEn" type="text" autocomplete="off" required oninput="novaroSyncCategoryLanguage(\'catSubEn\',\'catSubAr\',\'en\')"></div>';
+  novaroCategoryNameInput(en?"Subcategory name (Arabic)":"اسم التصنيف الفرعي بالعربية",en?"Subcategory name (English)":"اسم التصنيف الفرعي بالإنجليزية","catSub");
  form(en?"Add category":"إضافة تصنيف",fields,async()=>{
-  const group=$("catGroup").value,mainAr=$("catMainAr").value.trim(),mainEn=$("catMainEn").value.trim(),subAr=$("catSubAr").value.trim(),subEn=$("catSubEn").value.trim();
-  if(!mainAr||!mainEn)throw Error(en?"Enter the main category name in both languages.":"اكتب اسم التصنيف الرئيسي باللغتين.");
+  const group=$("catGroup").value,mainId=$("catMain").value,subAr=$("catSubAr").value.trim(),subEn=$("catSubEn").value.trim();
+  if(!mainId)throw Error(en?"Choose Kitchen or Dining Area first.":"اختار المطبخ أو الصالة الأول.");
   if(!subAr||!subEn)throw Error(en?"Enter the subcategory name in both languages.":"اكتب اسم التصنيف الفرعي باللغتين.");
-  let main=cats.find(c=>(c.group_key||"equipment")===group&&!c.parent_id&&c.is_active!==false&&c.name_ar.trim().toLocaleLowerCase()===mainAr.toLocaleLowerCase());
-  if(main&&main.name_en.trim().toLocaleLowerCase()!==mainEn.toLocaleLowerCase())throw Error(en?"This Arabic main category already exists with a different English name.":"التصنيف الرئيسي ده موجود بالفعل باسم إنجليزي مختلف.");
-  if(!main){
-   const count=cats.filter(c=>(c.group_key||"equipment")===group&&!c.parent_id).length;
-   const r=await db.from("categories").insert({name_ar:mainAr,name_en:mainEn,group_key:group,parent_id:null,sort_order:count+1,is_active:true,created_by:user.id});
-   if(r.error)throw r.error;
-   await load();
-   main=cats.find(c=>(c.group_key||"equipment")===group&&!c.parent_id&&c.is_active!==false&&c.name_ar.trim().toLocaleLowerCase()===mainAr.toLocaleLowerCase());
-   if(!main)throw Error(en?"The main category was saved but could not be reloaded.":"تم حفظ التصنيف الرئيسي لكن تعذر تحميله مرة أخرى.");
-  }
-  if(subAr){
-   const existing=cats.find(c=>c.parent_id===main.id&&c.is_active!==false&&c.name_ar.trim().toLocaleLowerCase()===subAr.toLocaleLowerCase());
-   if(existing&&existing.name_en.trim().toLocaleLowerCase()!==subEn.toLocaleLowerCase())throw Error(en?"This subcategory already exists with a different English name.":"التصنيف الفرعي ده موجود بالفعل باسم إنجليزي مختلف.");
-   if(!existing){
-    const count=cats.filter(c=>c.parent_id===main.id).length;
-    const r=await db.from("categories").insert({name_ar:subAr,name_en:subEn,group_key:group,parent_id:main.id,sort_order:count+1,is_active:true,created_by:user.id});
-    if(r.error)throw r.error;
-   }
-  }
+  const main=cats.find(c=>c.id===mainId&&c.is_active!==false);
+  if(!main||main.parent_id||(main.group_key||"equipment")!==group)throw Error(en?"The selected main category does not match the group.":"التصنيف الرئيسي المختار مش تابع للمجموعة دي.");
+  const existing=cats.find(c=>c.parent_id===main.id&&c.is_active!==false&&c.name_ar.trim().toLocaleLowerCase()===subAr.toLocaleLowerCase());
+  if(existing)throw Error(en?"This subcategory already exists under the selected main category.":"التصنيف الفرعي ده موجود بالفعل تحت التصنيف الرئيسي المختار.");
+  const count=cats.filter(c=>c.parent_id===main.id).length;
+  const r=await db.from("categories").insert({name_ar:subAr,name_en:subEn,group_key:group,parent_id:main.id,sort_order:count+1,is_active:true,created_by:user.id});
+  if(r.error)throw r.error;
   await load();manageCategories();
  });
 }
