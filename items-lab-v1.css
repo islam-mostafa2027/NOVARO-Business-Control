@@ -5,7 +5,7 @@
 #main.novaro-items-experiment .branches-page-head h3{margin:0!important;color:#263b35!important;font-size:19px!important;font-weight:800!important}
 #main.novaro-items-experiment .items-toolbar{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:7px!important;margin:0 0 14px!important}
 #main.novaro-items-experiment .items-toolbar .branch-action-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;min-height:34px!important;padding:6px 10px!important;border:1px solid #d5e3dc!important;border-radius:9px!important;background:#edf3f0!important;color:#315f70!important;box-shadow:none!important;font-size:12px!important;font-weight:700!important}
-#main.novaro-items-experiment .items-toolbar .items-tool-primary{background:linear-gradient(110deg,#397f6c,#2c6d5b)!important;border-color:#367765!important;color:#fff!important}
+#main.novaro-items-experiment .items-toolbar .items-tool-primary{background:#e8f2ed!important;border-color:#d5e3dc!important;color:#397765!important}#main.novaro-items-experiment .items-toolbar .items-tool-primary .items-tool-icon{color:inherit!important}
 #main.novaro-items-experiment .items-toolbar .items-tool-icon{font-size:15px!important;line-height:1!important;color:inherit!important}
 #main.novaro-items-experiment .items-group-tabs{display:flex!important;flex-wrap:wrap!important;gap:7px!important;margin:0 0 13px!important;padding:0!important;border:0!important;background:transparent!important;overflow:visible!important}
 #main.novaro-items-experiment .items-group-tab{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:34px!important;padding:6px 13px!important;border:1px solid #d5e3dc!important;border-radius:9px!important;background:#edf3f0!important;color:#315f70!important;box-shadow:none!important;font-size:12px!important;font-weight:700!important}
@@ -652,4 +652,42 @@
     font-size:10px!important;
     padding:3px 7px!important;
   }
+}
+
+
+/* NOVARO internal pages: replace the legacy branch-inspired overrides with the approved soft card system. */
+#app #main.novaro-card-pages{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:14px!important;min-width:0!important;color:#263b35!important}
+#app #main.novaro-card-pages>section.card,
+#app #main.novaro-card-pages .card:not(.branch-card){box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;margin:0 0 12px!important;padding:18px!important;border:1px solid #dce9e2!important;border-radius:16px!important;background:linear-gradient(145deg,#fff 0%,#f7fbf8 100%)!important;box-shadow:0 4px 15px #173d3010!important}
+#app #main.novaro-card-pages h2,#app #main.novaro-card-pages h3{color:#263b35!important;font-size:18px!important;font-weight:800!important;line-height:1.5!important}
+#app #main.novaro-card-pages p{color:#71827a!important;line-height:1.7!important}
+#app #main.novaro-card-pages .muted{color:#71827a!important}
+#app #main.novaro-card-pages .row{gap:9px!important;align-items:center!important;flex-wrap:wrap!important}
+#app #main.novaro-card-pages .field{margin:12px 0!important;min-width:0!important}
+#app #main.novaro-card-pages .field label,#app #main.novaro-card-pages>section.card>label{display:block!important;margin:0 0 7px!important;color:#52685f!important;font-size:13px!important;font-weight:700!important}
+#app #main.novaro-card-pages input:not([type=checkbox]):not([type=radio]):not([type=range]),#app #main.novaro-card-pages select,#app #main.novaro-card-pages textarea{box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-height:44px!important;padding:10px 12px!important;border:1px solid #cbded3!important;border-radius:11px!important;background:#fff!important;color:#263b35!important;font:inherit!important;box-shadow:0 2px 9px #173d3008!important}
+#app #main.novaro-card-pages input:focus,#app #main.novaro-card-pages select:focus,#app #main.novaro-card-pages textarea:focus{outline:none!important;border-color:#287d6b!important;box-shadow:0 0 0 3px #287d6b18!important}
+#app #main.novaro-card-pages button:not(.items-tool):not(.items-group-tab):not(.language-choice):not([data-theme]){min-height:38px!important;padding:8px 12px!important;border:1px solid #d5e3dc!important;border-radius:10px!important;background:#e8f2ed!important;color:#397765!important;box-shadow:none!important;font-weight:700!important}
+#app #main.novaro-card-pages button.primary{background:#287d6b!important;color:#fff!important;border-color:#287d6b!important}
+#app #main.novaro-card-pages button.danger,#app #main.novaro-card-pages button.delete{background:#fff1f1!important;color:#a34b4b!important;border-color:#edcccc!important}
+#app #main.novaro-card-pages .tablewrap{width:100%!important;max-width:100%!important;overflow-x:auto!important;border:1px solid #dce9e2!important;border-radius:13px!important;background:#fff!important}
+#app #main.novaro-card-pages table{width:100%!important;border-collapse:separate!important;border-spacing:0!important}
+#app #main.novaro-card-pages th{background:#e8f3ed!important;color:#315f50!important;font-weight:800!important;white-space:nowrap!important}
+#app #main.novaro-card-pages td,#app #main.novaro-card-pages th{padding:10px!important;border-bottom:1px solid #edf2ef!important}
+#app #main.novaro-card-pages .stocktake-session-grid,#app #main.novaro-card-pages .stocktake-report-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:100%!important}
+#app #main.novaro-card-pages .stocktake-session-card,#app #main.novaro-card-pages .report-session-row{display:flex!important;flex-direction:column!important;justify-content:space-between!important;gap:12px!important;min-width:0!important;margin:0!important;padding:15px!important;border:1px solid #dfe9e3!important;border-radius:15px!important;background:linear-gradient(145deg,#fff,#f8fbf9)!important;box-shadow:0 3px 12px #173d3009!important}
+#app #main.novaro-card-pages .stocktake-session-card-head{display:flex!important;justify-content:space-between!important;align-items:flex-start!important;gap:8px!important}
+#app #main.novaro-card-pages .stocktake-session-card-title{font-weight:800!important;color:#263b35!important}
+#app #main.novaro-card-pages .stocktake-session-meta{display:flex!important;flex-wrap:wrap!important;gap:6px!important}
+#app #main.novaro-card-pages .stocktake-session-meta span{display:inline-flex!important;align-items:center!important;padding:4px 9px!important;border-radius:20px!important;background:#e8f2ed!important;color:#397765!important;font-size:11px!important;font-weight:700!important}
+#app #main.novaro-card-pages .stocktake-session-actions{display:flex!important;flex-wrap:wrap!important;gap:7px!important;padding-top:10px!important;border-top:1px solid #edf2ef!important}
+#app #main.novaro-card-pages .settings-page>h3:not(:first-child){margin-top:19px!important;padding-top:13px!important;border-top:1px solid #e7efea!important}
+#app #main.novaro-card-pages .settings-footer{display:flex!important;gap:8px!important;flex-wrap:wrap!important;justify-content:flex-end!important;margin-top:18px!important}
+@media(max-width:700px){
+ #app #main.novaro-card-pages{gap:10px!important}
+ #app #main.novaro-card-pages>section.card,#app #main.novaro-card-pages .card:not(.branch-card){padding:15px!important;border-radius:15px!important}
+ #app #main.novaro-card-pages h2,#app #main.novaro-card-pages h3{font-size:16px!important}
+ #app #main.novaro-card-pages .stocktake-session-grid,#app #main.novaro-card-pages .stocktake-report-list{grid-template-columns:1fr!important;gap:9px!important}
+ #app #main.novaro-card-pages .settings-footer{justify-content:stretch!important}
+ #app #main.novaro-card-pages .settings-footer button{flex:1 1 auto!important}
 }
