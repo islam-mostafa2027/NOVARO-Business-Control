@@ -1116,3 +1116,8 @@
   max-width:none!important;
   min-width:0!important;
 }
+/* Fix stocktake session inset: #sessions keeps the legacy .empty padding after loading. */
+#app #main.novaro-card-pages:has(#countBranch)>section.card>#sessions.empty{
+  padding:0!important;
+  text-align:initial!important;
+}
