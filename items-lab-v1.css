@@ -1029,3 +1029,32 @@
     margin-right:0!important;
   }
 }
+
+
+/* Restore the original footer flow: the developer credit must sit BELOW page content, never beside it. */
+#app:has(#main.novaro-card-pages) .workspace-content{
+  display:flex!important;
+  flex-flow:column nowrap!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:0!important;
+}
+#app:has(#main.novaro-card-pages) .workspace-content>#main.novaro-card-pages{
+  order:0!important;
+  flex:0 0 auto!important;
+  width:100%!important;
+  align-self:stretch!important;
+}
+#app:has(#main.novaro-card-pages) .workspace-content>.app-watermark{
+  order:1!important;
+  display:flex!important;
+  flex:0 0 auto!important;
+  align-self:stretch!important;
+  clear:both!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:24px 0 0!important;
+  padding:12px 0 0!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
