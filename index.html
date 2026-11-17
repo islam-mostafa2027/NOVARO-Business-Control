@@ -2104,7 +2104,7 @@ m.classList.remove("page-enter");void m.offsetWidth;m.classList.add("page-enter"
 function itemBarcodeMarkup(item){
  if(!item?.item_code)return '<span class="muted">—</span>';
  const url=window.location.origin+window.location.pathname+'?item='+encodeURIComponent(item.item_code);
- return '<span class="item-qrcode-wrap" onclick="openItemQR(this)" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openItemQR(this)}" title="'+(language==="en"?"View larger QR code":"تكبير QR Code")+'"><span class="item-qrcode" data-item-url="'+esc(url)+'" aria-label="QR code for '+esc(item.item_code)+'"></span><small>'+esc(item.item_code)+'</small></span>';
+ return '<span class="item-qrcode-wrap" onclick="openItemQR(this)" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openItemQR(this)}" title="'+(language==="en"?"View larger QR code":"تكبير QR Code")+'"><b style="display:block;font-size:10px;line-height:1.3;margin-bottom:4px;color:#287d6b">'+(language==="en"?"QR Code":"رمز QR")+'</b><span class="item-qrcode" data-item-url="'+esc(url)+'" aria-label="QR code for '+esc(item.item_code)+'"></span><small>'+esc(item.item_code)+'</small></span>';
 }
 function renderItemQRCodes(){
  if(typeof window.QRCode!=="function")return;
