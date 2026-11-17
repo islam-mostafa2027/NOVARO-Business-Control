@@ -1058,3 +1058,37 @@
   justify-content:center!important;
   text-align:center!important;
 }
+
+/* Full available phone width for Stocktake and Reports content; keep footer in its normal full-width row below. */
+@media(max-width:760px){
+  #app:has(#main.novaro-card-pages)>.wrap{
+    width:100%!important;
+    max-width:100%!important;
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+  #app:has(#main.novaro-card-pages) .app-layout,
+  #app:has(#main.novaro-card-pages) .workspace-content,
+  #app:has(#main.novaro-card-pages) #main.novaro-card-pages{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  #app:has(#main.novaro-card-pages) #main.novaro-card-pages>section.card,
+  #app #main.novaro-card-pages:has(#sessions) #sessions,
+  #app #main.novaro-card-pages:has(#reportBranch) #reportContent,
+  #app #main.novaro-card-pages:has(#sessions) .stocktake-session-grid,
+  #app #main.novaro-card-pages:has(#reportBranch) .stocktake-report-list{
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+  }
+  #app:has(#main.novaro-card-pages) .workspace-content>.app-watermark{
+    width:100%!important;
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+}
