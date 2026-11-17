@@ -715,7 +715,7 @@
 #app #main.novaro-card-pages .stocktake-session-grid,
 #app #main.novaro-card-pages .stocktake-report-list{
   display:grid!important;
-  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
   width:100%!important;
   max-width:none!important;
 }
