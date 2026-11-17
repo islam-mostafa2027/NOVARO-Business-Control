@@ -1342,6 +1342,30 @@ button.settings-swatches, .settings-swatches button{border-radius:50%!important}
  button.header-icon-button,button.ai-close{width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:7px!important}
  .tabs button{font-size:10px!important}
 }
+
+/* Higher-specificity coverage for legacy page-specific button rules. */
+:is(#app,#main,#reportContent,#novaroScanner,#novaroItemDetails,#loginView,#passwordResetView) button:not(#novaro-ai-launcher):not([data-theme]){
+ min-height:42px!important;padding:9px 14px!important;border-radius:12px!important;
+ font-family:inherit!important;font-size:13px!important;font-weight:700!important;
+ line-height:1.25!important;letter-spacing:0!important;
+}
+:is(#app,#main,#reportContent,#novaroScanner,#novaroItemDetails,#loginView,#passwordResetView) button.soft,
+:is(#app,#main,#reportContent,#novaroScanner,#novaroItemDetails,#loginView,#passwordResetView) button.secondary,
+#settingsBack{
+ background:#edf3f0!important;background-image:none!important;color:#315f70!important;
+ -webkit-text-fill-color:#315f70!important;border:1px solid #d5e3dc!important;
+ border-radius:12px!important;box-shadow:0 1px 4px #173d300b!important;
+}
+#appLayout .tabs button:not(.active){background:#edf3f0!important;background-image:none!important;color:#315f70!important;-webkit-text-fill-color:#315f70!important;border-radius:12px!important}
+#appLayout .tabs button.active,
+.app-layout .tabs button.active{
+ background:linear-gradient(110deg,var(--g,#287d6b),color-mix(in srgb,var(--g,#287d6b) 78%,#000))!important;
+ background-image:linear-gradient(110deg,var(--g,#287d6b),color-mix(in srgb,var(--g,#287d6b) 78%,#000))!important;
+ color:#fff!important;-webkit-text-fill-color:#fff!important;border-radius:12px!important;
+}
+@media(max-width:600px){
+ :is(#app,#main,#reportContent,#novaroScanner,#novaroItemDetails,#loginView,#passwordResetView) button:not(#novaro-ai-launcher):not([data-theme]){min-height:40px!important;padding:8px 11px!important;font-size:12px!important}
+}
 </style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
