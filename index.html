@@ -1155,46 +1155,15 @@ button:focus-visible{outline:3px solid #91b9a8!important;outline-offset:2px}
 </style>
 
 <style id="novaro-reports-actions-layout">
-/* Reports: equal action capsules in one clean horizontal row */
-#reportContent .report-session-row{
- display:grid!important;
- grid-template-columns:minmax(0,1fr)!important;
- gap:12px!important;
- align-items:stretch!important;
-}
-#reportContent .report-session-row>div:first-child{min-width:0!important}
-#reportContent .report-actions{
- display:grid!important;
- grid-template-columns:repeat(auto-fit,minmax(0,1fr))!important;
- grid-auto-flow:column!important;
- grid-auto-columns:minmax(0,1fr)!important;
- gap:7px!important;
- width:100%!important;
- min-width:0!important;
- align-items:stretch!important;
-}
-#reportContent .report-actions button{
- box-sizing:border-box!important;
- width:100%!important;
- min-width:0!important;
- min-height:44px!important;
- height:44px!important;
- margin:0!important;
- padding:5px 4px!important;
- display:flex!important;
- align-items:center!important;
- justify-content:center!important;
- white-space:nowrap!important;
- overflow:hidden!important;
- text-overflow:ellipsis!important;
- font-size:clamp(10px,2.7vw,13px)!important;
- line-height:1.15!important;
-}
-@media(max-width:600px){
- #reportContent .report-session-row{padding:12px!important}
- #reportContent .report-actions{gap:5px!important}
- #reportContent .report-actions button{height:42px!important;min-height:42px!important;padding:4px 2px!important;font-size:10px!important}
-}
+#reportContent .stocktake-report-list{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;width:100%!important}
+#reportContent .report-session-row{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:14px!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:16px!important;border:1px solid var(--line,#dce5e9)!important;border-radius:16px!important;background:var(--card,#fff)!important}
+#reportContent .report-session-info{min-width:0!important;width:100%!important}
+#reportContent .report-session-info>b{display:block!important;font-size:15px!important;line-height:1.4!important}
+#reportContent .report-session-info>p{margin:6px 0 0!important;line-height:1.5!important;overflow-wrap:anywhere!important}
+#reportContent .report-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:8px!important;width:100%!important;min-width:0!important;align-items:stretch!important;margin:0!important}
+#reportContent .report-actions-staff{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#reportContent .report-actions button{box-sizing:border-box!important;width:100%!important;min-width:0!important;height:44px!important;min-height:44px!important;max-height:44px!important;margin:0!important;padding:5px 3px!important;display:flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;font-size:clamp(10px,2.7vw,13px)!important;line-height:1.15!important}
+@media(max-width:600px){#reportContent .report-session-row{padding:12px!important;gap:12px!important;border-radius:14px!important}#reportContent .report-actions{gap:5px!important}#reportContent .report-actions button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:4px 2px!important;font-size:10px!important}}
 </style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
@@ -2133,7 +2102,7 @@ async function reportsPage(){
   const list=q.data||[];
   window.__novaroSessions=list;
   const en=language==="en";
-  host.innerHTML=list.length?'<div class="stocktake-report-list" style="display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important;width:100%!important">'+list.map(x=>'<section class="card report-session-row"><div><b>'+esc(sessionTitle(x))+'</b><p class="muted">'+esc(branchLabel(branches.find(b=>b.id===x.branch_id)||allBranches.find(b=>b.id===x.branch_id))||"")+' · '+esc(sessionLabel(x))+' · '+esc(x.status||"")+'</p></div><div class="row report-actions"><button data-report-action="view" data-id="'+esc(x.id)+'">'+(en?"View / Print":"عرض / طباعة")+'</button><button class="soft" data-report-action="export" data-id="'+esc(x.id)+'">'+(en?"Export Excel":"تصدير Excel")+'</button><button class="soft" data-report-action="edit" data-id="'+esc(x.id)+'">'+(en?"Edit":"تعديل")+'</button>'+(owner?'<button class="soft" data-report-action="delete" data-id="'+esc(x.id)+'">'+(en?"Delete":"حذف")+'</button>':"")+'</div></section>').join("")+'</div>':'<div class="empty">'+(en?"No stocktake sessions for this branch yet.":"لا توجد جلسات جرد لهذا الفرع حتى الآن.")+'</div>';
+  host.innerHTML=list.length?'<div class="stocktake-report-list" style="display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:10px!important;width:100%!important">'+list.map(x=>'<article class="card report-session-row"><div class="report-session-info"><b>'+esc(sessionTitle(x))+'</b><p class="muted">'+esc(branchLabel(branches.find(b=>b.id===x.branch_id)||allBranches.find(b=>b.id===x.branch_id))||"")+' · '+esc(sessionLabel(x))+' · '+esc(x.status||"")+'</p></div><div class="report-actions '+(owner?"report-actions-owner":"report-actions-staff")+'"><button data-report-action="view" data-id="'+esc(x.id)+'">'+(en?"View / Print":"عرض / طباعة")+'</button><button class="soft" data-report-action="export" data-id="'+esc(x.id)+'">'+(en?"Export Excel":"تصدير Excel")+'</button><button class="soft" data-report-action="edit" data-id="'+esc(x.id)+'">'+(en?"Edit":"تعديل")+'</button>'+(owner?'<button class="soft" data-report-action="delete" data-id="'+esc(x.id)+'">'+(en?"Delete":"حذف")+'</button>':"")+'</div></article>').join("")+'</div>':'<div class="empty">'+(en?"No stocktake sessions for this branch yet.":"لا توجد جلسات جرد لهذا الفرع حتى الآن.")+'</div>';
   host.querySelectorAll("[data-report-action]").forEach(btn=>btn.addEventListener("click",()=>{
    const action=btn.dataset.reportAction,sid=btn.dataset.id;
    if(action==="view")viewStocktakeReport(sid);
