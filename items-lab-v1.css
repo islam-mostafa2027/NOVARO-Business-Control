@@ -1121,3 +1121,8 @@
   padding:0!important;
   text-align:initial!important;
 }
+/* Reports only: remove legacy .empty inset from the report list host. */
+#app #main.novaro-card-pages:has(#reportBranch)>section.card>#reportContent.empty{
+  padding:0!important;
+  text-align:initial!important;
+}
