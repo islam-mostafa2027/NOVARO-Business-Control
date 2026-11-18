@@ -2214,5 +2214,32 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #app .header-clock-date{
  color:#b8c9bf!important;
 }
+
+/* Dark theme for the brand and signed-in user area in the header. */
+:root[data-novaro-mode="dark"] #app .app-header.novaro-header-column .brand-title>b{
+ color:#f0f6f2!important;
+ -webkit-text-fill-color:#f0f6f2!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header.novaro-header-column .brand-title .muted{
+ color:#b8c9bf!important;
+ -webkit-text-fill-color:#b8c9bf!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header.novaro-header-column .header-user-name{
+ background:#263b31!important;
+ border-color:#496858!important;
+ color:#c5efd7!important;
+ -webkit-text-fill-color:#c5efd7!important;
+ box-shadow:0 3px 12px #00000020!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header.novaro-header-column .header-user-name:before{
+ background:#80d5aa!important;
+ box-shadow:0 0 0 3px #80d5aa20!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header.novaro-header-column .logo{
+ background:linear-gradient(145deg,#294b3d 0%,#203b30 100%)!important;
+ border-color:#527b65!important;
+ color:#d7f3e1!important;
+ box-shadow:0 7px 18px #00000030!important;
+}
 </style>
 </body></html>
