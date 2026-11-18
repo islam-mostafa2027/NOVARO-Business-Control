@@ -1618,6 +1618,30 @@ function openItemQR(wrap){
  modal.style.display="flex";
 }
 function closeItemQR(){const modal=document.getElementById("novaroQRPreview");if(modal)modal.style.display="none"}
+function showScannedItem(item){
+ if(!item)return;
+ const en=language==="en",group=categoryGroups.find(g=>g.key===cats.find(c=>c.id===item.category_id)?.group_key);
+ const category=cats.find(c=>c.id===item.category_id);
+ const qty=Number(balances[(branchId||"")+":"+item.id]||0);
+ let modal=document.getElementById("novaroItemDetails");
+ if(!modal){
+  modal=document.createElement("div");modal.id="novaroItemDetails";
+  modal.innerHTML='<div class="detail-panel"><div class="row" style="justify-content:space-between;align-items:center"><h3 id="novaroScannedTitle"></h3><button type="button" class="soft" id="novaroScannedClose">×</button></div><div class="detail-grid" id="novaroScannedGrid"></div></div>';
+  modal.querySelector("#novaroScannedClose").onclick=()=>modal.style.display="none";
+  modal.addEventListener("click",e=>{if(e.target===modal)modal.style.display="none"});
+  document.body.appendChild(modal);
+ }
+ const cell=(label,value)=>'<div class="detail-cell"><small>'+label+'</small><b>'+esc(value||"—")+'</b></div>';
+ modal.querySelector("#novaroScannedTitle").textContent=item.name_ar||item.name_en|| (en?"Item details":"بيانات الصنف");
+ modal.querySelector("#novaroScannedGrid").innerHTML=
+  cell(en?"Item name":"اسم الصنف",en?(item.name_en||item.name_ar):(item.name_ar||item.name_en))+
+  cell(en?"Item code":"كود الصنف",item.item_code)+
+  cell(en?"Main group":"المجموعة الرئيسية",group?categoryGroupLabel(group.key):"—")+
+  cell(en?"Category":"التصنيف",category?categoryName(category):"—")+
+  cell(en?"Unit":"الوحدة",en?(item.unit_en||item.unit_ar):(item.unit_ar||item.unit_en))+
+  cell(en?"Current branch balance":"رصيد الفرع الحالي",qty);
+ modal.style.display="flex";
+}
 function openLinkedItemFromUrl(){
  const params=new URLSearchParams(window.location.search),code=params.get("item");
  if(!code)return;
