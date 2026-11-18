@@ -1045,6 +1045,13 @@ function novaroApplyColorMode(p){
  if(meta)meta.setAttribute("content",mode==="dark"?"#19251f":(novaroThemeMap()[p.theme]||novaroThemeMap().default)[1]);
  return mode;
 }
+if(!window.__novaroSystemThemeListener&&window.matchMedia){
+ const systemThemeQuery=window.matchMedia("(prefers-color-scheme: dark)");
+ const syncSystemTheme=()=>{const prefs=getNovaroPrefs();if(prefs.appearance==="system")novaroApplyColorMode(prefs);};
+ if(systemThemeQuery.addEventListener)systemThemeQuery.addEventListener("change",syncSystemTheme);
+ else if(systemThemeQuery.addListener)systemThemeQuery.addListener(syncSystemTheme);
+ window.__novaroSystemThemeListener=true;
+}
 function applyNovaroAppearance(overridePrefs){
  const p=overridePrefs||getNovaroPrefs(),root=document.documentElement,t=novaroThemeMap()[p.theme]||novaroThemeMap().default,fonts=novaroFontMap();
  novaroApplyColorMode(p);
