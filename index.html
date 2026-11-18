@@ -1956,7 +1956,7 @@ async function submitStocktakeSession(){
 }
 
 function stocktakeUnitFields(x,en,locked){const ar=x.count_unit_ar||x.items?.unit_ar||"",eng=x.count_unit_en||x.items?.unit_en||"",value=en?(eng||ar):(ar||eng);return '<label style="display:block;font-size:13px;color:var(--muted);margin:6px 0 4px">'+(en?"Unit of measure":"وحدة القياس")+'</label><input data-unit-custom="'+x.id+'" value="'+esc(value)+'" placeholder="'+(en?"Type any unit name":"اكتب اسم أي وحدة قياس")+'" '+(locked?"disabled":"")+' style="width:100%;margin-top:6px;padding:9px;border:1px solid var(--line);border-radius:10px">';}
-function showStocktakeCategory(categoryId){window.__novaroStocktakeSubView="category";const v=window.__stocktakeView;if(!v)return;const en=language==="en",area=$("sessions"),cat=cats.find(c=>c.id===categoryId),title=categoryId==="__none"?(en?"Uncategorized":"بدون تصنيف"):categoryName(cat),rows=v.rows.filter(x=>(x.items?.category_id||"__none")===categoryId);const cards=rows.map(x=>'<article class="card stocktake-entry-card"><div class="stocktake-entry-media">'+(x.items?.image_url?'<img src="'+esc(x.items.image_url)+'" alt="" class="stocktake-entry-image">':'<span class="stocktake-entry-placeholder">▧</span>')+'</div><div class="stocktake-entry-main"><b class="stocktake-entry-name">'+esc(nameOf(x.items)||"صنف")+'</b><div class="stocktake-entry-unit">'+stocktakeUnitFields(x,en,v.locked)+'</div></div><div class="stocktake-entry-quantity"><label>'+(en?"Actual quantity":"الكمية الموجودة")+'</label><input class="stocktake-entry-count" type="number" min="0" step="0.01" data-count-id="'+x.id+'" value="'+Number(x.counted_quantity||0)+'" '+(v.locked?"disabled":"")+'></div></article>').join("");area.innerHTML='<div class="row"><div><h3>'+esc(title)+'</h3><p class="muted">'+rows.length+' '+(en?"items":"صنف")+'</p></div><button class="soft" onclick="renderStocktakeCategories()">← '+(en?"All categories":"كل التصنيفات")+'</button></div>'+(rows.length?'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">'+cards+'</div>':'<section class="card empty">'+(en?"No items in this category yet":"لا توجد أصناف في هذا التصنيف حالياً")+'</section>')+(v.locked?'<p class="muted">'+(en?"This session is locked.":"الجلسة مغلقة.")+'</p>':'<div class="row" style="margin-top:16px"><button id="saveCategoryCounts">'+(en?"Save quantities":"حفظ الكميات")+'</button><span id="countSaveMsg" class="muted"></span></div>');if(!v.locked&&rows.length){/* Units are free text; no fixed unit template is used. */$("saveCategoryCounts").onclick=async()=>{const btn=$("saveCategoryCounts");btn.disabled=true;try{for(const input of area.querySelectorAll("[data-count-id]")){const value=Number(input.value);if(input.value.trim()===""||!Number.isFinite(value)||value<0)throw Error(en?"Enter a valid quantity":"اكتب كمية صحيحة، ويمكن كتابة صفر إذا كان الصنف غير موجود");const id=input.dataset.countId,custom=area.querySelector('[data-unit-custom="'+id+'"]');const val=(custom?.value||"").trim();if(!val)throw Error(en?"Enter a unit name":"اكتب اسم وحدة القياس");const ar=val,eng=val;const now=new Date().toISOString();const u=await db.from("branch_item_stock").upsert({branch_id:v.branch_id,item_id:id,quantity:value,updated_by:user.id,updated_at:now},{onConflict:"branch_id,item_id"});if(u.error)throw u.error;balances[v.branch_id+":"+id]=value;const row=v.rows.find(x=>x.id===id);if(row){row.counted_quantity=value;row.count_unit_ar=ar;row.count_unit_en=eng;row.is_counted=true}}$("countSaveMsg").textContent=en?"Saved successfully":"تم حفظ الكميات بنجاح"}catch(e){$("countSaveMsg").textContent=e.message||String(e)}finally{btn.disabled=false}}} }
+function showStocktakeCategory(categoryId){window.__novaroStocktakeSubView="category";const v=window.__stocktakeView;if(!v)return;const en=language==="en",area=$("sessions"),cat=cats.find(c=>c.id===categoryId),title=categoryId==="__none"?(en?"Uncategorized":"بدون تصنيف"):categoryName(cat),rows=v.rows.filter(x=>(x.items?.category_id||"__none")===categoryId);const cards=rows.map(x=>'<article class="card stocktake-entry-card"><div class="stocktake-entry-media">'+(x.items?.image_url?'<img src="'+esc(x.items.image_url)+'" alt="" class="stocktake-entry-image">':'<span class="stocktake-entry-placeholder">▧</span>')+'</div><div class="stocktake-entry-main"><b class="stocktake-entry-name">'+esc(nameOf(x.items)||"صنف")+'</b></div><div class="stocktake-entry-controls"><div class="stocktake-entry-unit">'+stocktakeUnitFields(x,en,v.locked)+'</div><div class="stocktake-entry-quantity"><label>'+(en?"Actual quantity":"الكمية الموجودة")+'</label><input class="stocktake-entry-count" type="number" min="0" step="0.01" data-count-id="'+x.id+'" value="'+Number(x.counted_quantity||0)+'" '+(v.locked?"disabled":"")+'></div></div></article>').join("");area.innerHTML='<div class="row"><div><h3>'+esc(title)+'</h3><p class="muted">'+rows.length+' '+(en?"items":"صنف")+'</p></div><button class="soft" onclick="renderStocktakeCategories()">← '+(en?"All categories":"كل التصنيفات")+'</button></div>'+(rows.length?'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">'+cards+'</div>':'<section class="card empty">'+(en?"No items in this category yet":"لا توجد أصناف في هذا التصنيف حالياً")+'</section>')+(v.locked?'<p class="muted">'+(en?"This session is locked.":"الجلسة مغلقة.")+'</p>':'<div class="row" style="margin-top:16px"><button id="saveCategoryCounts">'+(en?"Save quantities":"حفظ الكميات")+'</button><span id="countSaveMsg" class="muted"></span></div>');if(!v.locked&&rows.length){/* Units are free text; no fixed unit template is used. */$("saveCategoryCounts").onclick=async()=>{const btn=$("saveCategoryCounts");btn.disabled=true;try{for(const input of area.querySelectorAll("[data-count-id]")){const value=Number(input.value);if(input.value.trim()===""||!Number.isFinite(value)||value<0)throw Error(en?"Enter a valid quantity":"اكتب كمية صحيحة، ويمكن كتابة صفر إذا كان الصنف غير موجود");const id=input.dataset.countId,custom=area.querySelector('[data-unit-custom="'+id+'"]');const val=(custom?.value||"").trim();if(!val)throw Error(en?"Enter a unit name":"اكتب اسم وحدة القياس");const ar=val,eng=val;const now=new Date().toISOString();const u=await db.from("branch_item_stock").upsert({branch_id:v.branch_id,item_id:id,quantity:value,updated_by:user.id,updated_at:now},{onConflict:"branch_id,item_id"});if(u.error)throw u.error;balances[v.branch_id+":"+id]=value;const row=v.rows.find(x=>x.id===id);if(row){row.counted_quantity=value;row.count_unit_ar=ar;row.count_unit_en=eng;row.is_counted=true}}$("countSaveMsg").textContent=en?"Saved successfully":"تم حفظ الكميات بنجاح"}catch(e){$("countSaveMsg").textContent=e.message||String(e)}finally{btn.disabled=false}}} }
 setTimeout(()=>{const splash=document.getElementById("splash");if(splash){splash.classList.add("splash-out");setTimeout(()=>splash.remove(),700)}},4400);
 applyLanguage();init().catch(err);
 </script><script>
@@ -2522,86 +2522,62 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 
 
-<style id="novaro-stocktake-entry-card-v1">
-/* Consistent item cards inside the live stocktake category view. */
+<style id="novaro-stocktake-entry-card-v2">
+/* Balanced stocktake item card: clear item identity, compact side-by-side fields. */
 #app .stocktake-entry-card{
  display:grid!important;
- grid-template-columns:76px minmax(0,1fr);
- grid-template-areas:"media main" "media quantity";
+ grid-template-columns:82px minmax(0,1fr)!important;
+ grid-template-areas:"media main" "media controls"!important;
  align-items:center!important;
- gap:10px 13px!important;
- min-width:0;
- margin:0!important;
- padding:14px!important;
- border:1px solid var(--line)!important;
- border-radius:17px!important;
+ gap:8px 13px!important;
+ min-width:0;margin:0!important;padding:13px!important;
+ border:1px solid var(--line)!important;border-radius:16px!important;
  background:linear-gradient(145deg,#fff,#f5f9f7)!important;
  box-shadow:0 4px 14px #173d3009!important;
 }
 #app .stocktake-entry-media{
- grid-area:media;
- width:76px;height:76px;min-width:76px;
- display:grid;place-items:center;
- overflow:hidden;
- border:1px solid #dce9e2;
- border-radius:13px;
- background:#edf4f0;
+ grid-area:media;width:82px;height:82px;min-width:82px;
+ display:grid;place-items:center;overflow:hidden;
+ border:1px solid #dce9e2;border-radius:12px;background:#edf4f0;
 }
 #app .stocktake-entry-image{display:block;width:100%;height:100%;object-fit:cover}
-#app .stocktake-entry-placeholder{font-size:28px;color:#71877b}
-#app .stocktake-entry-main{grid-area:main;min-width:0}
+#app .stocktake-entry-placeholder{font-size:29px;color:#71877b}
+#app .stocktake-entry-main{grid-area:main;min-width:0;align-self:end}
 #app .stocktake-entry-name{
- display:block;
- min-width:0;
- margin:0 0 7px;
- color:var(--ink);
- font-size:15px;
- font-weight:800;
- line-height:1.5;
- overflow-wrap:anywhere;
+ display:block;min-width:0;margin:0!important;padding:0 2px 2px!important;
+ color:var(--ink);font-size:15px;font-weight:800;line-height:1.45;
+ overflow-wrap:anywhere;text-align:start;
 }
-#app .stocktake-entry-unit{min-width:0}
+#app .stocktake-entry-controls{
+ grid-area:controls;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:8px;min-width:0;align-self:start;
+}
+#app .stocktake-entry-unit,#app .stocktake-entry-quantity{min-width:0;margin:0!important}
 #app .stocktake-entry-unit label,
 #app .stocktake-entry-quantity label{
- display:block!important;
- margin:0 0 5px!important;
- color:var(--muted)!important;
- font-size:11px!important;
- font-weight:700!important;
- line-height:1.4;
+ display:block!important;margin:0 0 4px!important;
+ color:var(--muted)!important;font-size:10px!important;
+ font-weight:700!important;line-height:1.35!important;
 }
 #app .stocktake-entry-unit input,
 #app .stocktake-entry-count{
- display:block!important;
- width:100%!important;
- min-width:0!important;
- height:42px!important;
- min-height:42px!important;
- margin:0!important;
- padding:8px 10px!important;
- border:1px solid var(--line)!important;
- border-radius:11px!important;
- background:#fff!important;
- color:var(--ink)!important;
- font-size:14px!important;
- font-weight:650!important;
- box-shadow:none!important;
+ display:block!important;width:100%!important;min-width:0!important;
+ height:37px!important;min-height:37px!important;margin:0!important;
+ padding:6px 8px!important;border:1px solid var(--line)!important;
+ border-radius:9px!important;background:#fff!important;color:var(--ink)!important;
+ font-size:13px!important;font-weight:650!important;box-shadow:none!important;
 }
 #app .stocktake-entry-unit input:focus,
 #app .stocktake-entry-count:focus{
- outline:none!important;
- border-color:#77b9d2!important;
- box-shadow:0 0 0 3px #77b9d225!important;
+ outline:none!important;border-color:#77b9d2!important;
+ box-shadow:0 0 0 2px #77b9d225!important;
 }
-#app .stocktake-entry-quantity{grid-area:quantity;min-width:0}
-#app .stocktake-entry-count{font-size:16px!important;font-weight:800!important}
+#app .stocktake-entry-count{font-size:15px!important;font-weight:800!important}
 #app .stocktake-entry-unit input:disabled,
 #app .stocktake-entry-count:disabled{opacity:.8!important;cursor:not-allowed}
 :root[data-novaro-mode="dark"] #app .stocktake-entry-card{
- background:#202f28!important;
- background-image:none!important;
- border-color:#40564a!important;
- box-shadow:0 4px 14px #00000020!important;
+ background:#202f28!important;background-image:none!important;
+ border-color:#40564a!important;box-shadow:0 4px 14px #00000020!important;
 }
 :root[data-novaro-mode="dark"] #app .stocktake-entry-media{
  background:#26382f!important;border-color:#40564a!important;
@@ -2616,10 +2592,17 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  border-color:#50685a!important;-webkit-text-fill-color:#edf5f0!important;
 }
 @media(max-width:420px){
- #app .stocktake-entry-card{grid-template-columns:64px minmax(0,1fr);gap:9px 10px!important;padding:12px!important}
- #app .stocktake-entry-media{width:64px;height:64px;min-width:64px;border-radius:11px}
+ #app .stocktake-entry-card{grid-template-columns:72px minmax(0,1fr)!important;gap:7px 10px!important;padding:11px!important}
+ #app .stocktake-entry-media{width:72px;height:72px;min-width:72px;border-radius:11px}
  #app .stocktake-entry-name{font-size:14px}
- #app .stocktake-entry-unit input,#app .stocktake-entry-count{height:40px!important;min-height:40px!important}
+ #app .stocktake-entry-controls{gap:6px}
+ #app .stocktake-entry-unit label,#app .stocktake-entry-quantity label{font-size:9px!important}
+ #app .stocktake-entry-unit input,#app .stocktake-entry-count{height:35px!important;min-height:35px!important;padding:5px 6px!important;font-size:12px!important}
+}
+@media(max-width:350px){
+ #app .stocktake-entry-card{grid-template-columns:62px minmax(0,1fr)!important}
+ #app .stocktake-entry-media{width:62px;height:62px;min-width:62px}
+ #app .stocktake-entry-controls{grid-template-columns:1fr 1fr}
 }
 </style>
 </body></html>
