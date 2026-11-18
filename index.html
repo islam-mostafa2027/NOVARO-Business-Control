@@ -2004,6 +2004,8 @@ function addCategoryGroup(){
   if(inserted.error){await db.from("category_groups").delete().eq("key",key);throw inserted.error;}
   await load();window.__novaroReturnToCategoryManager=true;
  });
+ const addSubcategoryButton=$("novaroAddGroupSubcategory"),saveButton=$("save");
+ [addSubcategoryButton,saveButton].forEach(button=>{if(button){button.style.display="block";button.style.width="100%";button.style.boxSizing="border-box";button.style.minHeight="46px";button.style.height="46px";button.style.marginTop="10px";button.style.marginBottom="0";button.style.borderRadius="12px";}});
  novaroAddGroupSubcategoryRow();
  $("novaroAddGroupSubcategory").onclick=novaroAddGroupSubcategoryRow;
 }
