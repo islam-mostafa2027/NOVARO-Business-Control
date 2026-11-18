@@ -546,6 +546,79 @@ a.auth-back-link:hover{background:#e3eee8!important}
 :root[data-novaro-mode="dark"] #app .novaro-category-main-card-head h4{color:var(--ink,#e5eee9)}
 @media(max-width:420px){#app .novaro-category-main-card{padding:12px}#app .novaro-category-area-capsules{gap:7px}#app .novaro-category-area-pill{padding-inline-start:10px;padding-inline-end:31px;min-height:58px}#app .novaro-category-area-name{font-size:12px}}
 </style>
+
+<style id="novaro-unified-cards-capsules-v2">
+/* Unified NOVARO card language, matching the Branches page. */
+#app .stocktake-session-grid,
+#app #inventoryLocations .stocktake-session-grid,
+#app .branches-grid{gap:12px!important}
+#app .stocktake-session-card,
+#app .branch-card{
+  box-sizing:border-box!important;min-width:0!important;padding:16px!important;
+  border:1px solid var(--line,#e0ebe5)!important;border-radius:16px!important;
+  background:var(--surface,#fff)!important;
+  box-shadow:0 3px 12px rgba(23,61,48,.07)!important;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease!important;
+}
+#app .stocktake-session-card{display:flex!important;flex-direction:column!important;justify-content:space-between!important;gap:14px!important;min-height:142px!important}
+#app .stocktake-session-card-head{display:flex!important;align-items:center!important;gap:10px!important;min-width:0!important}
+#app .stocktake-session-card-title{display:flex!important;align-items:center!important;min-height:42px!important;min-width:0!important;font-size:15px!important;font-weight:750!important;line-height:1.45!important;overflow-wrap:anywhere!important}
+#app .stocktake-session-card .stocktake-session-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;width:100%!important;margin-top:auto!important}
+#app .stocktake-session-card .stocktake-session-actions>button{grid-column:auto!important;width:100%!important;min-width:0!important;height:auto!important;min-height:42px!important;max-height:none!important;padding:8px 10px!important;border-radius:11px!important;font-size:12px!important;white-space:normal!important}
+#app .stocktake-session-card>button{min-height:82px!important;border:1px dashed var(--g,#287d6b)!important;border-radius:13px!important;background:color-mix(in srgb,var(--g,#287d6b) 6%,var(--surface,#fff))!important;color:var(--g,#287d6b)!important;box-shadow:none!important;font-weight:750!important}
+#app .stocktake-session-card:has(>button:only-child){justify-content:center!important}
+#app .branch-card{padding:16px!important;border-radius:16px!important}
+#app .branch-card-symbol{border-radius:12px!important}
+#app .branch-card-actions{gap:8px!important}
+#app .stat-card,#main .stats>.stat-card{
+  border:1px solid var(--line,#e0ebe5)!important;border-radius:16px!important;
+  background:var(--surface,#fff)!important;box-shadow:0 3px 12px rgba(23,61,48,.06)!important;
+}
+#app .stat-card{padding:16px!important}
+#app .app-header .header-icon-button,
+#app .app-header .language-toggle-capsule,
+#app .app-header .logout-control{
+  border-radius:13px!important;border:1px solid var(--line,#dce9e2)!important;
+  box-shadow:0 2px 8px rgba(23,61,48,.05)!important;
+}
+#app .app-header .header-icon-button{background:var(--surface,#fff)!important}
+#app .app-header .language-toggle-capsule,
+#app .app-header .logout-control{background:var(--mint,#edf6f1)!important}
+#app .novaro-category-main-card{border-radius:16px!important;box-shadow:0 3px 12px rgba(23,61,48,.06)!important}
+#app .novaro-category-area-pill{
+  min-height:70px!important;padding:12px 38px 12px 14px!important;
+  border-radius:14px!important;background:var(--surface,#fff)!important;
+  box-shadow:0 2px 8px rgba(23,61,48,.045)!important;
+}
+#app .novaro-category-area-pill:hover{transform:translateY(-1px);border-color:var(--g,#287d6b)!important}
+#app .novaro-category-area-name{font-size:14px!important;font-weight:750!important}
+#app .novaro-category-area-count{font-size:11px!important}
+:root[data-novaro-mode="dark"] #app .stocktake-session-card,
+:root[data-novaro-mode="dark"] #app .branch-card,
+:root[data-novaro-mode="dark"] #app .stat-card,
+:root[data-novaro-mode="dark"] #main .stats>.stat-card,
+:root[data-novaro-mode="dark"] #app .novaro-category-main-card,
+:root[data-novaro-mode="dark"] #app .novaro-category-area-pill{
+  background:var(--surface,#202f28)!important;border-color:var(--line,#40564a)!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.12)!important;color:var(--ink,#e5eee9)!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header .header-icon-button,
+:root[data-novaro-mode="dark"] #app .app-header .language-toggle-capsule,
+:root[data-novaro-mode="dark"] #app .app-header .logout-control{
+  background:var(--surface,#202f28)!important;border-color:var(--line,#40564a)!important;
+}
+@media(max-width:600px){
+ #app .stocktake-session-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ #app .stocktake-session-card{padding:12px!important;min-height:132px!important;gap:11px!important}
+ #app .stocktake-session-card-title{font-size:13px!important;min-height:38px!important}
+ #app .stocktake-session-card .stocktake-session-actions{gap:6px!important}
+ #app .stocktake-session-card .stocktake-session-actions>button{font-size:11px!important;padding:7px 5px!important;min-height:40px!important}
+ #app .stocktake-session-card>button{min-height:76px!important;font-size:12px!important}
+ #app .stat-card,#main .stats>.stat-card{padding:13px 10px!important}
+ #app .novaro-category-area-pill{min-height:64px!important;padding-inline-start:11px!important;padding-inline-end:32px!important}
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
