@@ -2522,57 +2522,59 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 
 
-<style id="novaro-stocktake-entry-card-v2">
-/* Balanced stocktake item card: clear item identity, compact side-by-side fields. */
+<style id="novaro-stocktake-entry-card-v3">
+/* Horizontal stocktake card: photo, item-name capsule, and stacked compact fields. */
 #app .stocktake-entry-card{
  display:grid!important;
- grid-template-columns:82px minmax(0,1fr)!important;
- grid-template-areas:"media main" "media controls"!important;
+ grid-template-columns:70px minmax(58px,.85fr) minmax(112px,1fr)!important;
+ grid-template-areas:"media main controls"!important;
  align-items:center!important;
- gap:8px 13px!important;
- min-width:0;margin:0!important;padding:13px!important;
+ gap:8px!important;
+ min-width:0;margin:0!important;padding:11px!important;
  border:1px solid var(--line)!important;border-radius:16px!important;
  background:linear-gradient(145deg,#fff,#f5f9f7)!important;
  box-shadow:0 4px 14px #173d3009!important;
 }
 #app .stocktake-entry-media{
- grid-area:media;width:82px;height:82px;min-width:82px;
+ grid-area:media;width:70px;height:70px;min-width:70px;
  display:grid;place-items:center;overflow:hidden;
- border:1px solid #dce9e2;border-radius:12px;background:#edf4f0;
+ border:1px solid #dce9e2;border-radius:11px;background:#edf4f0;
 }
 #app .stocktake-entry-image{display:block;width:100%;height:100%;object-fit:cover}
-#app .stocktake-entry-placeholder{font-size:29px;color:#71877b}
-#app .stocktake-entry-main{grid-area:main;min-width:0;align-self:end}
+#app .stocktake-entry-placeholder{font-size:27px;color:#71877b}
+#app .stocktake-entry-main{grid-area:main;min-width:0;align-self:center}
 #app .stocktake-entry-name{
- display:block;min-width:0;margin:0!important;padding:0 2px 2px!important;
- color:var(--ink);font-size:15px;font-weight:800;line-height:1.45;
- overflow-wrap:anywhere;text-align:start;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%;min-width:0;min-height:46px;margin:0!important;padding:7px 6px!important;
+ border:1px solid #d7e6dd;border-radius:10px;
+ background:#edf5f0;color:var(--ink);font-size:13px;font-weight:800;
+ line-height:1.4;text-align:center;overflow-wrap:anywhere;word-break:normal;
 }
 #app .stocktake-entry-controls{
- grid-area:controls;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
- gap:8px;min-width:0;align-self:start;
+ grid-area:controls;display:grid;grid-template-columns:minmax(0,1fr);
+ grid-template-rows:auto auto;gap:6px;min-width:0;align-self:center;
 }
 #app .stocktake-entry-unit,#app .stocktake-entry-quantity{min-width:0;margin:0!important}
 #app .stocktake-entry-unit label,
 #app .stocktake-entry-quantity label{
- display:block!important;margin:0 0 4px!important;
+ display:block!important;margin:0 0 3px!important;
  color:var(--muted)!important;font-size:10px!important;
- font-weight:700!important;line-height:1.35!important;
+ font-weight:700!important;line-height:1.25!important;
 }
 #app .stocktake-entry-unit input,
 #app .stocktake-entry-count{
  display:block!important;width:100%!important;min-width:0!important;
- height:37px!important;min-height:37px!important;margin:0!important;
- padding:6px 8px!important;border:1px solid var(--line)!important;
+ height:34px!important;min-height:34px!important;margin:0!important;
+ padding:5px 8px!important;border:1px solid var(--line)!important;
  border-radius:9px!important;background:#fff!important;color:var(--ink)!important;
- font-size:13px!important;font-weight:650!important;box-shadow:none!important;
+ font-size:12px!important;font-weight:650!important;box-shadow:none!important;
 }
 #app .stocktake-entry-unit input:focus,
 #app .stocktake-entry-count:focus{
  outline:none!important;border-color:#77b9d2!important;
  box-shadow:0 0 0 2px #77b9d225!important;
 }
-#app .stocktake-entry-count{font-size:15px!important;font-weight:800!important}
+#app .stocktake-entry-count{font-size:14px!important;font-weight:800!important}
 #app .stocktake-entry-unit input:disabled,
 #app .stocktake-entry-count:disabled{opacity:.8!important;cursor:not-allowed}
 :root[data-novaro-mode="dark"] #app .stocktake-entry-card{
@@ -2583,7 +2585,9 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  background:#26382f!important;border-color:#40564a!important;
 }
 :root[data-novaro-mode="dark"] #app .stocktake-entry-placeholder{color:#c0d2c8!important}
-:root[data-novaro-mode="dark"] #app .stocktake-entry-name{color:#edf5f0!important}
+:root[data-novaro-mode="dark"] #app .stocktake-entry-name{
+ background:#294438!important;border-color:#496757!important;color:#edf5f0!important;
+}
 :root[data-novaro-mode="dark"] #app .stocktake-entry-unit label,
 :root[data-novaro-mode="dark"] #app .stocktake-entry-quantity label{color:#b8c9bf!important}
 :root[data-novaro-mode="dark"] #app .stocktake-entry-unit input,
@@ -2591,18 +2595,22 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  background:#26382f!important;color:#edf5f0!important;
  border-color:#50685a!important;-webkit-text-fill-color:#edf5f0!important;
 }
-@media(max-width:420px){
- #app .stocktake-entry-card{grid-template-columns:72px minmax(0,1fr)!important;gap:7px 10px!important;padding:11px!important}
- #app .stocktake-entry-media{width:72px;height:72px;min-width:72px;border-radius:11px}
- #app .stocktake-entry-name{font-size:14px}
- #app .stocktake-entry-controls{gap:6px}
- #app .stocktake-entry-unit label,#app .stocktake-entry-quantity label{font-size:9px!important}
- #app .stocktake-entry-unit input,#app .stocktake-entry-count{height:35px!important;min-height:35px!important;padding:5px 6px!important;font-size:12px!important}
-}
-@media(max-width:350px){
- #app .stocktake-entry-card{grid-template-columns:62px minmax(0,1fr)!important}
+@media(max-width:390px){
+ #app .stocktake-entry-card{
+  grid-template-columns:62px minmax(52px,.78fr) minmax(102px,1fr)!important;
+  gap:6px!important;padding:9px!important;
+ }
  #app .stocktake-entry-media{width:62px;height:62px;min-width:62px}
- #app .stocktake-entry-controls{grid-template-columns:1fr 1fr}
+ #app .stocktake-entry-name{font-size:12px;padding:6px 4px!important;min-height:42px}
+ #app .stocktake-entry-unit label,#app .stocktake-entry-quantity label{font-size:9px!important}
+ #app .stocktake-entry-unit input,#app .stocktake-entry-count{
+  height:32px!important;min-height:32px!important;padding:4px 6px!important;font-size:11px!important;
+ }
+}
+@media(max-width:340px){
+ #app .stocktake-entry-card{grid-template-columns:54px minmax(45px,.72fr) minmax(94px,1fr)!important;gap:5px!important;padding:8px!important}
+ #app .stocktake-entry-media{width:54px;height:54px;min-width:54px}
+ #app .stocktake-entry-name{font-size:11px}
 }
 </style>
 </body></html>
