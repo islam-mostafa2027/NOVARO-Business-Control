@@ -662,7 +662,19 @@ a.auth-back-link:hover{background:#e3eee8!important}
 #app .stocktake-transfer-button{border:1px solid #287d6b!important;background:#eaf4ef!important;color:#246b5c!important;font-weight:800!important;border-radius:10px!important;padding:9px 14px!important;white-space:nowrap!important}
 #app .stocktake-transfer-button:hover{background:#dceee5!important}
 :root[data-novaro-mode="dark"] #app .stocktake-transfer-button{background:#294438!important;color:#d8eee2!important;border-color:#527966!important}
-</style></head><body><script>
+</style>
+<style id="novaro-report-archive-capsules-v1">
+#reportContent .reports-archive-toolbar{display:flex;justify-content:flex-end;width:100%;margin:0 0 10px}
+#reportContent .reports-archive-toggle{min-height:38px;padding:7px 16px;border-radius:999px;font-weight:750}
+#reportContent .report-session-row{display:flex;flex-direction:column;gap:12px}
+#reportContent .report-actions,
+#reportContent .report-actions-owner{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:100%!important;align-items:stretch!important}
+#reportContent .report-actions-staff{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#reportContent .report-actions>button{box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:44px!important;height:auto!important;max-height:none!important;margin:0!important;padding:7px 5px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;border-radius:999px!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important;font-size:clamp(10px,2.6vw,12px)!important;line-height:1.2!important;font-weight:750!important}
+@media(max-width:380px){#reportContent .report-actions{gap:5px!important}#reportContent .report-actions>button{padding:6px 2px!important;font-size:10px!important;min-height:42px!important}}
+</style>
+
+</head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
  "use strict";
@@ -1637,28 +1649,38 @@ async function homeDashboard(){
 }
 async function reportsPage(){
  const select=$("reportBranch"),host=$("reportContent");if(!select||!host)return;
- const owner=profile.role==="owner_admin";
+ const owner=profile.role==="owner_admin",archiveMode=!!window.__novaroReportsArchiveMode;
  if(window.__reportBranch!==undefined)select.value=window.__reportBranch;
  else if(owner)select.value="";
  else select.value=branchId||"";
  select.onchange=()=>{window.__reportBranch=select.value;reportsPage()};
- const id=select.value;
+ const id=select.value,en=language==="en";
  try{
-  let query=db.from("inventory_sessions").select("*,inventory_locations(name_ar,name_en)").in("status",["submitted","reviewed","approved"]).order("created_at",{ascending:false});
+  let query=db.from("inventory_sessions").select("*,inventory_locations(name_ar,name_en)").in("status",["submitted","reviewed","approved"]).eq("hidden_from_sessions",archiveMode).order("created_at",{ascending:false});
   if(id)query=query.eq("branch_id",id);
-  const q=await query;
-  if(q.error)throw q.error;
-  const list=q.data||[];
-  window.__novaroSessions=list;
-  const en=language==="en";
-  host.innerHTML=list.length?'<div class="stocktake-report-list">'+list.map(x=>'<article class="card report-session-row"><div class="report-session-info"><b>'+esc(sessionTitle(x))+'</b><p class="muted">'+esc(branchLabel(branches.find(b=>b.id===x.branch_id)||allBranches.find(b=>b.id===x.branch_id))||"")+' · '+esc(x.inventory_locations?.name_ar||(language==="en"?x.inventory_locations?.name_en:"")||"سجل سابق")+' · '+esc(sessionLabel(x))+' · '+esc(x.status||"")+'</p></div><div class="report-actions '+(owner?"report-actions-owner":"report-actions-staff")+'"><button data-report-action="view" data-id="'+esc(x.id)+'">'+(en?"View / Print":"عرض / طباعة")+'</button><button class="soft" data-report-action="export" data-id="'+esc(x.id)+'">'+(en?"Export Excel":"تصدير Excel")+'</button>' +'</div></article>').join("")+'</div>':'<div class="empty">'+(en?"No stocktake sessions for this branch yet.":"لا توجد جلسات جرد لهذا الفرع حتى الآن.")+'</div>';
-  host.querySelectorAll("[data-report-action]").forEach(btn=>btn.addEventListener("click",()=>{
+  const q=await query;if(q.error)throw q.error;
+  const list=q.data||[];window.__novaroSessions=list;
+  const toolbar='<div class="reports-archive-toolbar">'+(owner?'<button type="button" class="soft reports-archive-toggle" data-report-archive-toggle="1">'+(archiveMode?(en?"Back to Reports":"العودة للتقارير"):(en?"Archive":"الأرشيف"))+'</button>':'')+'</div>';
+  const rows=list.map(x=>'<article class="card report-session-row"><div class="report-session-info"><b>'+esc(sessionTitle(x))+'</b><p class="muted">'+esc(branchLabel(branches.find(b=>b.id===x.branch_id)||allBranches.find(b=>b.id===x.branch_id))||"")+' · '+esc(x.inventory_locations?.name_ar||(en?x.inventory_locations?.name_en:"")||"سجل سابق")+' · '+esc(sessionLabel(x))+' · '+esc(x.status||"")+'</p></div><div class="report-actions '+(owner?"report-actions-owner":"report-actions-staff")+'"><button data-report-action="view" data-id="'+esc(x.id)+'">'+(en?"View / Print":"عرض / طباعة")+'</button><button class="soft" data-report-action="export" data-id="'+esc(x.id)+'">'+(en?"Export Excel":"تصدير Excel")+'</button>'+(owner?'<button class="soft" data-report-action="'+(archiveMode?"restore":"archive")+'" data-id="'+esc(x.id)+'">'+(archiveMode?(en?"Restore":"استعادة"):(en?"Archive":"أرشفة"))+'</button>':"")+'</div></article>').join("");
+  host.innerHTML=toolbar+(rows?'<div class="stocktake-report-list">'+rows+'</div>':'<div class="empty">'+(archiveMode?(en?"No archived stocktake reports.":"لا توجد تقارير مؤرشفة حاليًا."):(en?"No stocktake sessions for this branch yet.":"لا توجد جلسات جرد لهذا الفرع حتى الآن."))+'</div>');
+  host.querySelectorAll("[data-report-archive-toggle]").forEach(btn=>btn.addEventListener("click",()=>{window.__novaroReportsArchiveMode=!archiveMode;reportsPage()}));
+  host.querySelectorAll("[data-report-action]").forEach(btn=>btn.addEventListener("click",async()=>{
    const action=btn.dataset.reportAction,sid=btn.dataset.id;
    if(action==="view")viewStocktakeReport(sid);
    else if(action==="export")exportStocktakeReport(sid);
-
+   else if(action==="archive"||action==="restore")await setStocktakeArchiveState(sid,action==="archive");
   }));
  }catch(e){host.innerHTML='<div class="error">'+esc(e.message||String(e))+'</div>'}
+}
+async function setStocktakeArchiveState(id,archived){
+ if(profile.role!=="owner_admin")return;
+ const en=language==="en",message=archived?(en?"Archive this stocktake report? Its quantities and report will be preserved and can be restored.":"هل تريد أرشفة تقرير الجرد؟ ستظل كل الكميات والتفاصيل محفوظة ويمكن استعادته."):(en?"Restore this stocktake report to Reports and Sessions?":"هل تريد استعادة تقرير الجرد إلى التقارير والجلسات؟");
+ if(!confirm(message))return;
+ try{
+  const r=await db.from("inventory_sessions").update({hidden_from_sessions:!!archived,updated_at:new Date().toISOString()}).eq("id",id);
+  if(r.error)throw r.error;
+  await reportsPage();
+ }catch(e){alert((en?"Unable to update archive: ":"تعذر تحديث الأرشيف: ")+(e.message||String(e)))}
 }
 async function getSingleStocktakeReport(id){
  const session=window.__novaroSessions?.find(x=>x.id===id);
@@ -1754,7 +1776,7 @@ function editSession(id){const x=window.__novaroSessions?.find(v=>v.id===id);if(
 async function deleteSession(id){
  const x=window.__novaroSessions?.find(v=>v.id===id);if(!x)return;
  const en=language==="en",submitted=["submitted","reviewed","approved"].includes(x.status);
- const message=submitted?(en?"Hide this stocktake from Sessions only? It will remain in Reports with all quantities and details.":"هل تريد إخفاء الجرد من صفحة الجلسات فقط؟ سيظل محفوظًا في التقارير بكل الكميات والتفاصيل."):(en?"Delete this stocktake session and its count details?":"هل تريد حذف جلسة الجرد وتفاصيل الكميات التابعة لها؟");
+ const message=submitted?(en?"Archive this stocktake? It will disappear from active Sessions and Reports but remain available in the Archive with all quantities and details.":"هل تريد أرشفة جلسة الجرد؟ ستختفي من الجلسات والتقارير النشطة، وستظل محفوظة في الأرشيف بكل الكميات والتفاصيل ويمكن استعادتها."):(en?"Delete this stocktake session and its count details?":"هل تريد حذف جلسة الجرد وتفاصيل الكميات التابعة لها؟");
  if(!confirm(message))return;
  try{
   if(submitted){
@@ -1789,7 +1811,7 @@ async function submitStocktakeSessionById(id){
  }catch(e){alert((en?"Unable to transfer stocktake: ":"تعذر ترحيل الجرد: ")+(e.message||String(e)))}
 }
 
-async function sessions(){const area=$("sessions");if(!area)return;const owner=profile.role==="owner_admin",filter=$("countBranch");if(owner&&filter){if(window.__countBranch!==undefined)filter.value=window.__countBranch;else filter.value="";filter.onchange=()=>{window.__countBranch=filter.value;sessions()}}let q=db.from("inventory_sessions").select("*").eq("hidden_from_sessions",false).order("created_at",{ascending:false});if(owner&&filter?.value)q=q.eq("branch_id",filter.value);else if(!owner)q=q.eq("branch_id",branchId);let r=await q;if(!area.isConnected||$("sessions")!==area||page!=="counts")return;if(r.error){area.innerHTML=esc(r.error.message);return}window.__novaroSessions=r.data||[];area.innerHTML=r.data.length?'<div class="stocktake-session-grid">'+r.data.map(x=>'<article class="card stocktake-session-card"><div class="stocktake-session-card-head"><div><div class="stocktake-session-card-title">'+esc(sessionTitle(x))+'</div>'+(owner?'<p class="muted">'+esc(branchLabel(allBranches.find(b=>b.id===x.branch_id)||branches.find(b=>b.id===x.branch_id))||"—")+'</p>':"")+'</div></div><div class="stocktake-session-meta"><span>'+esc(monthLabel(x.inventory_date))+'</span><span>'+esc(x.status)+'</span></div><div class="stocktake-session-actions"><button onclick="openSession(&quot;'+x.id+'&quot;)">فتح الجرد</button> <button class="soft" onclick="printStocktakeReportById(&quot;'+x.id+'&quot;)">'+(language==="en"?"Print / PDF":"طباعة / PDF")+'</button> <button class="soft" onclick="exportStocktakeReport(&quot;'+x.id+'&quot;)">'+(language==="en"?"Export Excel":"تصدير Excel")+'</button>'+(["draft","in_progress"].includes(x.status)?' <button class="soft" onclick="editSession(&quot;'+x.id+'&quot;)">'+(language==="en"?"Edit":"تعديل")+"</button>":"")+((owner||profile.role==="branch_manager")&&["draft","in_progress"].includes(x.status)?'<button class="soft stocktake-transfer-button" onclick="submitStocktakeSessionById(&quot;'+x.id+'&quot;)">'+(language==="en"?"Transfer to Reports":"ترحيل للتقارير")+'</button>':"")+(owner?'<button class="soft" onclick="deleteSession(&quot;'+x.id+'&quot;)">'+(["submitted","reviewed","approved"].includes(x.status)?(language==="en"?"Hide from Sessions":"إخفاء من الجلسات"):(language==="en"?"Delete":"حذف"))+'</button>':"")+'</div></article>').join("")+'</div>':'<div class="empty">'+(language==="en"?"No stocktake sessions yet.":"لا توجد جلسات بعد")+'</div>'}
+async function sessions(){const area=$("sessions");if(!area)return;const owner=profile.role==="owner_admin",filter=$("countBranch");if(owner&&filter){if(window.__countBranch!==undefined)filter.value=window.__countBranch;else filter.value="";filter.onchange=()=>{window.__countBranch=filter.value;sessions()}}let q=db.from("inventory_sessions").select("*").eq("hidden_from_sessions",false).order("created_at",{ascending:false});if(owner&&filter?.value)q=q.eq("branch_id",filter.value);else if(!owner)q=q.eq("branch_id",branchId);let r=await q;if(!area.isConnected||$("sessions")!==area||page!=="counts")return;if(r.error){area.innerHTML=esc(r.error.message);return}window.__novaroSessions=r.data||[];area.innerHTML=r.data.length?'<div class="stocktake-session-grid">'+r.data.map(x=>'<article class="card stocktake-session-card"><div class="stocktake-session-card-head"><div><div class="stocktake-session-card-title">'+esc(sessionTitle(x))+'</div>'+(owner?'<p class="muted">'+esc(branchLabel(allBranches.find(b=>b.id===x.branch_id)||branches.find(b=>b.id===x.branch_id))||"—")+'</p>':"")+'</div></div><div class="stocktake-session-meta"><span>'+esc(monthLabel(x.inventory_date))+'</span><span>'+esc(x.status)+'</span></div><div class="stocktake-session-actions"><button onclick="openSession(&quot;'+x.id+'&quot;)">فتح الجرد</button> <button class="soft" onclick="printStocktakeReportById(&quot;'+x.id+'&quot;)">'+(language==="en"?"Print / PDF":"طباعة / PDF")+'</button> <button class="soft" onclick="exportStocktakeReport(&quot;'+x.id+'&quot;)">'+(language==="en"?"Export Excel":"تصدير Excel")+'</button>'+(["draft","in_progress"].includes(x.status)?' <button class="soft" onclick="editSession(&quot;'+x.id+'&quot;)">'+(language==="en"?"Edit":"تعديل")+"</button>":"")+((owner||profile.role==="branch_manager")&&["draft","in_progress"].includes(x.status)?'<button class="soft stocktake-transfer-button" onclick="submitStocktakeSessionById(&quot;'+x.id+'&quot;)">'+(language==="en"?"Transfer to Reports":"ترحيل للتقارير")+'</button>':"")+(owner?'<button class="soft" onclick="deleteSession(&quot;'+x.id+'&quot;)">'+(["submitted","reviewed","approved"].includes(x.status)?(language==="en"?"Archive":"أرشفة"):(language==="en"?"Delete":"حذف"))+'</button>':"")+'</div></article>').join("")+'</div>':'<div class="empty">'+(language==="en"?"No stocktake sessions yet.":"لا توجد جلسات بعد")+'</div>'}
 async function openSession(id){window.__novaroStocktakeSubView="categories";const session=window.__novaroSessions?.find(x=>x.id===id);if(!session)return;const area=$("sessions"),en=language==="en";area.innerHTML=en?"Loading...":"تحميل...";try{const countQ=await db.from("inventory_counts").select("id,item_id,counted_quantity,is_counted,count_unit_ar,count_unit_en").eq("session_id",id);if(countQ.error)throw countQ.error;const byItem=new Map((countQ.data||[]).map(x=>[x.item_id,x]));const rows=items.filter(x=>x.is_active!==false&&(!x.created_branch_id||x.created_branch_id===session.branch_id)).map(x=>{const saved=byItem.get(x.id);return{id:x.id,item_id:x.id,count_row_id:saved?.id||null,counted_quantity:saved?.is_counted?Number(saved.counted_quantity||0):null,count_unit_ar:saved?.count_unit_ar||x.unit_ar||null,count_unit_en:saved?.count_unit_en||x.unit_en||null,is_counted:!!saved?.is_counted,items:x}});window.__stocktakeView={id,session,branch_id:session.branch_id,location_id:session.location_id||null,rows,locked:["submitted","reviewed","approved"].includes(session.status)};renderStocktakeCategories()}catch(e){area.innerHTML='<p class="error">'+esc(e.message||e)+'</p><button class="soft" onclick="locationSessions(window.__activeInventoryLocation?.id)">'+(en?"Back":"رجوع")+'</button>'}}
 function renderStocktakeCategories(){
  window.__novaroStocktakeSubView="categories";const v=window.__stocktakeView;if(!v)return;
