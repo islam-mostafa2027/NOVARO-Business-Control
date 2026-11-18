@@ -1907,6 +1907,24 @@ function manageCategories(){
 function addCategoryGroup(){const en=language==="en";form(en?"Add new category":"إضافة تصنيف جديد",'<div class="field"><label>'+(en?"Main category name (Arabic)":"اسم التصنيف الرئيسي بالعربية")+'</label><input id="newGroupAr" required></div><div class="field"><label>'+(en?"Main category name (English)":"اسم التصنيف الرئيسي بالإنجليزية")+'</label><input id="newGroupEn"></div>',async()=>{const ar=$("newGroupAr").value.trim(),eng=$("newGroupEn").value.trim()||ar;if(!ar)throw Error(en?"Enter a group name.":"اكتب اسم المجموعة.");const key="group_"+crypto.randomUUID().replace(/-/g,"").slice(0,20);const r=await db.from("category_groups").insert({key,name_ar:ar,name_en:eng,sort_order:Math.max(0,...categoryGroups.map(x=>Number(x.sort_order)||0))+1,is_active:true,created_by:user.id});if(r.error)throw r.error;await load();window.__novaroReturnToCategoryManager=true})}
 function editCategoryGroup(key){const g=categoryGroups.find(x=>x.key===key);if(!g)return;const en=language==="en";form(en?"Edit group":"تعديل المجموعة",'<div class="field"><label>'+(en?"Arabic name":"الاسم بالعربية")+'</label><input id="editGroupAr" required value="'+esc(g.name_ar||"")+'"></div><div class="field"><label>'+(en?"English name":"الاسم بالإنجليزية")+'</label><input id="editGroupEn" value="'+esc(g.name_en||"")+'"></div>',async()=>{const ar=$("editGroupAr").value.trim(),eng=$("editGroupEn").value.trim()||ar;if(!ar)throw Error(en?"Enter a group name.":"اكتب اسم المجموعة.");const r=await db.from("category_groups").update({name_ar:ar,name_en:eng}).eq("key",key);if(r.error)throw r.error;await load();window.__novaroReturnToCategoryManager=true})}
 async function toggleCategoryGroupActive(key){const g=categoryGroups.find(x=>x.key===key);if(!g)return;const next=g.is_active===false;if(!next&&!confirm(language==="en"?"Archive this group? Its categories and items will be preserved.":"أرشفة المجموعة؟ ستظل التصنيفات والأصناف المرتبطة بها محفوظة."))return;const r=await db.from("category_groups").update({is_active:next}).eq("key",key);if(r.error)return alert(r.error.message);await load();manageCategories()}
+async function novaroTranslateCategoryName(value){
+ const source=String(value||"").trim();
+ if(!source)throw Error(language==="en"?"Enter a category name.":"اكتب اسم التصنيف.");
+ const params=new URLSearchParams({q:source,langpair:"ar|en"});
+ let response,data;
+ try{
+  response=await fetch("https://api.mymemory.translated.net/get?"+params.toString(),{headers:{Accept:"application/json"}});
+  if(!response.ok)throw Error("HTTP "+response.status);
+  data=await response.json();
+ }catch(error){
+  throw Error(language==="en"?"Could not connect to the translation service. Check your internet connection and try again.":"تعذر الاتصال بخدمة الترجمة. تحقق من اتصال الإنترنت ثم حاول مرة أخرى.");
+ }
+ if(Number(data?.responseStatus)!==200)throw Error(language==="en"?"The translation service is temporarily unavailable. Please try again later.":"خدمة الترجمة غير متاحة مؤقتًا. حاول مرة أخرى لاحقًا.");
+ let translated=String(data?.responseData?.translatedText||"").replace(/<[^>]*>/g,"").trim();
+ const decoder=document.createElement("textarea");decoder.innerHTML=translated;translated=decoder.value.trim();
+ if(!translated||/[\u0600-\u06FF]/.test(translated))throw Error(language==="en"?"The name could not be translated clearly. Please simplify it and try again.":"لم نتمكن من ترجمة الاسم بوضوح. حاول كتابة الاسم بصياغة أبسط.");
+ return translated;
+}
 let novaroCategoryDraftCount=0;
 function novaroAddCategoryDraftRow(){const host=$("novaroCategoryDraftRows");if(!host)return;const id=++novaroCategoryDraftCount,row=document.createElement("div");row.className="card novaro-category-draft-row";row.style.cssText="padding:12px;margin:8px 0;background:var(--surface,transparent);border:1px solid var(--line)";row.innerHTML='<div class="row" style="justify-content:space-between"><b>'+(language==="en"?"Subcategory":"التصنيف الفرعي")+' '+id+'</b><button class="soft" type="button" data-remove>×</button></div><div class="field"><label>'+(language==="en"?"Subcategory name":"اسم التصنيف الفرعي")+'</label><input data-name required placeholder="'+(language==="en"?"Type subcategory name":"اكتب اسم التصنيف الفرعي")+'"></div>';row.querySelector("[data-remove]").onclick=()=>{if(host.children.length>1)row.remove()};host.appendChild(row)}
 function novaroCategoryParentOptions(groupKey,selected=""){
@@ -1934,10 +1952,17 @@ function addCategory(groupKey="",parentId=null){
  if(!mainAr)throw Error(en?"Enter the main category name.":"اكتب اسم التصنيف الرئيسي.");
  const rows=[...document.querySelectorAll(".novaro-category-draft-row")].map(x=>x.querySelector("[data-name]").value.trim());
  if(!rows.length||rows.some(x=>!x))throw Error(en?"Complete each subcategory name.":"اكتب اسم كل تصنيف فرعي.");
+ const translations=await Promise.all([novaroTranslateCategoryName(mainAr),...rows.map(novaroTranslateCategoryName)]);
+ const mainEn=translations[0],rowEnglishNames=translations.slice(1);
  let group=categoryGroups.find(g=>g.is_active!==false&&((g.name_ar||"").trim().toLowerCase()===mainAr.toLowerCase()||(g.name_en||"").trim().toLowerCase()===mainAr.toLowerCase()));
- if(!group){const key="group_"+crypto.randomUUID().replace(/-/g,"").slice(0,20);const gr=await db.from("category_groups").insert({key,name_ar:mainAr,name_en:mainAr,sort_order:Math.max(0,...categoryGroups.map(x=>Number(x.sort_order)||0))+1,is_active:true,created_by:user.id}).select("*").single();if(gr.error)throw gr.error;group=gr.data;categoryGroups.push(group);}
+ if(!group){const key="group_"+crypto.randomUUID().replace(/-/g,"").slice(0,20);const gr=await db.from("category_groups").insert({key,name_ar:mainAr,name_en:mainEn,sort_order:Math.max(0,...categoryGroups.map(x=>Number(x.sort_order)||0))+1,is_active:true,created_by:user.id}).select("*").single();if(gr.error)throw gr.error;group=gr.data;categoryGroups.push(group);}
+ else if(!group.name_en||(group.name_en||"").trim().toLowerCase()===(group.name_ar||"").trim().toLowerCase()){
+  const translatedGroup=await db.from("category_groups").update({name_en:mainEn}).eq("key",group.key);
+  if(translatedGroup.error)throw translatedGroup.error;
+  group.name_en=mainEn;
+ }
  const existing=new Set(cats.filter(c=>c.group_key===group.key&&(c.parent_id||null)===null&&c.is_active!==false).map(c=>(c.name_ar||"").trim().toLowerCase()));let order=cats.filter(c=>c.group_key===group.key&&(c.parent_id||null)===null).length;const payloads=[];
- for(const name of rows){const normalized=name.toLowerCase();if(existing.has(normalized))throw Error(en?"A subcategory with this name already exists under this main category.":"يوجد تصنيف فرعي بنفس الاسم تحت هذا التصنيف الرئيسي.");existing.add(normalized);payloads.push({name_ar:name,name_en:name,group_key:group.key,parent_id:null,sort_order:++order,is_active:true,created_by:user.id});}
+ for(let i=0;i<rows.length;i++){const name=rows[i],normalized=name.toLowerCase();if(existing.has(normalized))throw Error(en?"A subcategory with this name already exists under this main category.":"يوجد تصنيف فرعي بنفس الاسم تحت هذا التصنيف الرئيسي.");existing.add(normalized);payloads.push({name_ar:name,name_en:rowEnglishNames[i],group_key:group.key,parent_id:null,sort_order:++order,is_active:true,created_by:user.id});}
  const ins=await db.from("categories").insert(payloads);if(ins.error)throw ins.error;await load();manageCategories();
  }catch(e){err.textContent=e.message||String(e);btn.disabled=false}};
  novaroBackButton();applyLanguage();
