@@ -2378,4 +2378,49 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 }
 </style>
 
+
+<style id="novaro-item-card-text-contrast-v3">
+/* Explicit high-contrast text colors for every textual part of inventory item cards. */
+:root[data-novaro-mode="dark"] #app .items-page article.item-card,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card :not(svg):not(path):not(img){
+  opacity:1!important;
+  text-shadow:none!important;
+  color:#edf5f0!important;
+  -webkit-text-fill-color:#edf5f0!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-title strong,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-category b,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-stock-heading b,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-branch-meta b{
+  color:#ffffff!important;
+  -webkit-text-fill-color:#ffffff!important;
+  font-weight:800!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-group,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-code,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-category small,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-stock-heading>span,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-branch-meta small,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-branch-stock small,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-qr-label{
+  color:#d5e4dc!important;
+  -webkit-text-fill-color:#d5e4dc!important;
+  font-weight:700!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-branch-stock strong{
+  color:#a9e5c5!important;
+  -webkit-text-fill-color:#a9e5c5!important;
+  font-weight:800!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-low-stock{
+  color:#ffe2a6!important;
+  -webkit-text-fill-color:#ffe2a6!important;
+  font-weight:800!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-symbol{
+  color:#edf5f0!important;
+  -webkit-text-fill-color:#edf5f0!important;
+}
+</style>
+
 </body></html>
