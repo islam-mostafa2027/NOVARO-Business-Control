@@ -2379,6 +2379,40 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 
 
+<style id="novaro-item-card-pills-dark-v1">
+/* Consistent dark-mode appearance and dimensions for the small item-card pills. */
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-group,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-code,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-qr-label{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  min-height:28px!important;
+  padding:5px 10px!important;
+  border:1px solid #506b5c!important;
+  border-radius:8px!important;
+  background:#30473b!important;
+  background-image:none!important;
+  color:#f1f7f3!important;
+  -webkit-text-fill-color:#f1f7f3!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1.2!important;
+  text-align:center!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-group,
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-code{
+  width:fit-content!important;
+  max-width:100%!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-qr-label{
+  width:100%!important;
+}
+</style>
+
 <style id="novaro-item-card-text-contrast-v3">
 /* Explicit high-contrast text colors for every textual part of inventory item cards. */
 :root[data-novaro-mode="dark"] #app .items-page article.item-card,
