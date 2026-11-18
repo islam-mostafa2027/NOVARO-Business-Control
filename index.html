@@ -1707,7 +1707,7 @@ function showScannedItem(item){
  modal.querySelector("[data-title]").textContent=language==="en"?"Item details":"بيانات الصنف";
  modal.querySelector("[data-grid]").innerHTML="";
  cells.forEach(([label,value],index)=>{const cell=document.createElement("div");cell.className="detail-cell";const small=document.createElement("small"),strong=document.createElement("b");small.textContent=label;strong.textContent=value;if(index===4)strong.className="detail-qty";cell.append(small,strong);modal.querySelector("[data-grid]").appendChild(cell)});
- modal.querySelector("[data-close]").textContent=language==="en"?"Close":"إغلاق";
+ modal.querySelectorAll("[data-close]").forEach(btn=>{btn.textContent=language==="en"?"Close":"إغلاق"});
  modal.style.display="flex";
 }
 function openItemImage(img){
