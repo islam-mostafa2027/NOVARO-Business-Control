@@ -1797,246 +1797,19 @@ async function restoreBranch(id){if(profile.role!=="owner_admin")return;const b=
 function toggleBranchArchive(force){const panel=$("branchArchivePanel");if(!panel)return;const open=typeof force==="boolean"?force:panel.style.display==="none";panel.style.display=open?"block":"none";if(open)panel.scrollIntoView({behavior:"smooth",block:"start"})}
 function manageCategories(){
  const en=language==="en";if(profile.role!=="owner_admin")return alert(en?"Only the system owner can manage categories":"إدارة التصنيفات متاحة للمالك فقط");
- const tree=(g,parent=null,depth=0)=>cats.filter(c=>(c.parent_id||null)===(parent||null)&&(c.group_key||"equipment")===g).map(c=>'<div class="row" style="padding:10px 0 10px '+(depth*18)+'px;border-bottom:1px solid var(--line)"><span>'+(depth?'↳ ':'')+esc(categoryName(c))+'</span><button class="soft" onclick="hideCategory(\''+c.id+'\')">'+(en?"Hide category":"إخفاء التصنيف")+'</button></div>'+tree(g,c.id,depth+1)).join("");
- const sections=["materials","tools","equipment","assets","other"].map(g=>'<section class="card"><h3>'+categoryGroupLabel(g)+'</h3>'+tree(g)+'</section>').join("");
- $("main").innerHTML='<section class="card"><div class="row"><h3>'+(en?"Manage categories":"إدارة التصنيفات")+'</h3><div class="row"><button class="primary" onclick="addCategory()">＋ '+(en?"New category":"إضافة تصنيف جديد")+'</button></div></div><p class="muted">'+(en?"Create categories and nest them under any existing category. Hiding a category preserves historical records.":"أضف تصنيفات رئيسية أو فرعية تحت أي تصنيف موجود. إخفاء التصنيف يحتفظ بالسجلات القديمة.")+'</p></section>'+sections;
- novaroBackButton();applyLanguage()
-}
-async function hideCategory(id){if(profile.role!=="owner_admin")return alert("غير مصرح");const c=cats.find(x=>x.id===id);if(!c)return;const linked=items.filter(x=>x.category_id===id&&x.is_active!==false);if(linked.length)return alert(language==="en"?"Move or deactivate the active items in this category before hiding it.":"انقل الأصناف النشطة من التصنيف أو أوقفها أولًا قبل إخفائه.");const hasNestedCategories=cats.some(x=>x.parent_id===id);if(hasNestedCategories)return alert(language==="en"?"Hide or move the child categories first.":"اخفِ التصنيفات الفرعية أو انقلها أولًا قبل إخفاء التصنيف الأب.");if(!confirm(language==="en"?"Hide this category? Historical stocktake records will be preserved.":"إخفاء التصنيف؟ سيتم الاحتفاظ بسجلات الجرد القديمة."))return;const r=await db.from("categories").update({is_active:false}).eq("id",id);if(r.error)return alert(r.error.message);await load();manageCategories()}
-function novaroFilterCategoryParents(group){
- const select=$("catParent");if(!select)return;
- const options=cats.filter(c=>(c.group_key||"equipment")===group&&c.is_active!==false);
- select.innerHTML='<option value="" selected disabled hidden></option>'+options.map(c=>'<option value="'+c.id+'">'+esc(categoryName(c))+'</option>').join("");
-}
-const novaroCategoryTranslations={
- "خامات":"Ingredients","المطبخ":"Kitchen","الصالة":"Dining Area","الخامات":"Ingredients","خامات المطبخ":"Kitchen Ingredients","خامات الصالة":"Dining Area Ingredients","العدة":"Tools","معدات":"Equipment","المعدات":"Equipment","الأصول":"Assets","أخرى":"Other","شاي":"Tea","قهوة":"Coffee","سكر":"Sugar","لبن":"Milk","مياه":"Water","عصائر":"Juices","مشروبات":"Beverages","توابل":"Spices","زيوت":"Oils","صوصات":"Sauces","منظفات":"Cleaning Supplies","أطباق":"Plates","طبق":"Plate","جلاس":"Glassware","أكواب":"Cups","كوب":"Cup","ملاعق":"Spoons","شوكة":"Fork","شوك":"Forks","سكاكين":"Knives","صواني":"Trays","أدوات":"Tools","معدات المطبخ":"Kitchen Equipment","معدات الصالة":"Dining Area Equipment"
-};
-const novaroCategoryReverse=Object.fromEntries(Object.entries(novaroCategoryTranslations).map(([ar,en])=>[en.toLocaleLowerCase(),ar]));
-function novaroTranslateCategory(value,source){
- const text=String(value||"").trim();if(!text)return "";
- const dict=source==="ar"?novaroCategoryTranslations:novaroCategoryReverse;
- const exact=dict[text]||dict[text.toLocaleLowerCase()];if(exact)return exact;
- const words=text.split(/\s+/);const translated=words.map(w=>dict[w]||dict[w.toLocaleLowerCase()]);
- return translated.every(Boolean)?translated.join(" "):"";
-}
-function novaroSyncCategoryLanguage(source,target,sourceLang){
- const from=$(source),to=$(target);if(!from||!to)return;
- const translated=novaroTranslateCategory(from.value,sourceLang);
- to.value=translated;
-}
-function novaroCategoryNameInput(arLabel,enLabel,id,lang){
- return '<div class="field"><label>'+arLabel+'</label><input id="'+id+'Ar" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\''+id+'Ar\',\''+id+'En\',\'ar\')" required></div>'+
- '<div class="field"><label>'+enLabel+'</label><input id="'+id+'En" type="text" autocomplete="off" oninput="novaroSyncCategoryLanguage(\''+id+'En\',\''+id+'Ar\',\'en\')" required></div>';
-}
-function novaroCategoryMainOptions(group,selected=""){
- const select=$("catMain");if(!select)return;
- const options=cats.filter(c=>(c.group_key||"equipment")===group&&!c.parent_id&&c.is_active!==false);
- select.innerHTML='<option value="">'+(language==="en"?"Choose kitchen or dining area":"اختر المطبخ أو الصالة")+'</option>'+options.map(c=>'<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+esc(categoryName(c))+'</option>').join("");
-}
-function addCategory(){
- const en=language==="en";if(profile.role!=="owner_admin")return alert(en?"Only the system owner can manage categories":"إدارة التصنيفات متاحة لمالك النظام فقط");
- const groupOptions=categoryGroups.filter(g=>g.is_active!==false).map(g=>[g.key,categoryGroupLabel(g.key)])
-  .map(([v,label])=>'<option value="'+v+'">'+label+'</option>').join("");
- const fields='<div class="field"><label>'+(en?"Main group":"التصنيف الرئيسي")+'</label><select id="catGroup" onchange="novaroCategoryMainOptions(this.value)">'+groupOptions+'</select></div>'+
-  '<div class="field"><label>'+(en?"Kitchen / Dining area":"المطبخ / الصالة")+'</label><select id="catMain"><option value="">'+(en?"Choose kitchen or dining area":"اختر المطبخ أو الصالة")+'</option>'+cats.filter(c=>(c.group_key||"equipment")==="materials"&&!c.parent_id&&c.is_active!==false).map(c=>'<option value="'+c.id+'">'+esc(categoryName(c))+'</option>').join("")+'</select><small class="muted">'+(en?"Choose one of the two existing main categories.":"اختار واحد من التصنيفين الموجودين: المطبخ أو الصالة.")+'</small></div>'+
-  '<h4>'+(en?"Subcategory":"التصنيف الفرعي")+'</h4>'+
-  novaroCategoryNameInput(en?"Subcategory name (Arabic)":"اسم التصنيف الفرعي بالعربية",en?"Subcategory name (English)":"اسم التصنيف الفرعي بالإنجليزية","catSub");
- form(en?"Add category":"إضافة تصنيف",fields,async()=>{
-  const group=$("catGroup").value,mainId=$("catMain").value,subAr=$("catSubAr").value.trim(),subEn=$("catSubEn").value.trim();
-  if(!mainId)throw Error(en?"Choose Kitchen or Dining Area first.":"اختار المطبخ أو الصالة الأول.");
-  if(!subAr||!subEn)throw Error(en?"Enter the subcategory name in both languages.":"اكتب اسم التصنيف الفرعي باللغتين.");
-  const main=cats.find(c=>c.id===mainId&&c.is_active!==false);
-  if(!main||main.parent_id||(main.group_key||"equipment")!==group)throw Error(en?"The selected main category does not match the group.":"التصنيف الرئيسي المختار مش تابع للمجموعة دي.");
-  const existing=cats.find(c=>c.parent_id===main.id&&c.is_active!==false&&c.name_ar.trim().toLocaleLowerCase()===subAr.toLocaleLowerCase());
-  if(existing)throw Error(en?"This subcategory already exists under the selected main category.":"التصنيف الفرعي ده موجود بالفعل تحت التصنيف الرئيسي المختار.");
-  const count=cats.filter(c=>c.parent_id===main.id).length;
-  const r=await db.from("categories").insert({name_ar:subAr,name_en:subEn,group_key:group,parent_id:main.id,sort_order:count+1,is_active:true,created_by:user.id});
-  if(r.error)throw r.error;
-  await load();manageCategories();
- });
-}
-function editQty(id){const i=items.find(x=>x.id===id);if(!i)return;const current=Number(balances[branchId+":"+id]||0);form("تعديل الكمية الفعلية",'<p>'+esc(nameOf(i))+' — الكمية الحالية: <b>'+current+'</b></p>'+inp("الكمية الموجودة فعليًا","newQty",'type="number" min="0" step="1" required'),async()=>{const next=Number($("newQty").value);if(!Number.isFinite(next)||next<0)throw Error("أدخل كمية صحيحة");const diff=next-current;if(diff===0)return;const r=await db.from("stock_movements").insert({branch_id:branchId,item_id:id,movement_type:diff>0?"receipt":"issue",quantity:Math.abs(diff),note:"تسوية مخزون: تعديل الكمية الفعلية إلى "+next,created_by:user.id});if(r.error)throw r.error});$("newQty").value=current}
-
-
-function closeBarcodeScanner(){
- if(window.__novaroScanFrame)cancelAnimationFrame(window.__novaroScanFrame);
- window.__novaroScanFrame=null;
- if(window.__novaroScanStream){window.__novaroScanStream.getTracks().forEach(t=>t.stop());window.__novaroScanStream=null}
- const v=$("novaroScanVideo");if(v){v.pause();v.srcObject=null}
- const modal=$("novaroScanner");if(modal)modal.style.display="none";
-}
-function closeScannedItem(){const el=$("novaroItemDetails");if(el)el.style.display="none"}
-function showScannedItem(item){
- const en=language==="en",cat=cats.find(x=>x.id===item.category_id),label=(ar,eng)=>en?eng:ar;
- const cell=(ar,eng,val,cls="")=>'<div class="detail-cell"><small>'+label(ar,eng)+'</small><b class="'+cls+'">'+val+'</b></div>';
- const image=item.image_url?'<img src="'+esc(item.image_url)+'" alt="" style="width:86px;height:86px;object-fit:cover;border-radius:12px">':"";
- let box=$("novaroItemDetails");
- if(!box){document.body.insertAdjacentHTML("beforeend",'<div id="novaroItemDetails" onclick="if(event.target===this)closeScannedItem()"></div>');box=$("novaroItemDetails")}
- const stockRows=branches.map(b=>{const key=b.id+":"+item.id,has=Object.prototype.hasOwnProperty.call(balances,key);return '<div class="detail-cell"><small>'+esc(branchLabel(b))+'</small><b class="detail-qty">'+(has?esc(fmtQty(Number(balances[key]||0))):"—")+'</b></div>'}).join("");
- const stockHtml=stockRows||'<div class="detail-cell"><small>'+label("الكمية المتاحة","Available quantity")+'</small><b>—</b></div>';
- box.innerHTML='<div class="detail-panel"><div style="display:flex;align-items:center;gap:12px">'+image+'<div><h2 style="margin:0 0 6px">'+esc(nameOf(item))+'</h2><div style="color:#687b72">'+label("تفاصيل الصنف","Product details")+'</div></div></div><div class="detail-grid">'+
- cell("كود الصنف","Item code",esc(item.item_code||"—"))+
- cell("التصنيف","Category",esc(categoryName(cat)))+
- cell("نوع الصنف","Item type",esc(categoryGroupLabel(cat?.group_key||"equipment")))+
- cell("وحدة القياس","Unit",esc(unitOf(item)||"—"))+
- cell("الحد الأدنى للمخزون","Minimum stock",esc(fmtQty(Number(item.min_stock||0))))+
- '</div><h3 style="margin:16px 0 8px">'+label("الرصيد حسب الفرع","Stock by branch")+'</h3><div class="detail-grid">'+stockHtml+'</div><div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="secondary" onclick="closeScannedItem()">'+label("إغلاق","Close")+'</button></div></div>';
- box.style.display="flex";
-}
-function findScannedItem(){
- const code=$("novaroScanCode").value.trim();if(!code)return;
- const item=items.find(x=>String(x.item_code||"").trim().toLowerCase()===code.toLowerCase());
- if(!item){$("novaroScanStatus").textContent=language==="en"?"No product matches this item code.":"مفيش صنف مطابق لكود المنتج ده.";return}
- closeBarcodeScanner();showScannedItem(item);
-}
-async function openBarcodeScanner(){
- if(!branchId&&profile.role!=="owner_admin"){alert(language==="en"?"Choose a branch first.":"اختار الفرع الأول.");return}
- if(!$("novaroScanner")){
-  document.body.insertAdjacentHTML("beforeend",'<div id="novaroScanner"><div class="scan-panel"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0">'+(language==="en"?"Scan QR Code":"مسح QR Code")+'</h3><button class="secondary" onclick="closeBarcodeScanner()">×</button></div><video id="novaroScanVideo" playsinline muted></video><div id="novaroScanStatus" class="scan-status"></div><label for="novaroScanCode">'+(language==="en"?"Or enter item code":"أو أدخل كود الصنف")+'</label><input id="novaroScanCode" autocomplete="off" placeholder="'+(language==="en"?"Item code":"كود الصنف")+'"><div style="margin-top:10px"><button onclick="findScannedItem()">'+(language==="en"?"Open product":"فتح الصنف")+'</button><button class="secondary" onclick="closeBarcodeScanner()">'+(language==="en"?"Close":"إغلاق")+'</button></div></div></div><div id="novaroItemDetails" onclick="if(event.target===this)closeScannedItem()"></div>');
- }
- $("novaroScanner").style.display="flex";$("novaroScanCode").value="";
- const status=$("novaroScanStatus"),video=$("novaroScanVideo");
- if(!("BarcodeDetector" in window)||!navigator.mediaDevices?.getUserMedia){status.textContent=language==="en"?"Camera scanning is unavailable here. Enter the item code below.":"المسح بالكاميرا غير متاح في المتصفح ده. اكتب كود الصنف يدويًا.";return}
- try{
-  const supported=await window.BarcodeDetector.getSupportedFormats();
-  if(!supported.includes("qr_code")){status.textContent=language==="en"?"QR scanning is not supported by this browser. Enter the item code below.":"المتصفح لا يدعم قراءة QR Code. اكتب كود الصنف يدويًا.";return}
-  const detector=new window.BarcodeDetector({formats:["qr_code"]});
-  window.__novaroScanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
-  video.srcObject=window.__novaroScanStream;await video.play();
-  status.textContent=language==="en"?"Point the camera at the QR Code.":"وجّه كاميرا الموبايل ناحية QR Code.";
-  const scan=async()=>{
-   if($("novaroScanner").style.display==="none"||!window.__novaroScanStream)return;
-   try{const found=await detector.detect(video);if(found.length&&found[0].rawValue){$("novaroScanCode").value=found[0].rawValue;findScannedItem();return}}catch(e){}
-   window.__novaroScanFrame=requestAnimationFrame(scan);
-  };
-  window.__novaroScanFrame=requestAnimationFrame(scan);
- }catch(e){status.textContent=language==="en"?"Camera could not start. Allow camera access or enter the code below.":"مش قادر أشغّل الكاميرا. اسمح باستخدامها أو اكتب الكود يدويًا."}
-}
-function editItem(id){const i=items.find(x=>x.id===id);if(i)itemForm(i)}
-async function deactivateItem(id){if(profile.role!=="owner_admin")return alert("غير مصرح");if(!confirm("هل تريد إيقاف هذا الصنف؟"))return;const r=await db.from("items").update({is_active:false,updated_by:user.id}).eq("id",id);if(r.error)return alert(r.error.message);await load();render()}
-async function saveUserRole(id){const role=$("role_"+id).value;const a=await db.from("profiles").update({role,updated_at:new Date().toISOString()}).eq("id",id);if(a.error)throw a.error;const b=await db.from("branch_members").update({branch_role:role}).eq("user_id",id);if(b.error)throw b.error;await usersPage()}
-async function toggleUserActive(id,active){if(id===user.id)return alert("لا يمكن إيقاف حساب المالك الحالي");const r=await db.from("profiles").update({is_active:!active,updated_at:new Date().toISOString()}).eq("id",id);if(r.error)return alert(r.error.message);await usersPage()}
-async function usersPage(){if(profile.role!=="owner_admin"){$("main").innerHTML='<section class="card empty">هذه الصفحة للمالك فقط</section>';return}const r=await db.from("profiles").select("id,display_name,role,is_active,created_at").order("created_at",{ascending:false});if(r.error)throw r.error;$("main").innerHTML='<section class="card"><h3>إضافة مستخدم جديد</h3><div class="formgrid">'+inp("اسم الموظف","uName","required")+inp("البريد الإلكتروني","uEmail",'type="email" required')+inp("كلمة مرور مؤقتة (8 أحرف على الأقل)","uPass",'type="password" minlength="8" required')+'</div><div class="field"><label>الصلاحية</label><select id="uRole"><option value="inventory_staff">موظف مخزون</option><option value="branch_manager">مدير فرع</option><option value="viewer">مشاهدة فقط</option></select></div><div class="field"><label>الفرع</label><select id="uBranch">'+branches.map(b=>'<option value="'+b.id+'">'+esc(nameOf(b))+'</option>').join("")+'</select></div><button id="createUser">إنشاء حساب الموظف</button><div id="userErr" class="error"></div></section><section class="card"><h3>المستخدمون والصلاحيات</h3><div class="tablewrap"><table><tr><th>الاسم</th><th>الصلاحية</th><th>الحالة</th><th>إجراء</th></tr>'+r.data.map(x=>'<tr><td>'+esc(x.display_name||"—")+'</td><td>'+(x.role==="owner_admin"?"مالك النظام":'<select id="role_'+x.id+'"><option value="inventory_staff" '+(x.role==="inventory_staff"?"selected":"")+'>موظف مخزون</option><option value="branch_manager" '+(x.role==="branch_manager"?"selected":"")+'>مدير فرع</option><option value="viewer" '+(x.role==="viewer"?"selected":"")+'>مشاهدة فقط</option></select>')+'</td><td>'+(x.is_active?"نشط":"موقوف")+'</td><td>'+(x.role==="owner_admin"?"—":'<button class="soft" onclick="saveUserRole(\''+x.id+'\')">حفظ الصلاحية</button> <button class="soft" onclick="toggleUserActive(\''+x.id+'\','+x.is_active+')">'+(x.is_active?"إيقاف":"تفعيل")+'</button>')+'</td></tr>').join("")+'</table></div></section>';$("createUser").onclick=async()=>{const b=$("createUser");b.disabled=true;$("userErr").textContent="";try{const result=await db.functions.invoke("admin-create-user",{body:{display_name:$("uName").value.trim(),email:$("uEmail").value.trim(),password:$("uPass").value,role:$("uRole").value,branch_id:$("uBranch").value}});if(result.error)throw result.error;if(result.data?.error)throw Error(result.data.error);alert("تم إنشاء حساب الموظف بنجاح");await usersPage()}catch(e){$("userErr").textContent=e.message||"تعذر إنشاء الحساب";b.disabled=false}};novaroBackButton();}
-function addMove(){form("تسجيل حركة",'<div class="field"><label>الصنف</label><select id="item">'+items.map(i=>'<option value="'+i.id+'">'+esc(nameOf(i))+'</option>').join("")+'</select></div><div class="field"><label>النوع</label><select id="type"><option value="receipt">استلام / إضافة</option><option value="issue">صرف</option><option value="adjustment">تسوية (تحديد الرصيد الفعلي)</option></select></div>'+inp("الكمية / الرصيد الفعلي عند التسوية","qty",'type="number" min="0" step="0.01" required')+inp("ملاحظات","note"),async()=>{const itemId=$("item").value,type=$("type").value,entered=Number($("qty").value),current=Number(balances[branchId+":"+itemId]||0);if(!itemId)throw Error("اختر الصنف");if(!Number.isFinite(entered)||entered<0||(type!=="adjustment"&&entered===0))throw Error("أدخل كمية صحيحة أكبر من صفر، ويمكن أن تكون التسوية صفرًا");let movementType=type,quantity=entered,note=$("note").value.trim()||null;if(type==="issue"&&entered>current)throw Error("الكمية المطلوبة أكبر من الرصيد المتاح ("+current+")");if(type==="adjustment"){const diff=entered-current;if(diff===0)return;movementType=diff>0?"receipt":"issue";quantity=Math.abs(diff);note="تسوية مخزون: الرصيد الفعلي "+entered+(note?" | "+note:"")}const r=await db.from("stock_movements").insert({branch_id:branchId,item_id:itemId,movement_type:movementType,quantity,note,created_by:user.id});if(r.error)throw r.error})}
-function monthLabel(value){if(!value)return "—";const p=String(value).slice(0,7).split("-");return new Intl.DateTimeFormat(language==="en"?"en-US-u-ca-gregory-nu-latn":"ar-EG",{month:"long",year:"numeric"}).format(new Date(Number(p[0]),Number(p[1])-1,1))}
-function stocktakeTitle(month){const p=String(month||"").split("-");if(p.length!==2)return language==="en"?"Stocktake":"جرد";const d=new Date(Number(p[0]),Number(p[1])-1,1);return (language==="en"?"Stocktake — ":"جرد — ")+d.toLocaleDateString(language==="en"?"en-US":"ar-EG",{month:"long",year:"numeric"})}
-function addSession(){const now=new Date(),ym=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0"),en=language==="en",owner=profile.role==="owner_admin";const branchField=owner?'<div class="field"><label>'+(en?"Branch":"الفرع")+'</label><select id="sessionBranch" required><option value="">'+(en?"Choose a branch":"اختر الفرع")+'</option>'+branches.map(b=>'<option value="'+b.id+'">'+esc(branchLabel(b))+'</option>').join("")+'</select></div>':"";const scopeField='<div class="field"><label>'+(en?"Items to count":"الأصناف المطلوب جردها")+'</label><select id="sessionScope"><option value="all">'+(en?"All five groups":"الخامات والعدة والمعدات والأصول وأخرى")+'</option><option value="materials">'+(en?"Materials only":"الخامات فقط")+'</option><option value="tools">'+(en?"Tools only":"العدة فقط")+'</option><option value="equipment">'+(en?"Equipment only":"المعدات فقط")+'</option><option value="assets">'+(en?"Assets only":"الأصول فقط")+'</option><option value="other">'+(en?"Other only":"أخرى فقط")+'</option></select></div>';form(en?"Start stocktake":"بدء جلسة جرد",branchField+scopeField+inp(en?"Month and year":"شهر وسنة الجرد","month",'type="month" required'),async()=>{const month=$("month").value,scope=$("sessionScope").value,targetBranch=owner?$("sessionBranch").value:branchId;if(!targetBranch)throw Error(en?"Choose the branch for this stocktake":"اختار الفرع اللي هتعمل له الجرد");if(!month)throw Error(en?"Choose the stocktake month and year":"اختر شهر وسنة الجرد");const selectedItems=items.filter(x=>x.is_active!==false&&(scope==="all"||(cats.find(c=>c.id===x.category_id)?.group_key||"equipment")===scope));if(!selectedItems.length)throw Error(en?"No active items exist in this selection.":"مفيش أصناف نشطة في الاختيار ده.");const r=await db.from("inventory_sessions").insert({branch_id:targetBranch,title:stocktakeTitle(month),inventory_date:month+"-01",created_by:user.id}).select().single();if(r.error)throw r.error;const rows=selectedItems.map(x=>({session_id:r.data.id,item_id:x.id,counted_quantity:0,counted_by:user.id,is_counted:false}));const c=await db.from("inventory_counts").insert(rows);if(c.error)throw Error((en?"Session created, but items could not be prepared: ":"تم إنشاء الجلسة، لكن تعذر تجهيز قائمة الأصناف: ")+c.error.message);if(owner)window.__countBranch=targetBranch;window.__openStocktakeAfterSave=r.data.id});$("month").value=ym}
-function editSession(id){const x=window.__novaroSessions?.find(v=>v.id===id);if(!x)return;form("تعديل شهر الجرد",inp("شهر وسنة الجرد","month",'type="month" required'),async()=>{const month=$("month").value;if(!month)throw Error("اختر شهر وسنة الجرد");const r=await db.from("inventory_sessions").update({title:stocktakeTitle(month),inventory_date:month+"-01",updated_at:new Date().toISOString()}).eq("id",id).eq("branch_id",x.branch_id);if(r.error)throw r.error});$("month").value=String(x.inventory_date||"").slice(0,7)}
-
-async function deleteSession(id){const x=window.__novaroSessions?.find(v=>v.id===id);if(!x)return;if(!confirm(language==="en"?"Delete this stocktake session? Its count details will also be deleted.":"هل تريد حذف جلسة الجرد هذه؟ سيتم حذف تفاصيل الجرد التابعة لها أيضًا."))return;try{const c=await db.from("inventory_counts").delete().eq("session_id",id);if(c.error)throw c.error;const r=await db.from("inventory_sessions").delete().eq("id",id).eq("branch_id",x.branch_id);if(r.error)throw r.error;if(page==="reports")await reportsPage();else await sessions()}catch(e){alert((language==="en"?"Unable to delete stocktake: ":"لا يمكن حذف الجرد: ")+(e.message||e))}}
-async function sessions(){const area=$("sessions");if(!area)return;const owner=profile.role==="owner_admin",filter=$("countBranch");if(owner&&filter){if(window.__countBranch!==undefined)filter.value=window.__countBranch;else filter.value="";filter.onchange=()=>{window.__countBranch=filter.value;sessions()}}let q=db.from("inventory_sessions").select("*").order("created_at",{ascending:false});if(owner&&filter?.value)q=q.eq("branch_id",filter.value);else if(!owner)q=q.eq("branch_id",branchId);let r=await q;if(!area.isConnected||$("sessions")!==area||page!=="counts")return;if(r.error){area.innerHTML=esc(r.error.message);return}window.__novaroSessions=r.data||[];area.innerHTML=r.data.length?'<div class="stocktake-session-grid">'+r.data.map(x=>'<article class="card stocktake-session-card"><div class="stocktake-session-card-head"><div><div class="stocktake-session-card-title">'+esc(sessionTitle(x))+'</div>'+(owner?'<p class="muted">'+esc(branchLabel(allBranches.find(b=>b.id===x.branch_id)||branches.find(b=>b.id===x.branch_id))||"—")+'</p>':"")+'</div></div><div class="stocktake-session-meta"><span>'+esc(monthLabel(x.inventory_date))+'</span><span>'+esc(x.status)+'</span></div><div class="stocktake-session-actions"><button onclick="openSession(&quot;'+x.id+'&quot;)">فتح الجرد</button> <button class="soft" onclick="editSession(&quot;'+x.id+'&quot;)">تعديل</button> '+(owner?'<button class="soft" onclick="deleteSession(&quot;'+x.id+'&quot;)">حذف</button>':"")+'</div></article>').join("")+'</div>':'<div class="empty">'+(language==="en"?"No stocktake sessions yet.":"لا توجد جلسات بعد")+'</div>'}
-async function openSession(id){window.__novaroStocktakeSubView="categories";const session=window.__novaroSessions?.find(x=>x.id===id);if(!session)return;const area=$("sessions"),en=language==="en";area.innerHTML=en?"Loading...":"تحميل...";try{const branch=session.branch_id;const stock=await db.from("branch_item_stock").select("item_id,quantity").eq("branch_id",branch);if(stock.error)throw stock.error;const stockMap=new Map((stock.data||[]).map(x=>[x.item_id,Number(x.quantity||0)]));const rows=items.filter(x=>x.is_active!==false).map(x=>({id:x.id,item_id:x.id,counted_quantity:stockMap.has(x.id)?stockMap.get(x.id):Number(balances[branch+":"+x.id]||0),count_unit_ar:x.unit_ar||null,count_unit_en:x.unit_en||null,is_counted:stockMap.has(x.id),items:x}));window.__stocktakeView={id,session,branch_id:branch,rows,locked:false};renderStocktakeCategories()}catch(e){area.innerHTML='<p class="error">'+esc(e.message||e)+'</p><button class="soft" onclick="sessions()">رجوع</button>'}}
-function renderStocktakeCategories(){window.__novaroStocktakeSubView="categories";const v=window.__stocktakeView;if(!v)return;const en=language==="en",area=$("sessions"),counts=new Map();for(const x of v.rows){const k=x.items?.category_id||"__none";counts.set(k,(counts.get(k)||0)+1)}const ordered=cats.slice().sort((a,b)=>{const ao=/^(other|أخرى)$/i.test((a.name_en||a.name_ar||"").trim()),bo=/^(other|أخرى)$/i.test((b.name_en||b.name_ar||"").trim());return ao===bo?Number(a.sort_order||0)-Number(b.sort_order||0):ao?1:-1});const tiles=categoryGroups.map(g=>'<section style="margin:12px 0"><h3 style="margin:8px 2px 12px">'+esc(categoryGroupLabel(g.key))+'</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px">'+ordered.filter(c=>(c.group_key||"equipment")===g.key).map(c=>'<button class="card" style="display:flex;align-items:center;justify-content:space-between;width:100%;background:#fff;color:var(--ink);text-align:start;padding:18px;margin:0;border:1px solid var(--line);box-shadow:none" onclick="showStocktakeCategory(\''+c.id+'\')"><b>'+esc(categoryName(c))+'</b><span class="muted">'+(counts.get(c.id)||0)+' '+(en?"items":"صنف")+'　›</span></button>').join("")+'</div></section>').join("");const unc=counts.get("__none")||0;area.innerHTML='<div class="row"><div><h3>'+esc(sessionTitle(v.session))+'</h3><p class="muted">'+esc(monthLabel(v.session.inventory_date))+' — '+v.rows.length+' '+(en?"items":"صنف")+'</p></div><button class="soft" onclick="sessions()">'+(en?"Back to sessions":"رجوع للجلسات")+'</button></div><section class="card"><h3>'+(en?"Choose a category":"اختار التصنيف")+'</h3><p class="muted">'+(en?"Open a category to view item photos and count quantities.":"اختار القسم عشان تشوف صور الأصناف وتسجل الكميات الموجودة.")+'</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px">'+tiles+(unc?'<button class="card" onclick="showStocktakeCategory(\'__none\')">'+(en?"Uncategorized":"بدون تصنيف")+' ('+unc+')</button>':"")+'</div></section>'+(v.locked?'<p class="muted">'+(en?"This session is locked.":"الجلسة مغلقة ولا تسمح بالتعديل.")+'</p>':(v.session.status==="submitted"&&profile.role==="owner_admin"?'<p class="muted">'+(en?"Admin review mode: you can edit submitted quantities.":"وضع مراجعة الأدمن: يمكنك تعديل كميات الجرد بعد الإرسال.")+'</p>':((profile.role==="owner_admin"||profile.role==="branch_manager"||profile.role==="inventory_staff")?'<p class="muted" style="margin-top:14px">'+(en?"Live actual stock: saved quantities update the item balances immediately. Reports remain unchanged.":"الجرد الفعلي المباشر: الكميات المحفوظة تحدّث أرصدة الأصناف فورًا، دون تغيير التقارير المحفوظة.")+'</p>':"")))}
-
-async function saveStocktakeDraft(){const v=window.__stocktakeView;if(!v||v.locked||v.session.status==="submitted")return;const en=language==="en";if(profile.role==="viewer")return alert(en?"You do not have permission to save this stocktake.":"ليس لديك صلاحية حفظ الجرد.");try{for(const row of v.rows){const quantity=Number(row.counted_quantity||0);if(!Number.isFinite(quantity)||quantity<0)throw Error(en?"A stocktake quantity is invalid.":"توجد كمية غير صحيحة في الجرد.");const u=await db.from("inventory_counts").update({counted_quantity:quantity,count_unit_ar:row.count_unit_ar||row.items?.unit_ar||null,count_unit_en:row.count_unit_en||row.items?.unit_en||null}).eq("id",row.id);if(u.error)throw u.error;}const now=new Date().toISOString();const r=await db.from("inventory_sessions").update({status:"in_progress",updated_at:now}).eq("id",v.id).in("status",["draft","in_progress"]);if(r.error)throw r.error;v.session.status="in_progress";if(window.__novaroSessions){const x=window.__novaroSessions.find(z=>z.id===v.id);if(x)x.status="in_progress"}alert(en?"Stocktake saved as a draft. It has not been submitted for review.":"تم حفظ الجرد كمسودة، ولم يتم إرساله للمراجعة.");renderStocktakeCategories();}catch(e){alert((en?"Unable to save stocktake: ":"تعذر حفظ الجرد: ")+(e.message||String(e)))}}
-
-async function submitStocktakeSession(){
- const v=window.__stocktakeView;if(!v||v.locked)return;
- const en=language==="en";
- if(profile.role!=="owner_admin"&&profile.role!=="branch_manager")return alert(en?"Only a branch manager can submit this stocktake.":"إرسال الجرد متاح لمدير الفرع فقط.");
- if(!confirm(en?"Submit this stocktake for review? Quantities will be locked.":"هل تريد إرسال الجرد للمراجعة؟ سيتم قفل الكميات بعد الإرسال."))return;
- try{
-  const c=await db.from("inventory_counts").select("id,is_counted").eq("session_id",v.id);
-  if(c.error)throw c.error;
-  if(!c.data?.length)throw Error(en?"There are no counted items in this session.":"لا توجد أصناف في جلسة الجرد.");
-  // Uncounted items are allowed; their default quantity remains zero.
-    const now=new Date().toISOString();
-  const r=await db.from("inventory_sessions").update({status:"submitted",submitted_by:user.id,submitted_at:now,updated_at:now}).eq("id",v.id).in("status",["draft","in_progress"]);
-  if(r.error)throw r.error;
-  if(window.__novaroSessions){const x=window.__novaroSessions.find(z=>z.id===v.id);if(x)x.status="submitted"}
-  v.session.status="submitted";v.locked=true;
-  alert(en?"Stocktake submitted and locked successfully.":"تم إرسال الجرد للمراجعة وقفل الكميات بنجاح.");
-  await openSession(v.id);
- }catch(e){alert((en?"Unable to submit stocktake: ":"تعذر إرسال الجرد: ")+(e.message||String(e)))}
-}
-
-function stocktakeUnitFields(x,en,locked){const ar=x.count_unit_ar||x.items?.unit_ar||"",eng=x.count_unit_en||x.items?.unit_en||"",value=en?(eng||ar):(ar||eng);return '<label class="stocktake-entry-control-label">'+(en?"Unit of measure":"وحدة القياس")+'</label><input data-unit-custom="'+x.id+'" value="'+esc(value)+'" placeholder="'+(en?"Type any unit name":"اكتب اسم أي وحدة قياس")+'" '+(locked?"disabled":"")+'>';}
-function showStocktakeCategory(categoryId){window.__novaroStocktakeSubView="category";const v=window.__stocktakeView;if(!v)return;const en=language==="en",area=$("sessions"),cat=cats.find(c=>c.id===categoryId),title=categoryId==="__none"?(en?"Uncategorized":"بدون تصنيف"):categoryName(cat),rows=v.rows.filter(x=>(x.items?.category_id||"__none")===categoryId);const cards=rows.map(x=>'<article class="card stocktake-entry-card"><div class="stocktake-entry-media">'+(x.items?.image_url?'<img src="'+esc(x.items.image_url)+'" alt="" class="stocktake-entry-image">':'<span class="stocktake-entry-placeholder">▧</span>')+'</div><div class="stocktake-entry-main"><span class="stocktake-entry-name-label">'+(en?"Item name":"اسم الصنف")+'</span><b class="stocktake-entry-name">'+esc(nameOf(x.items)||"صنف")+'</b></div><div class="stocktake-entry-controls"><div class="stocktake-entry-unit">'+stocktakeUnitFields(x,en,v.locked)+'</div><div class="stocktake-entry-quantity"><label class="stocktake-entry-control-label">'+(en?"Quantity":"الكمية")+'</label><input class="stocktake-entry-count" type="number" min="0" step="0.01" data-count-id="'+x.id+'" value="'+Number(x.counted_quantity||0)+'" '+(v.locked?"disabled":"")+'></div></div></article>').join("");area.innerHTML='<div class="row"><div><h3>'+esc(title)+'</h3><p class="muted">'+rows.length+' '+(en?"items":"صنف")+'</p></div><button class="soft" onclick="renderStocktakeCategories()">← '+(en?"All categories":"كل التصنيفات")+'</button></div>'+(rows.length?'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">'+cards+'</div>':'<section class="card empty">'+(en?"No items in this category yet":"لا توجد أصناف في هذا التصنيف حالياً")+'</section>')+(v.locked?'<p class="muted">'+(en?"This session is locked.":"الجلسة مغلقة.")+'</p>':'<div class="row" style="margin-top:16px"><button id="saveCategoryCounts">'+(en?"Save quantities":"حفظ الكميات")+'</button><span id="countSaveMsg" class="muted"></span></div>');if(!v.locked&&rows.length){/* Units are free text; no fixed unit template is used. */$("saveCategoryCounts").onclick=async()=>{const btn=$("saveCategoryCounts");btn.disabled=true;try{for(const input of area.querySelectorAll("[data-count-id]")){const value=Number(input.value);if(input.value.trim()===""||!Number.isFinite(value)||value<0)throw Error(en?"Enter a valid quantity":"اكتب كمية صحيحة، ويمكن كتابة صفر إذا كان الصنف غير موجود");const id=input.dataset.countId,custom=area.querySelector('[data-unit-custom="'+id+'"]');const val=(custom?.value||"").trim();if(!val)throw Error(en?"Enter a unit name":"اكتب اسم وحدة القياس");const ar=val,eng=val;const now=new Date().toISOString();const u=await db.from("branch_item_stock").upsert({branch_id:v.branch_id,item_id:id,quantity:value,updated_by:user.id,updated_at:now},{onConflict:"branch_id,item_id"});if(u.error)throw u.error;balances[v.branch_id+":"+id]=value;const row=v.rows.find(x=>x.id===id);if(row){row.counted_quantity=value;row.count_unit_ar=ar;row.count_unit_en=eng;row.is_counted=true}}$("countSaveMsg").textContent=en?"Saved successfully":"تم حفظ الكميات بنجاح"}catch(e){$("countSaveMsg").textContent=e.message||String(e)}finally{btn.disabled=false}}} }
-setTimeout(()=>{const splash=document.getElementById("splash");if(splash){splash.classList.add("splash-out");setTimeout(()=>splash.remove(),700)}},4400);
-applyLanguage();init().catch(err);
-</script><script>
-
-(function(){
- const launcher=document.getElementById("novaro-ai-launcher"),panel=document.getElementById("novaro-ai-panel");
- if(!launcher||!panel)return;
- const $=id=>document.getElementById(id),log=$("novaro-ai-log"),input=$("novaro-ai-input"),status=$("novaro-ai-status");
- let lastAnswer="",recognition=null,drag=null;
- const isEn=()=>document.documentElement.lang==="en";
- const tr=(ar,en)=>isEn()?en:ar;
- function setStatus(v){status.textContent=v||""}
- function addMsg(text,who){const d=document.createElement("div");d.className="ai-msg "+who;d.textContent=text;log.append(d);log.scrollTop=log.scrollHeight;return d}
- function setPosition(x,y){const pad=8,w=launcher.offsetWidth||62,h=launcher.offsetHeight||62; x=Math.max(pad,Math.min(innerWidth-w-pad,x));y=Math.max(pad,Math.min(innerHeight-h-pad,y));launcher.style.left=x+"px";launcher.style.top=y+"px";launcher.style.right="auto";launcher.style.bottom="auto";try{localStorage.setItem("novaro-ai-position",JSON.stringify({x,y}))}catch(_){}}
- function restorePosition(){let p;try{p=JSON.parse(localStorage.getItem("novaro-ai-position")||"null")}catch(_){}if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y))setPosition(p.x,p.y);else setPosition(Math.max(12,innerWidth-78),Math.max(100,innerHeight-160))}
- function panelPosition(){const r=launcher.getBoundingClientRect(),w=Math.min(370,innerWidth-24),h=Math.min(540,innerHeight-105);let left=Math.max(12,Math.min(innerWidth-w-12,r.left+(r.left>innerWidth/2?-w+20:0)));let top=Math.max(12,Math.min(innerHeight-h-12,r.top-h-12));panel.style.left=left+"px";panel.style.top=top+"px";panel.style.right="auto";panel.style.bottom="auto"}
- function open(){launcher.style.opacity=".9";panel.classList.add("open");panelPosition()}
- function close(){panel.classList.remove("open");launcher.blur();launcher.style.opacity=".32";if(recognition){try{recognition.stop()}catch(_){}}}
- launcher.addEventListener("pointerdown",e=>{if(e.button!==0)return;const r=launcher.getBoundingClientRect();drag={sx:e.clientX,sy:e.clientY,x:r.left,y:r.top,moved:false};launcher.setPointerCapture(e.pointerId)});
- launcher.addEventListener("pointermove",e=>{if(!drag)return;const dx=e.clientX-drag.sx,dy=e.clientY-drag.sy;if(Math.abs(dx)+Math.abs(dy)>7)drag.moved=true;if(drag.moved)setPosition(drag.x+dx,drag.y+dy)});
- launcher.addEventListener("pointerup",()=>{if(!drag)return;const moved=drag.moved;drag=null;if(!moved){if(panel.classList.contains("open"))close();else open()}});
- launcher.addEventListener("pointercancel",()=>drag=null);
- panel.querySelector(".ai-close").addEventListener("click",close);
- addEventListener("resize",()=>{const r=launcher.getBoundingClientRect();setPosition(r.left,r.top);if(panel.classList.contains("open"))panelPosition()});
- async function send(){
-  const q=input.value.trim();if(!q)return;
-  if(typeof db==="undefined"||typeof user==="undefined"||!user){addMsg(tr("سجّل الدخول أولاً لاستخدام المساعد.","Please sign in to use the assistant."),"bot");return}
-  input.value="";addMsg(q,"me");setStatus(tr("جاري تحليل بيانات الفرع وصياغة الرد...","Analyzing authorized branch data..."));
-  const btn=$("novaro-ai-send");btn.disabled=true;
-  try{
-   const {data,error}=await db.auth.getSession();if(error)throw error;
-   const token=data?.session?.access_token;if(!token)throw Error(tr("انتهت جلسة الدخول. سجّل الدخول مرة أخرى.","Your session expired. Please sign in again."));
-   const res=await fetch("https://acgbcucjdmkboryxbhid.supabase.co/functions/v1/novaro-ai",{method:"POST",headers:{"Authorization":"Bearer "+token,"apikey":"sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz","Content-Type":"application/json"},body:JSON.stringify({question:q,language:isEn()?"en":"ar"})});
-   const dataOut=await res.json().catch(()=>({}));
-   if(!res.ok){if(dataOut.code==="AI_NOT_CONFIGURED")throw Error(tr("واجهة المساعد جاهزة، ويتبقى ربط مفتاح خدمة الذكاء الاصطناعي من إعدادات Supabase.","The assistant UI is ready; its AI provider key still needs to be configured in Supabase."));throw Error(dataOut.error||tr("تعذر الحصول على الرد.","Could not get a response."))}
-   lastAnswer=String(dataOut.answer||"");addMsg(lastAnswer,"bot");setStatus("");
-  }catch(e){addMsg(e.message||String(e),"bot");setStatus(tr("لم تكتمل العملية","Request not completed"))}
-  finally{btn.disabled=false}
- }
- $("novaro-ai-send").addEventListener("click",send);
- input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
- $("novaro-ai-mic").addEventListener("click",()=>{
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){setStatus(tr("الإملاء الصوتي غير مدعوم في هذا المتصفح. يمكنك استخدام لوحة المفاتيح الصوتية للهاتف.","Voice dictation is not supported in this browser. You can use your phone keyboard's voice typing."));return}
-  if(recognition){try{recognition.stop()}catch(_){}recognition=null;return}
-  recognition=new SR();recognition.lang=isEn()?"en-US":"ar-EG";recognition.interimResults=true;recognition.continuous=false;
-  recognition.onresult=e=>{let t="";for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;input.value=t};
-  recognition.onerror=e=>setStatus(tr("تعذر التقاط الصوت: ","Voice input error: ")+e.error);
-  recognition.onend=()=>{recognition=null;setStatus("")};setStatus(tr("اتكلم دلوقتي...","Listening..."));recognition.start();
- });
- $("novaro-ai-speak").addEventListener("click",()=>{if(!lastAnswer){setStatus(tr("لا يوجد رد للاستماع إليه بعد.","There is no answer to read yet."));return}if(!("speechSynthesis"in window)){setStatus(tr("القراءة الصوتية غير مدعومة هنا.","Speech playback is not supported here."));return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastAnswer);u.lang=isEn()?"en-US":"ar-EG";speechSynthesis.speak(u)});
- const observer=new MutationObserver(()=>{const app=$("app"),visible=app&&!app.classList.contains("hidden")&&typeof user!=="undefined"&&!!user;launcher.style.display=visible?"flex":"none";if(!visible)close()});
- observer.observe(document.body,{attributes:true,subtree:true,attributeFilter:["class"]});
- const app=$("app");if(app)observer.observe(app,{attributes:true,attributeFilter:["class"]});
- document.addEventListener("click",()=>{const appNow=$("app");if(appNow&&!appNow.classList.contains("hidden")&&typeof user!=="undefined"&&user&&launcher.style.display!=="flex")launcher.style.display="flex"});
- restorePosition();
-})();
-
-</script><script>
-if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.getRegistrations().then(regs=>Promise.all(regs.map(reg=>reg.unregister()))).then(()=>("caches" in window)?caches.keys().then(keys=>Promise.all(keys.filter(key=>key.indexOf("novaro-inventory-shell-")===0).map(key=>caches.delete(key)))):null).catch(error=>console.warn("NOVARO cache cleanup:",error));});}
-
-/* NOVARO dynamic category groups and category hierarchy */
-const __novaroBaseLoad=load;
-load=async function(){
- await __novaroBaseLoad();
- const [gr,cr]=await Promise.all([db.from("category_groups").select("*").order("sort_order"),db.from("categories").select("*").order("sort_order")]);
- if(gr.error)throw gr.error;if(cr.error)throw cr.error;categoryGroups=gr.data||[];cats=cr.data||[];
-};
-function categoryGroupLabel(key){const g=categoryGroups.find(x=>x.key===key);if(g)return language==="en"?(g.name_en||g.name_ar):(g.name_ar||g.name_en);const d={materials:["الخامات","Materials"],tools:["العدة","Tools"],equipment:["المعدات","Equipment"],assets:["الأصول","Assets"],other:["أخرى","Other"]}[key];return d?(language==="en"?d[1]:d[0]):(key||"—")}
-function novaroItemSubcategoryOptions(group,selected=""){
- const rows=cats.filter(c=>c.group_key===group&&(c.is_active!==false||c.id===selected)),by=new Map();rows.forEach(c=>{const k=c.parent_id||null;if(!by.has(k))by.set(k,[]);by.get(k).push(c)});
- const out=[],stack=[];for(let i=(by.get(null)||[]).length-1;i>=0;i--)stack.push({c:by.get(null)[i],d:0,p:new Set()});
- while(stack.length){const n=stack.pop(),c=n.c;if(n.p.has(c.id))continue;out.push('<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+(n.d?"　".repeat(Math.min(n.d,6))+"↳ ":"")+esc(categoryName(c))+'</option>');const p=new Set(n.p);p.add(c.id);const kids=by.get(c.id)||[];for(let i=kids.length-1;i>=0;i--)stack.push({c:kids[i],d:n.d+1,p})}return out.join("");
-}
-function novaroFilterItemCategories(group,selected=""){const el=$("cat");if(el)el.innerHTML=novaroItemSubcategoryOptions(group,selected)}
-function novaroCategoryParentOptions(group,selected=""){
- const rows=cats.filter(c=>c.group_key===group&&c.is_active!==false),by=new Map();rows.forEach(c=>{const k=c.parent_id||null;if(!by.has(k))by.set(k,[]);by.get(k).push(c)});
- const out=['<option value="">'+(language==="en"?"No parent (top level)":"بدون تصنيف أب (مستوى رئيسي)")+'</option>'],stack=[];for(let i=(by.get(null)||[]).length-1;i>=0;i--)stack.push({c:by.get(null)[i],d:0,p:new Set()});
- while(stack.length){const n=stack.pop(),c=n.c;if(n.p.has(c.id))continue;out.push('<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+(n.d?"　".repeat(Math.min(n.d,6))+"↳ ":"")+esc(categoryName(c))+'</option>');const p=new Set(n.p);p.add(c.id);const kids=by.get(c.id)||[];for(let i=kids.length-1;i>=0;i--)stack.push({c:kids[i],d:n.d+1,p})}return out.join("");
-}
-function manageCategories(){
- const en=language==="en";if(profile.role!=="owner_admin")return alert(en?"Only the system owner can manage categories":"إدارة التصنيفات متاحة للمالك فقط");
- const tree=(g,parent=null,depth=0,path=new Set())=>cats.filter(c=>c.group_key===g&&(c.parent_id||null)===(parent||null)).map(c=>{if(path.has(c.id))return "";const p=new Set(path);p.add(c.id);const archived=c.is_active===false;return '<div style="padding:10px 8px 10px '+(depth*18)+'px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;opacity:'+(archived?".62":"1")+'"><span>'+(depth?'↳ ':'')+esc(categoryName(c))+(archived?' <small>('+ (en?"Archived":"مؤرشف")+')</small>':"")+'</span><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="soft" type="button" onclick="editCategory(\''+c.id+'\')">'+(en?"Edit":"تعديل")+'</button><button class="soft" type="button" onclick="toggleCategoryActive(\''+c.id+'\')">'+(archived?(en?"Restore":"استعادة"):(en?"Archive":"إخفاء"))+'</button><button class="soft" type="button" onclick="deleteCategory(\''+c.id+'\')">'+(en?"Delete":"حذف")+'</button></span></div>'+tree(g,c.id,depth+1,p)}).join("");
+ const action=(label,fn,kind="soft")=>'<button class="'+kind+' novaro-category-action" type="button" onclick="'+fn+'">'+label+'</button>';
+ const tree=(g,parent=null,depth=0,path=new Set())=>cats.filter(c=>c.group_key===g&&(c.parent_id||null)===(parent||null)).map(c=>{
+  if(path.has(c.id))return "";const nextPath=new Set(path);nextPath.add(c.id);const archived=c.is_active===false;
+  const children=tree(g,c.id,depth+1,nextPath);
+  const buttons=action(en?"Add child":"إضافة فرعي","addCategory('"+g+"','"+c.id+"')")+action(en?"Edit":"تعديل","editCategory('"+c.id+"')")+action(archived?(en?"Restore":"استعادة"):(en?"Archive":"أرشفة"),"toggleCategoryActive('"+c.id+"')")+action(en?"Delete":"حذف","deleteCategory('"+c.id+"')","soft danger");
+  return '<div class="novaro-category-node '+(archived?"is-archived":"")+'" style="--category-depth:'+depth+'"><div class="novaro-category-node-head"><span class="novaro-category-node-name">'+(depth?'<span class="novaro-category-branch-mark">↳</span>':"")+esc(categoryName(c))+(archived?'<small>'+(en?"Archived":"مؤرشف")+'</small>':"")+'</span><div class="novaro-category-node-actions">'+buttons+'</div></div>'+(children?'<div class="novaro-category-children">'+children+'</div>':"")+'</div>';
+ }).join("");
  const groups=categoryGroups.slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
- $("main").innerHTML='<section class="card branches-page"><div class="branches-page-head"><h3>'+(en?"Manage categories":"إدارة التصنيفات")+'</h3><button class="primary" type="button" onclick="addCategoryGroup()">＋ '+(en?"Add group":"إضافة مجموعة")+'</button></div><p class="muted">'+(en?"Manage all groups and build unlimited nested categories. Archiving preserves linked items and stocktake history.":"تحكم في كل المجموعات والتصنيفات والفروع بلا حدود. الأرشفة تحفظ الأصناف وسجلات الجرد المرتبطة.")+'</p></section>'+groups.map(g=>'<section class="card" style="margin-top:12px;'+(g.is_active===false?'opacity:.68':'')+'"><div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap"><h3>'+esc(categoryGroupLabel(g.key))+(g.is_active===false?' — '+(en?"Archived":"مؤرشفة"):"")+'</h3><div class="row" style="gap:6px;flex-wrap:wrap"><button class="soft" type="button" onclick="editCategoryGroup(\''+g.key+'\')">'+(en?"Rename":"تعديل الاسم")+'</button><button class="soft" type="button" onclick="toggleCategoryGroupActive(\''+g.key+'\')">'+(g.is_active===false?(en?"Restore":"استعادة"):(en?"Archive":"أرشفة"))+'</button><button class="soft" type="button" onclick="deleteCategoryGroup(&quot;'+g.key+'&quot;)">'+(en?"Delete":"حذف")+'</button><button class="soft" type="button" onclick="addCategory(\''+g.key+'\')">＋ '+(en?"Add category":"إضافة تصنيف")+'</button></div></div>'+tree(g.key)+'</section>').join("")+(groups.length?"":'<section class="card"><p class="muted">'+(en?"No groups yet. Add your first group.":"لا توجد مجموعات بعد. أضف أول مجموعة.")+'</p></section>');
+ $("main").innerHTML='<section class="card novaro-category-manager"><div class="novaro-category-manager-head"><div><h3>'+(en?"Category management":"إدارة التصنيفات")+'</h3><p>'+(en?"Manage every group and nested category in one place.":"إدارة كل المجموعات والتصنيفات المتفرعة من مكان واحد.")+'</p></div><button class="primary" type="button" onclick="addCategoryGroup()">＋ '+(en?"Add group":"إضافة مجموعة")+'</button></div>'+groups.map(g=>{
+  const archived=g.is_active===false;
+  const groupActions=action(en?"Add category":"إضافة تصنيف","addCategory('"+g.key+"')","primary")+action(en?"Rename":"تعديل الاسم","editCategoryGroup('"+g.key+"')")+action(archived?(en?"Restore":"استعادة"):(en?"Archive":"أرشفة"),"toggleCategoryGroupActive('"+g.key+"')")+action(en?"Delete":"حذف","deleteCategoryGroup('"+g.key+"')","soft danger");
+  return '<section class="novaro-category-group '+(archived?"is-archived":"")+'"><div class="novaro-category-group-head"><h4>'+esc(categoryGroupLabel(g.key))+(archived?'<small>'+(en?"Archived":"مؤرشفة")+'</small>':"")+'</h4><div class="novaro-category-group-actions">'+groupActions+'</div></div><div class="novaro-category-tree">'+(tree(g.key)||'<p class="novaro-category-empty">'+(en?"No categories in this group yet.":"لا توجد تصنيفات داخل هذه المجموعة بعد.")+'</p>')+'</div></section>';
+ }).join("")+(groups.length?"":'<div class="novaro-category-empty">'+(en?"No groups yet. Add your first group.":"لا توجد مجموعات بعد. أضف أول مجموعة.")+'</div>')+'</section>';
  novaroBackButton();applyLanguage();
 }
 function addCategoryGroup(){const en=language==="en";form(en?"Add group":"إضافة مجموعة",'<div class="field"><label>'+(en?"Group name (Arabic)":"اسم المجموعة بالعربية")+'</label><input id="newGroupAr" required></div><div class="field"><label>'+(en?"Group name (English)":"اسم المجموعة بالإنجليزية")+'</label><input id="newGroupEn"></div>',async()=>{const ar=$("newGroupAr").value.trim(),eng=$("newGroupEn").value.trim()||ar;if(!ar)throw Error(en?"Enter a group name.":"اكتب اسم المجموعة.");const key="group_"+crypto.randomUUID().replace(/-/g,"").slice(0,20);const r=await db.from("category_groups").insert({key,name_ar:ar,name_en:eng,sort_order:Math.max(0,...categoryGroups.map(x=>Number(x.sort_order)||0))+1,is_active:true,created_by:user.id});if(r.error)throw r.error;await load();window.__novaroReturnToCategoryManager=true})}
@@ -2044,9 +1817,9 @@ function editCategoryGroup(key){const g=categoryGroups.find(x=>x.key===key);if(!
 async function toggleCategoryGroupActive(key){const g=categoryGroups.find(x=>x.key===key);if(!g)return;const next=g.is_active===false;if(!next&&!confirm(language==="en"?"Archive this group? Its categories and items will be preserved.":"أرشفة المجموعة؟ ستظل التصنيفات والأصناف المرتبطة بها محفوظة."))return;const r=await db.from("category_groups").update({is_active:next}).eq("key",key);if(r.error)return alert(r.error.message);await load();manageCategories()}
 let novaroCategoryDraftCount=0;
 function novaroAddCategoryDraftRow(){const host=$("novaroCategoryDraftRows");if(!host)return;const id=++novaroCategoryDraftCount,row=document.createElement("div");row.className="card novaro-category-draft-row";row.style.cssText="padding:12px;margin:8px 0;background:var(--surface,transparent);border:1px solid var(--line)";row.innerHTML='<div class="row" style="justify-content:space-between"><b>'+(language==="en"?"Category":"التصنيف")+' '+id+'</b><button class="soft" type="button" data-remove>×</button></div><div class="field"><label>'+(language==="en"?"Name (Arabic)":"الاسم بالعربية")+'</label><input data-ar required></div><div class="field"><label>'+(language==="en"?"Name (English)":"الاسم بالإنجليزية")+'</label><input data-en></div>';row.querySelector("[data-remove]").onclick=()=>{if(host.children.length>1)row.remove()};host.appendChild(row)}
-function addCategory(groupKey=""){
+function addCategory(groupKey="",parentId=null){
  const en=language==="en";if(profile.role!=="owner_admin")return alert(en?"Only the system owner can manage categories":"إدارة التصنيفات متاحة للمالك فقط");
- const gs=categoryGroups.filter(g=>g.is_active!==false);if(!gs.length)return alert(en?"Add a group first.":"أضف مجموعة أولًا.");const selected=gs.some(g=>g.key===groupKey)?groupKey:gs[0].key;
+ const gs=categoryGroups.filter(g=>g.is_active!==false);if(!gs.length)return alert(en?"Add a group first.":"أضف مجموعة أولًا.");const selected=gs.some(g=>g.key===groupKey)?groupKey:gs[0].key;const selectedParent=cats.some(c=>c.id===parentId&&c.group_key===selected&&c.is_active!==false)?parentId:"";
  const fields='<div class="field"><label>'+(en?"Group":"المجموعة")+'</label><select id="novaroCategoryGroup">'+gs.map(g=>'<option value="'+g.key+'" '+(g.key===selected?"selected":"")+'>'+esc(categoryGroupLabel(g.key))+'</option>').join("")+'</select></div><div class="field"><label>'+(en?"Parent category (optional)":"التصنيف الأب (اختياري)")+'</label><select id="novaroCategoryParent">'+novaroCategoryParentOptions(selected)+'</select><small class="muted">'+(en?"Leave empty to create a top-level category in this group.":"اتركه فارغًا لإنشاء تصنيف رئيسي داخل المجموعة.")+'</small></div><h4>'+(en?"Category names":"أسماء التصنيفات")+'</h4><div id="novaroCategoryDraftRows"></div><button class="soft" type="button" id="novaroAddCategoryDraft">＋ '+(en?"Add another category":"إضافة خانة تصنيف أخرى")+'</button><div id="novaroCategoryError" class="error"></div><button class="primary" type="button" id="novaroSaveCategoryDraft" style="margin-top:12px">'+(en?"Save categories":"حفظ التصنيفات")+'</button>';
  $("main").innerHTML='<section class="card"><div class="row"><h3>'+(en?"Add categories":"إضافة تصنيفات")+'</h3></div>'+fields+'</section>';novaroCategoryDraftCount=0;novaroAddCategoryDraftRow();$("novaroCategoryGroup").onchange=()=>{$("novaroCategoryParent").innerHTML=novaroCategoryParentOptions($("novaroCategoryGroup").value)};$("novaroAddCategoryDraft").onclick=novaroAddCategoryDraftRow;
  $("novaroSaveCategoryDraft").onclick=async()=>{const btn=$("novaroSaveCategoryDraft"),err=$("novaroCategoryError");btn.disabled=true;err.textContent="";try{const group=$("novaroCategoryGroup").value,parent=$("novaroCategoryParent").value||null,rows=[...document.querySelectorAll(".novaro-category-draft-row")].map(x=>({ar:x.querySelector("[data-ar]").value.trim(),en:x.querySelector("[data-en]").value.trim()})).filter(x=>x.ar||x.en);if(!rows.length||rows.some(x=>!x.ar&&!x.en))throw Error(en?"Complete each category name.":"أكمل اسم كل تصنيف.");const existing=new Set(cats.filter(c=>c.group_key===group&&(c.parent_id||null)===parent&&c.is_active!==false).map(c=>(c.name_ar||"").trim().toLowerCase()));let order=cats.filter(c=>c.group_key===group&&(c.parent_id||null)===parent).length;const payloads=[];for(const x of rows){const ar=x.ar||x.en,eng=x.en||x.ar;if(existing.has(ar.toLowerCase()))throw Error(en?"A category with this name already exists under the selected parent.":"يوجد تصنيف بنفس الاسم تحت التصنيف الأب المختار.");existing.add(ar.toLowerCase());payloads.push({name_ar:ar,name_en:eng,group_key:group,parent_id:parent,sort_order:++order,is_active:true,created_by:user.id})}const r=await db.from("categories").insert(payloads);if(r.error)throw r.errorawait load();manageCategories()}catch(e){err.textContent=e.message||String(e);btn.disabled=false}};
@@ -2883,5 +2656,41 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 @media(max-width:600px){
  :root #app .items-page article.item-card .item-card-qr-column{flex-basis:88px!important}
  :root #app .items-page article.item-card .item-card-picture-column{flex-basis:88px!important}
+}
+</style>
+
+<style id="novaro-category-manager-clean-v1">
+#app .novaro-category-manager{display:grid;gap:14px;padding:clamp(14px,2.5vw,22px)!important}
+#app .novaro-category-manager-head,#app .novaro-category-group-head,#app .novaro-category-node-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#app .novaro-category-manager-head h3,#app .novaro-category-group-head h4{margin:0!important;color:var(--ink)!important}
+#app .novaro-category-manager-head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+#app .novaro-category-group{min-width:0;padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--surface,transparent)}
+#app .novaro-category-group.is-archived,#app .novaro-category-node.is-archived{opacity:.68}
+#app .novaro-category-group-head{padding-bottom:11px;border-bottom:1px solid var(--line)}
+#app .novaro-category-group-head h4{font-size:15px}
+#app .novaro-category-group-head h4 small,#app .novaro-category-node-name small{display:inline-block;margin-inline-start:7px;padding:2px 7px;border-radius:20px;background:var(--bg);color:var(--muted);font-size:10px;font-weight:600}
+#app .novaro-category-group-actions,#app .novaro-category-node-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#app .novaro-category-action{min-height:32px!important;padding:5px 9px!important;font-size:11px!important;white-space:nowrap}
+#app .novaro-category-action.danger{color:#b64a43!important;border-color:#d99a95!important}
+#app .novaro-category-tree{display:grid;gap:7px;padding-top:10px}
+#app .novaro-category-node{min-width:0;margin-inline-start:calc(var(--category-depth)*13px);padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+#app .novaro-category-node-head{min-width:0}
+#app .novaro-category-node-name{min-width:0;display:flex;align-items:center;gap:5px;flex-wrap:wrap;color:var(--ink);font-size:13px;font-weight:650;overflow-wrap:anywhere}
+#app .novaro-category-branch-mark{color:var(--muted)}
+#app .novaro-category-children{display:grid;gap:7px;margin-top:8px;padding-inline-start:10px;border-inline-start:1px solid var(--line)}
+#app .novaro-category-empty{margin:0;padding:12px;color:var(--muted);font-size:12px;text-align:center}
+:root[data-novaro-mode="dark"] #app .novaro-category-group{background:#202f28!important;border-color:#40564a!important}
+:root[data-novaro-mode="dark"] #app .novaro-category-node{background:#26382f!important;border-color:#40564a!important}
+:root[data-novaro-mode="dark"] #app .novaro-category-node-name,:root[data-novaro-mode="dark"] #app .novaro-category-group-head h4,:root[data-novaro-mode="dark"] #app .novaro-category-manager-head h3{color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #app .novaro-category-action.danger{color:#f0aaa1!important;border-color:#815b56!important}
+@media(max-width:600px){
+ #app .novaro-category-manager{padding:11px!important;gap:10px}
+ #app .novaro-category-group{padding:10px}
+ #app .novaro-category-group-head{align-items:flex-start}
+ #app .novaro-category-group-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ #app .novaro-category-action{width:100%;min-width:0;padding:5px 6px!important}
+ #app .novaro-category-node{margin-inline-start:calc(var(--category-depth)*7px);padding:8px}
+ #app .novaro-category-node-head{align-items:flex-start}
+ #app .novaro-category-node-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 </style>
