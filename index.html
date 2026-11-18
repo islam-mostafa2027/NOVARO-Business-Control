@@ -2615,3 +2615,33 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 }
 </style>
 </body></html>
+
+<style id="novaro-item-qr-label-position-v1">
+/* Keep the QR Code capsule clearly above its QR image, never over the image. */
+:root #app .items-page article.item-card .item-card-qr-column{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  align-self:flex-start!important;
+  gap:8px!important;
+  min-width:92px!important;
+  position:relative!important;
+}
+:root #app .items-page article.item-card .item-card-qr-column .item-qr-label{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  position:relative!important;
+  inset:auto!important;
+  z-index:1!important;
+  margin:0!important;
+  flex:none!important;
+}
+:root #app .items-page article.item-card .item-card-qr-column .item-card-symbol{
+  position:relative!important;
+  inset:auto!important;
+  margin:0!important;
+  flex:none!important;
+}
+</style>
