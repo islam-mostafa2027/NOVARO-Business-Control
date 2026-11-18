@@ -2035,8 +2035,7 @@ function addCategoryUnderArea(groupKey,parentId){
   const payload=rows.map((row,index)=>({name_ar:row.ar,name_en:englishNames[index],group_key:groupKey,parent_id:parentId,sort_order:currentOrder+index+1,is_active:true,created_by:user.id}));
   const inserted=await db.from("categories").insert(payload);
   if(inserted.error)throw inserted.error;
-  await load();
-  manageCategories(groupKey,parentId);
+  window.__novaroReturnToCategoryManager=true;
  });
  novaroAddAreaCategoryRow();
  $("novaroAddAreaCategoryRow").onclick=novaroAddAreaCategoryRow;
