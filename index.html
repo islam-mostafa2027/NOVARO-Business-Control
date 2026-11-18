@@ -3016,3 +3016,40 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  #app .novaro-category-node-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 </style>
+<style id="novaro-stocktake-report-summary-compact-v1">
+/* Compact the in-app report summary and keep its four metadata capsules equal in one row. */
+#app .single-stocktake-report .print-report-head{
+  padding:10px!important;
+  border-radius:13px!important;
+}
+#app .single-stocktake-report .print-report-brand{
+  font-size:15px!important;line-height:1.2!important;letter-spacing:1px!important;
+}
+#app .single-stocktake-report .print-report-head h2{
+  font-size:15px!important;line-height:1.3!important;margin:3px 0 7px!important;
+}
+#app .single-stocktake-report .report-meta{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:6px!important;align-items:stretch!important;
+}
+#app .single-stocktake-report .report-meta span{
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:2px!important;min-width:0!important;min-height:48px!important;
+  padding:6px 5px!important;border-radius:9px!important;
+  font-size:10px!important;line-height:1.3!important;text-align:center!important;
+  overflow-wrap:anywhere!important;
+}
+#app .single-stocktake-report .report-meta span b{
+  display:block!important;font-size:9px!important;line-height:1.25!important;
+}
+@media(max-width:600px){
+  #app .single-stocktake-report .print-report-head{padding:8px!important}
+  #app .single-stocktake-report .report-meta{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;
+  }
+  #app .single-stocktake-report .report-meta span{
+    min-height:45px!important;padding:5px 3px!important;font-size:9px!important;
+  }
+  #app .single-stocktake-report .report-meta span b{font-size:8px!important}
+}
+</style>
