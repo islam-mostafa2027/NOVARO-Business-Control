@@ -2513,6 +2513,8 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   }
   #app button:active,#appLayout #tabs button:active{box-shadow:none!important;}
   #appLayout #tabs button.active:active,.app-layout .tabs button.active:active,.tabs button.active:active{background:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;background-image:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;}
+  /* Avoid GPU backdrop-filter recomposition while mobile pages are replaced. */
+  #app .app-header,#app .tabs{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
 }
 </style>
 </style>
