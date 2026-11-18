@@ -1312,7 +1312,7 @@ profile=r.data;if(profile.is_active===false||profile.is_active===0||profile.is_a
 async function load(){let q=db.from("branches").select("*").is("archived_at",null).eq("is_active",true).order("name_ar");if(profile.role!=="owner_admin"){let m=await db.from("branch_members").select("branch_id").eq("user_id",user.id).eq("is_active",true);q=q.in("id",(m.data||[]).map(x=>x.branch_id))}const aq=profile.role==="owner_admin"?db.from("branches").select("*").is("archived_at",null).order("name_ar"):q;const rq=profile.role==="owner_admin"?db.from("branches").select("*").not("archived_at","is",null).order("archived_at",{ascending:false}):Promise.resolve({data:[],error:null});let [b,ab,ar,i,c,m,st]=await Promise.all([q,aq,rq,db.from("items").select("*,categories(name_ar,name_en)").eq("is_active",true).order("name_ar"),db.from("categories").select("*").eq("is_active",true).order("sort_order"),db.from("stock_movements").select("branch_id,item_id,movement_type,quantity,created_at"),db.from("branch_item_stock").select("branch_id,item_id,quantity,updated_at")]);if(b.error)throw b.error;if(ab.error)throw ab.error;if(ar.error)throw ar.error;if(i.error)throw i.error;if(c.error)throw c.error;if(m.error)throw m.error;if(st.error)throw st.error;branches=b.data||[];allBranches=ab.data||[];archivedBranches=ar.data||[];const branchUserIds=[...new Set(allBranches.map(x=>x.branch_login_user_id).filter(Boolean))];if(branchUserIds.length){const pr=await db.from("profiles").select("id,display_name").in("id",branchUserIds);if(pr.error)throw pr.error;const names=new Map((pr.data||[]).map(x=>[x.id,x.display_name]));allBranches=allBranches.map(x=>({...x,branch_manager_name:names.get(x.branch_login_user_id)||""}));branches=branches.map(x=>({...x,branch_manager_name:names.get(x.branch_login_user_id)||""}));}items=i.data||[];cats=(c.data||[]).sort((a,b)=>{const ao=/^(other|أخرى)$/i.test((a.name_en||a.name_ar||"").trim()),bo=/^(other|أخرى)$/i.test((b.name_en||b.name_ar||"").trim());return ao===bo?Number(a.sort_order||0)-Number(b.sort_order||0):ao?1:-1});balances={};const liveByItem=new Map();for(const x of(st.data||[])){const k=x.branch_id+":"+x.item_id;const base={quantity:Number(x.quantity||0),updated_at:x.updated_at};liveByItem.set(k,base);balances[k]=base.quantity}for(const x of(m.data||[])){const k=x.branch_id+":"+x.item_id,base=liveByItem.get(k);if(base&&x.created_at&&new Date(x.created_at)<=new Date(base.updated_at))continue;const q=Number(x.quantity);balances[k]=(balances[k]||0)+(x.movement_type==="issue"?-q:q)}if(!branches.some(x=>x.id===branchId))branchId=(profile.role!=="owner_admin"&&branches.length===1)?branches[0].id:""}
 $("tabs").onclick=e=>{let b=e.target.closest("button[data-p]");if(b)novaroNavigate(b.dataset.p)};
 $("openSettings").onclick=()=>novaroNavigate("settings");$("openAbout").onclick=()=>novaroNavigate("about");
-document.addEventListener("change",e=>{const id=e.target.id;if(!novaroSettingsDraft)return;const map={programAppearance:"appearance",programFont:"font",fontSize:"fontSize",displayDensity:"density",alertVolume:"volume"};if(map[id])novaroSettingsDraft[map[id]]=id==="alertVolume"?Number(e.target.value):e.target.value;if(id==="programAppearance")applyNovaroAppearance(novaroSettingsDraft);if(id==="programFont"||id==="fontSize"||id==="displayDensity")syncSettingsControls()});
+document.addEventListener("change",e=>{const id=e.target.id;if(!novaroSettingsDraft)return;const map={programAppearance:"appearance",programFont:"font",fontSize:"fontSize",displayDensity:"density",alertVolume:"volume"};if(map[id])novaroSettingsDraft[map[id]]=id==="alertVolume"?Number(e.target.value):e.target.value;if(id==="programAppearance"){saveNovaroPrefs({...getNovaroPrefs(),appearance:novaroSettingsDraft.appearance});applyNovaroAppearance(novaroSettingsDraft);}if(id==="programFont"||id==="fontSize"||id==="displayDensity")syncSettingsControls()});
 document.addEventListener("input",e=>{if(e.target.id==="alertVolume"&&novaroSettingsDraft){novaroSettingsDraft.volume=Number(e.target.value);const v=$("alertVolumeValue");if(v)v.textContent=e.target.value+"%";if(novaroSoundMaster&&novaroSoundContext)novaroSoundMaster.gain.setTargetAtTime(Math.max(.01,novaroSettingsDraft.volume/100*.48),novaroSoundContext.currentTime,.025)}});
 document.addEventListener("click",async e=>{
  const changeOwnerEmail=e.target.closest("#requestOwnerEmailChange");
@@ -2380,7 +2380,8 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 
 
 <style id="novaro-item-card-pills-dark-v1">
-/* Consistent dark-mode appearance and dimensions for the small item-card pills. */
+/* One consistent pill treatment for item name, group, code and QR label. */
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-title strong,
 :root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-group,
 :root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-code,
 :root[data-novaro-mode="dark"] #app .items-page article.item-card .item-qr-label{
@@ -2388,20 +2389,27 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   align-items:center!important;
   justify-content:center!important;
   box-sizing:border-box!important;
-  min-height:28px!important;
-  padding:5px 10px!important;
+  min-height:32px!important;
+  min-width:88px!important;
+  padding:6px 12px!important;
   border:1px solid #506b5c!important;
-  border-radius:8px!important;
+  border-radius:9px!important;
   background:#30473b!important;
   background-image:none!important;
   color:#f1f7f3!important;
   -webkit-text-fill-color:#f1f7f3!important;
   font-size:12px!important;
   font-weight:700!important;
-  line-height:1.2!important;
+  line-height:1.25!important;
   text-align:center!important;
   opacity:1!important;
   text-shadow:none!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-title strong{
+  width:fit-content!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
 }
 :root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-group,
 :root[data-novaro-mode="dark"] #app .items-page article.item-card .item-card-code{
@@ -2409,7 +2417,7 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   max-width:100%!important;
 }
 :root[data-novaro-mode="dark"] #app .items-page article.item-card .item-qr-label{
-  width:100%!important;
+  width:auto!important;
 }
 </style>
 
