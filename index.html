@@ -1501,100 +1501,7 @@ function printStocktakeReport(){
  const tables=groups.map(g=>{const list=rows.filter(x=>(["materials","tools","equipment","assets","other"].includes(x.categories?.group_key)?x.categories.group_key:"equipment")===g.key);const body=list.map((x,i)=>'<tr><td>'+(i+1)+'</td><td class="item">'+escHtml(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</td><td>'+escHtml(x.item_code||"—")+'</td><td>'+escHtml(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</td><td>'+escHtml(fmtQty(x.quantity))+'</td></tr>').join("");return '<section class="group"><h2>'+g.label+' <small>('+list.length+')</small></h2>'+(list.length?'<table><thead><tr><th style="width:7%">'+(en?"No.":"م")+'</th><th style="width:39%">'+(en?"Item name":"اسم الصنف")+'</th><th style="width:20%">'+(en?"Item code":"كود الصنف")+'</th><th style="width:14%">'+(en?"Unit":"الوحدة")+'</th><th style="width:20%">'+(en?"Actual quantity":"الكمية الفعلية")+'</th></tr></thead><tbody>'+body+'</tbody></table>':'<p class="empty">'+(en?"No items in this section.":"لا توجد أصناف في هذا القسم.")+'</p>')+'</section>'}).join("");
  const w=window.open("","_blank");if(!w)return alert(en?"Allow pop-ups to open the printable report.":"اسمح بفتح النوافذ المنبثقة لعرض التقرير القابل للطباعة.");
  const title=en?"STOCKTAKE REPORT":"تقرير الجرد",date=String(data.session.inventory_date||"").slice(0,10)||"—";
- const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}.group{margin:18px 0 22px;break-inside:auto}.group h2{font-size:16px;color:#244b5a;background:#eaf3f7;border-right:4px solid #315b70;padding:8px 10px;margin:0 0 8px}.group h2 small{font-size:11px;color:#607987}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 10px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start}.empty{padding:8px;color:#718894}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:18px}}</style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header>'+tables+'<div class="foot">NOVARO Inventory</div>
-<style id="novaro-dark-mode-surface-coverage-v1">
-/* Complete dark-mode coverage for nested cards, item tiles and mobile navigation. */
-:root[data-novaro-mode="dark"] #app .about-page-detail,
-:root[data-novaro-mode="dark"] #app .item-card,
-:root[data-novaro-mode="dark"] #app .item-card-header,
-:root[data-novaro-mode="dark"] #app .item-card-body,
-:root[data-novaro-mode="dark"] #app .item-details,
-:root[data-novaro-mode="dark"] #app .item-info,
-:root[data-novaro-mode="dark"] #app .item-image,
-:root[data-novaro-mode="dark"] #app .item-image-wrap,
-:root[data-novaro-mode="dark"] #app .item-stock,
-:root[data-novaro-mode="dark"] #app .branch-stock-card,
-:root[data-novaro-mode="dark"] #app .stock-card,
-:root[data-novaro-mode="dark"] #app .stock-row,
-:root[data-novaro-mode="dark"] #app .dashboard-row,
-:root[data-novaro-mode="dark"] #app .kpi-card,
-:root[data-novaro-mode="dark"] #app .tablewrap,
-:root[data-novaro-mode="dark"] #app .item-barcode,
-:root[data-novaro-mode="dark"] #app .item-qrcode {
- background:#202f28!important;
- background-image:none!important;
- color:#e5eee9!important;
- border-color:#40564a!important;
- box-shadow:0 5px 18px #00000018!important;
-}
-:root[data-novaro-mode="dark"] #app .about-page-detail span,
-:root[data-novaro-mode="dark"] #app .about-page-detail strong,
-:root[data-novaro-mode="dark"] #app .item-card *,
-:root[data-novaro-mode="dark"] #app .item-details *,
-:root[data-novaro-mode="dark"] #app .item-info *,
-:root[data-novaro-mode="dark"] #app .branch-stock-card *,
-:root[data-novaro-mode="dark"] #app .stock-card *,
-:root[data-novaro-mode="dark"] #app .stock-row * {
- color:#dce8e1!important;
- -webkit-text-fill-color:currentColor!important;
-}
-:root[data-novaro-mode="dark"] #app .item-card img,
-:root[data-novaro-mode="dark"] #app .item-image img,
-:root[data-novaro-mode="dark"] #app .item-image-wrap img {background:#26372f!important}
-:root[data-novaro-mode="dark"] #app .item-qrcode,
-:root[data-novaro-mode="dark"] #app .item-barcode {background:#f4f8f5!important;color:#20372f!important}
-:root[data-novaro-mode="dark"] #app .tabs,
-:root[data-novaro-mode="dark"] #app .app-layout .tabs {
- background:rgba(32,47,40,.97)!important;
- border:1px solid #40564a!important;
- box-shadow:0 8px 28px #00000055!important;
-}
-:root[data-novaro-mode="dark"] #app .tabs button,
-:root[data-novaro-mode="dark"] #app .app-layout .tabs button {
- color:#c8d8cf!important;
- -webkit-text-fill-color:#c8d8cf!important;
-}
-:root[data-novaro-mode="dark"] #app .tabs button *,
-:root[data-novaro-mode="dark"] #app .app-layout .tabs button * {
- color:inherit!important;
- -webkit-text-fill-color:currentColor!important;
-}
-:root[data-novaro-mode="dark"] #app .tabs button.active,
-:root[data-novaro-mode="dark"] #app .app-layout .tabs button.active {
- background:linear-gradient(145deg,#287d6b,#1d5c4d)!important;
- border-color:#55a58a!important;
- color:#fff!important;
- -webkit-text-fill-color:#fff!important;
-}
-:root[data-novaro-mode="dark"] #app .tabs button.active *,
-:root[data-novaro-mode="dark"] #app .app-layout .tabs button.active * {
- color:#fff!important;
- -webkit-text-fill-color:#fff!important;
-}
-:root[data-novaro-mode="dark"] #app .tabs .nav-icon {
- background:#ffffff12!important;
- color:#d5e5dc!important;
-}
-:root[data-novaro-mode="dark"] #app .tabs button.active .nav-icon {
- background:#ffffff20!important;color:#fff!important;
-}
-/* Catch remaining inline light surfaces inside generated inventory cards. */
-:root[data-novaro-mode="dark"] #app .card [style*="background:#fff"],
-:root[data-novaro-mode="dark"] #app .card [style*="background: #fff"],
-:root[data-novaro-mode="dark"] #app .card [style*="background:white"],
-:root[data-novaro-mode="dark"] #app .card [style*="background: white"],
-:root[data-novaro-mode="dark"] #app .card [style*="background-color:#fff"],
-:root[data-novaro-mode="dark"] #app .card [style*="background-color: #fff"],
-:root[data-novaro-mode="dark"] #app .card [style*="background-color:white"],
-:root[data-novaro-mode="dark"] #app .card [style*="background-color: white"] {
- background:#202f28!important;
- background-image:none!important;
- color:#e5eee9!important;
- border-color:#40564a!important;
-}
-</style>
-
-</body></html>';
+ const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>*{box-sizing:border-box}body{font-family:Arial,Tahoma,sans-serif;color:#263b4a;margin:0;padding:22px;background:#fff;font-size:12px}.head{text-align:center;border-bottom:3px solid #315b70;padding:0 0 14px;margin-bottom:16px}.brand{font-size:25px;font-weight:800;letter-spacing:2px;color:#244b5a}.title{font-size:19px;font-weight:700;margin:5px 0 12px;color:#244b5a}.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;text-align:start;font-size:12px}.meta span{padding:6px 9px;background:#f0f6f8;border:1px solid #d7e5eb;border-radius:4px}.group{margin:18px 0 22px;break-inside:auto}.group h2{font-size:16px;color:#244b5a;background:#eaf3f7;border-right:4px solid #315b70;padding:8px 10px;margin:0 0 8px}.group h2 small{font-size:11px;color:#607987}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 10px}thead{display:table-header-group}tr{break-inside:avoid}th{background:#315b70;color:white;padding:9px 6px;border:1px solid #244b5a;font-size:11px}td{border:1px solid #cbdce3;padding:7px 6px;text-align:center;vertical-align:middle;overflow-wrap:anywhere}tbody tr:nth-child(even){background:#f2f7f9}.item{text-align:start}.empty{padding:8px;color:#718894}.foot{margin-top:18px;padding-top:8px;border-top:1px solid #d7e5eb;text-align:center;color:#718894;font-size:10px}@page{size:A4 landscape;margin:12mm 10mm}@media print{body{padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}@media screen{body{max-width:1200px;margin:20px auto;box-shadow:0 2px 18px #0001;padding:18px}}</style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div><header class="head"><div class="brand">NOVARO</div><div class="title">'+title+'</div><div class="meta"><span><b>'+(en?"Branch: ":"الفرع: ")+'</b>'+escHtml(branch)+'</span><span><b>'+(en?"Date: ":"التاريخ: ")+'</b>'+escHtml(date)+'</span><span><b>'+(en?"Period: ":"الفترة: ")+'</b>'+escHtml(sessionLabel(data.session))+'</span><span><b>'+(en?"Total items: ":"إجمالي الأصناف: ")+'</b>'+rows.length+'</span></div></header>'+tables+'<div class="foot">NOVARO Inventory</div></body></html>';
  w.document.open();w.document.write(html);w.document.close();
 }
 function render(){novaroEnsureBrowserHistory();const headerUserName=$("headerUserName");if(headerUserName)headerUserName.textContent=(profile&&profile.display_name)|| (user&&user.email)||"";if(page!=="settings")novaroSettingsDraft=null;document.querySelectorAll("#tabs button[data-p]").forEach(b=>{const active=b.dataset.p===page;b.classList.toggle("active",active);b.setAttribute("aria-current",active?"page":"false")});let m=$("main");m.classList.remove("novaro-consistent-page");m.classList.toggle("novaro-card-pages",page!=="home"&&page!=="branches"&&page!=="items");m.classList.toggle("novaro-items-experiment",page==="items");if(!branches.length&&profile.role!=="owner_admin"){m.innerHTML='<section class="card empty">لا توجد فروع مرتبطة بحسابك. تواصل مع مالك النظام.</section>';return}
@@ -2187,6 +2094,98 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  #app .kpi-card b{font-size:25px!important}
  #app .dashboard-row{gap:9px!important;padding:10px!important}
  #app .dashboard-row>span{font-size:14px!important}
+}
+</style>
+
+<style id="novaro-dark-mode-surface-coverage-v1">
+/* Complete dark-mode coverage for nested cards, item tiles and mobile navigation. */
+:root[data-novaro-mode="dark"] #app .about-page-detail,
+:root[data-novaro-mode="dark"] #app .item-card,
+:root[data-novaro-mode="dark"] #app .item-card-header,
+:root[data-novaro-mode="dark"] #app .item-card-body,
+:root[data-novaro-mode="dark"] #app .item-details,
+:root[data-novaro-mode="dark"] #app .item-info,
+:root[data-novaro-mode="dark"] #app .item-image,
+:root[data-novaro-mode="dark"] #app .item-image-wrap,
+:root[data-novaro-mode="dark"] #app .item-stock,
+:root[data-novaro-mode="dark"] #app .branch-stock-card,
+:root[data-novaro-mode="dark"] #app .stock-card,
+:root[data-novaro-mode="dark"] #app .stock-row,
+:root[data-novaro-mode="dark"] #app .dashboard-row,
+:root[data-novaro-mode="dark"] #app .kpi-card,
+:root[data-novaro-mode="dark"] #app .tablewrap,
+:root[data-novaro-mode="dark"] #app .item-barcode,
+:root[data-novaro-mode="dark"] #app .item-qrcode {
+ background:#202f28!important;
+ background-image:none!important;
+ color:#e5eee9!important;
+ border-color:#40564a!important;
+ box-shadow:0 5px 18px #00000018!important;
+}
+:root[data-novaro-mode="dark"] #app .about-page-detail span,
+:root[data-novaro-mode="dark"] #app .about-page-detail strong,
+:root[data-novaro-mode="dark"] #app .item-card *,
+:root[data-novaro-mode="dark"] #app .item-details *,
+:root[data-novaro-mode="dark"] #app .item-info *,
+:root[data-novaro-mode="dark"] #app .branch-stock-card *,
+:root[data-novaro-mode="dark"] #app .stock-card *,
+:root[data-novaro-mode="dark"] #app .stock-row * {
+ color:#dce8e1!important;
+ -webkit-text-fill-color:currentColor!important;
+}
+:root[data-novaro-mode="dark"] #app .item-card img,
+:root[data-novaro-mode="dark"] #app .item-image img,
+:root[data-novaro-mode="dark"] #app .item-image-wrap img {background:#26372f!important}
+:root[data-novaro-mode="dark"] #app .item-qrcode,
+:root[data-novaro-mode="dark"] #app .item-barcode {background:#f4f8f5!important;color:#20372f!important}
+:root[data-novaro-mode="dark"] #app .tabs,
+:root[data-novaro-mode="dark"] #app .app-layout .tabs {
+ background:rgba(32,47,40,.97)!important;
+ border:1px solid #40564a!important;
+ box-shadow:0 8px 28px #00000055!important;
+}
+:root[data-novaro-mode="dark"] #app .tabs button,
+:root[data-novaro-mode="dark"] #app .app-layout .tabs button {
+ color:#c8d8cf!important;
+ -webkit-text-fill-color:#c8d8cf!important;
+}
+:root[data-novaro-mode="dark"] #app .tabs button *,
+:root[data-novaro-mode="dark"] #app .app-layout .tabs button * {
+ color:inherit!important;
+ -webkit-text-fill-color:currentColor!important;
+}
+:root[data-novaro-mode="dark"] #app .tabs button.active,
+:root[data-novaro-mode="dark"] #app .app-layout .tabs button.active {
+ background:linear-gradient(145deg,#287d6b,#1d5c4d)!important;
+ border-color:#55a58a!important;
+ color:#fff!important;
+ -webkit-text-fill-color:#fff!important;
+}
+:root[data-novaro-mode="dark"] #app .tabs button.active *,
+:root[data-novaro-mode="dark"] #app .app-layout .tabs button.active * {
+ color:#fff!important;
+ -webkit-text-fill-color:#fff!important;
+}
+:root[data-novaro-mode="dark"] #app .tabs .nav-icon {
+ background:#ffffff12!important;
+ color:#d5e5dc!important;
+}
+:root[data-novaro-mode="dark"] #app .tabs button.active .nav-icon {
+ background:#ffffff20!important;color:#fff!important;
+}
+/* Catch remaining inline light surfaces inside generated inventory cards. */
+:root[data-novaro-mode="dark"] #app .card [style*="background:#fff"],
+:root[data-novaro-mode="dark"] #app .card [style*="background: #fff"],
+:root[data-novaro-mode="dark"] #app .card [style*="background:white"],
+:root[data-novaro-mode="dark"] #app .card [style*="background: white"],
+:root[data-novaro-mode="dark"] #app .card [style*="background-color:#fff"],
+:root[data-novaro-mode="dark"] #app .card [style*="background-color: #fff"],
+:root[data-novaro-mode="dark"] #app .card [style*="background-color:white"],
+:root[data-novaro-mode="dark"] #app .card [style*="background-color: white"] {
+ background:#202f28!important;
+ background-image:none!important;
+ color:#e5eee9!important;
+ border-color:#40564a!important;
 }
 </style>
 </body></html>
