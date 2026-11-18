@@ -2463,6 +2463,45 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   color:#edf5f0!important;
   -webkit-text-fill-color:#edf5f0!important;
 }
+
+<style id="novaro-item-card-media-capsules-v1">
+/* Slightly enlarge the item photo and QR holders to balance the text pills. */
+:root #app .items-page article.item-card .item-card-picture,
+:root #app .items-page article.item-card .item-card-symbol{
+  width:92px!important;
+  min-width:92px!important;
+  height:92px!important;
+  min-height:92px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:5px!important;
+  flex:none!important;
+  border-radius:10px!important;
+}
+:root #app .items-page article.item-card .item-card-image,
+:root #app .items-page article.item-card .item-card-placeholder{
+  width:80px!important;
+  height:80px!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  object-fit:cover!important;
+  border-radius:7px!important;
+}
+:root #app .items-page article.item-card .item-qrcode{
+  width:76px!important;
+  height:76px!important;
+  box-sizing:border-box!important;
+}
+:root #app .items-page article.item-card .item-qrcode img,
+:root #app .items-page article.item-card .item-qrcode canvas{
+  width:72px!important;
+  height:72px!important;
+  max-width:72px!important;
+  max-height:72px!important;
+}
+</style>
 </style>
 
 </body></html>
