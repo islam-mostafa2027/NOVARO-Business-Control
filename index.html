@@ -3565,50 +3565,67 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 
 
-<style id="novaro-system-capsules-soft-green-v2">
-/* Soft green informational capsules across the app. Preserve geometry and exclude the top header and navigation. */
+<style id="novaro-system-capsules-soft-green-v3">
+/* One calm green treatment for informational capsules only.
+   Keep their existing geometry and content. The main header and bottom navigation are excluded. */
 :root #app :is(
- .status-pill,
- .report-meta span,
- .stocktake-session-meta>span,
- .items-group-caption,
- .branch-status,
- .scan-status,
- .novaro-qr-caption,
- .novaro-image-caption,
- .item-branch-meta,
- .item-card-field-label,
- .item-photo-label,
- .item-qr-label
-):not(.app-header *):not(nav *) {
- background:#edf5f0!important;
- background-color:#edf5f0!important;
- background-image:none!important;
- border:1px solid #d5e3da!important;
- box-shadow:none!important;
- color:#29483d!important;
- -webkit-text-fill-color:#29483d!important;
- text-shadow:none!important;
+  .status-pill,
+  .branch-status,
+  .scan-status,
+  .report-meta span,
+  .stocktake-session-meta>span,
+  .stocktake-group-count,
+  .stocktake-item-number,
+  .stocktake-item-details>div,
+  .stocktake-entry-name,
+  .items-group-caption,
+  .novaro-qr-caption,
+  .novaro-image-caption,
+  .item-card-title strong,
+  .item-card-group,
+  .item-card-code,
+  .item-photo-label,
+  .item-qr-label,
+  .novaro-category-group-head h4 small,
+  .novaro-category-node-name small
+):not(.app-header *):not(.tabs *):not(nav *) {
+  background:#edf5f0!important;
+  background-color:#edf5f0!important;
+  background-image:none!important;
+  border-color:#d5e3da!important;
+  color:#29483d!important;
+  -webkit-text-fill-color:#29483d!important;
+  text-shadow:none!important;
+  box-shadow:none!important;
 }
 :root[data-novaro-mode="dark"] #app :is(
- .status-pill,
- .report-meta span,
- .stocktake-session-meta>span,
- .items-group-caption,
- .branch-status,
- .scan-status,
- .novaro-qr-caption,
- .novaro-image-caption,
- .item-branch-meta,
- .item-card-field-label,
- .item-photo-label,
- .item-qr-label
-):not(.app-header *):not(nav *) {
- background:#26382f!important;
- background-color:#26382f!important;
- background-image:none!important;
- border-color:#40564a!important;
- color:#e5eee9!important;
- -webkit-text-fill-color:#e5eee9!important;
+  .status-pill,
+  .branch-status,
+  .scan-status,
+  .report-meta span,
+  .stocktake-session-meta>span,
+  .stocktake-group-count,
+  .stocktake-item-number,
+  .stocktake-item-details>div,
+  .stocktake-entry-name,
+  .items-group-caption,
+  .novaro-qr-caption,
+  .novaro-image-caption,
+  .item-card-title strong,
+  .item-card-group,
+  .item-card-code,
+  .item-photo-label,
+  .item-qr-label,
+  .novaro-category-group-head h4 small,
+  .novaro-category-node-name small
+):not(.app-header *):not(.tabs *):not(nav *) {
+  background:#26382f!important;
+  background-color:#26382f!important;
+  background-image:none!important;
+  border-color:#40564a!important;
+  color:#e5eee9!important;
+  -webkit-text-fill-color:#e5eee9!important;
+  text-shadow:none!important;
+  box-shadow:none!important;
 }
 </style>
