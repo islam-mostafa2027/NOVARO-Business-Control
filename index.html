@@ -2807,6 +2807,34 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root #app .items-page article.item-card .item-photo-label{width:88px!important;min-width:88px!important;min-height:32px!important;padding:6px 8px!important;font-size:11px!important}
 }
 </style>
+
+<style id="novaro-stocktake-report-toolbar-four-equal-v1">
+/* Keep the four in-app stocktake report actions in one equal-width row. */
+#app .report-toolbar{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:5px!important;
+  align-items:stretch!important;
+  width:100%!important;
+}
+#app .report-toolbar>button{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:44px!important;
+  height:100%!important;
+  margin:0!important;
+  padding:6px 3px!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  line-height:1.25!important;
+  font-size:clamp(9px,2.6vw,12px)!important;
+}
+</style>
 </body></html>
 
 <style id="novaro-item-qr-label-position-v1">
