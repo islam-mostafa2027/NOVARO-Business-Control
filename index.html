@@ -3565,13 +3565,14 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 
 
-<style id="novaro-system-capsules-soft-green-v2">
-/* Soft green informational capsules across the app. Preserve geometry and exclude the top header and navigation. */
+<style id="novaro-system-capsules-soft-green-v3">
+/* One Mint Green background for every content capsule. Color-only treatment: no geometry, spacing, sizing or behavior changes. Header and all app navigation remain untouched. */
 :root #app :is(
  .status-pill,
  .report-meta span,
  .stocktake-session-meta>span,
  .items-group-caption,
+ .items-group-tab,
  .branch-status,
  .scan-status,
  .novaro-qr-caption,
@@ -3579,15 +3580,18 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  .item-branch-meta,
  .item-card-field-label,
  .item-photo-label,
- .item-qr-label
-):not(.app-header *):not(nav *) {
- background:#edf5f0!important;
- background-color:#edf5f0!important;
+ .item-qr-label,
+ .novaro-category-area-pill,
+ .novaro-manage-group-pill,
+ .stocktake-group-count,
+ .novaro-category-group-head h4 small,
+ .novaro-category-node-name small
+):not(.app-header *):not(.tabs *):not(nav *):not(.sidebar *):not(.side-nav *) {
+ background:#dff3e8!important;
+ background-color:#dff3e8!important;
  background-image:none!important;
- border:1px solid #d5e3da!important;
+ border-color:#b9dec9!important;
  box-shadow:none!important;
- color:#29483d!important;
- -webkit-text-fill-color:#29483d!important;
  text-shadow:none!important;
 }
 :root[data-novaro-mode="dark"] #app :is(
@@ -3595,6 +3599,7 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  .report-meta span,
  .stocktake-session-meta>span,
  .items-group-caption,
+ .items-group-tab,
  .branch-status,
  .scan-status,
  .novaro-qr-caption,
@@ -3602,13 +3607,39 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  .item-branch-meta,
  .item-card-field-label,
  .item-photo-label,
- .item-qr-label
-):not(.app-header *):not(nav *) {
- background:#26382f!important;
- background-color:#26382f!important;
+ .item-qr-label,
+ .novaro-category-area-pill,
+ .novaro-manage-group-pill,
+ .stocktake-group-count,
+ .novaro-category-group-head h4 small,
+ .novaro-category-node-name small
+):not(.app-header *):not(.tabs *):not(nav *):not(.sidebar *):not(.side-nav *) {
+ background:#29483a!important;
+ background-color:#29483a!important;
  background-image:none!important;
- border-color:#40564a!important;
- color:#e5eee9!important;
- -webkit-text-fill-color:#e5eee9!important;
+ border-color:#527662!important;
+ box-shadow:none!important;
+ text-shadow:none!important;
+}
+/* Keep the unified fill stable on hover and selection; status text/icons retain their semantic colors. */
+:root #app .novaro-category-area-pill:hover,
+:root #app .novaro-category-area-pill:focus-visible,
+:root #app .novaro-manage-group-pill:hover,
+:root #app .novaro-manage-group-pill.active,
+:root #app .items-group-tab:hover,
+:root #app .items-group-tab.active {
+ background:#dff3e8!important;
+ background-color:#dff3e8!important;
+ background-image:none!important;
+}
+:root[data-novaro-mode="dark"] #app .novaro-category-area-pill:hover,
+:root[data-novaro-mode="dark"] #app .novaro-category-area-pill:focus-visible,
+:root[data-novaro-mode="dark"] #app .novaro-manage-group-pill:hover,
+:root[data-novaro-mode="dark"] #app .novaro-manage-group-pill.active,
+:root[data-novaro-mode="dark"] #app .items-group-tab:hover,
+:root[data-novaro-mode="dark"] #app .items-group-tab.active {
+ background:#29483a!important;
+ background-color:#29483a!important;
+ background-image:none!important;
 }
 </style>
