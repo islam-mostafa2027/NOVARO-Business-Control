@@ -2001,9 +2001,7 @@ function manageCategories(groupKey=null,areaId=null){
   }).join("");
   content='<div class="novaro-category-main-cards">'+cards+'</div>';
  }
- $("main").innerHTML='<section class="card novaro-category-manager"><div class="novaro-category-manager-head"><h3>'+(en?'Manage categories':'إدارة التصنيفات')+'</h3><div class="novaro-category-top-actions"><button type="button" class="soft novaro-category-top-pill" id="novaroAddGroup">＋ '+(en?'Add main category':'إضافة تصنيف رئيسي')+'</button>'+(group?'<button type="button" class="soft novaro-category-top-pill" id="novaroBackGroups">'+(en?'All main categories':'كل التصنيفات الرئيسية')+'</button>':'')+'</div></div>'+content+'</section>';
- $("novaroAddGroup").onclick=()=>{window.__novaroCategoryManagerContext={groupKey:null,areaId:null};addCategoryGroup()};
- $("novaroBackGroups")?.addEventListener("click",()=>manageCategories());
+ $("main").innerHTML='<section class="card novaro-category-manager">'+content+'</section>';
  document.querySelectorAll("[data-open-area]").forEach(btn=>btn.onclick=()=>manageCategories(btn.dataset.groupKey,btn.dataset.openArea));
  $("novaroAddAreaCategory")?.addEventListener("click",()=>addCategoryUnderArea(group.key,area.id));
  document.querySelectorAll("[data-edit-category]").forEach(btn=>btn.onclick=()=>{window.__novaroCategoryManagerContext={groupKey:group.key,areaId:area.id};editCategory(btn.dataset.editCategory)});
