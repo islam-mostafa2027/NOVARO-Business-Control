@@ -1076,8 +1076,18 @@ const novaroRecoveryRequested=
  );
 const novaroRecoveryError="رابط استعادة كلمة المرور غير صالح أو انتهت صلاحيته. ارجع لصفحة الدخول واطلب رابط استعادة جديدًا.";
 let novaroRecoverySessionReady=false;
+function syncNovaroAuthUser(u){
+ if(!u)return;
+ const previousEmail=user?.email;
+ user=u;
+ if(previousEmail&&previousEmail!==u.email&&localStorage.getItem("novaro-remembered-email")===previousEmail){
+  localStorage.setItem("novaro-remembered-email",u.email||"");
+ }
+ if(openedUserId===u.id&&profile)render();
+}
 db.auth.onAuthStateChange((event,session)=>{
  if(event==="PASSWORD_RECOVERY"){novaroRecoverySessionReady=!!session;showPasswordResetView();return;}
+ if(session&&event==="USER_UPDATED"){syncNovaroAuthUser(session.user);return;}
  if(event==="SIGNED_OUT"){
   if(novaroRecoveryRequested)return;
   openedUserId=null;openingUserId=null;
@@ -1256,7 +1266,7 @@ const $=x=>document.getElementById(x), esc=x=>String(x??"").replace(/[&<>"']/g,c
 function err(e){console.error(e);alert(e.message||"حدث خطأ")}
 let openingUserId=null,openedUserId=null;
 function showAuthError(error){console.error("NOVARO authentication flow error:",error);$("app").classList.add("hidden");$("login").classList.remove("hidden");const msg=$("loginErr");if(msg)msg.textContent=error?.message||(language==="en"?"Could not open your workspace. Please try again.":"تم تسجيل الدخول لكن تعذر فتح البرنامج. حاول مرة أخرى.");const btn=$("loginBtn");if(btn)btn.disabled=false;const signup=$("signupBtn");if(signup)signup.disabled=false;}
-async function openWorkspace(u){if(!u)return;if(openedUserId===u.id||openingUserId===u.id)return;openingUserId=u.id;try{await enter(u);openedUserId=u.id;}finally{openingUserId=null;}}
+async function openWorkspace(u){if(!u)return;if(openedUserId===u.id){syncNovaroAuthUser(u);return;}if(openingUserId===u.id){syncNovaroAuthUser(u);return;}openingUserId=u.id;try{await enter(u);openedUserId=u.id;}finally{openingUserId=null;}}
 const rememberedEmail=localStorage.getItem("novaro-remembered-email");if(rememberedEmail){$("email").value=rememberedEmail;$("rememberMe").checked=true;}
 $("rememberMe").addEventListener("change",()=>{if(!$("rememberMe").checked)localStorage.removeItem("novaro-remembered-email");else if($("email").value.trim())localStorage.setItem("novaro-remembered-email",$("email").value.trim());});
 async function offerPasswordSave(username,password){
