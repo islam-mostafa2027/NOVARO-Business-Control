@@ -2741,4 +2741,30 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   min-width:0!important;min-height:32px!important;padding:6px 8px!important;font-size:11px!important;
  }
 }
+
+ /* Center the item photo vertically against the capsule stack. */
+ :root #app .items-page article.item-card .item-card-top{align-items:center!important}
+ :root #app .items-page article.item-card .item-card-picture{align-self:center!important}
+ /* Make the three item capsules match the QR Code capsule dimensions. */
+ :root #app .items-page article.item-card .item-card-title{
+  align-items:center!important;justify-content:center!important;
+ }
+ :root #app .items-page article.item-card .item-card-title strong,
+ :root #app .items-page article.item-card .item-card-group,
+ :root #app .items-page article.item-card .item-card-code{
+  width:104px!important;min-width:104px!important;max-width:104px!important;
+  min-height:34px!important;box-sizing:border-box!important;
+ }
+ :root #app .items-page article.item-card .item-qr-label{
+  width:104px!important;min-width:104px!important;max-width:104px!important;
+ }
+ @media(max-width:600px){
+  :root #app .items-page article.item-card .item-card-title strong,
+  :root #app .items-page article.item-card .item-card-group,
+  :root #app .items-page article.item-card .item-card-code,
+  :root #app .items-page article.item-card .item-qr-label{
+   width:88px!important;min-width:88px!important;max-width:88px!important;
+   min-height:32px!important;
+  }
+ }
 </style>
