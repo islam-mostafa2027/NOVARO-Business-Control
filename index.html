@@ -1371,6 +1371,35 @@ function novaroItemSubcategoryOptions(group,selected=""){
   .sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0))
   .map(c=>'<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+esc(categoryName(c))+'</option>').join("");
 }
+function novaroCategoryParentOptions(group,selected="",excludeId=null){
+ const rows=cats.filter(c=>(c.group_key||"equipment")===group&&c.is_active!==false);
+ const excluded=new Set();
+ if(excludeId){
+  const queue=[excludeId];
+  while(queue.length){
+   const id=queue.pop();
+   if(excluded.has(id))continue;
+   excluded.add(id);
+   rows.forEach(c=>{if(c.parent_id===id)queue.push(c.id)});
+  }
+ }
+ const available=rows.filter(c=>!excluded.has(c.id));
+ const byParent=new Map();
+ available.forEach(c=>{const key=c.parent_id||null;if(!byParent.has(key))byParent.set(key,[]);byParent.get(key).push(c)});
+ const roots=(byParent.get(null)||[]).slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
+ const stack=[];
+ for(let i=roots.length-1;i>=0;i--)stack.push({item:roots[i],depth:0,path:new Set()});
+ let html='<option value="">'+(language==="en"?"No parent category":"بدون تصنيف أب")+'</option>';
+ while(stack.length){
+  const node=stack.pop(),c=node.item;
+  if(node.path.has(c.id))continue;
+  html+='<option value="'+esc(c.id)+'" '+(String(selected||"")===String(c.id)?"selected":"")+'>'+(node.depth?"　".repeat(Math.min(node.depth,5))+"↳ ":"")+esc(categoryName(c))+'</option>';
+  const path=new Set(node.path);path.add(c.id);
+  const children=(byParent.get(c.id)||[]).slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
+  for(let i=children.length-1;i>=0;i--)stack.push({item:children[i],depth:node.depth+1,path});
+ }
+ return html;
+}
 function novaroFilterItemCategories(group,selected=""){
  const select=$("cat");if(!select)return;
  select.innerHTML=novaroItemSubcategoryOptions(group,selected);
@@ -1592,6 +1621,94 @@ function openLinkedItemFromUrl(){
  history.replaceState({},document.title,window.location.pathname+(rest?"?"+rest:"")+window.location.hash);
  if(!item){alert(language==="en"?"This item code was not found or the item is inactive.":"كود الصنف ده غير موجود أو الصنف غير نشط.");return}
  showScannedItem(item);
+}
+
+let novaroScannerStream=null,novaroScannerFrame=0,novaroScannerActive=false;
+function closeBarcodeScanner(){
+ novaroScannerActive=false;
+ if(novaroScannerFrame)cancelAnimationFrame(novaroScannerFrame);
+ novaroScannerFrame=0;
+ if(novaroScannerStream){novaroScannerStream.getTracks().forEach(track=>track.stop());novaroScannerStream=null;}
+ const modal=document.getElementById("novaroScanner");
+ if(modal){const video=modal.querySelector("video");if(video)video.srcObject=null;modal.style.display="none";}
+}
+function novaroResolveScannedValue(value){
+ const raw=String(value||"").trim();if(!raw)return null;
+ let code=raw;
+ try{const parsed=new URL(raw,window.location.href);code=parsed.searchParams.get("item")||raw;}catch(e){}
+ try{code=decodeURIComponent(code);}catch(e){}
+ return items.find(x=>String(x.item_code||"").trim().toLowerCase()===String(code).trim().toLowerCase())||null;
+}
+function novaroHandleScannedValue(value){
+ const item=novaroResolveScannedValue(value);
+ closeBarcodeScanner();
+ if(item){showScannedItem(item);return}
+ alert(language==="en"?"No active item matches this QR code or item code.":"لم يتم العثور على صنف نشط مطابق لرمز QR أو كود الصنف.");
+}
+async function openBarcodeScanner(){
+ let modal=document.getElementById("novaroScanner");
+ if(!modal){
+  modal=document.createElement("div");modal.id="novaroScanner";
+  modal.innerHTML='<section class="scan-panel" role="dialog" aria-modal="true"><div class="row"><h3 style="margin:0">'+(language==="en"?"Scan item QR code":"مسح رمز QR للصنف")+'</h3><button type="button" class="soft" data-close>×</button></div><video playsinline muted></video><p class="scan-status" data-status></p><label for="novaroScanManual">'+(language==="en"?"Or enter the item code":"أو أدخل كود الصنف يدويًا")+'</label><input id="novaroScanManual" autocomplete="off" placeholder="'+(language==="en"?"Item code":"كود الصنف")+'"><div class="row" style="margin-top:12px"><button type="button" class="primary" data-submit>'+(language==="en"?"Find item":"بحث عن الصنف")+'</button><button type="button" class="soft" data-close>'+(language==="en"?"Close":"إغلاق")+'</button></div></section>';
+  document.body.appendChild(modal);
+  modal.querySelectorAll("[data-close]").forEach(btn=>btn.addEventListener("click",closeBarcodeScanner));
+  modal.addEventListener("click",e=>{if(e.target===modal)closeBarcodeScanner()});
+  modal.querySelector("[data-submit]").addEventListener("click",()=>novaroHandleScannedValue(modal.querySelector("#novaroScanManual").value));
+  modal.querySelector("#novaroScanManual").addEventListener("keydown",e=>{if(e.key==="Enter")novaroHandleScannedValue(e.currentTarget.value)});
+ }
+ closeBarcodeScanner();
+ modal.style.display="flex";
+ const video=modal.querySelector("video"),status=modal.querySelector("[data-status]");
+ modal.querySelector("#novaroScanManual").value="";
+ const setStatus=message=>{status.textContent=message};
+ if(!navigator.mediaDevices?.getUserMedia){setStatus(language==="en"?"Camera access is unavailable in this browser. Enter the item code below.":"الكاميرا غير متاحة في هذا المتصفح. أدخل كود الصنف بالأسفل.");return}
+ if(!window.isSecureContext){setStatus(language==="en"?"Camera scanning requires HTTPS. Enter the item code below.":"مسح الكاميرا يحتاج اتصال HTTPS. أدخل كود الصنف بالأسفل.");return}
+ try{
+  novaroScannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
+  video.srcObject=novaroScannerStream;await video.play();
+  if(!("BarcodeDetector" in window)){setStatus(language==="en"?"Live QR detection is not supported by this browser. Enter the item code below.":"قراءة QR بالكاميرا غير مدعومة في هذا المتصفح. أدخل كود الصنف بالأسفل.");return}
+  let detector;
+  try{detector=new BarcodeDetector({formats:["qr_code"]})}
+  catch(e){setStatus(language==="en"?"QR detection is unavailable. Enter the item code below.":"تعذر تهيئة قارئ QR. أدخل كود الصنف بالأسفل.");return}
+  novaroScannerActive=true;
+  setStatus(language==="en"?"Point the camera at an item QR code.":"وجّه الكاميرا إلى رمز QR الخاص بالصنف.");
+  const scan=async()=>{
+   if(!novaroScannerActive||video.readyState<2){if(novaroScannerActive)novaroScannerFrame=requestAnimationFrame(scan);return}
+   try{const codes=await detector.detect(video);if(codes.length&&codes[0].rawValue){novaroHandleScannedValue(codes[0].rawValue);return}}
+   catch(e){}
+   if(novaroScannerActive)novaroScannerFrame=requestAnimationFrame(scan);
+  };
+  novaroScannerFrame=requestAnimationFrame(scan);
+ }catch(error){
+  closeBarcodeScanner();
+  modal.style.display="flex";
+  setStatus(language==="en"?"Could not open the camera. Check browser permission, then enter the item code below.":"تعذر فتح الكاميرا. راجع إذن الكاميرا في المتصفح، أو أدخل كود الصنف بالأسفل.");
+ }
+}
+function showScannedItem(item){
+ if(!item)return;
+ let modal=document.getElementById("novaroItemDetails");
+ if(!modal){
+  modal=document.createElement("div");modal.id="novaroItemDetails";
+  modal.innerHTML='<section class="detail-panel" role="dialog" aria-modal="true"><div class="row"><h3 data-title style="margin:0"></h3><button type="button" class="soft" data-close>×</button></div><div class="detail-grid" data-grid></div><div class="row" style="margin-top:14px"><button type="button" class="primary" data-close></button></div></section>';
+  document.body.appendChild(modal);
+  modal.querySelectorAll("[data-close]").forEach(btn=>btn.addEventListener("click",()=>modal.style.display="none"));
+  modal.addEventListener("click",e=>{if(e.target===modal)modal.style.display="none"});
+ }
+ const quantity=branchId?Number(balances[branchId+":"+item.id]||0):branches.reduce((sum,b)=>sum+Number(balances[b.id+":"+item.id]||0),0);
+ const unit=unitOf(item),category=cats.find(c=>c.id===item.category_id);
+ const cells=[
+  [language==="en"?"Item name":"اسم الصنف",nameOf(item)],
+  [language==="en"?"Item code":"كود الصنف",item.item_code||"—"],
+  [language==="en"?"Category":"التصنيف",categoryName(category)],
+  [language==="en"?"Unit":"الوحدة",unit||"—"],
+  [branchId?(language==="en"?"Branch stock":"رصيد الفرع"):(language==="en"?"Total branch stock":"إجمالي أرصدة الفروع"),fmtQty(quantity)+(unit?" "+unit:"")]
+ ];
+ modal.querySelector("[data-title]").textContent=language==="en"?"Item details":"بيانات الصنف";
+ modal.querySelector("[data-grid]").innerHTML="";
+ cells.forEach(([label,value],index)=>{const cell=document.createElement("div");cell.className="detail-cell";const small=document.createElement("small"),strong=document.createElement("b");small.textContent=label;strong.textContent=value;if(index===4)strong.className="detail-qty";cell.append(small,strong);modal.querySelector("[data-grid]").appendChild(cell)});
+ modal.querySelector("[data-close]").textContent=language==="en"?"Close":"إغلاق";
+ modal.style.display="flex";
 }
 function openItemImage(img){
  if(!img)return;
@@ -1856,7 +1973,7 @@ function addCategory(groupKey="",parentId=null){
  $("novaroSaveCategoryDraft").onclick=async()=>{const btn=$("novaroSaveCategoryDraft"),err=$("novaroCategoryError");btn.disabled=true;err.textContent="";try{const group=$("novaroCategoryGroup").value,parent=$("novaroCategoryParent").value||null,rows=[...document.querySelectorAll(".novaro-category-draft-row")].map(x=>({ar:x.querySelector("[data-ar]").value.trim(),en:x.querySelector("[data-en]").value.trim()})).filter(x=>x.ar||x.en);if(!rows.length||rows.some(x=>!x.ar&&!x.en))throw Error(en?"Complete each category name.":"أكمل اسم كل تصنيف.");const existing=new Set(cats.filter(c=>c.group_key===group&&(c.parent_id||null)===parent&&c.is_active!==false).map(c=>(c.name_ar||"").trim().toLowerCase()));let order=cats.filter(c=>c.group_key===group&&(c.parent_id||null)===parent).length;const payloads=[];for(const x of rows){const ar=x.ar||x.en,eng=x.en||x.ar;if(existing.has(ar.toLowerCase()))throw Error(en?"A category with this name already exists under the selected parent.":"يوجد تصنيف بنفس الاسم تحت التصنيف الأب المختار.");existing.add(ar.toLowerCase());payloads.push({name_ar:ar,name_en:eng,group_key:group,parent_id:parent,sort_order:++order,is_active:true,created_by:user.id})}const r=await db.from("categories").insert(payloads);if(r.error){throw r.error;} await load(); manageCategories();}catch(e){err.textContent=e.message||String(e);btn.disabled=false}};
  novaroBackButton();applyLanguage();
 }
-function editCategory(id){const c=cats.find(x=>x.id===id);if(!c)return;const en=language==="en",gs=categoryGroups.filter(g=>g.is_active!==false||g.key===c.group_key),fields='<div class="field"><label>'+(en?"Group":"المجموعة")+'</label><select id="editCatGroup">'+gs.map(g=>'<option value="'+g.key+'" '+(g.key===c.group_key?"selected":"")+'>'+esc(categoryGroupLabel(g.key))+'</option>').join("")+'</select></div><div class="field"><label>'+(en?"Parent category":"التصنيف الأب")+'</label><select id="editCatParent">'+novaroCategoryParentOptions(c.group_key,c.parent_id||"")+'</select></div><div class="field"><label>'+(en?"Arabic name":"الاسم بالعربية")+'</label><input id="editCatAr" required value="'+esc(c.name_ar||"")+'"></div><div class="field"><label>'+(en?"English name":"الاسم بالإنجليزية")+'</label><input id="editCatEn" value="'+esc(c.name_en||"")+'"></div>';form(en?"Edit category":"تعديل التصنيف",fields,async()=>{const group=$("editCatGroup").value,parent=$("editCatParent").value||null,ar=$("editCatAr").value.trim(),eng=$("editCatEn").value.trim()||ar;if(!ar)throw Error(en?"Enter a category name.":"اكتب اسم التصنيف.");if(group!==c.group_key&&cats.some(x=>x.parent_id===id))throw Error(en?"Move or reorganize child categories before moving this category to another group.":"انقل أو أعد تنظيم التصنيفات الفرعية أولًا قبل نقل هذا التصنيف إلى مجموعة أخرى.");if(parent===id)throw Error(en?"A category cannot be its own parent.":"لا يمكن أن يكون التصنيف أبًا لنفسه.");let p=parent;while(p){if(p===id)throw Error(en?"This would create a category loop.":"هذا التعديل سيُنشئ تكرارًا في مستويات التصنيف.");p=cats.find(x=>x.id===p)?.parent_id||null}const r=await db.from("categories").update({group_key:group,parent_id:parent,name_ar:ar,name_en:eng}).eq("id",id);if(r.error)throw r.error;await load();window.__novaroReturnToCategoryManager=true})}
+function editCategory(id){const c=cats.find(x=>x.id===id);if(!c)return;const en=language==="en",gs=categoryGroups.filter(g=>g.is_active!==false||g.key===c.group_key),fields='<div class="field"><label>'+(en?"Group":"المجموعة")+'</label><select id="editCatGroup">'+gs.map(g=>'<option value="'+g.key+'" '+(g.key===c.group_key?"selected":"")+'>'+esc(categoryGroupLabel(g.key))+'</option>').join("")+'</select></div><div class="field"><label>'+(en?"Parent category":"التصنيف الأب")+'</label><select id="editCatParent">'+novaroCategoryParentOptions(c.group_key,c.parent_id||"",id)+'</select></div><div class="field"><label>'+(en?"Arabic name":"الاسم بالعربية")+'</label><input id="editCatAr" required value="'+esc(c.name_ar||"")+'"></div><div class="field"><label>'+(en?"English name":"الاسم بالإنجليزية")+'</label><input id="editCatEn" value="'+esc(c.name_en||"")+'"></div>';form(en?"Edit category":"تعديل التصنيف",fields,async()=>{const group=$("editCatGroup").value,parent=$("editCatParent").value||null,ar=$("editCatAr").value.trim(),eng=$("editCatEn").value.trim()||ar;if(!ar)throw Error(en?"Enter a category name.":"اكتب اسم التصنيف.");if(group!==c.group_key&&cats.some(x=>x.parent_id===id))throw Error(en?"Move or reorganize child categories before moving this category to another group.":"انقل أو أعد تنظيم التصنيفات الفرعية أولًا قبل نقل هذا التصنيف إلى مجموعة أخرى.");if(parent===id)throw Error(en?"A category cannot be its own parent.":"لا يمكن أن يكون التصنيف أبًا لنفسه.");let p=parent;while(p){if(p===id)throw Error(en?"This would create a category loop.":"هذا التعديل سيُنشئ تكرارًا في مستويات التصنيف.");p=cats.find(x=>x.id===p)?.parent_id||null}const r=await db.from("categories").update({group_key:group,parent_id:parent,name_ar:ar,name_en:eng}).eq("id",id);if(r.error)throw r.error;await load();window.__novaroReturnToCategoryManager=true})}
 async function toggleCategoryActive(id){const c=cats.find(x=>x.id===id);if(!c)return;const next=c.is_active===false;if(!next&&!confirm(language==="en"?"Archive this category? Linked items and history will be preserved.":"إخفاء التصنيف؟ ستظل الأصناف وسجلات الجرد المرتبطة به محفوظة."))return;const r=await db.from("categories").update({is_active:next}).eq("id",id);if(r.error)return alert(r.error.message);await load();manageCategories()}
 const __novaroBaseRender=render;
 render=function(){const active=categoryGroups.filter(g=>g.is_active!==false);if(page==="items"&&active.length&&!active.some(g=>g.key===window.__itemsGroupView))window.__itemsGroupView=active[0].key;__novaroBaseRender();if(page!=="items")return;const host=document.querySelector("#main .items-group-tabs");if(!host)return;if(!active.length){host.innerHTML="";return}const rowCount=Math.ceil(active.length/3),baseCount=Math.floor(active.length/rowCount),extraRows=active.length%rowCount,rowSizes=Array.from({length:rowCount},(_,r)=>baseCount+(r<extraRows?1:0));let rowIndex=0,rowStart=0;host.innerHTML=active.map((g,i)=>{while(i>=rowStart+rowSizes[rowIndex]){rowStart+=rowSizes[rowIndex];rowIndex++}const span=6/rowSizes[rowIndex];return '<button type="button" class="items-group-tab '+(g.key===window.__itemsGroupView?"active":"")+'" data-dynamic-items-group="'+esc(g.key)+'" data-items-group="'+esc(g.key)+'" style="grid-column:span '+span+'!important">'+esc(categoryGroupLabel(g.key))+'</button>'}).join("");host.querySelectorAll("[data-dynamic-items-group]").forEach(btn=>btn.onclick=()=>{window.__itemsGroupView=btn.dataset.dynamicItemsGroup;render()});const cap=$("itemsGroupCaption"),search=$("search");const refreshCaption=()=>{if(cap&&search&&!search.value.trim()){const count=items.filter(i=>cats.find(c=>c.id===i.category_id)?.group_key===window.__itemsGroupView).length;cap.textContent=categoryGroupLabel(window.__itemsGroupView)+" · "+count+" "+(language==="en"?"items":"صنف")}};if(search){const prior=search.oninput;search.oninput=()=>{if(prior)prior();refreshCaption()}}refreshCaption()};
@@ -1888,7 +2005,7 @@ async function deleteCategory(id){
 
 
 const __novaroBaseEditCategory=editCategory;
-editCategory=function(id){__novaroBaseEditCategory(id);const group=$("editCatGroup"),parent=$("editCatParent");if(group&&parent)group.onchange=()=>{parent.innerHTML=novaroCategoryParentOptions(group.value)}};
+editCategory=function(id){__novaroBaseEditCategory(id);const group=$("editCatGroup"),parent=$("editCatParent");if(group&&parent)group.onchange=()=>{parent.innerHTML=novaroCategoryParentOptions(group.value,"",id)}};
 </script><style id="novaro-button-feedback-v2">
 /* Clear, consistent pressed and current-page feedback across mouse and touch. */
 button:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]){
