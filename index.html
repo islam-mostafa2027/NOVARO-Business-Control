@@ -1726,22 +1726,30 @@ function monthLabel(value){if(!value)return "—";const p=String(value).slice(0,
 function stocktakeTitle(month){const p=String(month||"").split("-");if(p.length!==2)return language==="en"?"Stocktake":"جرد";const d=new Date(Number(p[0]),Number(p[1])-1,1);return (language==="en"?"Stocktake — ":"جرد — ")+d.toLocaleDateString(language==="en"?"en-US":"ar-EG",{month:"long",year:"numeric"})}
 function addSession(){
  const today=new Date().toISOString().slice(0,10),en=language==="en",owner=profile.role==="owner_admin";
- const branchField=owner?'<div class="field"><label>'+(en?"Branch":"الفرع")+'</label><select id="sessionBranch" required><option value="">'+(en?"Choose a branch":"اختر الفرع")+'</option>'+branches.map(b=>'<option value="'+b.id+'">'+esc(branchLabel(b))+'</option>').join("")+'</select></div>':"";
- form(en?"Open new stocktake":"فتح جرد جديد",branchField+inp(en?"Stocktake date":"تاريخ الجرد","stocktakeDate",'type="date" required value="'+today+'"'),async()=>{
+ const branchField=owner?'<div class="field"><label>'+(en?"Branch":"الفرع")+'</label><select id="sessionBranch" required><option value="">'+(en?"Choose a branch":"اختر الفرع")+'</option>'+branches.map(b=>'<option value="'+b.id+'">'+esc(branchLabel(b))+'</option>').join("")+'</select></div>':'<div class="field"><label>'+(en?"Branch":"الفرع")+'</label><input value="'+esc(branchLabel(branches.find(b=>b.id===branchId)||allBranches.find(b=>b.id===branchId)||{}))+'" disabled></div>';
+ $("main").innerHTML='<section class="card"><div class="row"><h3>'+(en?"New stocktake":"جرد جديد")+'</h3></div>'+branchField+inp(en?"Stocktake date":"تاريخ الجرد","stocktakeDate",'type="date" required value="'+today+'"')+'<button type="button" id="startStocktake">'+(en?"Open new stocktake":"فتح جرد جديد")+'</button><div id="formErr" class="error"></div></section>';
+ applyLanguage();novaroBackButton();
+ $("startStocktake").onclick=async()=>{
   const date=$("stocktakeDate").value,targetBranch=owner?$("sessionBranch").value:branchId;
-  if(!targetBranch)throw Error(en?"Choose the branch for this stocktake":"اختار الفرع اللي هتعمل له الجرد");
-  if(!date)throw Error(en?"Choose the stocktake date":"اختار تاريخ الجرد");
+  const button=$("startStocktake");$("formErr").textContent="";
+  if(!targetBranch){$("formErr").textContent=en?"Choose the branch for this stocktake":"اختار الفرع اللي هتعمل له الجرد";return}
+  if(!date){$("formErr").textContent=en?"Choose the stocktake date":"اختار تاريخ الجرد";return}
   const selectedItems=items.filter(x=>x.is_active!==false&&(!x.created_branch_id||x.created_branch_id===targetBranch));
-  if(!selectedItems.length)throw Error(en?"No active items exist for this branch.":"مفيش أصناف نشطة للفرع ده.");
-  const created=await db.from("inventory_sessions").insert({branch_id:targetBranch,title:stocktakeTitle(date.slice(0,7)),inventory_date:date,created_by:user.id}).select().single();
-  if(created.error)throw created.error;
-  const rows=selectedItems.map(x=>({session_id:created.data.id,item_id:x.id,counted_quantity:0,counted_by:user.id,is_counted:false}));
-  const prepared=await db.from("inventory_counts").insert(rows);
-  if(prepared.error)throw Error((en?"Session created, but items could not be prepared: ":"تم إنشاء الجلسة، لكن تعذر تجهيز قائمة الأصناف: ")+prepared.error.message);
-  if(owner)window.__countBranch=targetBranch;
-  window.__openStocktakeAfterSave=created.data.id;
- },en?"Open new stocktake":"فتح جرد جديد");
+  if(!selectedItems.length){$("formErr").textContent=en?"No active items exist for this branch.":"مفيش أصناف نشطة للفرع ده.";return}
+  button.disabled=true;
+  try{
+   if(owner)window.__countBranch=targetBranch;
+   page="counts";window.__novaroStocktakeSubView="categories";
+   render();
+   await sessions();
+   const session={id:null,branch_id:targetBranch,title:stocktakeTitle(date.slice(0,7)),inventory_date:date,created_by:user.id,status:"draft"};
+   const rows=selectedItems.map(x=>({id:x.id,item_id:x.id,count_row_id:null,counted_quantity:null,count_unit_ar:x.unit_ar||null,count_unit_en:x.unit_en||null,is_counted:false,items:x}));
+   window.__stocktakeView={id:null,session,branch_id:targetBranch,location_id:null,rows,locked:false};
+   renderStocktakeCategories();
+  }catch(error){page="counts";render();await sessions();alert((en?"Unable to open stocktake: ":"تعذر فتح شاشة الجرد: ")+(error.message||String(error)))}
+ };
 }
+
 function editSession(id){const x=window.__novaroSessions?.find(v=>v.id===id);if(!x)return;form("تعديل شهر الجرد",inp("شهر وسنة الجرد","month",'type="month" required'),async()=>{const month=$("month").value;if(!month)throw Error("اختر شهر وسنة الجرد");const r=await db.from("inventory_sessions").update({title:stocktakeTitle(month),inventory_date:month+"-01",updated_at:new Date().toISOString()}).eq("id",id).eq("branch_id",x.branch_id);if(r.error)throw r.error});$("month").value=String(x.inventory_date||"").slice(0,7)}
 
 async function deleteSession(id){const x=window.__novaroSessions?.find(v=>v.id===id);if(!x)return;if(!confirm(language==="en"?"Delete this stocktake session? Its count details will also be deleted.":"هل تريد حذف جلسة الجرد هذه؟ سيتم حذف تفاصيل الجرد التابعة لها أيضًا."))return;try{const c=await db.from("inventory_counts").delete().eq("session_id",id);if(c.error)throw c.error;const r=await db.from("inventory_sessions").delete().eq("id",id).eq("branch_id",x.branch_id);if(r.error)throw r.error;if(page==="reports")await reportsPage();else await sessions()}catch(e){alert((language==="en"?"Unable to delete stocktake: ":"لا يمكن حذف الجرد: ")+(e.message||e))}}
@@ -1810,16 +1818,31 @@ async function saveStocktakeItem(itemId){
  if(raw===""||!Number.isFinite(value)||value<0){if(message)message.textContent=en?"Enter a valid quantity.":"اكتب كمية صحيحة قبل الحفظ.";return}
  if(!unit){if(message)message.textContent=en?"Enter a unit name.":"اكتب وحدة القياس.";return}
  button.disabled=true;if(message)message.textContent=en?"Saving...":"جاري الحفظ...";
+ let newlyCreated=false;
  try{
   const now=new Date().toISOString(),patch={counted_quantity:value,is_counted:true,counted_by:user.id,counted_at:now,count_unit_ar:unit,count_unit_en:unit};
+  if(!v.id){
+   const created=await db.from("inventory_sessions").insert({branch_id:v.branch_id,title:v.session.title,inventory_date:v.session.inventory_date,created_by:user.id}).select().single();
+   if(created.error)throw created.error;
+   v.id=created.data.id;v.session={...created.data};newlyCreated=true;
+  }
   let saved;
   if(row.count_row_id)saved=await db.from("inventory_counts").update(patch).eq("id",row.count_row_id).eq("session_id",v.id);
   else{saved=await db.from("inventory_counts").insert({session_id:v.id,item_id:itemId,...patch}).select("id").single();if(!saved.error)row.count_row_id=saved.data.id}
-  if(saved.error)throw saved.error;
+  if(saved.error){
+   if(newlyCreated){await db.from("inventory_sessions").delete().eq("id",v.id);v.id=null;v.session.id=null}
+   throw saved.error;
+  }
+  row.counted_quantity=value;row.count_unit_ar=unit;row.count_unit_en=unit;row.is_counted=true;
+  if(newlyCreated){
+   v.session.status="in_progress";
+   if(!window.__novaroSessions)window.__novaroSessions=[];
+   window.__novaroSessions.unshift(v.session);
+  }
   if(v.location_id){const stock=await db.from("location_item_stock").upsert({location_id:v.location_id,item_id:itemId,quantity:value,updated_by:user.id,updated_at:now},{onConflict:"location_id,item_id"});if(stock.error)throw stock.error}
   else{const stock=await db.from("branch_item_stock").upsert({branch_id:v.branch_id,item_id:itemId,quantity:value,updated_by:user.id,updated_at:now},{onConflict:"branch_id,item_id"});if(stock.error)throw stock.error;balances[v.branch_id+":"+itemId]=value}
   const status=await db.from("inventory_sessions").update({status:"in_progress",updated_at:now}).eq("id",v.id).in("status",["draft","in_progress"]);if(status.error)throw status.error;
-  v.session.status="in_progress";row.counted_quantity=value;row.count_unit_ar=unit;row.count_unit_en=unit;row.is_counted=true;
+  v.session.status="in_progress";
   if(window.__novaroSessions){const session=window.__novaroSessions.find(x=>x.id===v.id);if(session)session.status="in_progress"}
   if(message)message.textContent=en?"Quantity saved.":"تم حفظ الكمية.";
  }catch(error){if(message)message.textContent=(en?"Save failed: ":"فشل الحفظ: ")+(error.message||String(error))}
