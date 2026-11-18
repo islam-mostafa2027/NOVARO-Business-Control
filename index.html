@@ -2609,6 +2609,14 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  #app .stocktake-entry-name{font-size:11px}
 }
 </style>
+
+<style id="novaro-items-five-tabs-balanced-v1">
+/* Balance the five item-category tabs: three on row one, two equal full-width tabs on row two. */
+#app .items-page .items-group-tabs{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important;width:100%!important}
+#app .items-page .items-group-tabs>.items-group-tab{box-sizing:border-box!important;width:100%!important;min-width:0!important;margin:0!important;justify-content:center!important;text-align:center!important}
+#app .items-page .items-group-tabs>.items-group-tab:nth-child(-n+3){grid-column:span 2!important}
+#app .items-page .items-group-tabs>.items-group-tab:nth-child(n+4){grid-column:span 3!important}
+</style>
 </body></html>
 
 <style id="novaro-item-qr-label-position-v1">
