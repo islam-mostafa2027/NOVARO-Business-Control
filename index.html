@@ -2339,4 +2339,43 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  box-shadow:0 0 0 3px #78b99b25!important;
 }
 </style>
+<style id="novaro-item-card-text-contrast-v2">
+/* Improve readability of every text element inside item cards in dark mode. */
+:root[data-novaro-mode="dark"] #app .items-page .item-card,
+:root[data-novaro-mode="dark"] #app .items-page .item-card *{
+  opacity:1!important;
+  text-shadow:none!important;
+  -webkit-text-fill-color:currentColor;
+}
+:root[data-novaro-mode="dark"] #app .items-page .item-card{color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #app .items-page .item-card-title strong,
+:root[data-novaro-mode="dark"] #app .items-page .item-card-category b,
+:root[data-novaro-mode="dark"] #app .items-page .item-card-stock-heading>b,
+:root[data-novaro-mode="dark"] #app .items-page .item-branch-meta b{
+  color:#edf5f0!important;-webkit-text-fill-color:#edf5f0!important;font-weight:800!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page .item-card-title .item-card-group,
+:root[data-novaro-mode="dark"] #app .items-page .item-card-title .item-card-code,
+:root[data-novaro-mode="dark"] #app .items-page .item-card-category small,
+:root[data-novaro-mode="dark"] #app .items-page .item-card-stock-heading>span,
+:root[data-novaro-mode="dark"] #app .items-page .item-branch-meta small,
+:root[data-novaro-mode="dark"] #app .items-page .item-branch-stock small,
+:root[data-novaro-mode="dark"] #app .items-page .item-qr-label,
+:root[data-novaro-mode="dark"] #app .items-page .item-qrcode-wrap small{
+  color:#c0d2c8!important;-webkit-text-fill-color:#c0d2c8!important;opacity:1!important;font-weight:650!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page .item-card-category .item-meta-icon{
+  color:#b9d8c7!important;-webkit-text-fill-color:#b9d8c7!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page .item-branch-stock strong{
+  color:#a9e5c5!important;-webkit-text-fill-color:#a9e5c5!important;font-weight:800!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page .item-card .item-low-stock{
+  color:#f2d69a!important;-webkit-text-fill-color:#f2d69a!important;
+}
+:root[data-novaro-mode="dark"] #app .items-page .item-card .item-card-symbol{
+  color:#e5eee9!important;-webkit-text-fill-color:#e5eee9!important;
+}
+</style>
+
 </body></html>
