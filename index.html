@@ -1355,7 +1355,7 @@ function novaroItemSubcategoryOptions(group,selected=""){
 }
 function novaroFilterItemCategories(group,selected=""){
  const select=$("cat");if(!select)return;
- select.innerHTML='<option value="">'+(language==="en"?"Choose a subcategory":"اختر التصنيف الفرعي")+'</option>'+novaroItemSubcategoryOptions(group,selected);
+ select.innerHTML=novaroItemSubcategoryOptions(group,selected);
 }
 function unitOf(x){return language==="en"?(x?.unit_en||x?.unit_ar||""):(x?.unit_ar||x?.unit_en||"")}
 function roleName(role){return ({owner_admin:language==="en"?"System owner":"مالك النظام",inventory_staff:language==="en"?"Inventory staff":"موظف مخزون",branch_manager:language==="en"?"Branch manager":"مدير فرع",viewer:language==="en"?"View only":"مشاهدة فقط"})[role]||role||"—"}
@@ -1620,7 +1620,7 @@ function itemForm(existing=null){
  const i=existing||{},en=language==="en";
  const currentCategory=cats.find(c=>c.id===(i.category_id||""));
  const initialGroup=currentCategory?.group_key||"materials";
- const categoryField='<div class="field"><label>'+(en?"Main category":"التصنيف الرئيسي")+'</label><select id="itemMainCategory" onchange="novaroFilterItemCategories(this.value)">'+["materials","tools","equipment","assets","other"].map(g=>'<option value="'+g+'" '+(g===initialGroup?"selected":"")+'>'+esc(categoryGroupLabel(g))+'</option>').join("")+'</select></div><div class="field"><label>'+(en?"Subcategory":"التصنيف الفرعي")+'</label><select id="cat"><option value="">'+(en?"Choose a subcategory":"اختر التصنيف الفرعي")+'</option>'+novaroItemSubcategoryOptions(initialGroup,i.category_id||"")+'</select><small class="muted" id="categoryHelp"></small></div>';
+ const categoryField='<div class="field"><label>'+(en?"Main category":"التصنيف الرئيسي")+'</label><select id="itemMainCategory" onchange="novaroFilterItemCategories(this.value)">'+["materials","tools","equipment","assets","other"].map(g=>'<option value="'+g+'" '+(g===initialGroup?"selected":"")+'>'+esc(categoryGroupLabel(g))+'</option>').join("")+'</select></div><div class="field"><label>'+(en?"Subcategory":"التصنيف الفرعي")+'</label><select id="cat">'+novaroItemSubcategoryOptions(initialGroup,i.category_id||"")+'</select><small class="muted" id="categoryHelp"></small></div>';
  const unitSelect=(id,customId,current,english)=>'<div class="field"><label>'+(english?"Unit (English)":"وحدة القياس بالعربية")+'</label><input id="'+id+'" value="'+esc(current||"")+'" placeholder="'+(english?"Type any unit name":"اكتب اسم أي وحدة قياس")+'" autocomplete="off"></div>';
 
  form(en?(existing?"Edit item":"Add item"):(existing?"تعديل الصنف":"إضافة صنف"),
