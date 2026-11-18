@@ -516,6 +516,18 @@ a.auth-back-link:hover{background:#e3eee8!important}
  #main .novaro-category-top-actions button{flex:1}
 }
 </style>
+
+<style id="novaro-main-group-cards-v2">
+#app .novaro-category-group-capsules{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;margin:20px 0 12px!important;padding:0!important}
+#app .novaro-main-group-card{position:relative;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;gap:9px!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:116px!important;margin:0!important;padding:18px 20px!important;border:1px solid var(--line)!important;border-radius:18px!important;background:var(--surface,white)!important;color:var(--text)!important;text-align:start!important;white-space:normal!important;box-shadow:0 4px 16px #173d300d!important;cursor:pointer!important;transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease!important}
+#app .novaro-main-group-card:hover{transform:translateY(-2px);box-shadow:0 7px 20px #173d3015!important}
+#app .novaro-main-group-card.active{border:2px solid var(--nv-btn-primary)!important;background:color-mix(in srgb,var(--nv-btn-primary) 7%,var(--surface,white))!important}
+#app .novaro-main-group-card-title{display:block;font-size:16px!important;font-weight:850!important;line-height:1.4!important;overflow-wrap:anywhere}
+#app .novaro-main-group-card-hint{display:block;font-size:12px!important;line-height:1.5!important;color:var(--muted)!important;font-weight:500!important}
+#app .novaro-main-group-card-arrow{position:absolute;inset-inline-end:16px;top:50%;transform:translateY(-50%);font-size:25px;line-height:1;color:var(--muted)}
+@media(max-width:700px){#app .novaro-category-group-capsules{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}#app .novaro-main-group-card{min-height:108px!important;padding:15px 16px!important}}
+@media(max-width:390px){#app .novaro-category-group-capsules{grid-template-columns:1fr!important}#app .novaro-main-group-card{min-height:88px!important}}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -1948,7 +1960,7 @@ function manageCategories(groupKey=null){
  const en=language==="en";
  const groups=categoryGroups.slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
  const group=groupKey?groups.find(g=>g.key===groupKey):null;
- const groupButtons=groups.map(g=>'<button type="button" class="items-group-tab novaro-manage-group-pill '+(group&&group.key===g.key?"active":"") + '" aria-pressed="'+(group&&group.key===g.key?"true":"false")+'" data-manage-group="'+esc(g.key)+'">'+esc(categoryGroupLabel(g.key))+(g.is_active===false?' · '+(en?'Archived':'مؤرشف'):'')+'</button>').join("");
+ const groupButtons=groups.map(g=>'<button type="button" class="novaro-main-group-card '+(group&&group.key===g.key?"active":"") + '" aria-pressed="'+(group&&group.key===g.key?"true":"false")+'" data-manage-group="'+esc(g.key)+'"><span class="novaro-main-group-card-title">'+esc(categoryGroupLabel(g.key))+(g.is_active===false?' · '+(en?'Archived':'مؤرشف'):'')+'</span><span class="novaro-main-group-card-hint">'+(en?'Open to manage this category':'اضغط لفتح وإدارة هذا التصنيف')+'</span><span class="novaro-main-group-card-arrow" aria-hidden="true">‹</span></button>').join("");
  let content='';
  if(group){
   const rows=cats.filter(c=>c.group_key===group.key);
