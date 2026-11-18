@@ -794,6 +794,45 @@ a.auth-back-link:hover{background:#e3eee8!important}
 }
 </style>
 
+
+<style id="novaro-stocktake-inner-capsules-slim-v1">
+/* Reduce capsule height only; keep every capsule's width and grid placement unchanged. */
+#reportContent .report-actions>button,
+#app #sessions .stocktake-session-actions>button{
+ box-sizing:border-box!important;
+ min-height:34px!important;
+ height:34px!important;
+ max-height:34px!important;
+ padding-top:3px!important;
+ padding-bottom:3px!important;
+ line-height:1.15!important;
+}
+#app #sessions .stocktake-session-meta>span{
+ box-sizing:border-box!important;
+ min-height:22px!important;
+ height:22px!important;
+ padding-top:2px!important;
+ padding-bottom:2px!important;
+ line-height:1.2!important;
+}
+@media(max-width:600px){
+ #reportContent .report-actions>button,
+ #app #sessions .stocktake-session-actions>button{
+  min-height:32px!important;
+  height:32px!important;
+  max-height:32px!important;
+  padding-top:2px!important;
+  padding-bottom:2px!important;
+ }
+ #app #sessions .stocktake-session-meta>span{
+  min-height:20px!important;
+  height:20px!important;
+  padding-top:1px!important;
+  padding-bottom:1px!important;
+ }
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
