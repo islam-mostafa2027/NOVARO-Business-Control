@@ -655,3 +655,44 @@
 }
 
 /* Internal pages now inherit the same shared workspace, card, form, and responsive rules as the rest of NOVARO. */
+
+
+/* Unified Mint Green capsule palette for the items workspace, including active tabs and item identity labels. */
+#main.novaro-items-experiment :is(
+ .items-group-tab,
+ .item-card-title>strong,
+ .item-card-title>.item-card-group,
+ .item-card-title>.item-card-code,
+ .item-card-symbol .item-qr-label,
+ .item-card-qr-column>.item-qr-label,
+ .item-card-group
+){
+ background-color:#dff3e8!important;
+ background-image:none!important;
+ border-color:#b9dec9!important;
+}
+#main.novaro-items-experiment .items-group-tab.active{
+ background-color:#dff3e8!important;
+ border-color:#438b70!important;
+ color:#246b55!important;
+ -webkit-text-fill-color:#246b55!important;
+}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment :is(
+ .items-group-tab,
+ .item-card-title>strong,
+ .item-card-title>.item-card-group,
+ .item-card-title>.item-card-code,
+ .item-card-symbol .item-qr-label,
+ .item-card-qr-column>.item-qr-label,
+ .item-card-group
+){
+ background-color:#29483a!important;
+ background-image:none!important;
+ border-color:#527662!important;
+}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment .items-group-tab.active{
+ background-color:#315b49!important;
+ border-color:#78ad91!important;
+ color:#e5f4eb!important;
+ -webkit-text-fill-color:#e5f4eb!important;
+}
