@@ -2192,5 +2192,27 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  color:#e5eee9!important;
  border-color:#40564a!important;
 }
+
+/* Keep the header clock and date in sync with the selected dark theme. */
+:root[data-novaro-mode="dark"] #app .app-header{
+ background:rgba(29,43,36,.96)!important;
+ border-color:#40564a!important;
+ color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] #app .header-clock{
+ background:#26382f!important;
+ border:1px solid #40564a!important;
+ border-radius:12px!important;
+ color:#edf5ef!important;
+}
+:root[data-novaro-mode="dark"] #app .header-clock-time{
+ color:#f0f6f2!important;
+}
+:root[data-novaro-mode="dark"] #app .header-clock-time #headerClockPeriod{
+ color:#9cdbb8!important;
+}
+:root[data-novaro-mode="dark"] #app .header-clock-date{
+ color:#b8c9bf!important;
+}
 </style>
 </body></html>
