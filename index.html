@@ -1349,11 +1349,9 @@ function categoryOptions(selected="",group=null){
  }).join("");
 }
 function novaroItemSubcategoryOptions(group,selected=""){
- return cats.filter(c=>{
-  if((c.group_key||"equipment")!==group||!c.parent_id||c.is_active===false)return false;
-  const parent=cats.find(p=>p.id===c.parent_id);
-  return !!parent&&(parent.group_key||"equipment")===group&&!parent.parent_id&&parent.is_active!==false;
- }).map(c=>'<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+esc(categoryName(c))+'</option>').join("");
+ return cats.filter(c=>(c.group_key||"equipment")===group&&!c.parent_id&&c.is_active!==false)
+  .sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0))
+  .map(c=>'<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+esc(categoryName(c))+'</option>').join("");
 }
 function novaroFilterItemCategories(group,selected=""){
  const select=$("cat");if(!select)return;
