@@ -1754,7 +1754,7 @@ async function submitStocktakeSession(){
 function stocktakeUnitFields(x,en,locked){const ar=x.count_unit_ar||x.items?.unit_ar||"",eng=x.count_unit_en||x.items?.unit_en||"",value=en?(eng||ar):(ar||eng);return '<label class="stocktake-entry-control-label">'+(en?"Unit of measure":"وحدة القياس")+'</label><input data-unit-custom="'+x.id+'" value="'+esc(value)+'" placeholder="'+(en?"Type any unit name":"اكتب اسم أي وحدة قياس")+'" '+(locked?"disabled":"")+'>';}
 async function saveStocktakeItem(itemId){
  const v=window.__stocktakeView,en=language==="en",area=$("sessions");
- if(!v||v.locked||v.session.status==="submitted"||profile.role==="viewer")return;
+ if(!v||v.locked||(v.session.status==="submitted"&&profile.role!=="owner_admin")||profile.role==="viewer")return;
  const row=v.rows.find(x=>x.id===itemId);if(!row)return;
  const input=area.querySelector('[data-count-id="'+itemId+'"]'),unitInput=area.querySelector('[data-unit-custom="'+itemId+'"]'),message=area.querySelector('[data-save-message="'+itemId+'"]'),button=area.querySelector('[data-save-item="'+itemId+'"]');
  if(!input||!unitInput||!button)return;
