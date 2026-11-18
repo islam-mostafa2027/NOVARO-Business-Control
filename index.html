@@ -528,6 +528,24 @@ a.auth-back-link:hover{background:#e3eee8!important}
 @media(max-width:700px){#app .novaro-category-group-capsules{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}#app .novaro-main-group-card{min-height:108px!important;padding:15px 16px!important}}
 @media(max-width:390px){#app .novaro-category-group-capsules{grid-template-columns:1fr!important}#app .novaro-main-group-card{min-height:88px!important}}
 </style>
+
+<style id="novaro-category-area-cards-v1">
+#app .novaro-category-main-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:13px;margin-top:17px}
+#app .novaro-category-main-card{min-width:0;padding:15px 16px;border:1px solid var(--line);border-radius:17px;background:var(--surface,white);box-shadow:0 3px 12px #173d3008}
+#app .novaro-category-main-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+#app .novaro-category-main-card-head h4{margin:0;font-size:17px;font-weight:800;color:var(--ink)}
+#app .novaro-category-area-capsules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#app .novaro-category-area-pill{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-width:0;min-height:62px;width:100%;padding:10px 38px 10px 13px;border:1px solid var(--line);border-radius:13px;background:var(--surface,white);color:var(--ink);text-align:start;cursor:pointer;box-shadow:none;transition:background .16s ease,border-color .16s ease}
+#app .novaro-category-area-pill:hover{background:var(--bg);border-color:var(--muted)}
+#app .novaro-category-area-name{font-size:14px;font-weight:750;line-height:1.4;overflow-wrap:anywhere}
+#app .novaro-category-area-count{font-size:11px;color:var(--muted)}
+#app .novaro-category-area-arrow{position:absolute;inset-inline-end:13px;top:50%;transform:translateY(-50%);font-size:22px;color:var(--muted)}
+#app .novaro-category-section-head p{margin:4px 0 0;font-size:12px}
+#app .novaro-category-empty{padding:18px 12px;border:1px dashed var(--line);border-radius:13px;color:var(--muted);text-align:center}
+:root[data-novaro-mode="dark"] #app .novaro-category-main-card,:root[data-novaro-mode="dark"] #app .novaro-category-area-pill{background:var(--surface,#202f28);color:var(--ink,#e5eee9);border-color:var(--line,#40564a)}
+:root[data-novaro-mode="dark"] #app .novaro-category-main-card-head h4{color:var(--ink,#e5eee9)}
+@media(max-width:420px){#app .novaro-category-main-card{padding:12px}#app .novaro-category-area-capsules{gap:7px}#app .novaro-category-area-pill{padding-inline-start:10px;padding-inline-end:31px;min-height:58px}#app .novaro-category-area-name{font-size:12px}}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -1426,9 +1444,14 @@ function categoryOptions(selected="",group=null){
  }).join("");
 }
 function novaroItemSubcategoryOptions(group,selected=""){
- return cats.filter(c=>(c.group_key||"equipment")===group&&!c.parent_id&&c.is_active!==false)
-  .sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0))
-  .map(c=>'<option value="'+c.id+'" '+(selected===c.id?"selected":"")+'>'+esc(categoryName(c))+'</option>').join("");
+ const active=cats.filter(c=>(c.group_key||"equipment")===group&&c.is_active!==false);
+ const render=(parentId=null,depth=0,path=new Set())=>active.filter(c=>(c.parent_id||null)===(parentId||null)).sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0)).map(c=>{
+  if(path.has(c.id))return "";
+  const next=new Set(path);next.add(c.id);
+  const prefix=depth?"— ".repeat(Math.min(depth,4)):"";
+  return '<option value="'+c.id+'" '+(String(selected)===String(c.id)?"selected":"")+'>'+prefix+esc(categoryName(c))+'</option>'+render(c.id,depth+1,next);
+ }).join("");
+ return render();
 }
 function novaroFilterItemCategories(group,selected=""){
  const select=$("cat");if(!select)return;
@@ -1955,36 +1978,68 @@ async function toggleBranch(id){if(profile.role!=="owner_admin")return;const b=a
 async function deleteBranch(id){if(profile.role!=="owner_admin")return;const b=allBranches.find(x=>x.id===id);if(!b)return;if(!confirm("هل تريد أرشفة فرع "+nameOf(b)+"؟ سيختفي من الفروع النشطة، وستظل كل بياناته محفوظة ويمكنك استعادته من الأرشيف."))return;const members=await db.from("branch_members").select("user_id,is_active").eq("branch_id",id);if(members.error){alert("تعذر حفظ صلاحيات مستخدمي الفرع: "+members.error.message);return}const states=members.data||[];const archived=await db.from("branches").update({is_active:false,archived_at:new Date().toISOString(),archived_by:user.id,archived_member_states:states}).eq("id",id);if(archived.error){alert("تعذرت أرشفة الفرع: "+archived.error.message);return}const disabled=await db.from("branch_members").update({is_active:false}).eq("branch_id",id);if(disabled.error){await db.from("branches").update({is_active:b.is_active,archived_at:null,archived_by:null,archived_member_states:null}).eq("id",id);alert("تعذر إيقاف صلاحيات مستخدمي الفرع، وتم التراجع عن الأرشفة: "+disabled.error.message);return}await load();render()}
 async function restoreBranch(id){if(profile.role!=="owner_admin")return;const b=archivedBranches.find(x=>x.id===id);if(!b)return;if(!confirm("هل تريد استعادة فرع "+nameOf(b)+"؟ سيعود بنفس بياناته وسجلاته وصلاحيات مستخدميه السابقة."))return;const states=Array.isArray(b.archived_member_states)?b.archived_member_states:[];const restored=await db.from("branches").update({is_active:true,archived_at:null,archived_by:null,archived_member_states:null}).eq("id",id);if(restored.error){alert("تعذرت استعادة الفرع: "+restored.error.message);return}for(const member of states){const r=await db.from("branch_members").update({is_active:!!member.is_active}).eq("branch_id",id).eq("user_id",member.user_id);if(r.error){alert("تمت استعادة الفرع، لكن تعذر استعادة بعض صلاحيات المستخدمين: "+r.error.message+" يمكنك إعادة المحاولة.");await load();render();return}}await load();render();alert("تمت استعادة الفرع بنجاح.")}
 function toggleBranchArchive(force){const panel=$("branchArchivePanel");if(!panel)return;const open=typeof force==="boolean"?force:panel.style.display==="none";panel.style.display=open?"block":"none";if(open)panel.scrollIntoView({behavior:"smooth",block:"start"})}
-function manageCategories(groupKey=null){
+function manageCategories(groupKey=null,areaId=null){
  if(profile.role!=="owner_admin")return alert(language==="en"?"Only the system owner can manage categories":"إدارة التصنيفات متاحة للمالك فقط");
  const en=language==="en";
- const groups=categoryGroups.slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
+ const groups=categoryGroups.filter(g=>g.is_active!==false).slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
  const group=groupKey?groups.find(g=>g.key===groupKey):null;
- const groupButtons=groups.map(g=>'<button type="button" class="novaro-main-group-card '+(group&&group.key===g.key?"active":"") + '" aria-pressed="'+(group&&group.key===g.key?"true":"false")+'" data-manage-group="'+esc(g.key)+'"><span class="novaro-main-group-card-title">'+esc(categoryGroupLabel(g.key))+(g.is_active===false?' · '+(en?'Archived':'مؤرشف'):'')+'</span><span class="novaro-main-group-card-hint">'+(en?'Open to manage this category':'اضغط لفتح وإدارة هذا التصنيف')+'</span><span class="novaro-main-group-card-arrow" aria-hidden="true">‹</span></button>').join("");
- let content='';
- if(group){
-  const rows=cats.filter(c=>c.group_key===group.key);
-  const sorted=rows.slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
-  const renderTree=(parentId=null,depth=0,path=new Set())=>sorted.filter(c=>(c.parent_id||null)===(parentId||null)).map(c=>{
-   if(path.has(c.id))return '';
-   const next=new Set(path);next.add(c.id);
-   return '<article class="card novaro-managed-category-card" style="margin:8px 0;margin-left:'+Math.min(depth*14,42)+'px;opacity:'+(c.is_active===false?'.68':'1')+'"><div class="novaro-managed-category-name"><b>'+esc(categoryName(c))+'</b>'+(c.is_active===false?'<small class="muted"> · '+(en?'Archived':'مؤرشف')+'</small>':'')+'</div><div class="novaro-managed-category-actions"><button type="button" class="soft novaro-category-action" data-edit-category="'+esc(c.id)+'">'+(en?'Edit':'تعديل')+'</button><button type="button" class="soft novaro-category-action" data-toggle-category="'+esc(c.id)+'">'+(c.is_active===false?(en?'Restore':'استعادة'):(en?'Archive':'أرشفة'))+'</button><button type="button" class="soft novaro-category-action" data-delete-category="'+esc(c.id)+'">'+(en?'Delete':'حذف')+'</button></div></article>'+renderTree(c.id,depth+1,next);
-  }).join("");
-  content='<div class="novaro-category-section-head"><h4>'+esc(categoryGroupLabel(group.key))+'</h4><button type="button" class="primary novaro-category-add-pill" id="novaroAddInGroup">＋ '+(en?'Add category':'إضافة تصنيف')+'</button></div><div class="novaro-managed-category-list">'+renderTree()+'</div>';
-  if(!rows.length)content+='<p class="muted">'+(en?'No categories in this group yet.':'لا توجد تصنيفات داخل هذه المجموعة حتى الآن.')+'</p>';
+ const area=areaId?cats.find(c=>c.id===areaId&&c.group_key===groupKey&&!c.parent_id&&c.is_active!==false):null;
+ window.__novaroCategoryManagerContext={groupKey:group?.key||null,areaId:area?.id||null};
+ let content="";
+ if(group&&area){
+  const rows=cats.filter(c=>c.group_key===group.key&&c.parent_id===area.id&&c.is_active!==false).slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
+  const list=rows.length?'<div class="novaro-managed-category-list">'+rows.map(c=>'<article class="card novaro-managed-category-card"><div class="novaro-managed-category-name"><b>'+esc(categoryName(c))+'</b></div><div class="novaro-managed-category-actions"><button type="button" class="soft novaro-category-action" data-edit-category="'+esc(c.id)+'">'+(en?'Edit':'تعديل')+'</button><button type="button" class="soft novaro-category-action" data-toggle-category="'+esc(c.id)+'">'+(en?'Archive':'أرشفة')+'</button><button type="button" class="soft novaro-category-action" data-delete-category="'+esc(c.id)+'">'+(en?'Delete':'حذف')+'</button></div></article>').join("")+'</div>':'<p class="novaro-category-empty">'+(en?'No types added here yet.':'لا توجد أنواع مضافة هنا حتى الآن.')+'</p>';
+  content='<div class="novaro-category-section-head"><div><h4>'+esc(categoryName(area))+'</h4><p class="muted">'+(en?'Manage all types under this capsule.':'أضف وأدر كل الأنواع التابعة لهذه الكبسولة.')+'</p></div><button type="button" class="primary novaro-category-add-pill" id="novaroAddAreaCategory">＋ '+(en?'Add types':'إضافة أنواع')+'</button></div>'+list;
  }else{
-  content='<div class="items-group-tabs novaro-category-group-capsules">'+groupButtons+'</div><p class="muted novaro-category-hint">'+(en?'Choose a group to view and manage its categories.':'اختر تصنيفًا رئيسيًا لعرض وإدارة التصنيفات التابعة له.')+'</p>';
+  const cards=groups.map(g=>{
+   const roots=cats.filter(c=>c.group_key===g.key&&!c.parent_id&&c.is_active!==false).slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
+   const capsules=roots.map(c=>{
+    const count=cats.filter(x=>x.parent_id===c.id&&x.is_active!==false).length;
+    return '<button type="button" class="novaro-category-area-pill" data-open-area="'+esc(c.id)+'" data-group-key="'+esc(g.key)+'"><span class="novaro-category-area-name">'+esc(categoryName(c))+'</span><span class="novaro-category-area-count">'+count+' '+(en?'types':'نوع')+'</span><span class="novaro-category-area-arrow" aria-hidden="true">‹</span></button>';
+   }).join("");
+   return '<article class="novaro-category-main-card"><div class="novaro-category-main-card-head"><h4>'+esc(categoryGroupLabel(g.key))+'</h4></div><div class="novaro-category-area-capsules">'+capsules+'</div></article>';
+  }).join("");
+  content='<div class="novaro-category-main-cards">'+cards+'</div>';
  }
- $("main").innerHTML='<section class="card novaro-category-manager"><div class="novaro-category-manager-head"><h3>'+(en?'Manage categories':'إدارة التصنيفات')+'</h3><div class="novaro-category-top-actions"><button type="button" class="soft novaro-category-top-pill" id="novaroAddGroup">＋ '+(en?'Add main category':'إضافة تصنيف رئيسي')+'</button>'+(group?'<button type="button" class="soft novaro-category-top-pill" id="novaroBackGroups">'+(en?'All groups':'كل التصنيفات الرئيسية')+'</button>':'')+'</div></div>'+content+'</section>';
- $("novaroAddGroup").onclick=()=>addCategoryGroup();
+ $("main").innerHTML='<section class="card novaro-category-manager"><div class="novaro-category-manager-head"><h3>'+(en?'Manage categories':'إدارة التصنيفات')+'</h3><div class="novaro-category-top-actions"><button type="button" class="soft novaro-category-top-pill" id="novaroAddGroup">＋ '+(en?'Add main category':'إضافة تصنيف رئيسي')+'</button>'+(group?'<button type="button" class="soft novaro-category-top-pill" id="novaroBackGroups">'+(en?'All main categories':'كل التصنيفات الرئيسية')+'</button>':'')+'</div></div>'+content+'</section>';
+ $("novaroAddGroup").onclick=()=>{window.__novaroCategoryManagerContext={groupKey:null,areaId:null};addCategoryGroup()};
  $("novaroBackGroups")?.addEventListener("click",()=>manageCategories());
- document.querySelectorAll("[data-manage-group]").forEach(btn=>btn.onclick=()=>manageCategories(btn.dataset.manageGroup));
- $("novaroAddInGroup")?.addEventListener("click",()=>addCategory(group.key));
- document.querySelectorAll("[data-edit-category]").forEach(btn=>btn.onclick=()=>editCategory(btn.dataset.editCategory));
+ document.querySelectorAll("[data-open-area]").forEach(btn=>btn.onclick=()=>manageCategories(btn.dataset.groupKey,btn.dataset.openArea));
+ $("novaroAddAreaCategory")?.addEventListener("click",()=>addCategoryUnderArea(group.key,area.id));
+ document.querySelectorAll("[data-edit-category]").forEach(btn=>btn.onclick=()=>{window.__novaroCategoryManagerContext={groupKey:group.key,areaId:area.id};editCategory(btn.dataset.editCategory)});
  document.querySelectorAll("[data-toggle-category]").forEach(btn=>btn.onclick=()=>toggleCategoryActive(btn.dataset.toggleCategory));
  document.querySelectorAll("[data-delete-category]").forEach(btn=>btn.onclick=()=>deleteCategory(btn.dataset.deleteCategory));
  novaroBackButton();
  applyLanguage();
+}
+function novaroAddAreaCategoryRow(){
+ const host=$("novaroAreaCategoryRows");if(!host)return;
+ const en=language==="en",number=host.children.length+1,row=document.createElement("div");
+ row.className="card novaro-area-category-row";
+ row.style.cssText="padding:12px;margin:9px 0;background:var(--surface,transparent);border:1px solid var(--line)";
+ row.innerHTML='<div class="row" style="justify-content:space-between;align-items:center"><b>'+(en?"Type":"النوع")+' '+number+'</b><button class="soft" type="button" data-remove-area-type>×</button></div><div class="field"><label>'+(en?"Type name (Arabic)":"اسم النوع بالعربية")+'</label><input data-area-name-ar required></div><div class="field"><label>'+(en?"Type name (English)":"اسم النوع بالإنجليزية")+'</label><input data-area-name-en></div>';
+ row.querySelector("[data-remove-area-type]").onclick=()=>{if(host.children.length>1)row.remove()};
+ host.appendChild(row);
+}
+function addCategoryUnderArea(groupKey,parentId){
+ const en=language==="en",parent=cats.find(c=>c.id===parentId&&c.group_key===groupKey);
+ if(!parent)return alert(en?"This capsule could not be found.":"تعذر العثور على الكبسولة المطلوبة.");
+ const fields='<div class="muted">'+esc(categoryName(parent))+'</div><h4 style="margin-top:16px">'+(en?"Types to add":"الأنواع المراد إضافتها")+'</h4><div id="novaroAreaCategoryRows"></div><button class="soft" type="button" id="novaroAddAreaCategoryRow">＋ '+(en?"Add another type":"إضافة نوع آخر")+'</button>';
+ form(en?"Add types":"إضافة أنواع",fields,async()=>{
+  const rows=[...document.querySelectorAll(".novaro-area-category-row")].map(row=>({ar:row.querySelector("[data-area-name-ar]").value.trim(),en:row.querySelector("[data-area-name-en]").value.trim()}));
+  if(!rows.length||rows.some(row=>!row.ar))throw Error(en?"Enter an Arabic name for every type.":"اكتب الاسم بالعربية لكل نوع.");
+  const existing=new Set(cats.filter(c=>c.parent_id===parentId&&c.is_active!==false).map(c=>(c.name_ar||"").trim().toLocaleLowerCase()));
+  for(const row of rows){const key=row.ar.toLocaleLowerCase();if(existing.has(key))throw Error(en?"A type with this name already exists in this capsule.":"يوجد نوع بنفس الاسم داخل هذه الكبسولة بالفعل.");existing.add(key);}
+  const englishNames=await Promise.all(rows.map(row=>row.en?Promise.resolve(row.en):novaroTranslateCategoryName(row.ar)));
+  const currentOrder=Math.max(0,...cats.filter(c=>c.parent_id===parentId).map(c=>Number(c.sort_order)||0));
+  const payload=rows.map((row,index)=>({name_ar:row.ar,name_en:englishNames[index],group_key:groupKey,parent_id:parentId,sort_order:currentOrder+index+1,is_active:true,created_by:user.id}));
+  const inserted=await db.from("categories").insert(payload);
+  if(inserted.error)throw inserted.error;
+  await load();
+  manageCategories(groupKey,parentId);
+ });
+ novaroAddAreaCategoryRow();
+ $("novaroAddAreaCategoryRow").onclick=novaroAddAreaCategoryRow;
 }
 function novaroAddGroupSubcategoryRow(){
  const host=$("novaroGroupSubcategoryRows");if(!host)return;
@@ -2084,14 +2139,14 @@ function addCategory(groupKey="",parentId=null){
  novaroBackButton();applyLanguage();
 }
 function editCategory(id){const c=cats.find(x=>x.id===id);if(!c)return;const en=language==="en",gs=categoryGroups.filter(g=>g.is_active!==false||g.key===c.group_key),fields='<div class="field"><label>'+(en?"Main category":"التصنيف الرئيسى")+'</label><select id="editCatGroup">'+gs.map(g=>'<option value="'+g.key+'" '+(g.key===c.group_key?"selected":"")+'>'+esc(categoryGroupLabel(g.key))+'</option>').join("")+'</select></div><div class="field"><label>'+(en?"Subcategory":"التصنيف الفرعي")+'</label><select id="editCatParent">'+novaroCategoryParentOptions(c.group_key,c.parent_id||"")+'</select></div><div class="field"><label>'+(en?"Arabic name":"الاسم بالعربية")+'</label><input id="editCatAr" required value="'+esc(c.name_ar||"")+'"></div><div class="field"><label>'+(en?"English name":"الاسم بالإنجليزية")+'</label><input id="editCatEn" value="'+esc(c.name_en||"")+'"></div>';form(en?"Edit category":"تعديل التصنيف",fields,async()=>{const group=$("editCatGroup").value,parent=$("editCatParent").value||null,ar=$("editCatAr").value.trim(),eng=$("editCatEn").value.trim()||ar;if(!ar)throw Error(en?"Enter a category name.":"اكتب اسم التصنيف.");if(group!==c.group_key&&cats.some(x=>x.parent_id===id))throw Error(en?"Move or reorganize child categories before moving this category to another group.":"انقل أو أعد تنظيم التصنيفات الفرعية أولًا قبل نقل هذا التصنيف إلى مجموعة أخرى.");if(parent===id)throw Error(en?"A category cannot be its own parent.":"لا يمكن أن يكون التصنيف أبًا لنفسه.");let p=parent;while(p){if(p===id)throw Error(en?"This would create a category loop.":"هذا التعديل سيُنشئ تكرارًا في مستويات التصنيف.");p=cats.find(x=>x.id===p)?.parent_id||null}const r=await db.from("categories").update({group_key:group,parent_id:parent,name_ar:ar,name_en:eng}).eq("id",id);if(r.error)throw r.error;await load();window.__novaroReturnToCategoryManager=true})}
-async function toggleCategoryActive(id){const c=cats.find(x=>x.id===id);if(!c)return;const next=c.is_active===false;if(!next&&!confirm(language==="en"?"Archive this category? Linked items and history will be preserved.":"إخفاء التصنيف؟ ستظل الأصناف وسجلات الجرد المرتبطة به محفوظة."))return;const r=await db.from("categories").update({is_active:next}).eq("id",id);if(r.error)return alert(r.error.message);await load();manageCategories()}
+async function toggleCategoryActive(id){const c=cats.find(x=>x.id===id);if(!c)return;const next=c.is_active===false;if(!next&&!confirm(language==="en"?"Archive this category? Linked items and history will be preserved.":"إخفاء التصنيف؟ ستظل الأصناف وسجلات الجرد المرتبطة به محفوظة."))return;const r=await db.from("categories").update({is_active:next}).eq("id",id);if(r.error)return alert(r.error.message);await load();const ctx=window.__novaroCategoryManagerContext||{};manageCategories(ctx.groupKey||null,ctx.areaId||null)}
 const __novaroBaseRender=render;
 render=function(){const active=categoryGroups.filter(g=>g.is_active!==false);if(page==="items"&&active.length&&!active.some(g=>g.key===window.__itemsGroupView))window.__itemsGroupView=active[0].key;__novaroBaseRender();if(page!=="items")return;const host=document.querySelector("#main .items-group-tabs");if(!host)return;if(!active.length){host.innerHTML="";return}const rowCount=Math.ceil(active.length/3),baseCount=Math.floor(active.length/rowCount),extraRows=active.length%rowCount,rowSizes=Array.from({length:rowCount},(_,r)=>baseCount+(r<extraRows?1:0));let rowIndex=0,rowStart=0;host.innerHTML=active.map((g,i)=>{while(i>=rowStart+rowSizes[rowIndex]){rowStart+=rowSizes[rowIndex];rowIndex++}const span=6/rowSizes[rowIndex];return '<button type="button" class="items-group-tab '+(g.key===window.__itemsGroupView?"active":"")+'" data-dynamic-items-group="'+esc(g.key)+'" data-items-group="'+esc(g.key)+'" style="grid-column:span '+span+'!important">'+esc(categoryGroupLabel(g.key))+'</button>'}).join("");host.querySelectorAll("[data-dynamic-items-group]").forEach(btn=>btn.onclick=()=>{window.__itemsGroupView=btn.dataset.dynamicItemsGroup;render()});const cap=$("itemsGroupCaption"),search=$("search");const refreshCaption=()=>{if(cap&&search&&!search.value.trim()){const count=items.filter(i=>cats.find(c=>c.id===i.category_id)?.group_key===window.__itemsGroupView).length;cap.textContent=categoryGroupLabel(window.__itemsGroupView)+" · "+count+" "+(language==="en"?"items":"صنف")}};if(search){const prior=search.oninput;search.oninput=()=>{if(prior)prior();refreshCaption()}}refreshCaption()};
 
 
 /* Return to the category manager after editing a group/category form. */
 const __novaroRenderWithCategoryReturn=render;
-render=function(){__novaroRenderWithCategoryReturn();if(window.__novaroReturnToCategoryManager){window.__novaroReturnToCategoryManager=false;manageCategories()}};
+render=function(){__novaroRenderWithCategoryReturn();if(window.__novaroReturnToCategoryManager){window.__novaroReturnToCategoryManager=false;const ctx=window.__novaroCategoryManagerContext||{};manageCategories(ctx.groupKey||null,ctx.areaId||null)}};
 
 async function deleteCategoryGroup(key){
  const g=categoryGroups.find(x=>x.key===key);if(!g)return;
@@ -2110,7 +2165,7 @@ async function deleteCategory(id){
  if(children.error||linked.error)return alert((children.error||linked.error).message);
  if(children.count>0||linked.count>0)return alert(language==="en"?"This category has child categories or linked items. Archive it instead to preserve all data.":"التصنيف مرتبط بفروع أو أصناف. استخدم الأرشفة بدل الحذف للحفاظ على البيانات.");
  if(!confirm(language==="en"?"Permanently delete this empty category?":"حذف هذا التصنيف الفارغ نهائيًا؟"))return;
- const r=await db.from("categories").delete().eq("id",id);if(r.error)return alert(r.error.message);await load();manageCategories();
+ const r=await db.from("categories").delete().eq("id",id);if(r.error)return alert(r.error.message);await load();const ctx=window.__novaroCategoryManagerContext||{};manageCategories(ctx.groupKey||null,ctx.areaId||null);
 }
 
 
