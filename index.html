@@ -490,6 +490,32 @@ a.auth-back-link:hover{background:#e3eee8!important}
 @media(max-width:620px){#app .novaro-category-manager-head{align-items:stretch}#app .novaro-category-top-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}#app .novaro-category-top-pill{min-width:0;width:100%;white-space:normal}#app .novaro-category-group-capsules{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}#app .novaro-managed-category-card{grid-template-columns:minmax(0,1fr);gap:11px}#app .novaro-managed-category-actions{grid-template-columns:repeat(3,minmax(0,1fr));width:100%}#app .novaro-category-section-head{align-items:stretch}#app .novaro-category-add-pill{width:100%}}
 @media(max-width:360px){#app .novaro-category-top-actions{grid-template-columns:1fr}#app .novaro-managed-category-actions{gap:5px}#app .novaro-managed-category-actions .novaro-category-action{font-size:11px!important;padding:5px 4px!important}}
 </style>
+
+<style id="novaro-category-manager-cards-v1">
+/* Balanced capsule navigation and individual cards for category management. */
+#main .novaro-category-manager{padding:clamp(14px,2.5vw,24px);overflow:hidden}
+#main .novaro-category-manager-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:15px;border-bottom:1px solid var(--line)}
+#main .novaro-category-manager-head h3{margin:0;font-size:clamp(17px,2vw,21px);font-weight:800}
+#main .novaro-category-top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#main .novaro-category-top-pill,#main .novaro-category-add-pill{min-height:42px!important;padding:9px 17px!important;border-radius:999px!important;font-weight:750!important;white-space:nowrap}
+#main .novaro-category-group-capsules{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,132px),1fr))!important;gap:10px!important;width:100%!important;margin:17px 0 11px!important;padding:0!important}
+#main .novaro-category-group-capsules>.novaro-manage-group-pill{display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:47px!important;height:auto!important;margin:0!important;padding:10px 14px!important;border-radius:999px!important;text-align:center!important;font-size:13px!important;font-weight:750!important;line-height:1.35!important;white-space:normal!important;box-shadow:0 2px 9px #173d3009!important}
+#main .novaro-category-hint{margin:14px 0 2px!important;padding:13px 15px!important;border:1px solid var(--line)!important;border-radius:14px!important;background:var(--bg)!important;text-align:center!important;line-height:1.7!important}
+#main .novaro-category-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:17px 0 12px;padding:13px 15px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+#main .novaro-category-section-head h4{margin:0;font-size:16px;font-weight:800}
+#main .novaro-managed-category-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,265px),1fr));gap:12px;margin-top:12px}
+#main .novaro-managed-category-card{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-width:0;margin:0!important;padding:15px!important;border:1px solid var(--line)!important;border-radius:17px!important;background:var(--surface,white)!important;box-shadow:0 4px 15px #173d300b!important}
+#main .novaro-managed-category-name{display:flex;align-items:center;gap:7px;min-height:27px;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+#main .novaro-managed-category-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;width:100%}
+#main .novaro-managed-category-actions button{width:100%!important;min-width:0!important;min-height:39px!important;margin:0!important;padding:7px 8px!important;border-radius:999px!important;font-size:12px!important;font-weight:750!important;white-space:nowrap}
+@media(max-width:520px){
+ #main .novaro-category-group-capsules{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ #main .novaro-managed-category-list{grid-template-columns:1fr}
+ #main .novaro-category-manager-head{align-items:stretch}
+ #main .novaro-category-top-actions{width:100%}
+ #main .novaro-category-top-actions button{flex:1}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
