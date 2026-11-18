@@ -1546,18 +1546,17 @@ if(page==="reports")m.innerHTML='<section class="card"><div class="row"><div><h3
 if(page==="branches")m.innerHTML='<section class="card branches-page"><div class="branches-page-head"><h3>'+(language==="en"?"Branches":"الفروع")+'</h3><div class="row" style="gap:7px;flex-wrap:wrap">'+(profile.role==="owner_admin"?'<button type="button" class="soft branch-action-btn" onclick="toggleBranchArchive()"><span>▤</span> '+(language==="en"?"Archive":"الأرشيف")+' ('+archivedBranches.length+')</button><button type="button" class="soft branch-action-btn" onclick="addBranch()"><span>＋</span> '+(language==="en"?"Add branch":"إضافة فرع")+'</button>':'')+'</div></div><div class="branches-grid">'+((profile.role==="owner_admin"?allBranches:branches).map(b=>'<article class="branch-card"><div class="branch-card-head"><span class="branch-card-symbol">⌂</span><div class="branch-card-name"><strong>'+esc(nameOf(b))+'</strong><span class="branch-card-address">'+esc(branchLocationOf(b)||"—")+'</span><small>'+esc(b.code||"—")+'</small></div><span class="branch-status '+(b.is_active?"active":"inactive")+'">'+(b.is_active?(language==="en"?"Active":"نشط"):(language==="en"?"Inactive":"موقوف"))+'</span></div><div class="branch-card-info"><div><small>'+(language==="en"?"Login email":"إيميل الدخول")+'</small><span>'+esc(b.branch_login_email||(language==="en"?"Not created":"لم يُنشأ بعد"))+'</span></div></div>'+(profile.role==="owner_admin"?'<div class="branch-card-actions"><button type="button" class="soft branch-action-btn" title="'+(b.branch_login_user_id?(language==="en"?"Edit login account":"تعديل حساب الدخول"):(language==="en"?"Create login account":"إنشاء حساب الدخول"))+'" onclick="manageBranchAccount(&quot;'+b.id+'&quot;)"><span>♙</span> '+(language==="en"?"Account":"الحساب")+'</button><button type="button" class="soft branch-action-btn" title="'+(language==="en"?"Edit":"تعديل")+'" onclick="editBranch(&quot;'+b.id+'&quot;)"><span>✎</span> '+(language==="en"?"Edit":"تعديل")+'</button><button type="button" class="soft branch-action-btn branch-delete-btn" title="'+(language==="en"?"Archive":"أرشفة")+'" onclick="deleteBranch(&quot;'+b.id+'&quot;)"><span>⌫</span> '+(language==="en"?"Archive":"أرشفة")+'</button></div>':'')+'</article>').join(""))+'</div>'+(profile.role==="owner_admin"?'<section class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between;align-items:center"><div><h3>'+(language==="en"?"Password reset requests":"طلبات استعادة كلمات المرور")+'</h3><p class="muted">'+(language==="en"?"Branch requests appear here for the system owner to review.":"طلبات الفروع تصل هنا للمراجعة من مالك النظام.")+'</p></div><button type="button" class="soft branch-action-btn" onclick="loadBranchRecoveryRequests()">'+(language==="en"?"Refresh requests":"تحديث الطلبات")+'</button></div><div id="branchRecoveryRequests" class="empty">'+(language==="en"?"Select “Refresh requests” to display requests.":"اضغط «تحديث الطلبات» لعرض الطلبات.")+'</div></section>':"")+'<section id="branchArchivePanel" class="card" style="display:none;margin-top:16px"><div class="row" style="justify-content:space-between;align-items:center"><h3>'+(language==="en"?"Branch archive":"أرشيف الفروع")+'</h3><button type="button" class="soft branch-action-btn" onclick="toggleBranchArchive(false)">'+(language==="en"?"Close":"إغلاق")+'</button></div><p class="muted">'+(language==="en"?"Archived branches and their data are preserved and can be restored at any time.":"الفروع المؤرشفة وبياناتها محفوظة ويمكن استعادتها في أي وقت.")+'</p><div class="branches-grid">'+archivedBranches.map(b=>'<article class="branch-card"><div class="branch-card-head"><span class="branch-card-symbol">▤</span><div class="branch-card-name"><strong>'+esc(nameOf(b))+'</strong><span class="branch-card-address">'+esc(branchLocationOf(b)||"—")+'</span><small>'+esc(b.code||"—")+(language==="en"?", Archived ":", أرشيف ")+ (b.archived_at?new Date(b.archived_at).toLocaleDateString(language==="en"?"en-US":"ar-EG"):"")+'</small></div><span class="branch-status inactive">'+(language==="en"?"Archived":"مؤرشف")+'</span></div><div class="branch-card-info"><div><small>'+(language==="en"?"Login email":"إيميل الدخول")+'</small><span>'+esc(b.branch_login_email||"—")+'</span></div></div><div class="branch-card-actions"><button type="button" class="soft branch-action-btn" onclick="restoreBranch(&quot;'+b.id+'&quot;)"><span>↶</span> '+(language==="en"?"Restore branch":"استعادة الفرع")+'</button></div></article>').join("")+(archivedBranches.length?"":'<p class="muted">'+(language==="en"?"No archived branches yet.":"لا توجد فروع مؤرشفة حاليًا.")+'</p>')+'</div></section></section>';
 if($("branchSelect")){$("branchSelect").value=branchId;$("branchSelect").onchange=e=>{branchId=e.target.value;render()}}
 if(window.matchMedia&&window.matchMedia("(hover:none) and (pointer:coarse)").matches){m.classList.remove("page-enter")}else{m.classList.remove("page-enter");void m.offsetWidth;m.classList.add("page-enter")}novaroBackButton();applyNovaroAppearance();if(page==="settings")syncSettingsControls();applyLanguage();if(page==="counts"&&!window.__openingStocktake)sessions();if(page==="items"){document.querySelectorAll(".items-tool").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".items-tool").forEach(x=>x.classList.remove("is-selected"));btn.classList.add("is-selected")},{capture:true}));renderItemQRCodes();const filter=()=>{const group=window.__itemsGroupView||"materials";const query=$("search").value.trim().toLowerCase();const list=items.filter(i=>{const category=cats.find(c=>c.id===i.category_id),cg=category?.group_key||"equipment";const searchable=[i.name_ar||"",i.name_en||"",nameOf(i),categoryName(category),categoryGroupLabel(cg)].join(" ").toLowerCase();return query ? searchable.includes(query) : cg===group});$("itemRows").innerHTML=itemRows(list);$("itemsGroupCaption").textContent=(query?(language==="en"?"Search results across all items":"نتائج البحث في كل الأصناف"):(language==="en"?(group==="materials"?"Raw materials":group==="tools"?"Tools":group==="equipment"?"Equipment":"Assets"):(group==="materials"?"الخامات":group==="tools"?"العدة":group==="equipment"?"المعدات":"الأصول")))+" · "+list.length+" "+(language==="en"?"items":"صنف");renderItemQRCodes()};document.querySelectorAll("[data-items-group]").forEach(btn=>btn.onclick=()=>{window.__itemsGroupView=btn.dataset.itemsGroup;document.querySelectorAll("[data-items-group]").forEach(x=>x.classList.toggle("active",x===btn));filter()});$("search").oninput=filter;filter()}if(page==="home"&&branchId)homeDashboard();if(page==="reports")reportsPage();const layout=$("appLayout");if(layout)layout.classList.toggle("branch-not-selected",!branchId&&profile.role!=="owner_admin")}
-async function openBarcodeScanner(){
+function openBarcodeScanner(){
  const en=language==="en";
  let modal=document.getElementById("novaroScanner");
  if(!modal){
   modal=document.createElement("div");modal.id="novaroScanner";
-  modal.innerHTML='<div class="scan-panel"><div class="row" style="justify-content:space-between;align-items:center"><h3>'+(en?"Scan item QR code":"مسح QR Code للصنف")+'</h3><button type="button" class="soft" id="novaroScannerClose">×</button></div><video id="novaroScannerVideo" playsinline muted></video><p class="scan-status" id="novaroScannerStatus"></p><div class="field"><label for="novaroScannerCode">'+(en?"Or enter item code / scan result":"أو اكتب كود الصنف / نتيجة المسح")+'</label><input id="novaroScannerCode" autocomplete="off"></div><div class="row" style="gap:8px"><button type="button" class="primary" id="novaroScannerFind">'+(en?"Open item":"فتح الصنف")+'</button><button type="button" class="soft" id="novaroScannerStop">'+(en?"Stop camera":"إيقاف الكاميرا")+'</button></div></div>';
+  modal.innerHTML='<div class="scan-panel"><div class="row" style="justify-content:space-between;align-items:center"><h3>'+(en?"Scan item QR code":"مسح QR Code للصنف")+'</h3><button type="button" class="soft" id="novaroScannerClose">×</button></div><p class="scan-status" id="novaroScannerStatus"></p><input id="novaroScannerCamera" type="file" accept="image/*" capture="environment" style="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0"><div class="field"><label for="novaroScannerCode">'+(en?"Or enter item code / scan result":"أو اكتب كود الصنف / نتيجة المسح")+'</label><input id="novaroScannerCode" autocomplete="off"></div><div class="row" style="gap:8px"><button type="button" class="primary" id="novaroScannerFind">'+(en?"Open item":"فتح الصنف")+'</button><button type="button" class="soft" id="novaroScannerCameraButton">'+(en?"Open camera":"فتح الكاميرا")+'</button></div></div>';
   document.body.appendChild(modal);
  }
- const video=modal.querySelector("#novaroScannerVideo"),status=modal.querySelector("#novaroScannerStatus"),input=modal.querySelector("#novaroScannerCode");
- let stream=null,raf=0,detector=null,closed=false;
- const stop=()=>{closed=true;if(raf)cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;video.srcObject=null};
- const close=()=>{stop();modal.style.display="none"};
+ const status=modal.querySelector("#novaroScannerStatus"),input=modal.querySelector("#novaroScannerCode"),camera=modal.querySelector("#novaroScannerCamera");
+ let closed=false;
+ const close=()=>{closed=true;modal.style.display="none";camera.value=""};
  const openCode=()=>{
   let raw=input.value.trim();if(!raw)return;
   try{const u=new URL(raw,window.location.origin);raw=u.searchParams.get("item")||raw}catch(e){}
@@ -1565,21 +1564,29 @@ async function openBarcodeScanner(){
   if(!item){status.textContent=en?"Item code not found.":"كود الصنف غير موجود.";return}
   close();showScannedItem(item);
  };
+ const launchCamera=()=>{
+  closed=false;camera.value="";
+  status.textContent=en?"Opening camera…":"جاري فتح الكاميرا…";
+  try{camera.click()}catch(e){status.textContent=(en?"Could not open camera: ":"تعذر فتح الكاميرا: ")+(e.message||String(e))}
+ };
  modal.querySelector("#novaroScannerClose").onclick=close;
- modal.querySelector("#novaroScannerStop").onclick=()=>{stop();status.textContent=en?"Camera stopped. You can enter the code manually.":"تم إيقاف الكاميرا. يمكنك إدخال الكود يدويًا."};
+ modal.querySelector("#novaroScannerCameraButton").onclick=launchCamera;
  modal.querySelector("#novaroScannerFind").onclick=openCode;
  input.onkeydown=e=>{if(e.key==="Enter")openCode()};
  modal.onclick=e=>{if(e.target===modal)close()};
- modal.style.display="flex";status.textContent=en?"Starting camera…":"جاري تشغيل الكاميرا…";input.value="";
- if(!("BarcodeDetector" in window)){status.textContent=en?"QR camera scanning is not supported by this browser. Enter the item code manually.":"المتصفح لا يدعم مسح QR بالكاميرا. اكتب كود الصنف يدويًا.";return}
- try{
-  detector=new BarcodeDetector({formats:["qr_code"]});
-  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
-  if(closed){stream.getTracks().forEach(t=>t.stop());return}
-  video.srcObject=stream;await video.play();status.textContent=en?"Point the camera at the item QR code.":"وجّه الكاميرا إلى رمز QR الخاص بالصنف.";
-  const scan=async()=>{if(closed||!stream)return;try{const codes=await detector.detect(video);if(codes.length){input.value=codes[0].rawValue||"";openCode();return}}catch(e){}raf=requestAnimationFrame(scan)};
-  scan();
- }catch(e){status.textContent=(en?"Could not start camera: ":"تعذر تشغيل الكاميرا: ")+(e.message||String(e))+" — "+(en?"enter the code manually.":"اكتب الكود يدويًا.");}
+ camera.onchange=async()=>{
+  const file=camera.files&&camera.files[0];if(!file||closed)return;
+  if(!("BarcodeDetector" in window)){status.textContent=en?"QR decoding is not supported by this browser. Enter the item code manually.":"المتصفح لا يدعم قراءة QR من الصورة. اكتب كود الصنف يدويًا.";return}
+  try{
+   const detector=new BarcodeDetector({formats:["qr_code"]});
+   const codes=await detector.detect(file);
+   if(!codes.length){status.textContent=en?"No QR code found. Try again.":"لم يتم العثور على QR Code في الصورة. حاول مرة أخرى.";return}
+   input.value=codes[0].rawValue||"";
+   openCode();
+  }catch(e){status.textContent=(en?"Could not read QR image: ":"تعذرت قراءة QR من الصورة: ")+(e.message||String(e))}
+ };
+ modal.style.display="flex";input.value="";
+ launchCamera();
 }
 function itemBarcodeMarkup(item){
  if(!item?.item_code)return '<span class="muted">—</span>';
