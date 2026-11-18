@@ -2068,6 +2068,11 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 @media(max-width:600px){.about-page-card{margin:12px 0!important;padding:19px!important}.about-page-heading{gap:13px;padding-bottom:18px}.about-page-mark{width:48px;height:48px;flex-basis:48px;border-radius:14px;font-size:25px}.about-page-intro p{font-size:13px}.about-page-details{grid-template-columns:1fr;gap:9px;padding-top:17px}.about-page-detail{padding:12px 14px;gap:5px}}
 </style>
 
+
+/* Improve contrast for the user role label on the home summary card. */
+#app .home-summary-stats .stat-card .role-value{color:#176b55!important;font-weight:700!important;opacity:1!important}
+:root[data-novaro-mode="dark"] #app .home-summary-stats .stat-card .role-value{color:#a9e5c5!important;font-weight:700!important;opacity:1!important}
+
 <style id="novaro-home-dashboard-readability-v1">
 /* Home dashboard typography: clearer hierarchy without changing data or behavior. */
 #app .kpi-card span{font-weight:500!important;font-size:14px!important;line-height:1.55!important;color:#61736a!important}
