@@ -2793,3 +2793,21 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  }
 </style>
 <style id="novaro-clock-appearance-toggle-v1">.app-header.novaro-header-column .header-clock-panel{position:relative;padding-left:58px!important}.app-header.novaro-header-column #appearanceToggle{position:absolute!important;left:12px!important;top:50%!important;transform:translateY(-50%)!important;width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;padding:5px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:50%!important;color:var(--ink)!important}.app-header.novaro-header-column #appearanceToggle svg{display:block!important;width:21px!important;height:21px!important;min-width:21px!important;min-height:21px!important}@media(max-width:600px){.app-header.novaro-header-column .header-clock-panel{padding-left:52px!important}.app-header.novaro-header-column #appearanceToggle{left:9px!important;width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important}}</style>
+
+<style id="novaro-item-card-left-center-right-v1">
+/* Fixed three-column order: QR on the left, name/code centered, item photo on the right. */
+:root #app .items-page article.item-card .item-card-top{
+ direction:ltr!important;display:flex!important;flex-direction:row!important;
+ align-items:center!important;justify-content:space-between!important;
+}
+:root #app .items-page article.item-card .item-card-qr-column{order:1!important;flex:0 0 104px!important}
+:root #app .items-page article.item-card .item-card-title{
+ order:2!important;flex:1 1 auto!important;min-width:0!important;
+ direction:rtl!important;align-items:center!important;text-align:center!important;
+}
+:root #app .items-page article.item-card .item-card-picture-column{order:3!important;flex:0 0 104px!important}
+@media(max-width:600px){
+ :root #app .items-page article.item-card .item-card-qr-column{flex-basis:88px!important}
+ :root #app .items-page article.item-card .item-card-picture-column{flex-basis:88px!important}
+}
+</style>
