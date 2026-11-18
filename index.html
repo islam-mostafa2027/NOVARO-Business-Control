@@ -738,6 +738,62 @@ a.auth-back-link:hover{background:#e3eee8!important}
 }
 </style>
 
+
+<style id="novaro-compact-stocktake-cards-v1">
+/* Compact report and stocktake cards without changing their actions or data. */
+#reportContent .report-session-row,
+#app #sessions .stocktake-session-card{
+ box-sizing:border-box!important;
+ padding:12px!important;
+ gap:8px!important;
+ min-height:0!important;
+ border-radius:14px!important;
+}
+#reportContent .report-session-row{gap:8px!important}
+#reportContent .report-session-info b,
+#app #sessions .stocktake-session-card-title{
+ font-size:13px!important;
+ line-height:1.35!important;
+}
+#reportContent .report-session-info p,
+#app #sessions .stocktake-session-card-head p{
+ margin:3px 0 0!important;
+ font-size:11px!important;
+ line-height:1.35!important;
+}
+#app #sessions .stocktake-session-card-head{
+ min-height:0!important;
+ gap:6px!important;
+}
+#app #sessions .stocktake-session-card-title{min-height:0!important}
+#app #sessions .stocktake-session-meta{
+ gap:6px!important;
+ margin:0!important;
+ font-size:10px!important;
+ line-height:1.3!important;
+}
+#reportContent .report-actions,
+#app #sessions .stocktake-session-actions{
+ margin-top:4px!important;
+ gap:7px!important;
+}
+#reportContent .report-actions>button,
+#app #sessions .stocktake-session-actions>button{
+ min-height:40px!important;
+ height:auto!important;
+ padding:6px 5px!important;
+ font-size:11px!important;
+}
+@media(max-width:600px){
+ #reportContent .report-session-row,
+ #app #sessions .stocktake-session-card{padding:10px!important;gap:7px!important}
+ #reportContent .report-actions,
+ #app #sessions .stocktake-session-actions{gap:6px!important;margin-top:3px!important}
+ #reportContent .report-actions>button,
+ #app #sessions .stocktake-session-actions>button{min-height:38px!important;padding:5px 4px!important;font-size:10.5px!important}
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
