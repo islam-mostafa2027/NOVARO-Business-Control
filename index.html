@@ -1896,11 +1896,34 @@ async function toggleBranch(id){if(profile.role!=="owner_admin")return;const b=a
 async function deleteBranch(id){if(profile.role!=="owner_admin")return;const b=allBranches.find(x=>x.id===id);if(!b)return;if(!confirm("هل تريد أرشفة فرع "+nameOf(b)+"؟ سيختفي من الفروع النشطة، وستظل كل بياناته محفوظة ويمكنك استعادته من الأرشيف."))return;const members=await db.from("branch_members").select("user_id,is_active").eq("branch_id",id);if(members.error){alert("تعذر حفظ صلاحيات مستخدمي الفرع: "+members.error.message);return}const states=members.data||[];const archived=await db.from("branches").update({is_active:false,archived_at:new Date().toISOString(),archived_by:user.id,archived_member_states:states}).eq("id",id);if(archived.error){alert("تعذرت أرشفة الفرع: "+archived.error.message);return}const disabled=await db.from("branch_members").update({is_active:false}).eq("branch_id",id);if(disabled.error){await db.from("branches").update({is_active:b.is_active,archived_at:null,archived_by:null,archived_member_states:null}).eq("id",id);alert("تعذر إيقاف صلاحيات مستخدمي الفرع، وتم التراجع عن الأرشفة: "+disabled.error.message);return}await load();render()}
 async function restoreBranch(id){if(profile.role!=="owner_admin")return;const b=archivedBranches.find(x=>x.id===id);if(!b)return;if(!confirm("هل تريد استعادة فرع "+nameOf(b)+"؟ سيعود بنفس بياناته وسجلاته وصلاحيات مستخدميه السابقة."))return;const states=Array.isArray(b.archived_member_states)?b.archived_member_states:[];const restored=await db.from("branches").update({is_active:true,archived_at:null,archived_by:null,archived_member_states:null}).eq("id",id);if(restored.error){alert("تعذرت استعادة الفرع: "+restored.error.message);return}for(const member of states){const r=await db.from("branch_members").update({is_active:!!member.is_active}).eq("branch_id",id).eq("user_id",member.user_id);if(r.error){alert("تمت استعادة الفرع، لكن تعذر استعادة بعض صلاحيات المستخدمين: "+r.error.message+" يمكنك إعادة المحاولة.");await load();render();return}}await load();render();alert("تمت استعادة الفرع بنجاح.")}
 function toggleBranchArchive(force){const panel=$("branchArchivePanel");if(!panel)return;const open=typeof force==="boolean"?force:panel.style.display==="none";panel.style.display=open?"block":"none";if(open)panel.scrollIntoView({behavior:"smooth",block:"start"})}
-function manageCategories(){
+function manageCategories(groupKey=null){
  if(profile.role!=="owner_admin")return alert(language==="en"?"Only the system owner can manage categories":"إدارة التصنيفات متاحة للمالك فقط");
  const en=language==="en";
- $("main").innerHTML='<section class="card"><div class="row"><h3>'+(en?"Manage categories":"إدارة التصنيفات")+'</h3><button type="button" class="primary" id="novaroOpenAddCategory">＋ '+(en?"New category":"إضافة تصنيف جديد")+'</button></div></section>';
- $("novaroOpenAddCategory").onclick=()=>addCategory();
+ const groups=categoryGroups.slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
+ const group=groupKey?groups.find(g=>g.key===groupKey):null;
+ const groupButtons=groups.map(g=>'<button type="button" class="items-group-tab" data-manage-group="'+esc(g.key)+'">'+esc(categoryGroupLabel(g.key))+(g.is_active===false?' · '+(en?'Archived':'مؤرشف'):'')+'</button>').join("");
+ let content='';
+ if(group){
+  const rows=cats.filter(c=>c.group_key===group.key);
+  const sorted=rows.slice().sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0));
+  const renderTree=(parentId=null,depth=0,path=new Set())=>sorted.filter(c=>(c.parent_id||null)===(parentId||null)).map(c=>{
+   if(path.has(c.id))return '';
+   const next=new Set(path);next.add(c.id);
+   return '<div class="card" style="margin:8px 0;padding:12px 14px;margin-left:'+Math.min(depth*14,42)+'px;opacity:'+(c.is_active===false?'.65':'1')+'"><div class="row" style="justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div><b>'+esc(categoryName(c))+'</b>'+(c.is_active===false?'<small class="muted"> · '+(en?'Archived':'مؤرشف')+'</small>':'')+'</div><div class="row" style="gap:6px;flex-wrap:wrap"><button type="button" class="soft" data-edit-category="'+esc(c.id)+'">'+(en?'Edit':'تعديل')+'</button><button type="button" class="soft" data-toggle-category="'+esc(c.id)+'">'+(c.is_active===false?(en?'Restore':'استعادة'):(en?'Archive':'أرشفة'))+'</button><button type="button" class="soft" data-delete-category="'+esc(c.id)+'">'+(en?'Delete':'حذف')+'</button></div></div></div>'+renderTree(c.id,depth+1,next);
+  }).join("");
+  content='<div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap"><h4>'+esc(categoryGroupLabel(group.key))+'</h4><button type="button" class="primary" id="novaroAddInGroup">＋ '+(en?'Add category':'إضافة تصنيف')+'</button></div><div>'+renderTree()+'</div>';
+  if(!rows.length)content+='<p class="muted">'+(en?'No categories in this group yet.':'لا توجد تصنيفات داخل هذه المجموعة حتى الآن.')+'</p>';
+ }else{
+  content='<div class="items-group-tabs" style="margin-top:14px">'+groupButtons+'</div><p class="muted">'+(en?'Choose a group to view and manage its categories.':'اختر تصنيفًا رئيسيًا لعرض وإدارة التصنيفات التابعة له.')+'</p>';
+ }
+ $("main").innerHTML='<section class="card"><div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap"><h3>'+(en?'Manage categories':'إدارة التصنيفات')+'</h3><div class="row" style="gap:6px;flex-wrap:wrap"><button type="button" class="soft" id="novaroAddGroup">＋ '+(en?'Add main category':'إضافة تصنيف رئيسي')+'</button>'+(group?'<button type="button" class="soft" id="novaroBackGroups">'+(en?'All groups':'كل التصنيفات الرئيسية')+'</button>':'')+'</div></div>'+content+'</section>';
+ $("novaroAddGroup").onclick=()=>addCategoryGroup();
+ $("novaroBackGroups")?.addEventListener("click",()=>manageCategories());
+ document.querySelectorAll("[data-manage-group]").forEach(btn=>btn.onclick=()=>manageCategories(btn.dataset.manageGroup));
+ $("novaroAddInGroup")?.addEventListener("click",()=>addCategory(group.key));
+ document.querySelectorAll("[data-edit-category]").forEach(btn=>btn.onclick=()=>editCategory(btn.dataset.editCategory));
+ document.querySelectorAll("[data-toggle-category]").forEach(btn=>btn.onclick=()=>toggleCategoryActive(btn.dataset.toggleCategory));
+ document.querySelectorAll("[data-delete-category]").forEach(btn=>btn.onclick=()=>deleteCategory(btn.dataset.deleteCategory));
  novaroBackButton();
  applyLanguage();
 }
