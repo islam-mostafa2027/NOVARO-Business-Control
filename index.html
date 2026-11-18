@@ -3565,46 +3565,50 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 
 
-<style id="novaro-system-capsules-transparent-v1">
-/* Unify informational capsules across the app; deliberately exclude navigation and the top header controls. */
-:root #app .status-pill,
-:root #app .report-meta span,
-:root #app .stocktake-session-meta>span,
-:root #app .items-group-caption,
-:root #app .branch-status,
-:root #app .scan-status,
-:root #app .novaro-qr-caption,
-:root #app .novaro-image-caption,
-:root #app .item-branch-meta,
-:root #app .item-card-field-label,
-:root #app .item-photo-label,
-:root #app .item-qr-label {
-  background:transparent!important;
-  background-color:transparent!important;
-  background-image:none!important;
-  border:1px solid var(--line)!important;
-  box-shadow:none!important;
-  color:var(--ink)!important;
-  -webkit-text-fill-color:var(--ink)!important;
-  text-shadow:none!important;
+<style id="novaro-system-capsules-soft-green-v2">
+/* Soft green informational capsules across the app. Preserve geometry and exclude the top header and navigation. */
+:root #app :is(
+ .status-pill,
+ .report-meta span,
+ .stocktake-session-meta>span,
+ .items-group-caption,
+ .branch-status,
+ .scan-status,
+ .novaro-qr-caption,
+ .novaro-image-caption,
+ .item-branch-meta,
+ .item-card-field-label,
+ .item-photo-label,
+ .item-qr-label
+):not(.app-header *):not(nav *) {
+ background:#edf5f0!important;
+ background-color:#edf5f0!important;
+ background-image:none!important;
+ border:1px solid #d5e3da!important;
+ box-shadow:none!important;
+ color:#29483d!important;
+ -webkit-text-fill-color:#29483d!important;
+ text-shadow:none!important;
 }
-:root[data-novaro-mode="dark"] #app .status-pill,
-:root[data-novaro-mode="dark"] #app .report-meta span,
-:root[data-novaro-mode="dark"] #app .stocktake-session-meta>span,
-:root[data-novaro-mode="dark"] #app .items-group-caption,
-:root[data-novaro-mode="dark"] #app .branch-status,
-:root[data-novaro-mode="dark"] #app .scan-status,
-:root[data-novaro-mode="dark"] #app .novaro-qr-caption,
-:root[data-novaro-mode="dark"] #app .novaro-image-caption,
-:root[data-novaro-mode="dark"] #app .item-branch-meta,
-:root[data-novaro-mode="dark"] #app .item-card-field-label,
-:root[data-novaro-mode="dark"] #app .item-photo-label,
-:root[data-novaro-mode="dark"] #app .item-qr-label {
-  background:transparent!important;
-  background-color:transparent!important;
-  background-image:none!important;
-  border-color:var(--line)!important;
-  color:var(--ink)!important;
-  -webkit-text-fill-color:var(--ink)!important;
+:root[data-novaro-mode="dark"] #app :is(
+ .status-pill,
+ .report-meta span,
+ .stocktake-session-meta>span,
+ .items-group-caption,
+ .branch-status,
+ .scan-status,
+ .novaro-qr-caption,
+ .novaro-image-caption,
+ .item-branch-meta,
+ .item-card-field-label,
+ .item-photo-label,
+ .item-qr-label
+):not(.app-header *):not(nav *) {
+ background:#26382f!important;
+ background-color:#26382f!important;
+ background-image:none!important;
+ border-color:#40564a!important;
+ color:#e5eee9!important;
+ -webkit-text-fill-color:#e5eee9!important;
 }
 </style>
