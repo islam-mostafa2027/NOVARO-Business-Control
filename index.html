@@ -3565,81 +3565,103 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 
 
-<style id="novaro-system-capsules-soft-green-v3">
-/* One Mint Green background for every content capsule. Color-only treatment: no geometry, spacing, sizing or behavior changes. Header and all app navigation remain untouched. */
+<style id="novaro-system-capsules-soft-green-v4">
+/* Content capsules only. Keep header and bottom navigation completely unchanged.
+   Color-only overrides: preserve dimensions, spacing, typography and interaction. */
 :root #app :is(
  .status-pill,
- .report-meta span,
- .stocktake-session-meta>span,
- .items-group-caption,
- .items-group-tab,
  .branch-status,
  .scan-status,
+ .report-meta span,
+ .stocktake-session-meta>span,
+ .stocktake-group-count,
+ .items-group-caption,
+ .items-group-tab,
  .novaro-qr-caption,
  .novaro-image-caption,
  .item-branch-meta,
  .item-card-field-label,
  .item-photo-label,
  .item-qr-label,
+ .item-card-group,
+ .item-card-code,
+ .item-card-title>strong,
+ .novaro-category-top-pill,
+ .novaro-category-add-pill,
  .novaro-category-area-pill,
  .novaro-manage-group-pill,
- .stocktake-group-count,
+ .novaro-category-action,
  .novaro-category-group-head h4 small,
- .novaro-category-node-name small
-):not(.app-header *):not(.tabs *):not(nav *):not(.sidebar *):not(.side-nav *) {
- background:#dff3e8!important;
+ .novaro-category-node-name small,
+ .stocktake-entry-control-label,
+ .stocktake-entry-name-label,
+ .sound-choice,
+ .ai-status,
+ .report-nav-label
+):not(.app-header *):not(.tabs *):not(#tabs *):not(nav *) {
  background-color:#dff3e8!important;
  background-image:none!important;
  border-color:#b9dec9!important;
- box-shadow:none!important;
- text-shadow:none!important;
 }
+/* Preserve warning, inactive and destructive meaning through their existing text colors. */
+:root #app .branch-status.inactive,
+:root #app .novaro-category-action.danger {
+ border-color:#d99a95!important;
+}
+:root #app .status-pill {
+ color:#9a641b;
+}
+/* Selected content capsules stay Mint; selected state remains clear through a stronger outline. */
+:root #app :is(.items-group-tab.active,.sound-choice.selected,.novaro-manage-group-pill.active) {
+ background-color:#dff3e8!important;
+ border-color:#438b70!important;
+ color:#246b55!important;
+ -webkit-text-fill-color:#246b55!important;
+}
+/* Dark mode: calm, low-glare deep mint, with readable text and preserved semantic colors. */
 :root[data-novaro-mode="dark"] #app :is(
  .status-pill,
- .report-meta span,
- .stocktake-session-meta>span,
- .items-group-caption,
- .items-group-tab,
  .branch-status,
  .scan-status,
+ .report-meta span,
+ .stocktake-session-meta>span,
+ .stocktake-group-count,
+ .items-group-caption,
+ .items-group-tab,
  .novaro-qr-caption,
  .novaro-image-caption,
  .item-branch-meta,
  .item-card-field-label,
  .item-photo-label,
  .item-qr-label,
+ .item-card-group,
+ .item-card-code,
+ .item-card-title>strong,
+ .novaro-category-top-pill,
+ .novaro-category-add-pill,
  .novaro-category-area-pill,
  .novaro-manage-group-pill,
- .stocktake-group-count,
+ .novaro-category-action,
  .novaro-category-group-head h4 small,
- .novaro-category-node-name small
-):not(.app-header *):not(.tabs *):not(nav *):not(.sidebar *):not(.side-nav *) {
- background:#29483a!important;
+ .novaro-category-node-name small,
+ .stocktake-entry-control-label,
+ .stocktake-entry-name-label,
+ .sound-choice,
+ .ai-status,
+ .report-nav-label
+):not(.app-header *):not(.tabs *):not(#tabs *):not(nav *) {
  background-color:#29483a!important;
  background-image:none!important;
  border-color:#527662!important;
- box-shadow:none!important;
- text-shadow:none!important;
 }
-/* Keep the unified fill stable on hover and selection; status text/icons retain their semantic colors. */
-:root #app .novaro-category-area-pill:hover,
-:root #app .novaro-category-area-pill:focus-visible,
-:root #app .novaro-manage-group-pill:hover,
-:root #app .novaro-manage-group-pill.active,
-:root #app .items-group-tab:hover,
-:root #app .items-group-tab.active {
- background:#dff3e8!important;
- background-color:#dff3e8!important;
- background-image:none!important;
+:root[data-novaro-mode="dark"] #app :is(.items-group-tab.active,.sound-choice.selected,.novaro-manage-group-pill.active) {
+ background-color:#315b49!important;
+ border-color:#78ad91!important;
+ color:#e5f4eb!important;
+ -webkit-text-fill-color:#e5f4eb!important;
 }
-:root[data-novaro-mode="dark"] #app .novaro-category-area-pill:hover,
-:root[data-novaro-mode="dark"] #app .novaro-category-area-pill:focus-visible,
-:root[data-novaro-mode="dark"] #app .novaro-manage-group-pill:hover,
-:root[data-novaro-mode="dark"] #app .novaro-manage-group-pill.active,
-:root[data-novaro-mode="dark"] #app .items-group-tab:hover,
-:root[data-novaro-mode="dark"] #app .items-group-tab.active {
- background:#29483a!important;
- background-color:#29483a!important;
- background-image:none!important;
+:root[data-novaro-mode="dark"] #app .branch-status.inactive,
+:root[data-novaro-mode="dark"] #app .novaro-category-action.danger {
+ border-color:#815b56!important;
 }
 </style>
