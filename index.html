@@ -1647,10 +1647,14 @@ async function reportsPage(){
    const action=btn.dataset.reportAction,sid=btn.dataset.id;
    if(action==="view")viewStocktakeReport(sid);
    else if(action==="export")exportStocktakeReport(sid);
-   else if(action==="edit"&&owner)editSession(sid);
+   else if(action==="edit"&&owner)editSubmittedStocktake(sid);
    else if(action==="delete")deleteSession(sid);
   }));
  }catch(e){host.innerHTML='<div class="error">'+esc(e.message||String(e))+'</div>'}
+}
+async function editSubmittedStocktake(id){
+ if(profile.role!=="owner_admin")return alert(language==="en"?"Only the system admin can edit submitted reports.":"تعديل التقارير المعتمدة متاح للأدمن فقط.");
+ page="counts";window.__novaroStocktakeSubView=null;window.__stocktakeView=null;render();await sessions();await openSession(id);
 }
 async function getSingleStocktakeReport(id){
  const session=window.__novaroSessions?.find(x=>x.id===id);
