@@ -2037,6 +2037,8 @@ function addCategoryUnderArea(groupKey,parentId){
   if(inserted.error)throw inserted.error;
   window.__novaroReturnToCategoryManager=true;
  });
+ const addTypeButton=$("novaroAddAreaCategoryRow"),saveButton=$("save");
+ [addTypeButton,saveButton].forEach(button=>{if(button){button.style.display="block";button.style.width="100%";button.style.boxSizing="border-box";button.style.minHeight="46px";button.style.height="46px";button.style.marginTop="10px";button.style.marginBottom="0";button.style.borderRadius="12px";}});
  novaroAddAreaCategoryRow();
  $("novaroAddAreaCategoryRow").onclick=novaroAddAreaCategoryRow;
 }
