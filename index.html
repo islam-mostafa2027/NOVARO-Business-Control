@@ -713,6 +713,31 @@ a.auth-back-link:hover{background:#e3eee8!important}
 #reportContent .reports-archive-toggle,
 #app #sessions .sessions-archive-toggle{display:flex!important;flex:1 1 100%!important;width:100%!important;min-width:100%!important;min-height:48px!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;border-radius:14px!important;font-size:14px!important;font-weight:800!important;white-space:normal!important}
 </style>
+
+<style id="novaro-report-actions-even-grid-v1">
+#reportContent .report-actions-owner{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ grid-auto-rows:minmax(46px,1fr)!important;
+ gap:10px!important;
+ width:100%!important;
+ align-items:stretch!important;
+ justify-items:stretch!important;
+}
+#reportContent .report-actions-owner>button{
+ box-sizing:border-box!important;
+ width:100%!important;
+ min-width:0!important;
+ min-height:46px!important;
+ height:100%!important;
+ margin:0!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ text-align:center!important;
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
