@@ -884,6 +884,22 @@ a.auth-back-link:hover{background:#e3eee8!important}
  #app .headcount-metric small{font-size:9px!important}
 }
 </style>
+
+<style id="novaro-headcount-metric-rectangles-v1">
+/* Three compact horizontal metric tiles, always aligned in one row. */
+#app .headcount-metrics{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;align-items:stretch!important}
+#app .headcount-metric{min-width:0!important;min-height:74px!important;padding:9px 8px!important;border-radius:10px!important;gap:4px!important;justify-content:center!important;overflow:hidden!important}
+#app .headcount-metric span{font-size:11px!important;line-height:1.25!important;white-space:normal!important}
+#app .headcount-metric strong{font-size:22px!important;line-height:1.05!important}
+#app .headcount-metric small{font-size:9px!important;line-height:1.25!important}
+@media(max-width:600px){
+ #app .headcount-metrics{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}
+ #app .headcount-metric{min-height:70px!important;padding:8px 5px!important;border-radius:9px!important;gap:4px!important}
+ #app .headcount-metric span{font-size:9px!important;line-height:1.2!important}
+ #app .headcount-metric strong{font-size:19px!important}
+ #app .headcount-metric small{font-size:8px!important;line-height:1.2!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
