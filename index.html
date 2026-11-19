@@ -1629,6 +1629,7 @@ function startNotificationStream(){
 let user,profile,branches=[],allBranches=[],archivedBranches=[],items=[],cats=[],categoryGroups=[],balances={},branchId,page="home",headcountBranchId="",headcountRoles=[],headcountEmployees=[];
 const novaroPageHistory=[];
 function canManageHeadcount(){return profile?.role==="owner_admin"||profile?.role==="branch_manager"}
+function localizedHeadcountField(record,field){const ar=record?.[field+"_ar"],en=record?.[field+"_en"],raw=record?.[field]??"";return language==="en"?(en||translateText(ar||raw)):(ar||translateCanonical(en||raw));}
 function novaroEnsureBrowserHistory(){
  if(window.__novaroHistoryReady)return;
  window.__novaroHistoryReady=true;
@@ -2275,7 +2276,6 @@ if(page==="headcount"){
   const registeredActual=branchEmployees.length,actual=branchRoles.reduce((total,role)=>total+Math.max(0,Number(role.required_count)||0),0),variance=actual-required;
   const canManage=profile.role==="owner_admin"||profile.role==="branch_manager";
   const canManageJobRequirements=profile.role==="owner_admin";
-  const localizedHeadcountField=(record,field)=>{const ar=record?.[field+"_ar"],en=record?.[field+"_en"],raw=record?.[field]??"";return language==="en"?(en||translateText(ar||raw)):(ar||translateCanonical(en||raw));};
   const jobOptions='<option value="">'+(language==="en"?"Choose job title":"اختر المسمى الوظيفي")+'</option>'+branchRoles.map(r=>'<option value="'+r.id+'">'+esc(localizedHeadcountField(r,"job_title"))+'</option>').join("");
   const roleRows=branchRoles.map(r=>'<div class="hc-role-row" data-role-row="'+r.id+'"><input class="hc-role-title" aria-label="'+(language==="en"?"Job title":"المسمى الوظيفي")+'" value="'+esc(localizedHeadcountField(r,"job_title"))+'" '+(!canManageJobRequirements?'disabled':'')+'><input class="hc-role-count" aria-label="'+(language==="en"?"Required count":"العدد المطلوب")+'" type="number" min="0" step="1" inputmode="numeric" value="'+Number(r.required_count||0)+'" '+(!canManage?'disabled':'')+'><div class="hc-row-actions">'+(canManage?'<button type="button" class="soft" data-save-role="'+r.id+'">'+(language==="en"?"Save count":"حفظ العدد")+'</button>':'')+(canManageJobRequirements?'<button type="button" class="soft hc-delete" data-delete-role="'+r.id+'">×</button>':'')+'</div></div>').join("");
   const normalizeHeadcountTitle=value=>String(value||"").normalize("NFKC").replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").trim().toLocaleLowerCase().split(/\s+/).map(word=>word.startsWith("ال")&&word.length>2?word.slice(2):word).map(word=>word==="مطعم"?"فرع":word).join("");
