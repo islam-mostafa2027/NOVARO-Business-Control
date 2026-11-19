@@ -833,6 +833,32 @@ a.auth-back-link:hover{background:#e3eee8!important}
 }
 </style>
 
+
+<style id="novaro-welcome-restaurant-background-v1">
+/* Subtle restaurant atmosphere on the welcome panel only. */
+#login .auth-visual{
+  isolation:isolate!important;
+  background:#123b32!important;
+}
+#login .auth-visual::before{
+  content:"";
+  position:absolute;
+  inset:-12px;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(115deg,rgba(13,48,39,.88) 0%,rgba(18,59,50,.78) 54%,rgba(13,43,36,.86) 100%),
+    url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+  filter:blur(3px) saturate(.72);
+  transform:scale(1.025);
+}
+#login .auth-visual>.visual-glow,
+#login .auth-visual>.visual-grid{z-index:1}
+#login .auth-visual>.visual-content{z-index:2}
+@media(max-width:820px){
+  #login .auth-visual::before{background-position:center 48%}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
