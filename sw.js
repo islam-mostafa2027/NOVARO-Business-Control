@@ -1,4 +1,4 @@
-const CACHE_NAME = "novaro-inventory-shell-v40";
+const CACHE_NAME = "novaro-inventory-shell-v41";
 const APP_SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL.map(path => new Request(path, { cache: "reload" })))).then(() => self.skipWaiting()));
