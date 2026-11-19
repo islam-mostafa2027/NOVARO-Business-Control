@@ -1370,12 +1370,13 @@ Object.assign(translations,{
   ,"مراجَع":"Reviewed"
   ,"معتمد":"Approved"
   ,"in_progress":"In progress"
+  ,"تعديل العدد المطلوب متاح لمالك النظام فقط.":"Only the system owner can edit Required Headcount."
 
 });
 const reverseTranslations=Object.fromEntries(Object.entries(translations).map(([a,b])=>[b,a]));
 let language=localStorage.getItem("novaro-language")==="en"?"en":"ar";
 function translateCanonical(value){
- let out=String(value??"");
+ let out=String(value??"").replace(/Edit\s+Required\s+Headcount\s+متاح\s+ل\s*System\s+owner\s+فقط\.?/gi,"تعديل العدد المطلوب متاح لمالك النظام فقط.");
  const pairs=Object.entries(translations).sort((a,b)=>b[1].length-a[1].length);
  for(const [ar,en] of pairs){if(en)out=out.split(en).join(ar);}
  return out;
