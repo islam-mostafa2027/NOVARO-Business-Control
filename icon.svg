@@ -1,14 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<defs>
- <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#287d6b"/><stop offset="1" stop-color="#123b32"/></linearGradient>
- <linearGradient id="mint" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dff1e9"/><stop offset="1" stop-color="#9ed7bf"/></linearGradient>
- <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>
-</defs>
-<rect x="18" y="18" width="476" height="476" rx="126" fill="url(#bg)"/>
-<path d="M148 358V154h48l168 204h-50L148 154" fill="none" stroke="#061f19" stroke-opacity=".22" stroke-width="1"/>
-<path d="M150 360V152h53l159 194V152h48v208h-52L198 166v194z" fill="#f5fbf8"/>
-<path d="M95 310C114 155 257 72 391 137c44 21 70 57 79 96" fill="none" stroke="#061f19" stroke-opacity=".24" stroke-width="30" stroke-linecap="round" filter="url(#shadow)"/>
-<path d="M94 302C116 151 257 75 390 137c43 20 69 55 79 92" fill="none" stroke="url(#mint)" stroke-width="27" stroke-linecap="round"/>
-<path d="M425 207l50 22-45 31" fill="none" stroke="#9ed7bf" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="95" cy="302" r="13" fill="#dff1e9"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="NOVARO">
+  <defs>
+    <linearGradient id="n" x1="150" y1="125" x2="365" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2B806C"/>
+      <stop offset="1" stop-color="#174F42"/>
+    </linearGradient>
+    <linearGradient id="orbit" x1="100" y1="300" x2="450" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#236E5D"/>
+      <stop offset="1" stop-color="#9ED7BF"/>
+    </linearGradient>
+  </defs>
+  <path d="M96 302C105 181 190 94 294 94c76 0 138 42 162 112" fill="none" stroke="url(#orbit)" stroke-width="19" stroke-linecap="round"/>
+  <path d="m424 181 33 31 14-43" fill="none" stroke="#9ED7BF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M153 365V151c0-12 9-21 21-21h11c8 0 15 4 21 11l132 168V151c0-12 9-21 21-21h10c12 0 21 9 21 21v214c0 12-9 21-21 21h-10c-8 0-15-4-21-11L206 207v158c0 12-9 21-21 21h-11c-12 0-21-9-21-21Z" fill="url(#n)"/>
+  <path d="M96 302c-1 16 1 31 5 45" fill="none" stroke="#9ED7BF" stroke-width="19" stroke-linecap="round"/>
 </svg>
