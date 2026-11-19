@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#1e344b"><link rel="manifest" href="manifest.webmanifest"><title>NOVARO Inventory</title><style>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#236E5D"><link rel="manifest" href="manifest.webmanifest"><title>NOVARO Inventory</title><style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');:root{--g:#287d6b;--bg:#f3f7f5;--ink:#263a35;--muted:#71817c;--line:#e2ebe7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Tahoma,Arial}input,select{font:inherit}.wrap{max-width:1050px;margin:auto;padding:16px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:17px;margin:12px 0;box-shadow:0 5px 20px #173d3010}.brand{display:flex;align-items:center;gap:12px}.logo{background:var(--g);color:white;border-radius:13px;padding:12px;font-weight:800}.muted{color:var(--muted)}.hidden{display:none!important}.login{max-width:420px;margin:9vh auto}.field{margin:12px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:white}.tabs{display:flex;gap:8px;overflow:auto;padding:8px 0}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat b{display:block;font-size:26px;margin-top:5px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:500px}td,th{text-align:right;padding:11px;border-bottom:1px solid var(--line);font-size:14px}th{color:var(--muted)}.error{color:#b43f3f;white-space:pre-wrap}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.empty{padding:25px;text-align:center;color:var(--muted)}@media(max-width:600px){.wrap{padding:10px}.stats{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}}/* NOVARO refined interface */
 :root{--g:#287d6b;--bg:#f4f8f6;--ink:#243b34;--muted:#71827c;--line:#e1ebe6}body{font-family:Inter,system-ui,"Segoe UI",Tahoma,Arial,sans-serif;letter-spacing:.01em}.wrap{max-width:1180px;padding:20px}header.row{position:sticky;top:0;z-index:20;background:rgba(244,248,246,.94);backdrop-filter:blur(12px);padding:12px 14px;border:1px solid #e4eee9;border-radius:16px;margin:0 0 14px;box-shadow:0 8px 28px #173d300a}.logo{min-width:44px;min-height:44px;display:grid;place-items:center;box-shadow:0 5px 14px #287d6b25}.card{border-radius:18px;padding:20px;box-shadow:0 8px 28px #173d300c;transition:box-shadow .22s ease,transform .22s ease}.card:hover{box-shadow:0 12px 32px #173d3014}.tabs{gap:9px;padding:10px 2px 14px;scrollbar-width:thin}.field input,.field select,input,select{transition:border-color .18s ease,box-shadow .18s ease}.field input:focus,.field select:focus,input:focus,select:focus{outline:none;border-color:#72b4a1;box-shadow:0 0 0 3px #287d6b18}table{border-spacing:0}th{background:#f7faf8;font-weight:700}td,th{padding:13px 12px}tbody tr{transition:background .16s ease}tbody tr:hover{background:#f7fbf9}#main.page-enter{animation:novaroPageIn .28s cubic-bezier(.2,.75,.25,1) both}
 @keyframes novaroPageIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
@@ -842,6 +842,43 @@ a.auth-back-link:hover{background:#e3eee8!important}
 }
 </style>
 
+<style id="novaro-signature-logo">
+/* NOVARO signature mark — consistent transparent logo across the app */
+#splash .splash-mark,
+.auth-visual .visual-mark,
+.auth-mini-brand .mini-mark,
+#app .app-header .logo{
+  background:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+#splash .splash-mark{border-radius:0!important}
+#splash .splash-mark img,
+.auth-visual .visual-mark img,
+.auth-mini-brand .mini-mark img,
+#app .app-header .logo img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  border-radius:0!important;
+}
+#splash .splash-mark:before,
+#splash .splash-mark:after,
+.auth-visual .visual-mark:before,
+.auth-visual .visual-mark:after,
+.auth-mini-brand .mini-mark:before,
+.auth-mini-brand .mini-mark:after,
+#app .app-header .logo:before,
+#app .app-header .logo:after{content:none!important;display:none!important}
+#splash .splash-mark{width:116px!important;height:116px!important;min-width:116px!important;min-height:116px!important;padding:0!important}
+.auth-visual .visual-mark{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:0!important}
+.auth-mini-brand .mini-mark{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;padding:0!important}
+#app .app-header .logo{width:56px!important;height:56px!important;min-width:56px!important;min-height:56px!important;padding:0!important;border-radius:0!important}
+:root[data-novaro-mode="dark"] #app .app-header .logo{background:transparent!important;box-shadow:none!important}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
