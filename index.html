@@ -1639,7 +1639,7 @@ function startNotificationStream(){
  .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
    const n=payload.new;if(!n)return;
    notificationRows=[n,...notificationRows.filter(x=>x.id!==n.id)].slice(0,40);
-   showNotificationToast(n);
+   renderNotifications();showNotificationToast(n);
  })
  .subscribe();
 }
