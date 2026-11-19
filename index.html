@@ -1650,7 +1650,7 @@ async function novaroTranslateHeadcountInputs(root){
  if(language!=="en"||!root)return;
  const inputs=[...root.querySelectorAll(".hc-role-title,.hc-employee-name,.hc-employee-title")];
  await Promise.all(inputs.map(async input=>{
-  const source=input.dataset.originalValue||input.value;
+  const source=input.value;
   if(!/[\u0600-\u06FF]/.test(source))return;
   const initial=input.dataset.displayValue||input.value;
   const translated=await novaroTranslateHeadcountDisplay(source);
