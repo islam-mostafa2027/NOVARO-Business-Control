@@ -1379,6 +1379,7 @@ function translateCanonical(value){
  let out=String(value??"");
  out=out.replace(/تعديل\s+العدد\s+المطلوب\s*(?:Available\s*to\s*owner_admin\s*Only|متاح\s*ل\s*System\s*owner\s*فقط)\.?/gi,"تعديل العدد المطلوب متاح لمالك النظام فقط.");
  out=out.replace(/Edit\s+Required\s+Headcount\s*(?:Available\s*to\s*owner_admin\s*Only|متاح\s*ل\s*System\s*owner\s*فقط)\.?/gi,"تعديل العدد المطلوب متاح لمالك النظام فقط.");
+ out=out.replace(/owner_admin\s*Only\s*يمكنه\s*تغيير\s*هذه\s*القيمة\.?/gi,"مالك النظام فقط يمكنه تغيير هذه القيمة.");
  const pairs=Object.entries(translations).sort((a,b)=>b[1].length-a[1].length);
  for(const [ar,en] of pairs){if(en)out=out.split(en).join(ar);}
  return out;
