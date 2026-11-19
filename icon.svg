@@ -1,16 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="NOVARO">
   <defs>
-    <linearGradient id="n" x1="150" y1="125" x2="365" y2="390" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#2B806C"/>
-      <stop offset="1" stop-color="#174F42"/>
-    </linearGradient>
-    <linearGradient id="orbit" x1="100" y1="300" x2="450" y2="110" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#236E5D"/>
+    <linearGradient id="novaroGreen" x1="118" y1="390" x2="390" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#174F42"/>
+      <stop offset=".58" stop-color="#236E5D"/>
       <stop offset="1" stop-color="#9ED7BF"/>
     </linearGradient>
   </defs>
-  <path d="M96 302C105 181 190 94 294 94c76 0 138 42 162 112" fill="none" stroke="url(#orbit)" stroke-width="19" stroke-linecap="round"/>
-  <path d="m424 181 33 31 14-43" fill="none" stroke="#9ED7BF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M153 365V151c0-12 9-21 21-21h11c8 0 15 4 21 11l132 168V151c0-12 9-21 21-21h10c12 0 21 9 21 21v214c0 12-9 21-21 21h-10c-8 0-15-4-21-11L206 207v158c0 12-9 21-21 21h-11c-12 0-21-9-21-21Z" fill="url(#n)"/>
-  <path d="M96 302c-1 16 1 31 5 45" fill="none" stroke="#9ED7BF" stroke-width="19" stroke-linecap="round"/>
+  <path d="M142 380V165L370 380V132" fill="none" stroke="url(#novaroGreen)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M142 165L218 89M166 89H218V141" fill="none" stroke="#9ED7BF" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
