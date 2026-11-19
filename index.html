@@ -1807,7 +1807,7 @@ document.addEventListener("click",async e=>{
  }
  const saveRole=e.target.closest("[data-save-role]");
  if(saveRole){
-  const row=saveRole.closest("[data-role-row]"),titleInput=row?.querySelector(".hc-role-title"),enteredTitle=titleInput?titleInput.value.trim():"",role=headcountRoles.find(x=>x.id===saveRole.dataset.saveRole),title=titleInput&&role&&enteredTitle===translateText(role.job_title)?role.job_title:enteredTitle,count=Number(row?.querySelector(".hc-role-count")?.value);
+  const row=saveRole.closest("[data-role-row]"),titleInput=row?.querySelector(".hc-role-title"),enteredTitle=titleInput?titleInput.value.trim():"",role=headcountRoles.find(x=>x.id===saveRole.dataset.saveRole),title=titleInput&&role&&enteredTitle===localizedHeadcountField(role,"job_title")?role.job_title:enteredTitle,count=Number(row?.querySelector(".hc-role-count")?.value);
   if(!canManageHeadcount()||!role)return;
   if(!Number.isInteger(count)||count<0||(profile?.role==="owner_admin"&&!title)){alert(language==="en"?"Enter a valid title and count.":"راجع المسمى الوظيفي والعدد.");return;}
   saveRole.disabled=true;try{
@@ -1827,7 +1827,7 @@ document.addEventListener("click",async e=>{
  }
  const saveEmployee=e.target.closest("[data-save-employee]");
  if(saveEmployee){
-  const row=saveEmployee.closest("[data-employee-row]"),number=row?.querySelector(".hc-employee-number")?.value.trim(),nameInput=row?.querySelector(".hc-employee-name"),enteredName=nameInput?.value.trim()||"",employee=headcountEmployees.find(x=>x.id===saveEmployee.dataset.saveEmployee),name=nameInput&&employee&&enteredName===translateText(employee.full_name)?employee.full_name:enteredName,titleInput=row?.querySelector(".hc-employee-title"),enteredTitle=titleInput?titleInput.value.trim():"",jobTitle=titleInput&&employee&&enteredTitle===translateText(employee.job_title)?employee.job_title:enteredTitle;
+  const row=saveEmployee.closest("[data-employee-row]"),number=row?.querySelector(".hc-employee-number")?.value.trim(),nameInput=row?.querySelector(".hc-employee-name"),enteredName=nameInput?.value.trim()||"",employee=headcountEmployees.find(x=>x.id===saveEmployee.dataset.saveEmployee),name=nameInput&&employee&&enteredName===localizedHeadcountField(employee,"full_name")?employee.full_name:enteredName,titleInput=row?.querySelector(".hc-employee-title"),enteredTitle=titleInput?titleInput.value.trim():"",jobTitle=titleInput&&employee&&enteredTitle===localizedHeadcountField(employee,"job_title")?employee.job_title:enteredTitle;
   if(!canManageHeadcount())return;
   if(!number||!name||!jobTitle){alert(language==="en"?"Enter employee number, name and job title.":"راجع الرقم الوظيفي والاسم والمسمى الوظيفي.");return;}
   saveEmployee.disabled=true;try{const r=await db.from("branch_employees").update({employee_number:number,full_name:name,job_title_id:null,job_title:jobTitle,updated_at:new Date().toISOString()}).eq("id",saveEmployee.dataset.saveEmployee).eq("branch_id",headcountBranchId);if(r.error)throw r.error;await load();render();}catch(error){saveEmployee.disabled=false;alert(error.message||String(error));}return;
