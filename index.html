@@ -1807,7 +1807,7 @@ document.addEventListener("click",async e=>{
  }
  const saveRole=e.target.closest("[data-save-role]");
  if(saveRole){
-  const row=saveRole.closest("[data-role-row]"),titleInput=row?.querySelector(".hc-role-title"),title=titleInput?(titleInput.value.trim()===titleInput.dataset.displayTitle?titleInput.dataset.originalTitle:titleInput.value.trim()):"",count=Number(row?.querySelector(".hc-role-count")?.value);
+  const row=saveRole.closest("[data-role-row]"),titleInput=row?.querySelector(".hc-role-title"),title=titleInput?titleInput.value.trim():"",count=Number(row?.querySelector(".hc-role-count")?.value);
   if(profile?.role!=="owner_admin")return;
   if(!title||!Number.isInteger(count)||count<0){alert(language==="en"?"Enter a valid job title and count.":"راجع المسمى الوظيفي والعدد.");return;}
   saveRole.disabled=true;try{const r=await db.from("branch_headcount_roles").update({job_title:title,required_count:count,updated_at:new Date().toISOString()}).eq("id",saveRole.dataset.saveRole).eq("branch_id",headcountBranchId);if(r.error)throw r.error;await load();render();}catch(error){saveRole.disabled=false;alert(error.message||String(error));}return;
@@ -1823,7 +1823,7 @@ document.addEventListener("click",async e=>{
  }
  const saveEmployee=e.target.closest("[data-save-employee]");
  if(saveEmployee){
-  const row=saveEmployee.closest("[data-employee-row]"),number=row?.querySelector(".hc-employee-number")?.value.trim(),name=row?.querySelector(".hc-employee-name")?.value.trim(),titleInput=row?.querySelector(".hc-employee-title"),jobTitle=titleInput?(titleInput.value.trim()===titleInput.dataset.displayTitle?titleInput.dataset.originalTitle:titleInput.value.trim()):"";
+  const row=saveEmployee.closest("[data-employee-row]"),number=row?.querySelector(".hc-employee-number")?.value.trim(),name=row?.querySelector(".hc-employee-name")?.value.trim(),titleInput=row?.querySelector(".hc-employee-title"),jobTitle=titleInput?titleInput.value.trim():"";
   if(!canManageHeadcount())return;
   if(!number||!name||!jobTitle){alert(language==="en"?"Enter employee number, name and job title.":"راجع الرقم الوظيفي والاسم والمسمى الوظيفي.");return;}
   saveEmployee.disabled=true;try{const r=await db.from("branch_employees").update({employee_number:number,full_name:name,job_title_id:null,job_title:jobTitle,updated_at:new Date().toISOString()}).eq("id",saveEmployee.dataset.saveEmployee).eq("branch_id",headcountBranchId);if(r.error)throw r.error;await load();render();}catch(error){saveEmployee.disabled=false;alert(error.message||String(error));}return;
