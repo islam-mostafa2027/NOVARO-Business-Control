@@ -1632,6 +1632,8 @@ function canManageHeadcount(){return profile?.role==="owner_admin"||profile?.rol
 function localizedHeadcountField(record,field){const ar=record?.[field+"_ar"],en=record?.[field+"_en"],raw=String(record?.[field]??"");const normalize=value=>String(value||"").replace(/branch_manager/gi,language==="en"?"Branch Manager":"مدير فرع").replace(/owner_admin/gi,language==="en"?"System Owner":"مالك النظام").replace(/inventory_staff/gi,language==="en"?"Inventory Staff":"موظف مخزون").replace(/viewer/gi,language==="en"?"View Only":"مشاهدة فقط");return language==="en"?normalize(en||translateText(ar||raw)):normalize(ar||translateCanonical(en||raw));}
 async function novaroTranslateHeadcountDisplay(value){
  const source=String(value||"").trim();if(!source||!/[\u0600-\u06FF]/.test(source))return source;
+ const correctedTitle=source.replace(/تيم\s*ليدر/gi,"Team Leader");
+ if(correctedTitle!==source){try{localStorage.setItem("novaro-headcount-en:"+source,correctedTitle);}catch(error){}return correctedTitle;}
  const cacheKey="novaro-headcount-en:"+source;
  try{const cached=localStorage.getItem(cacheKey);if(cached)return cached;}catch(error){}
  try{
