@@ -1255,6 +1255,37 @@ body::before{
 }
 @media(max-width:360px){.app-header.novaro-header-column .brand-name-main{font-size:13px!important}.app-header.novaro-header-column .brand-name-sub{font-size:9.5px!important}}
 </style>
+
+<style id="novaro-brand-centered-larger-v2">
+/* Center NOVARO over Business Control and slightly enlarge the complete brand title. */
+#app .app-header.novaro-header-column .brand-title{
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ justify-content:center!important;min-width:0!important;text-align:center!important;
+}
+#app .app-header.novaro-header-column .brand-title>b{
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ justify-content:center!important;gap:3px!important;width:max-content!important;
+ max-width:100%!important;text-align:center!important;white-space:normal!important;
+ font-size:0!important;line-height:1.12!important;letter-spacing:0!important;
+}
+#app .app-header.novaro-header-column .brand-name-main{
+ display:block!important;font-size:18px!important;font-weight:900!important;
+ letter-spacing:.055em!important;line-height:1.12!important;text-align:center!important;
+}
+#app .app-header.novaro-header-column .brand-name-sub{
+ display:block!important;font-size:14px!important;font-weight:800!important;
+ letter-spacing:.025em!important;line-height:1.15!important;text-align:center!important;
+ color:var(--muted)!important;
+}
+@media(max-width:600px){
+ #app .app-header.novaro-header-column .brand-name-main{font-size:16px!important}
+ #app .app-header.novaro-header-column .brand-name-sub{font-size:12px!important}
+}
+@media(max-width:360px){
+ #app .app-header.novaro-header-column .brand-name-main{font-size:15px!important}
+ #app .app-header.novaro-header-column .brand-name-sub{font-size:11px!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
