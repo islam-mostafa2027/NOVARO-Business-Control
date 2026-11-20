@@ -1153,7 +1153,9 @@ body::before{
 #app .branch-card-actions-four{
  display:grid!important;
  grid-template-columns:repeat(2,minmax(0,1fr))!important;
- grid-auto-rows:minmax(58px,auto)!important;
+ grid-template-rows:repeat(2,minmax(58px,auto))!important;
+ grid-auto-flow:column!important;
+ grid-auto-rows:unset!important;
  gap:9px!important;
  width:100%!important;
  min-width:0!important;
