@@ -2947,7 +2947,7 @@ document.addEventListener("click",async e=>{
  const saveStatisticsButton=e.target.closest("#saveSalesStatistics");
  if(saveStatisticsButton){
   const pageRoot=saveStatisticsButton.closest(".sales-report-page"),branch=salesReportBranches().find(b=>b.id===pageRoot?.querySelector(".sales-month-card")?.dataset.salesBranchId),month=salesReportSelectedMonth,status=pageRoot?.querySelector("#salesStatisticsStatus"),table=pageRoot?.querySelector(".sales-statistics-table");
-  const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\\d{4}$/;
+  const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/;
   if(!branch||!monthPattern.test(month||"")||!table){if(status)status.textContent=language==="en"?"Choose a valid month first.":"اختار شهر صحيح الأول.";return;}
   const monthCard=pageRoot.querySelector(".sales-month-card");
   if(monthCard?.dataset.loadedMonth!==month){if(status)status.textContent=language==="en"?"Wait for the month to load before saving.":"استنى تحميل الشهر قبل الحفظ.";return;}
