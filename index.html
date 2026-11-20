@@ -4712,6 +4712,66 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 }
 </style>
 
+
+<!-- NOVARO: final transparent day controls and compact day-month-year order -->
+<style id="novaro-sales-day-and-date-order-final-v5">
+/* Date order: day, month, year — keep the three parts grouped, not spread across the card. */
+#app .sales-report-page .sales-month-card > .sales-month-heading,
+#app .sales-report-page .saved-sales-day-selector-card .sales-month-heading{
+ display:flex!important;flex-direction:row!important;align-items:center!important;
+ justify-content:flex-start!important;gap:8px!important;
+ width:100%!important;margin:0 0 15px!important;padding:0!important;
+ direction:ltr!important;text-align:left!important;
+}
+#app .sales-report-page .sales-month-heading > .sales-report-day-input,
+#app .sales-report-page .saved-sales-day-selector-card .sales-date-part.saved-sales-day-picker{
+ order:1!important;flex:0 0 auto!important;margin:0!important;
+}
+#app .sales-report-page .sales-month-heading > .sales-month-static{
+ order:2!important;flex:0 0 auto!important;width:auto!important;min-width:0!important;
+ margin:0!important;text-align:left!important;white-space:nowrap!important;
+}
+#app .sales-report-page .sales-month-heading > .sales-date-year{
+ order:3!important;flex:0 0 auto!important;width:auto!important;min-width:0!important;
+ margin:0!important;text-align:left!important;white-space:nowrap!important;
+}
+#app .sales-report-page .saved-sales-day-selector-card .sales-month-heading{gap:8px!important}
+#app .sales-report-page .saved-sales-day-picker{margin:0!important}
+@media(max-width:600px){
+ #app .sales-report-page .sales-month-card > .sales-month-heading,
+ #app .sales-report-page .saved-sales-day-selector-card .sales-month-heading{gap:7px!important}
+}
+
+/* Every day-picker button stays transparent in every state, including the selected day. */
+#app .sales-report-page .saved-sales-day-toggle,
+#app .sales-report-page .saved-sales-day-toggle:hover,
+#app .sales-report-page .saved-sales-day-toggle:focus,
+#app .sales-report-page .saved-sales-day-toggle:focus-visible,
+#app .sales-report-page .saved-sales-day-toggle:active,
+#app .sales-report-page .saved-sales-day-toggle.active,
+#app .sales-report-page .saved-sales-day-toggle[aria-expanded="true"],
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option,
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option:hover,
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option:focus,
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option:focus-visible,
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option:active,
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option.active,
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option[aria-pressed="true"]{
+ background:transparent!important;background-color:transparent!important;background-image:none!important;
+ box-shadow:none!important;filter:none!important;transform:none!important;
+}
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option.active,
+#app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option[aria-pressed="true"]{
+ color:var(--nv-btn-primary,var(--g,#287d6b))!important;
+ border-color:var(--line,#d5e3dc)!important;font-weight:800!important;
+}
+#app .sales-report-page .saved-sales-day-toggle{background:transparent!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .saved-sales-day-toggle,
+:root[data-novaro-mode="dark"] #app .sales-report-page .saved-sales-day-panel > .saved-sales-day-option{
+ background:transparent!important;background-color:transparent!important;background-image:none!important;
+}
+</style>
+
 </body></html>
 
 <style id="novaro-item-qr-label-position-v1">
