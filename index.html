@@ -1436,7 +1436,14 @@ function applyLanguage(){
  headerLabels.forEach(label=>{
   if(label.closest("#openSettings"))label.textContent=language==="en"?"Settings":"الإعدادات";
   else if(label.closest("#openAbout"))label.textContent=language==="en"?"About":"عن البرنامج";
+  else if(label.closest("#novaroAuditBell"))label.textContent=language==="en"?"Branch Messages":"رسائل الفروع";
  });
+ const auditBell=document.getElementById("novaroAuditBell");
+ if(auditBell){
+  const auditLabel=language==="en"?"Branch messages":"رسائل الفروع";
+  auditBell.setAttribute("aria-label",auditLabel);
+  auditBell.title=auditLabel;
+ }
  const logoutLabel=document.querySelector("#logout span");
  if(logoutLabel)logoutLabel.textContent=language==="en"?"Sign out":"خروج";
  const reportTab=document.querySelector('[data-p="reports"]');
