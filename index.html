@@ -2262,10 +2262,8 @@ document.addEventListener("click",async e=>{
    const now=new Date().toISOString();
    const reportSave=await db.from("sales_report_months").upsert({branch_id:branch.id,report_month:month,...values,created_by:user.id,updated_by:user.id,updated_at:now},{onConflict:"branch_id,report_month"});
    if(reportSave.error)throw reportSave.error;
-   if(managerCanEdit){
-    const targetSave=targetValue===null
-     ?await db.from("sales_report_targets").delete().eq("branch_id",branch.id).eq("report_month",month)
-     :await db.from("sales_report_targets").upsert({branch_id:branch.id,report_month:month,sales_target:targetValue,created_by:user.id,updated_by:user.id,updated_at:now},{onConflict:"branch_id,report_month"});
+   if(managerCanEdit&&targetValue!==null){
+    const targetSave=await db.from("sales_report_targets").upsert({branch_id:branch.id,report_month:month,sales_target:targetValue,created_by:user.id,updated_by:user.id,updated_at:now},{onConflict:"branch_id,report_month"});
     if(targetSave.error)throw targetSave.error;
    }
    if(status)status.textContent=language==="en"?"Report saved successfully.":"تم حفظ التقرير بنجاح.";
