@@ -1515,6 +1515,20 @@ a.auth-back-link:hover{background:#e3eee8!important}
 #app .sales-report-page .sales-metric-currency{position:absolute!important;inset-inline-end:9px!important;top:50%!important;transform:translateY(-50%)!important;z-index:1!important;pointer-events:none!important;white-space:nowrap!important;font-size:10px!important;font-weight:700!important;line-height:1!important;color:var(--muted,#718078)!important;opacity:.9!important;}
 @media(max-width:600px){#app .sales-report-page .sales-metric-input-wrap input{padding-inline-end:35px!important;}#app .sales-report-page .sales-metric-currency{inset-inline-end:7px!important;font-size:9px!important;}}
 </style>
+
+<style id="novaro-saved-sales-day-select-v1">
+/* Keep the saved-day selector visually identical to the compact day field. */
+#app .sales-report-page .sales-month-heading>select.sales-report-day-input{
+ appearance:none!important;-webkit-appearance:none!important;
+ text-align:center!important;text-align-last:center!important;
+ padding:0!important;cursor:pointer!important;font:inherit!important;
+ font-size:14px!important;font-weight:700!important;
+}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-month-heading>select.sales-report-day-input{
+ background:transparent!important;color:#e5eee9!important;border-color:#40564a!important;
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
