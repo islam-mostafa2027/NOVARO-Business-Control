@@ -2597,7 +2597,7 @@ document.addEventListener("click",async e=>{
   if(!Number.isInteger(reportDay)||reportDay<1||reportDay>31){if(status)status.textContent=language==="en"?"Enter a report day from 1 to 31.":"اكتب يوم التقرير من 1 إلى 31.";salesMonthCard.querySelector("#salesReportDay")?.focus();return;}
   const targetValue=readNumber("sales_target"),dailyTarget=readNumber("daily_sales_target"),mtdSales=readNumber("month_to_date_sales"),yesterdaySales=readNumber("yesterday_sales"),yesterdayTip=readNumber("yesterday_tip"),mtdTip=readNumber("month_to_date_tip");
   if([targetValue,dailyTarget,mtdSales,yesterdaySales,yesterdayTip,mtdTip].some(Number.isNaN)){if(status)status.textContent=language==="en"?"Enter valid non-negative numbers.":"أدخل أرقام صحيحة أكبر من أو تساوي صفر.";return;}
-  const managerCanEdit=profile?.role==="branch_manager"&&branch.branch_manager_user_id===user?.id;
+  const managerCanEdit=profile?.role==="owner_admin"||branch.branch_manager_user_id===user?.id||branch.branch_login_user_id===user?.id;
   if(!managerCanEdit&&targetValue!==null){const original=await db.from("sales_report_targets").select("sales_target").eq("branch_id",branch.id).eq("report_month",month).maybeSingle();if(original.error){if(status)status.textContent=original.error.message;return;}if(Number(original.data?.sales_target??0)!==targetValue){if(status)status.textContent=language==="en"?"Only the branch manager can change Sales Target.":"تعديل مستهدف المبيعات متاح لمدير الفرع فقط.";return;}}
   saveButton.disabled=true;if(status)status.textContent=language==="en"?"Saving...":"جارٍ الحفظ...";
   try{
