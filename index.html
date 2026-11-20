@@ -1609,9 +1609,8 @@ function renderNotifications(){
  if(!wrap||!panel||!list||!badge)return;
  const appRoot=$("app");
  if(appRoot&&panel.parentElement!==appRoot)appRoot.appendChild(panel);
- const isOwner=profile?.role==="owner_admin";
- wrap.style.display=isOwner?"inline-flex":"none";
- if(!isOwner){panel.classList.add("hidden");return}
+ wrap.style.display=user?"inline-flex":"none";
+ if(!user){panel.classList.add("hidden");return}
  const activeRows=notificationRows.filter(n=>!n.archived_at),archivedRows=notificationRows.filter(n=>!!n.archived_at);
  const unread=activeRows.filter(n=>!n.read_at).length;
  badge.textContent=unread>99?"99+":String(unread);badge.classList.toggle("hidden",unread===0);
