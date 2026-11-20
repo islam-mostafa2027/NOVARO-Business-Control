@@ -2917,7 +2917,7 @@ function syncStatisticsMonthlyTotals(){
  });
  const totalTickets=sum("[data-stat-total-tickets]"),totalSales=sum("[data-stat-total-sales]"),target=sum("[data-stat-target]");
  const totals={"total-tickets":totalTickets,"total-sales":totalSales,target:target,ach:target>0?totalSales/target*100:null};
- Object.entries(totals).forEach(([key,value])=>{const cell=table.querySelector('[data-stat-total="'+key+'"]');if(cell)cell.textContent=value===null?"—":Number(value.toFixed(2)).toLocaleString("en-US",{maximumFractionDigits:2});});
+ Object.entries(totals).forEach(([key,value])=>{const cell=table.querySelector('[data-stat-total="'+key+'"]');if(cell)cell.textContent=value===null?"—":formatStatisticsNumber(Number(value.toFixed(2)));});
 }
 window.syncStatisticsAverages=syncStatisticsAverages;
 window.syncStatisticsMonthlyTotals=syncStatisticsMonthlyTotals;
