@@ -1636,7 +1636,6 @@ function renderNotifications(){
  list.querySelectorAll("[data-audit-archive]").forEach(button=>{button.onclick=async e=>{e.preventDefault();e.stopPropagation();await archiveNotification(button.dataset.auditArchive);};});
  list.querySelectorAll("[data-audit-restore]").forEach(button=>{button.onclick=async e=>{e.preventDefault();e.stopPropagation();await restoreNotification(button.dataset.auditRestore);};});
  list.querySelectorAll("[data-audit-delete]").forEach(button=>{button.onclick=async e=>{e.preventDefault();e.stopPropagation();await permanentlyDeleteNotification(button.dataset.auditDelete);};});
- const viewAll=$("novaroAuditViewAll");if(viewAll)viewAll.onclick=()=>{novaroAuditShowAll=!novaroAuditShowAll;renderNotifications();};
 }
 async function loadNotifications(){
  if(!user)return;
