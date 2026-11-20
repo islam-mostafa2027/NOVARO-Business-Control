@@ -2248,6 +2248,9 @@ function novaroGoBack(fromPopState=false){
  if(main&&main.querySelector("#save")){novaroStopItemFormCameraRecovery();render();return;}
  if(window.__novaroStocktakeSubView==="category"){window.__novaroStocktakeSubView="categories";renderStocktakeCategories();return;}
  if(window.__novaroStocktakeSubView==="categories"){window.__novaroStocktakeSubView=null;window.__stocktakeView=null;sessions();return;}
+ // Sales report has its own nested steps: report -> month picker -> branch list.
+ if(page==="sales"&&salesReportSelectedMonth){salesReportSelectedMonth="";render();return;}
+ if(page==="sales"&&salesReportBranchId){salesReportBranchId="";salesReportSelectedMonth="";render();return;}
  if(novaroPageHistory.length){page=novaroPageHistory.pop();render();return;}
  if(page!=="home"){page="home";render();return;}
  if(fromPopState&&window.__novaroHistoryReady){try{history.pushState({novaroApp:true,kind:"root"},"",location.href)}catch(error){console.warn("NOVARO root history restore failed:",error)}}
