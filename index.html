@@ -1409,6 +1409,17 @@ a.auth-back-link:hover{background:#e3eee8!important}
  #app .sales-report-page .sales-entry-card .sales-entry-grid>button.sales-entry-month.soft:not(.active):not(.selected):not(.is-selected):not([aria-pressed="true"]){min-height:36px!important;height:36px!important;padding:3px 4px!important;font-size:11px!important;border-radius:9px!important}
 }
 </style>
+<style id="novaro-sales-month-buttons-inline-final-v4">
+#app .sales-report-page .sales-entry-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;margin-top:12px!important}
+#app .sales-report-page .sales-entry-grid>.sales-entry-month{width:100%!important;min-width:0!important;min-height:36px!important;height:36px!important;padding:3px 4px!important;font-size:11px!important;font-weight:700!important;line-height:1.2!important;border-radius:9px!important}
+#app .sales-entry-card .sales-year-control{display:flex!important;align-items:center!important;gap:7px!important}
+#app .sales-entry-card .sales-year-control label{margin:0!important;white-space:nowrap!important}
+#app .sales-entry-card .sales-year-control #salesEntryYear{width:96px!important;flex:0 0 96px!important;height:38px!important;min-height:38px!important}
+@media(max-width:600px){
+ #app .sales-report-page .sales-entry-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+ #app .sales-report-page .sales-entry-grid>.sales-entry-month{height:36px!important;min-height:36px!important;font-size:11px!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -2934,7 +2945,7 @@ if(page==="sales"){
  }else if(!salesReportSelectedMonth){
   const en=language==="en",months=en?["January","February","March","April","May","June","July","August","September","October","November","December"]:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   const currentSalesYear=new Date().getFullYear();
-  const monthButtons=months.map((name,i)=>'<button type="button" class="soft sales-entry-month" data-sales-entry-month="'+(i+1)+'"><strong>'+name+'</strong></button>').join("");
+  const monthButtons=months.map((name,i)=>'<button type="button" class="sales-entry-month" data-sales-entry-month="'+(i+1)+'" style="background:var(--nv-btn-soft-bg,#edf3f0)!important;background-image:none!important;color:var(--nv-btn-soft-text,#315f70)!important;-webkit-text-fill-color:var(--nv-btn-soft-text,#315f70)!important;border:1px solid var(--nv-btn-border,#d5e3dc)!important;box-shadow:none!important;min-height:36px!important;height:36px!important;padding:3px 4px!important;border-radius:9px!important;font-size:11px!important"><strong>'+name+'</strong></button>').join("");
   m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><div class="sales-year-control"><label for="salesEntryYear">'+(en?"Year":"السنة")+'</label><input id="salesEntryYear" type="number" inputmode="numeric" min="1" max="9999" step="1" value="'+currentSalesYear+'" placeholder="'+(en?"Year":"السنة")+'" aria-label="'+(en?"Report year":"سنة التقرير")+'"></div></div><div class="sales-entry-grid">'+monthButtons+'</div></div></section>';
  }else{
   const en=language==="en",managerCanEdit=profile?.role==="branch_manager"&&selectedSalesBranch.branch_manager_user_id===user?.id;
