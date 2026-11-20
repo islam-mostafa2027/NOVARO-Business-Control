@@ -1433,6 +1433,15 @@ a.auth-back-link:hover{background:#e3eee8!important}
  display:block!important;order:1!important;margin:0!important;text-align:left!important;white-space:nowrap!important;
 }
 </style>
+
+<!-- NOVARO: keep daily sales target label on one line -->
+<style id="novaro-daily-sales-target-label-nowrap">
+/* Keep only the daily sales target caption on a single line. */
+#app .sales-report-page .sales-metric label[for="salesMetric_daily_sales_target"]{
+ white-space:nowrap!important;overflow:visible!important;overflow-wrap:normal!important;word-break:keep-all!important;
+ font-size:11px!important;letter-spacing:-.2px!important;
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
