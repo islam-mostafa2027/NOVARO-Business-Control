@@ -1746,6 +1746,22 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 :root[data-novaro-mode="dark"] #app .sales-report-page .saved-sales-day-option.active{background:#287d6b!important;border-color:#287d6b!important}
 @media(max-width:600px){#app .sales-report-page .saved-sales-day-selector-card>.sales-month-heading{gap:7px!important}#app .sales-report-page .saved-sales-day-selector-card .sales-date-year,#app .sales-report-page .saved-sales-day-selector-card .sales-month-static,#app .sales-report-page .saved-sales-day-selector-card .saved-sales-day-picker{min-height:70px!important;padding:7px 3px!important}#app .sales-report-page .saved-sales-day-selector-card .sales-date-year:before,#app .sales-report-page .saved-sales-day-selector-card .sales-month-static:before,#app .sales-report-page .saved-sales-day-selector-card .saved-sales-day-picker:before{font-size:12px!important}#app .sales-report-page .saved-sales-day-selector-card .sales-date-year,#app .sales-report-page .saved-sales-day-selector-card .sales-month-static,#app .sales-report-page .saved-sales-day-selector-card .saved-sales-day-toggle{font-size:12px!important}#app .sales-report-page .saved-sales-day-panel{width:min(330px,calc(100vw - 34px))!important;gap:4px!important;padding:8px!important}#app .sales-report-page .saved-sales-day-option{height:45px!important;min-height:45px!important}#app .sales-report-page .saved-sales-day-option .saved-sales-day-weekday{font-size:8px!important}}
 </style>
+
+<style id="novaro-sales-year-field-rectangular-v1">
+/* Slightly wider year field: a clear rectangular shape, without changing date-picker behavior. */
+#app .sales-entry-card .sales-year-control #salesEntryYear{
+  width:120px!important;flex:0 0 120px!important;
+  min-width:120px!important;height:42px!important;min-height:42px!important;
+  box-sizing:border-box!important;border-radius:9px!important;
+}
+@media(max-width:600px){
+  #app .sales-entry-card .sales-year-control #salesEntryYear{
+    width:108px!important;flex-basis:108px!important;min-width:108px!important;
+    height:40px!important;min-height:40px!important;
+  }
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
