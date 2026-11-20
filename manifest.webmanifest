@@ -1,7 +1,7 @@
 {
-  "name": "NOVARO Inventory",
+  "name": "NOVARO Business Control",
   "short_name": "NOVARO",
-  "description": "NOVARO Inventory Management",
+  "description": "NOVARO Business Control — Restaurant Business Management Platform",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "./",
