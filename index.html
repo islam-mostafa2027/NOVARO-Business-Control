@@ -1453,10 +1453,10 @@ a.auth-back-link:hover{background:#e3eee8!important}
 @media(max-width:600px){#app .sales-report-page .sales-month-actions{gap:7px!important}#app .sales-report-page .sales-saved-reports-pill{min-height:38px!important;padding:7px 12px!important;font-size:12px!important}}
 </style>
 <style id="novaro-sales-report-day-input-v1">
-/* Manual day number beside the selected month; transparent and sized like the header message button. */
+/* Match the actual message button dimensions: 62px desktop, 58px mobile. */
 #app .sales-report-page .sales-month-heading>.sales-report-day-input{
  order:2!important;flex:0 0 62px!important;width:62px!important;min-width:62px!important;max-width:62px!important;
- height:62px!important;min-height:62px!important;box-sizing:border-box!important;padding:6px!important;
+ height:62px!important;min-height:62px!important;max-height:62px!important;box-sizing:border-box!important;padding:6px!important;
  border:1px solid var(--line,#dfe9e3)!important;border-radius:13px!important;
  background:transparent!important;color:var(--text,var(--ink))!important;
  text-align:center!important;font-size:16px!important;font-weight:700!important;direction:ltr!important
@@ -1469,6 +1469,12 @@ a.auth-back-link:hover{background:#e3eee8!important}
 }
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-month-heading>.sales-report-day-input{
  background:transparent!important;color:#e5eee9!important;border-color:#40564a!important
+}
+@media(max-width:600px){
+ #app .sales-report-page .sales-month-heading>.sales-report-day-input{
+  flex-basis:58px!important;width:58px!important;min-width:58px!important;max-width:58px!important;
+  height:58px!important;min-height:58px!important;max-height:58px!important;
+ }
 }
 </style>\n</head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
