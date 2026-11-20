@@ -2260,7 +2260,7 @@ document.addEventListener("click",async e=>{
  const chosenSalesEntryMonth=e.target.closest("[data-sales-entry-month]");
  if(chosenSalesEntryMonth){
   const yearInput=$("salesEntryYear"),year=String(yearInput?.value||"").trim(),monthIndex=Number(chosenSalesEntryMonth.dataset.salesEntryMonth)-1;
-  if(!/^\\d{1,4}$/.test(year)||Number(year)<1||Number(year)>9999){yearInput?.focus();if(yearInput)yearInput.setCustomValidity(language==="en"?"Enter a valid year.":"اكتب سنة صحيحة.");yearInput?.reportValidity();return;}
+  if(!/^\d{1,4}$/.test(year)||Number(year)<1||Number(year)>9999){yearInput?.focus();if(yearInput)yearInput.setCustomValidity(language==="en"?"Enter a valid year.":"اكتب سنة صحيحة.");yearInput?.reportValidity();return;}
   yearInput?.setCustomValidity("");
   const shortMonths=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   salesReportSelectedMonth=shortMonths[monthIndex]+"-"+year;
