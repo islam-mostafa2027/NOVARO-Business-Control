@@ -2262,13 +2262,6 @@ document.addEventListener("click",async e=>{
   const year=$("salesEntryYear")?.value||String(new Date().getFullYear()),monthIndex=Number(chosenSalesEntryMonth.dataset.salesEntryMonth)-1;
   const shortMonths=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   salesReportSelectedMonth=shortMonths[monthIndex]+"-"+year;
-  const selected=$("salesEntrySelected");if(selected)selected.textContent=language==="en"?salesReportSelectedMonth:arabicMonths[monthIndex]+" "+year;
-  document.querySelectorAll("[data-sales-entry-month]").forEach(button=>button.classList.toggle("active",button===chosenSalesEntryMonth));
-  const status=$("salesEntryStatus");if(status)status.textContent="";
-  return;
- }
- if(e.target.closest("#salesEntryOpen")){
-  if(!/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/.test(salesReportSelectedMonth)){const status=$("salesEntryStatus");if(status)status.textContent=language==="en"?"Choose a month first.":"اختار الشهر الأول.";return;}
   render();
   return;
  }
@@ -2795,7 +2788,7 @@ if(page==="sales"){
   const en=language==="en",months=en?["January","February","March","April","May","June","July","August","September","October","November","December"]:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   const years=Array.from({length:16},(_,i)=>{const y=new Date().getFullYear()-10+i;return '<option value="'+y+'" '+(y===new Date().getFullYear()?'selected':'')+'>'+y+'</option>';}).join("");
   const monthButtons=months.map((name,i)=>'<button type="button" class="soft sales-entry-month" data-sales-entry-month="'+(i+1)+'"><strong>'+name+'</strong></button>').join("");
-  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><p class="muted">'+(en?"Choose a year and one of its 12 months.":"اختار السنة والشهر من الشهور الـ12.")+'</p></div><label for="salesEntryYear">'+(en?"Year":"السنة")+'</label><select id="salesEntryYear">'+years+'</select><div class="sales-entry-grid">'+monthButtons+'</div><div class="sales-entry-footer"><div class="sales-entry-date"><small>'+(en?"Selected month":"الشهر المختار")+'</small><strong id="salesEntrySelected">'+(en?"No month selected":"لم يتم اختيار شهر")+'</strong></div><button type="button" class="primary" id="salesEntryOpen">'+(en?"Save & Open":"حفظ وفتح")+'</button></div><span class="muted" id="salesEntryStatus" role="status"></span></div></section>';
+  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><p class="muted">'+(en?"Choose a year and one of its 12 months.":"اختار السنة والشهر من الشهور الـ12.")+'</p></div><label for="salesEntryYear">'+(en?"Year":"السنة")+'</label><select id="salesEntryYear">'+years+'</select><div class="sales-entry-grid">'+monthButtons+'</div></div></section>';
  }else{
   const en=language==="en",managerCanEdit=profile?.role==="branch_manager"&&selectedSalesBranch.branch_manager_user_id===user?.id;
   const monthParts=salesReportSelectedMonth.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d{4})$/),monthIndex=monthParts?["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthParts[1]):0,year=monthParts?monthParts[2]:String(new Date().getFullYear()),arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
