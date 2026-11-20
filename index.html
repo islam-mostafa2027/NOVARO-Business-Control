@@ -1626,7 +1626,7 @@ async function loadNotifications(){
  const list=$("novaroAuditList");
  if(list)list.innerHTML='<div class="notification-empty">'+(language==="en"?"Loading messages…":"جاري تحميل الرسائل…")+'</div>';
  try{
-  const {data,error}=await db.from("notifications").select("id,title,body,created_at,read_at,branch_id,action,entity_table").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(40);
+  const {data,error}=await db.from("notifications").select("id,title,body,created_at,read_at,branch_id,action,entity_table").eq("recipient_id",user.id).order("created_at",{ascending:false});
   if(error)throw error;
   notificationRows=data||[];renderNotifications();
  }catch(error){
@@ -1754,7 +1754,7 @@ function startNotificationStream(){
  notificationChannel=db.channel("novaro-notifications-"+user.id)
  .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
    const n=payload.new;if(!n)return;
-   notificationRows=[n,...notificationRows.filter(x=>x.id!==n.id)].slice(0,40);
+   notificationRows=[n,...notificationRows.filter(x=>x.id!==n.id)];
    renderNotifications();showNotificationToast(n);
  })
  .subscribe();
@@ -4270,4 +4270,30 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #app .notification-entry b{color:#e5eee9!important}
 :root[data-novaro-mode="dark"] #app .notification-entry p{color:#c3d1c9!important}
 @media(max-width:600px){#app .notification-panel{top:82px!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;width:calc(100vw - 18px)!important;border-radius:16px!important;padding:10px!important}#app .notification-panel-head{padding:8px 3px 10px!important}}
+</style>
+
+
+<style id="novaro-notifications-full-content-fix">
+/* Keep every notification and its full text readable on mobile and desktop. */
+#app .notification-panel{
+ position:fixed!important;z-index:10052!important;
+ top:calc(env(safe-area-inset-top) + 72px)!important;
+ bottom:calc(env(safe-area-inset-bottom) + 78px)!important;
+ left:50%!important;right:auto!important;transform:translateX(-50%)!important;
+ width:min(520px,calc(100vw - 20px))!important;
+ height:auto!important;max-height:none!important;min-height:0!important;
+ box-sizing:border-box!important;overflow-x:hidden!important;overflow-y:auto!important;
+ overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;
+}
+#app #novaroAuditList{display:block!important;min-width:0!important;width:100%!important;overflow:visible!important}
+#app .notification-entry{display:block!important;width:100%!important;box-sizing:border-box!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
+#app .notification-entry .notification-detail{
+ display:block!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
+ overflow:visible!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;
+ text-overflow:clip!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;
+}
+#app .notification-panel-head{position:sticky!important;top:0!important;z-index:3!important}
+@media(max-width:600px){
+ #app .notification-panel{top:calc(env(safe-area-inset-top) + 68px)!important;bottom:calc(env(safe-area-inset-bottom) + 72px)!important;width:calc(100vw - 16px)!important;padding:10px!important}
+}
 </style>
