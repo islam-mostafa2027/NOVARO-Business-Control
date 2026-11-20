@@ -3037,14 +3037,32 @@ document.addEventListener("click",async e=>{
   render();
   return;
  }
+ if(salesMonthCard&&e.target.closest("#deleteSavedSalesDay")){
+  const branchId=salesMonthCard.dataset.salesBranchId,month=salesReportSelectedMonth,day=Number(salesSavedReportsDay),status=$("savedSalesReportStatus"),button=e.target.closest("#deleteSavedSalesDay");
+  if(!branchId||!month||!day)return;
+  const confirmed=window.confirm(language==="en"?"Delete the saved sales report for this day? This action cannot be undone.":"هل تريد حذف تقرير المبيعات المحفوظ لهذا اليوم؟ لا يمكن التراجع عن الحذف.");
+  if(!confirmed)return;
+  button.disabled=true;button.textContent=language==="en"?"Deleting...":"جارٍ الحذف...";
+  try{
+   const result=await db.from("sales_report_daily_entries").delete().eq("branch_id",branchId).eq("report_month",month).eq("report_day",day);
+   if(result.error)throw result.error;
+   salesMonthCard.hidden=true;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{input.value="";});
+   button.hidden=true;
+   if(status){status.hidden=false;status.textContent=language==="en"?"Saved report deleted.":"تم حذف التقرير المحفوظ.";}
+  }catch(error){
+   if(status){status.hidden=false;status.textContent=(language==="en"?"Could not delete report: ":"تعذر حذف التقرير: ")+(error.message||String(error));}
+   button.textContent=language==="en"?"Delete Report":"حذف التقرير";
+  }finally{button.disabled=false;}
+  return;
+ }
  if(salesMonthCard&&e.target.closest("#loadSavedSalesDay")){
   const branch=salesReportBranches().find(b=>b.id===salesMonthCard.dataset.salesBranchId),month=salesReportSelectedMonth,day=Number(salesSavedReportsDay),status=$("savedSalesReportStatus"),button=e.target.closest("#loadSavedSalesDay");
   button.disabled=true;if(status){status.hidden=false;status.textContent=language==="en"?"Loading...":"جارٍ التحميل...";}
   try{
    const result=await db.from("sales_report_daily_entries").select("sales_target,daily_sales_target,month_to_date_sales,yesterday_sales,yesterday_tip,month_to_date_tip").eq("branch_id",branch.id).eq("report_month",month).eq("report_day",day).maybeSingle();
    if(result.error)throw result.error;
-   if(result.data){salesMonthCard.hidden=false;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{const value=result.data[input.dataset.savedSalesMetric];input.value=value===null||value===undefined?"":formatStatisticsNumber(statisticsNumber(value));});if(status)status.hidden=true;}
-   else{salesMonthCard.hidden=true;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{input.value="";});if(status){status.hidden=false;status.textContent=language==="en"?"No data for this day.":"لا توجد بيانات لهذا اليوم.";}}
+   if(result.data){salesMonthCard.hidden=false;const deleteButton=$("deleteSavedSalesDay");if(deleteButton){deleteButton.hidden=false;deleteButton.textContent=language==="en"?"Delete Report":"حذف التقرير";}salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{const value=result.data[input.dataset.savedSalesMetric];input.value=value===null||value===undefined?"":formatStatisticsNumber(statisticsNumber(value));});if(status)status.hidden=true;}
+   else{salesMonthCard.hidden=true;const deleteButton=$("deleteSavedSalesDay");if(deleteButton)deleteButton.hidden=true;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{input.value="";});if(status){status.hidden=false;status.textContent=language==="en"?"No data for this day.":"لا توجد بيانات لهذا اليوم.";}}
   }catch(error){if(status){status.hidden=false;status.textContent=(language==="en"?"Could not load: ":"تعذر تحميل التقرير: ")+(error.message||String(error));}salesMonthCard.hidden=true;}
   finally{button.disabled=false;}
   return;
@@ -3586,7 +3604,7 @@ if(page==="sales"){
   const selectedSalesWeekday=salesWeekdays[new Date(Number(yr),mi,Number(salesSavedReportsDay)).getDay()];
   const selectedSalesDayLabel=selectedSalesWeekday+" - "+salesDayDigits(salesSavedReportsDay);
   const dayOptions=Array.from({length:salesSavedDayCount},(_,i)=>{const day=i+1,weekday=salesWeekdays[new Date(Number(yr),mi,day).getDay()],active=Number(salesSavedReportsDay)===day;return '<button type="button" class="saved-sales-day-option'+(active?" active":"")+'" data-saved-sales-day="'+day+'" data-day-name="'+weekday+'" aria-label="'+weekday+' '+day+'" aria-pressed="'+(active?'true':'false')+'"><span class="saved-sales-day-number">'+salesDayDigits(day)+'</span><span class="saved-sales-day-weekday">'+weekday+'</span></button>';}).join("");
-  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="sales-report-card-title">' +(en?"Saved Sales Reports":"التقارير المحفوظة")+ '</div><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="savedSalesReportsBack">← '+(en?"Back to report":"العودة للتقرير")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-month-card saved-sales-day-selector-card"><div class="sales-month-heading"><div class="sales-date-field"><span class="sales-date-label">'+(en?"Day":"اليوم")+'</span><div class="saved-sales-day-picker"><button type="button" id="savedSalesDayToggle" class="saved-sales-day-toggle" aria-expanded="false" aria-controls="savedSalesDayPanel"><span class="sales-report-day-number" data-saved-day-value>'+salesDayDigits(salesSavedReportsDay)+'</span><span class="sales-report-day-weekday" data-saved-day-weekday>'+selectedSalesWeekday+'</span><span aria-hidden="true">⌄</span></button><div id="savedSalesDayPanel" class="saved-sales-day-panel" hidden>'+dayOptions+'</div></div></div><div class="sales-date-field"><span class="sales-date-label">'+(en?"Month":"الشهر")+'</span><strong class="sales-date-value">'+(en?["January","February","March","April","May","June","July","August","September","October","November","December"][mi]:arMonths[mi])+'</strong></div><div class="sales-date-field"><span class="sales-date-label">'+(en?"Year":"السنة")+'</span><strong class="sales-date-value">'+yrLabel+'</strong></div></div></div>'+(salesSavedReportsDaySelected?'<p class="muted" id="savedSalesReportStatus" aria-live="polite" style="text-align:center;padding:12px 8px">' +(en?"Loading saved report...":"جارٍ تحميل التقرير المحفوظ...")+'</p><div id="savedSalesReportCard" hidden class="sales-month-card saved-sales-report-card" data-sales-branch-id="'+esc(selectedSalesBranch.id)+'"><div class="sales-metrics-grid">'+metric("sales_target",en?"Sales Target":"مستهدف المبيعات")+metric("daily_sales_target",en?"Daily Sales Target":"المستهدف اليومي للمبيعات")+metric("month_to_date_sales",en?"Month To Date Sales":"مبيعات الشهر حتى تاريخه")+metric("yesterday_sales",en?"Yesterday Sales":"مبيعات أمس")+metric("yesterday_tip",en?"Yesterday Tip":"إكرامية أمس")+metric("month_to_date_tip",en?"Month To Date Tip":"إكرامية الشهر حتى تاريخه")+'</div><button type="button" id="loadSavedSalesDay" style="display:none!important" aria-hidden="true" tabindex="-1">Load</button></div>':'')+'</section>';
+  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="sales-report-card-title">' +(en?"Saved Sales Reports":"التقارير المحفوظة")+ '</div><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="savedSalesReportsBack">← '+(en?"Back to report":"العودة للتقرير")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-month-card saved-sales-day-selector-card"><div class="sales-month-heading"><div class="sales-date-field"><span class="sales-date-label">'+(en?"Day":"اليوم")+'</span><div class="saved-sales-day-picker"><button type="button" id="savedSalesDayToggle" class="saved-sales-day-toggle" aria-expanded="false" aria-controls="savedSalesDayPanel"><span class="sales-report-day-number" data-saved-day-value>'+salesDayDigits(salesSavedReportsDay)+'</span><span class="sales-report-day-weekday" data-saved-day-weekday>'+selectedSalesWeekday+'</span><span aria-hidden="true">⌄</span></button><div id="savedSalesDayPanel" class="saved-sales-day-panel" hidden>'+dayOptions+'</div></div></div><div class="sales-date-field"><span class="sales-date-label">'+(en?"Month":"الشهر")+'</span><strong class="sales-date-value">'+(en?["January","February","March","April","May","June","July","August","September","October","November","December"][mi]:arMonths[mi])+'</strong></div><div class="sales-date-field"><span class="sales-date-label">'+(en?"Year":"السنة")+'</span><strong class="sales-date-value">'+yrLabel+'</strong></div></div></div>'+(salesSavedReportsDaySelected?'<p class="muted" id="savedSalesReportStatus" aria-live="polite" style="text-align:center;padding:12px 8px">' +(en?"Loading saved report...":"جارٍ تحميل التقرير المحفوظ...")+'</p><div id="savedSalesReportCard" hidden class="sales-month-card saved-sales-report-card" data-sales-branch-id="'+esc(selectedSalesBranch.id)+'"><div class="sales-metrics-grid">'+metric("sales_target",en?"Sales Target":"مستهدف المبيعات")+metric("daily_sales_target",en?"Daily Sales Target":"المستهدف اليومي للمبيعات")+metric("month_to_date_sales",en?"Month To Date Sales":"مبيعات الشهر حتى تاريخه")+metric("yesterday_sales",en?"Yesterday Sales":"مبيعات أمس")+metric("yesterday_tip",en?"Yesterday Tip":"إكرامية أمس")+metric("month_to_date_tip",en?"Month To Date Tip":"إكرامية الشهر حتى تاريخه")+'</div><div class="saved-sales-report-actions"><button type="button" class="saved-sales-delete-pill" id="deleteSavedSalesDay" hidden>'+(en?"Delete Report":"حذف التقرير")+'</button></div><button type="button" id="loadSavedSalesDay" style="display:none!important" aria-hidden="true" tabindex="-1">Load</button></div>':'')+'</section>';
   
   $("loadSavedSalesDay")?.click();
  }else if(!salesReportSelectedMonth){
@@ -6343,3 +6361,11 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 
 
+
+<style id="novaro-saved-sales-delete-pill-v1">
+#app .saved-sales-report-actions{display:flex!important;justify-content:flex-end!important;margin-top:14px!important}
+#app .saved-sales-delete-pill{min-height:38px!important;padding:7px 18px!important;border-radius:999px!important;border:1px solid #d66a6a!important;background:rgba(190,55,55,.09)!important;color:#b83d3d!important;font-size:12px!important;font-weight:700!important;white-space:nowrap!important}
+#app .saved-sales-delete-pill:disabled{opacity:.55!important;cursor:wait!important}
+:root[data-novaro-mode="dark"] #app .saved-sales-delete-pill{color:#ff9999!important;border-color:#8c4545!important;background:rgba(190,55,55,.14)!important}
+@media(max-width:600px){#app .saved-sales-delete-pill{min-height:36px!important;padding:6px 15px!important;font-size:12px!important}}
+</style>
