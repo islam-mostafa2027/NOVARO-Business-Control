@@ -1089,6 +1089,64 @@ body::before{
 }
 </style>
 
+<style id="novaro-content-transparency-v1">
+/* Let the restaurant photograph show gently through app surfaces without fading text or controls. */
+#app .app-header,
+#app .tabs,
+#app .card,
+#app .branch-panel,
+#app .branch-card,
+#app .kpi-card,
+#app .tablewrap,
+#app .dashboard-row,
+#app .stat-card,
+#app .stocktake-session-card,
+#app .novaro-category-main-card,
+#app .novaro-category-area-pill,
+#app .settings-section,
+#app .settings-card,
+#app .notification-panel,
+#app .notification-toast{
+  background-color:rgba(255,255,255,.76)!important;
+  background-image:none!important;
+  -webkit-backdrop-filter:blur(5px);
+  backdrop-filter:blur(5px);
+}
+#app .app-header{background-color:rgba(255,255,255,.72)!important}
+#app .tabs{background-color:rgba(255,255,255,.78)!important}
+#app .tablewrap{background-color:rgba(255,255,255,.80)!important}
+#app .card table,
+#app .tablewrap table{background:transparent!important}
+#app .card tbody tr,
+#app .tablewrap tbody tr{background-color:rgba(255,255,255,.28)!important}
+:root[data-novaro-mode="dark"] #app .app-header,
+:root[data-novaro-mode="dark"] #app .tabs,
+:root[data-novaro-mode="dark"] #app .card,
+:root[data-novaro-mode="dark"] #app .branch-panel,
+:root[data-novaro-mode="dark"] #app .branch-card,
+:root[data-novaro-mode="dark"] #app .kpi-card,
+:root[data-novaro-mode="dark"] #app .tablewrap,
+:root[data-novaro-mode="dark"] #app .dashboard-row,
+:root[data-novaro-mode="dark"] #app .stat-card,
+:root[data-novaro-mode="dark"] #app .stocktake-session-card,
+:root[data-novaro-mode="dark"] #app .novaro-category-main-card,
+:root[data-novaro-mode="dark"] #app .novaro-category-area-pill,
+:root[data-novaro-mode="dark"] #app .settings-section,
+:root[data-novaro-mode="dark"] #app .settings-card,
+:root[data-novaro-mode="dark"] #app .notification-panel,
+:root[data-novaro-mode="dark"] #app .notification-toast{
+  background-color:rgba(32,47,40,.78)!important;
+  background-image:none!important;
+  -webkit-backdrop-filter:blur(5px);
+  backdrop-filter:blur(5px);
+}
+:root[data-novaro-mode="dark"] #app .card tbody tr,
+:root[data-novaro-mode="dark"] #app .tablewrap tbody tr{background-color:rgba(32,47,40,.30)!important}
+@media(max-width:600px){
+  #app .app-header,#app .card,#app .tablewrap{ -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
