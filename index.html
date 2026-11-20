@@ -2924,14 +2924,19 @@ window.syncStatisticsMonthlyTotals=syncStatisticsMonthlyTotals;
 function syncSelectedStatisticsDailyTarget(){
  const page=document.querySelector(".sales-report-page");if(!page)return;
  const source=page.querySelector('[data-sales-metric="daily_sales_target"]'),display=page.querySelector("#salesStatisticsDailyTargetValue");
- const day=Number(salesReportSelectedDay||page.querySelector("#salesReportDay")?.value||0);
- const table=page.querySelector(".sales-statistics-table"),row=day>0?table?.querySelectorAll("tbody tr")[day-1]:null,target=row?.querySelector("[data-stat-target]");
  const raw=String(source?.value??"").trim(),value=statisticsNumber(raw);
  if(display)display.textContent=raw!==""&&Number.isFinite(value)?formatStatisticsNumber(value)+" "+(language==="en"?"EGP":"ج.م"):"—";
- if(target&&raw!==""){target.value=Number.isFinite(value)?formatStatisticsNumber(value):"";syncStatisticsAverages(row);}
 }
-document.addEventListener("input",e=>{if(e.target.matches&&e.target.matches('.sales-report-page [data-sales-metric="daily_sales_target"]'))syncSelectedStatisticsDailyTarget();},true);
-document.addEventListener("change",e=>{if(e.target.matches&&e.target.matches('.sales-report-page [data-sales-metric="daily_sales_target"]'))syncSelectedStatisticsDailyTarget();},true);
+function applySelectedDailyTargetToStatisticsRow(){
+ const page=document.querySelector(".sales-report-page");if(!page)return;
+ const day=Number(salesReportSelectedDay||page.querySelector("#salesReportDay")?.value||0),source=page.querySelector('[data-sales-metric="daily_sales_target"]');
+ const row=day>0?page.querySelectorAll(".sales-statistics-table tbody tr")[day-1]:null,target=row?.querySelector("[data-stat-target]");
+ const raw=String(source?.value??"").trim(),value=statisticsNumber(raw);
+ if(target&&raw!==""){target.value=Number.isFinite(value)?formatStatisticsNumber(value):"";syncStatisticsAverages(row);}
+ syncSelectedStatisticsDailyTarget();
+}
+document.addEventListener("input",e=>{if(e.target.matches&&e.target.matches('.sales-report-page [data-sales-metric="daily_sales_target"]'))applySelectedDailyTargetToStatisticsRow();},true);
+document.addEventListener("change",e=>{if(e.target.matches&&e.target.matches('.sales-report-page [data-sales-metric="daily_sales_target"]'))applySelectedDailyTargetToStatisticsRow();},true);
 document.addEventListener("input",e=>{const field=e.target.closest&&e.target.closest("[data-stat-tickets],[data-stat-sales],[data-stat-target]");if(field)syncStatisticsAverages(field.closest("tr"));},true);
 function setActiveStatisticsRow(row){if(!row)return;const table=row.closest(".sales-statistics-table");if(!table)return;table.querySelectorAll("tbody tr.sales-stat-row-active").forEach(active=>active.classList.remove("sales-stat-row-active"));row.classList.add("sales-stat-row-active");}
 document.addEventListener("click",e=>{const row=e.target.closest&&e.target.closest(".sales-report-page .sales-statistics-table tbody tr");if(row)setActiveStatisticsRow(row);},true);
