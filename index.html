@@ -1767,6 +1767,33 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-report-card-title{color:#e5eee9!important;border-color:#40564a!important;}
 @media(max-width:600px){#app .sales-report-page .sales-report-card-title{font-size:13px;margin-bottom:12px;padding-bottom:8px;}}
 </style>
+
+<style id="novaro-saved-sales-branch-back-row-v1">
+/* Saved sales reports: back action on the right, branch details at the far left on the same row. */
+#app .sales-report-page .headcount-detail-top{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  direction:rtl!important;
+}
+#app .sales-report-page .headcount-detail-top > div{
+  flex:0 1 auto!important;
+  min-width:0!important;
+  margin-inline-start:auto!important;
+  text-align:start!important;
+}
+#app .sales-report-page .headcount-detail-top .headcount-back{
+  flex:0 0 auto!important;
+  order:0!important;
+  white-space:nowrap!important;
+}
+#app .sales-report-page .headcount-detail-top h3,
+#app .sales-report-page .headcount-detail-top p{
+  overflow-wrap:anywhere!important;
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
