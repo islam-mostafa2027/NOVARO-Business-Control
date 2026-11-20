@@ -3341,7 +3341,7 @@ if(page==="sales"){
   salesReportSelectedDay=Math.min(Math.max(0,Number(salesReportSelectedDay)||0),salesReportDayCount);
   const salesReportDayDigits=n=>en?String(n):String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[Number(d)]);
   const salesReportWeekdayName=day=>new Intl.DateTimeFormat(en?"en":"ar-EG",{weekday:"long"}).format(new Date(Number(year),monthIndex,day));
-  const salesReportDayButtons=Array.from({length:salesReportDayCount},(_,i)=>{const day=i+1,weekday=salesReportWeekdayName(day);return '<button type="button" class="sales-report-day-option'+(day===salesReportSelectedDay?" active":"")'+" data-sales-report-day=\""+day+"\" aria-pressed=\""+(day===salesReportSelectedDay?"true":"false")+"\"><span class=\"sales-report-day-number\">"+salesReportDayDigits(day)+"</span><span class=\"sales-report-day-weekday\">"+weekday+"</span></button>";}).join("");
+  const salesReportDayButtons=Array.from({length:salesReportDayCount},(_,i)=>{const day=i+1,weekday=salesReportWeekdayName(day);return '<button type="button" class="sales-report-day-option'+(day===salesReportSelectedDay?" active":"")+'" data-sales-report-day="'+day+'" aria-pressed="'+(day===salesReportSelectedDay?"true":"false")+'"><span class="sales-report-day-number">'+salesReportDayDigits(day)+'</span><span class="sales-report-day-weekday">'+weekday+'</span></button>';}).join("");
   const selectedReportDayLabel=salesReportSelectedDay?salesReportDayDigits(salesReportSelectedDay):(en?"Choose day":"اختر اليوم");
   const selectedReportWeekday=salesReportSelectedDay?salesReportWeekdayName(salesReportSelectedDay):"";
   const metric=(key,label,editable)=>'<div class="sales-metric"><label for="salesMetric_'+key+'">'+label+'</label><div class="sales-metric-input-wrap"><input id="salesMetric_'+key+'" data-sales-metric="'+key+'" type="number" min="0" step="0.01" inputmode="decimal" '+(editable?'':'readonly')+' placeholder="—"><span class="sales-metric-currency" aria-hidden="true">'+(en?"EGP":"ج.م")+'</span></div></div>';
@@ -5641,4 +5641,32 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-report-day-option,:root[data-novaro-mode="dark"] #app .sales-report-page .saved-sales-day-option{color:#e5eee9!important;border-color:#40564a!important;}
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-report-day-option.active,:root[data-novaro-mode="dark"] #app .sales-report-page .saved-sales-day-option.active{background:#34483e!important;border-color:#60796a!important;color:#e5eee9!important;}
 @media(max-width:600px){#app .sales-report-page .sales-date-field{height:100px!important;min-height:100px!important;padding:9px 4px!important;}#app .sales-report-page .sales-report-day-panel,#app .sales-report-page .saved-sales-day-panel{width:min(310px,calc(100vw - 28px))!important;gap:4px!important;padding:9px!important;}#app .sales-report-page .sales-report-day-option,#app .sales-report-page .saved-sales-day-option{height:40px!important;min-height:40px!important;}#app .sales-report-page .sales-report-day-option .sales-report-day-weekday,#app .sales-report-page .saved-sales-day-option .saved-sales-day-weekday{font-size:8px!important;}}
+</style>
+
+<style id="novaro-neutral-buttons-global-v1">
+/* NOVARO button colors stay neutral unless a specific color is explicitly requested. */
+#app button,#app input[type="button"],#app input[type="submit"],#app input[type="reset"]{
+  background-color:#f1f3f2!important;
+  border-color:#d7ded9!important;
+  color:#34443c!important;
+  box-shadow:none!important;
+}
+#app button:hover,#app input[type="button"]:hover,#app input[type="submit"]:hover,#app input[type="reset"]:hover{
+  background-color:#e7ece9!important;
+  border-color:#cbd5cf!important;
+  color:#263a31!important;
+}
+#app button:active,#app input[type="button"]:active,#app input[type="submit"]:active,#app input[type="reset"]:active{
+  background-color:#e1e7e3!important;
+}
+:root[data-novaro-mode="dark"] #app button,:root[data-novaro-mode="dark"] #app input[type="button"],:root[data-novaro-mode="dark"] #app input[type="submit"],:root[data-novaro-mode="dark"] #app input[type="reset"]{
+  background-color:#2d3933!important;
+  border-color:#46554c!important;
+  color:#e4ebe6!important;
+  box-shadow:none!important;
+}
+:root[data-novaro-mode="dark"] #app button:hover,:root[data-novaro-mode="dark"] #app input[type="button"]:hover,:root[data-novaro-mode="dark"] #app input[type="submit"]:hover,:root[data-novaro-mode="dark"] #app input[type="reset"]:hover{
+  background-color:#39473f!important;
+  border-color:#59695f!important;
+}
 </style>
