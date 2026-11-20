@@ -1038,7 +1038,26 @@ a.auth-back-link:hover{background:#e3eee8!important}
   }
 }
 </style>
-<style id="novaro-notification-archive-icon-v1">#app .notification-entry-actions .notification-archive-icon{width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;padding:0!important;border-radius:9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;color:#287d6b!important;background:#eaf4ef!important;border:1px solid #d7e9df!important;box-shadow:none!important}#app .notification-entry-actions .notification-archive-icon svg{width:16px!important;height:16px!important;display:block!important}#app .notification-entry-actions .notification-archive-icon:hover{background:#dcefe5!important}</style></head><body><script>
+<style id="novaro-notification-archive-icon-v1">#app .notification-entry-actions .notification-archive-icon{width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;padding:0!important;border-radius:9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;color:#287d6b!important;background:#eaf4ef!important;border:1px solid #d7e9df!important;box-shadow:none!important}#app .notification-entry-actions .notification-archive-icon svg{width:16px!important;height:16px!important;display:block!important}#app .notification-entry-actions .notification-archive-icon:hover{background:#dcefe5!important}</style>
+<style id="novaro-notification-capsules-compact-v1">
+/* Compact action capsules in the branch-messages panel only. */
+#app .notification-panel .notification-panel-head{gap:7px!important;align-items:center!important}
+#app .notification-panel .notification-panel-head>strong{font-size:12px!important;line-height:1.35!important}
+#app .notification-panel .notification-head-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:5px!important;flex-wrap:wrap!important}
+#app .notification-panel .notification-head-actions>button{
+ box-sizing:border-box!important;display:inline-flex!important;flex:0 0 auto!important;
+ width:auto!important;min-width:0!important;min-height:27px!important;height:27px!important;max-height:27px!important;
+ margin:0!important;padding:3px 8px!important;border-radius:999px!important;
+ font-size:10px!important;line-height:1!important;font-weight:700!important;white-space:nowrap!important
+}
+@media(max-width:480px){
+ #app .notification-panel .notification-panel-head{align-items:flex-start!important;flex-direction:column!important;gap:7px!important}
+ #app .notification-panel .notification-head-actions{width:100%!important;justify-content:flex-start!important;gap:4px!important}
+ #app .notification-panel .notification-head-actions>button{min-height:25px!important;height:25px!important;max-height:25px!important;padding:3px 7px!important;font-size:9px!important}
+}
+</style>
+
+</head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
  "use strict";
