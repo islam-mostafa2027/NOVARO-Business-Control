@@ -4483,13 +4483,13 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  #app .header-icon-row>button#logout span{font-size:9px!important}
 }
 
-/* NOVARO: two actions per row, full card width, slim horizontal capsules. */
+/* NOVARO: tighter spacing between the four branch actions. */
 #app .branch-card-actions-four{
  display:grid!important;
  grid-template-columns:repeat(2,minmax(0,1fr))!important;
  grid-auto-flow:row!important;
  grid-auto-rows:36px!important;
- gap:7px!important;
+ gap:3px!important;
  width:100%!important;
  min-width:0!important;
  box-sizing:border-box!important;
@@ -4528,7 +4528,7 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  line-height:1!important;
 }
 @media(max-width:700px){
- #app .branch-card-actions-four{gap:6px!important;margin-top:12px!important;grid-auto-rows:34px!important}
+ #app .branch-card-actions-four{gap:3px!important;margin-top:12px!important;grid-auto-rows:34px!important}
  #app .branch-card-actions-four .branch-action-btn{
   height:34px!important;min-height:34px!important;max-height:34px!important;
   padding:3px 5px!important;font-size:10px!important;gap:4px!important;
