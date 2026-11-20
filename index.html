@@ -2940,7 +2940,7 @@ function syncSelectedStatisticsDailyTarget(){
  const day=Number(salesReportSelectedDay||page.querySelector("#salesReportDay")?.value||0);
  const row=day>0?page.querySelectorAll(".sales-statistics-table tbody tr")[day-1]:null;
  const target=row?.querySelector("[data-stat-target]"),raw=String(target?.value??"").trim(),value=statisticsNumber(raw);
- if(display)display.value=raw!==""&&Number.isFinite(value)?String(value):"";
+ if(display){display.value=raw!==""&&Number.isFinite(value)?String(value):"";formatMoneyField(display);}
 }
 document.addEventListener("input",e=>{const field=e.target.closest&&e.target.closest("[data-stat-tickets],[data-stat-sales],[data-stat-target]");if(field){syncStatisticsAverages(field.closest("tr"));if(field.matches("[data-stat-target]"))syncSelectedStatisticsDailyTarget();}},true);
 document.addEventListener("change",e=>{const field=e.target.closest&&e.target.closest("[data-stat-target]");if(field)syncSelectedStatisticsDailyTarget();},true);
