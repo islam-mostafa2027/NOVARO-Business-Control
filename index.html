@@ -5729,3 +5729,53 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   display:none!important;
 }
 </style>
+
+
+<style id="novaro-date-day-buttons-fit-v1">
+/* Keep the selected day controls compact and horizontal inside their date fields. */
+#app .sales-report-page #salesReportDayToggle{
+  display:inline-flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+  width:auto!important;min-width:0!important;max-width:100%!important;
+  height:30px!important;min-height:30px!important;max-height:30px!important;
+  padding:3px 8px!important;gap:5px!important;margin:0 auto!important;
+  border:1px solid var(--line,#dfe9e3)!important;border-radius:8px!important;
+  background:transparent!important;background-color:transparent!important;color:var(--text,var(--ink))!important;
+  box-shadow:none!important;
+}
+#app .sales-report-page #salesReportDayToggle .sales-report-day-number,
+#app .sales-report-page #salesReportDayToggle .sales-report-day-weekday{
+  display:inline-block!important;white-space:nowrap!important;line-height:1!important;
+}
+#app .sales-report-page #salesReportDayToggle .sales-report-day-number{font-size:13px!important;}
+#app .sales-report-page #salesReportDayToggle .sales-report-day-weekday{font-size:10px!important;}
+#app .sales-report-page .saved-sales-day-picker{
+  flex:1 1 auto!important;width:100%!important;min-width:0!important;max-width:100%!important;
+}
+#app .sales-report-page #savedSalesDayToggle{
+  display:inline-flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+  width:auto!important;min-width:0!important;max-width:100%!important;
+  height:32px!important;min-height:32px!important;max-height:32px!important;
+  padding:3px 8px!important;gap:5px!important;margin:0 auto!important;
+  border:1px solid var(--line,#dfe9e3)!important;border-radius:8px!important;
+  background:transparent!important;background-color:transparent!important;color:var(--text,var(--ink))!important;
+  box-shadow:none!important;
+}
+#app .sales-report-page #savedSalesDayToggle .sales-report-day-number,
+#app .sales-report-page #savedSalesDayToggle .sales-report-day-weekday{
+  display:inline-block!important;white-space:nowrap!important;line-height:1!important;
+}
+#app .sales-report-page #savedSalesDayToggle .sales-report-day-number{font-size:13px!important;}
+#app .sales-report-page #savedSalesDayToggle .sales-report-day-weekday{font-size:10px!important;}
+#app .sales-report-page #salesReportDayToggle:hover,
+#app .sales-report-page #salesReportDayToggle:focus,
+#app .sales-report-page #salesReportDayToggle:active,
+#app .sales-report-page #savedSalesDayToggle:hover,
+#app .sales-report-page #savedSalesDayToggle:focus,
+#app .sales-report-page #savedSalesDayToggle:active{
+  background:transparent!important;background-color:transparent!important;box-shadow:none!important;
+}
+:root[data-novaro-mode="dark"] #app .sales-report-page #salesReportDayToggle,
+:root[data-novaro-mode="dark"] #app .sales-report-page #savedSalesDayToggle{
+  color:#e5eee9!important;border-color:#40564a!important;background:transparent!important;
+}
+</style>
