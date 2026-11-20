@@ -4468,4 +4468,63 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .notification-entry{padding-inline-end:10px!important}
 #app .notification-entry-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;width:100%!important;gap:7px!important;flex-wrap:wrap!important;margin-bottom:9px!important}
 #app .notification-entry-actions .notification-delete{position:static!important;inset:auto!important;width:auto!important;height:auto!important;min-height:30px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:5px 10px!important;cursor:pointer!important}
+
+/* NOVARO Headcount: apply the selected appearance to all metric and staffing capsules. */
+:root[data-novaro-mode="dark"] #app .headcount-page-card,
+:root[data-novaro-mode="dark"] #app .hc-section{
+  background:#202f28!important;color:#e5eee9!important;
+  border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-page-card *,
+:root[data-novaro-mode="dark"] #app .hc-section *{
+  border-color:#40564a;
+}
+:root[data-novaro-mode="dark"] #app .headcount-branch-pill,
+:root[data-novaro-mode="dark"] #app .headcount-metric,
+:root[data-novaro-mode="dark"] #app .hc-role-head,
+:root[data-novaro-mode="dark"] #app .hc-employee-head,
+:root[data-novaro-mode="dark"] #app .hc-actual-total{
+  background:#293b33!important;color:#e5eee9!important;
+  border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-branch-pill *,
+:root[data-novaro-mode="dark"] #app .headcount-metric *,
+:root[data-novaro-mode="dark"] #app .hc-role-head *,
+:root[data-novaro-mode="dark"] #app .hc-employee-head *,
+:root[data-novaro-mode="dark"] #app .hc-actual-total *{
+  color:inherit!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-required-editor label,
+:root[data-novaro-mode="dark"] #app .hc-section-heading h3,
+:root[data-novaro-mode="dark"] #app .hc-section-heading p,
+:root[data-novaro-mode="dark"] #app .hc-role-row,
+:root[data-novaro-mode="dark"] #app .hc-employee-row,
+:root[data-novaro-mode="dark"] #app .hc-section .muted{
+  color:#d5e1da!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-required-controls input,
+:root[data-novaro-mode="dark"] #app .hc-role-row input,
+:root[data-novaro-mode="dark"] #app .hc-add-row input,
+:root[data-novaro-mode="dark"] #app .hc-employee-row input,
+:root[data-novaro-mode="dark"] #app .hc-employee-row select,
+:root[data-novaro-mode="dark"] #app .hc-add-employee input,
+:root[data-novaro-mode="dark"] #app .hc-add-employee select{
+  background:#18251f!important;color:#e5eee9!important;
+  border-color:#40564a!important;color-scheme:dark;
+}
+:root[data-novaro-mode="dark"] #app .hc-role-row input::placeholder,
+:root[data-novaro-mode="dark"] #app .hc-add-row input::placeholder,
+:root[data-novaro-mode="dark"] #app .hc-add-employee input::placeholder{
+  color:#91a69a!important;
+}
+:root[data-novaro-mode="dark"] #app .hc-role-row,
+:root[data-novaro-mode="dark"] #app .hc-employee-row{
+  border-bottom-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-required-editor{
+  border-top-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #app .hc-shortage{color:#f0a0a0!important}
+:root[data-novaro-mode="dark"] #app .hc-surplus{color:#8fd0ae!important}
+
 </style>
