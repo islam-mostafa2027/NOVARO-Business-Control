@@ -1057,6 +1057,38 @@ a.auth-back-link:hover{background:#e3eee8!important}
 }
 </style>
 
+
+<style id="novaro-restaurant-watermark-v1">
+/* NOVARO restaurant-service photographic watermark — visible between app surfaces, never above content. */
+body{isolation:isolate}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(112deg,rgba(246,250,247,.86) 0%,rgba(246,250,247,.80) 48%,rgba(246,250,247,.72) 100%),
+    url("https://images.pexels.com/photos/17086341/pexels-photo-17086341.jpeg?cs=srgb&dl=pexels-emris-17086341.jpg&fm=jpg");
+  background-size:cover;
+  background-position:center 52%;
+  background-repeat:no-repeat;
+}
+#app{position:relative;z-index:1}
+#splash{z-index:9999}
+:root[data-novaro-mode="dark"] body::before{
+  background-image:
+    linear-gradient(112deg,rgba(20,31,25,.90) 0%,rgba(20,31,25,.86) 48%,rgba(20,31,25,.80) 100%),
+    url("https://images.pexels.com/photos/17086341/pexels-photo-17086341.jpeg?cs=srgb&dl=pexels-emris-17086341.jpg&fm=jpg");
+}
+@media(max-width:600px){
+  body::before{background-position:54% center}
+}
+@media(prefers-reduced-motion:reduce){
+  body::before{background-attachment:scroll}
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
