@@ -1,6 +1,6 @@
 {
   "appId": "com.novaro.inventory",
-  "appName": "NOVARO Inventory",
+  "appName": "NOVARO Business Control",
   "webDir": "www",
   "backgroundColor": "#f3f7f5",
   "server": {
