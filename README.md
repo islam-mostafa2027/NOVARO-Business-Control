@@ -1,5 +1,5 @@
-# NOVARO Inventory
-Independent Arabic RTL inventory app for restaurant front-of-house and service equipment. Kitchen equipment is excluded.
+# NOVARO Business Control
+Arabic RTL restaurant business-control platform, currently focused on front-of-house inventory and stocktaking.
 
 ## Publish
 GitHub repository: islammostafa702-commits/NOVARO-Inventory
