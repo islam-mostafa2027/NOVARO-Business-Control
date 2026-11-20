@@ -2941,7 +2941,8 @@ function syncStatisticsMonthlyTotals(){
  const totals={"total-tickets":totalTickets,"total-sales":totalSales,target:target,ach:target>0?totalSales/target*100:null};
  Object.entries(totals).forEach(([key,value])=>{const cell=table.querySelector('[data-stat-total="'+key+'"]');if(cell)cell.textContent=value===null?"—":formatStatisticsNumber(Number(value.toFixed(2)));});
  const monthToDateField=document.querySelector('.sales-report-page [data-sales-metric="month_to_date_sales"]');
- if(monthToDateField){monthToDateField.value=formatStatisticsNumber(totalSales);syncMonthlyAnalysis();}
+ const totalSalesCell=table.querySelector('[data-stat-total="total-sales"]');
+ if(monthToDateField){monthToDateField.value=totalSalesCell?.textContent?.trim()||"";syncMonthlyAnalysis();}
 }
 window.syncStatisticsAverages=syncStatisticsAverages;
 window.syncStatisticsMonthlyTotals=syncStatisticsMonthlyTotals;
