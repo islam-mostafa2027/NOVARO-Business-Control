@@ -1420,6 +1420,19 @@ a.auth-back-link:hover{background:#e3eee8!important}
  #app .sales-report-page .sales-entry-grid>.sales-entry-month{height:36px!important;min-height:36px!important;font-size:11px!important}
 }
 </style>
+
+<!-- NOVARO: selected sales month title alignment -->
+<style id="novaro-sales-month-title-left-v2">
+/* Only align the selected month title inside the sales report card. */
+#app .sales-report-page .sales-month-card > .sales-month-heading{
+ display:flex!important;flex-direction:row!important;align-items:flex-start!important;justify-content:flex-start!important;
+ width:100%!important;margin:0 0 15px 0!important;padding:0!important;text-align:left!important;direction:ltr!important;
+}
+#app .sales-report-page .sales-month-card > .sales-month-heading > label{display:none!important}
+#app .sales-report-page .sales-month-card > .sales-month-heading > .sales-month-static{
+ display:block!important;margin:0!important;text-align:left!important;white-space:nowrap!important;
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
