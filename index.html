@@ -2867,9 +2867,9 @@ function syncMonthlyAnalysis(){
  const page=document.querySelector(".sales-report-page");if(!page)return;
  const target=page.querySelector('[data-sales-metric="sales_target"]'),sales=page.querySelector('[data-sales-metric="month_to_date_sales"]'),tips=page.querySelector('[data-sales-metric="month_to_date_tip"]');
  const targetMirror=page.querySelector("#monthlyAnalysisField1"),salesMirror=page.querySelector("#monthlyAnalysisField2"),difference=page.querySelector("#monthlyAnalysisField3"),tipsMirror=page.querySelector("#monthlyAnalysisField4");
- if(targetMirror&&target&&targetMirror.value!==target.value)targetMirror.value=target.value;
- if(salesMirror&&sales&&salesMirror.value!==sales.value)salesMirror.value=sales.value;
- if(tipsMirror&&tips&&tipsMirror.value!==tips.value)tipsMirror.value=tips.value;
+ if(targetMirror&&target&&targetMirror.value!==target.value)targetMirror.value=statisticsNumber(target.value)>=0?formatStatisticsNumber(statisticsNumber(target.value)):target.value;
+ if(salesMirror&&sales&&salesMirror.value!==sales.value)salesMirror.value=statisticsNumber(sales.value)>=0?formatStatisticsNumber(statisticsNumber(sales.value)):sales.value;
+ if(tipsMirror&&tips&&tipsMirror.value!==tips.value)tipsMirror.value=statisticsNumber(tips.value)>=0?formatStatisticsNumber(statisticsNumber(tips.value)):tips.value;
  if(difference){
   const targetValue=target?.value?.trim()??"",salesValue=sales?.value?.trim()??"";
   if(targetValue===""||salesValue==="")difference.value="";
@@ -2886,6 +2886,19 @@ function statisticsNumber(value){
 function formatStatisticsNumber(value){
  return Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:2}):'';
 }
+function formatMoneyField(field,grouping=true){
+ if(!field)return;
+ const raw=String(field.value??"").trim();
+ if(raw==="")return;
+ const value=statisticsNumber(raw);
+ if(Number.isFinite(value))field.value=grouping?formatStatisticsNumber(value):String(value);
+}
+function bindMoneyFieldFormatting(){
+ const selector='.sales-report-page [data-sales-metric],.sales-report-page [data-saved-sales-metric],.sales-report-page .sales-monthly-analysis-field:nth-child(-n+4) input';
+ document.addEventListener("focusin",e=>{const field=e.target.closest&&e.target.closest(selector);if(field)field.value=String(field.value??"").replace(/,/g,"");},true);
+ document.addEventListener("focusout",e=>{const field=e.target.closest&&e.target.closest(selector);if(field){formatMoneyField(field);if(field.matches("[data-sales-metric]"))syncMonthlyAnalysis();}},true);
+}
+bindMoneyFieldFormatting();
 function syncStatisticsAverages(row){
  if(!row)return;
  let rowTickets=0,rowSales=0;
@@ -2998,7 +3011,7 @@ document.addEventListener("click",async e=>{
   try{
    const result=await db.from("sales_report_daily_entries").select("sales_target,daily_sales_target,month_to_date_sales,yesterday_sales,yesterday_tip,month_to_date_tip").eq("branch_id",branch.id).eq("report_month",month).eq("report_day",day).maybeSingle();
    if(result.error)throw result.error;
-   if(result.data){salesMonthCard.hidden=false;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{const value=result.data[input.dataset.savedSalesMetric];input.value=value===null||value===undefined?"":String(value);});if(status)status.hidden=true;}
+   if(result.data){salesMonthCard.hidden=false;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{const value=result.data[input.dataset.savedSalesMetric];input.value=value===null||value===undefined?"":formatStatisticsNumber(statisticsNumber(value));});if(status)status.hidden=true;}
    else{salesMonthCard.hidden=true;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{input.value="";});if(status){status.hidden=false;status.textContent=language==="en"?"No data for this day.":"لا توجد بيانات لهذا اليوم.";}}
   }catch(error){if(status){status.hidden=false;status.textContent=(language==="en"?"Could not load: ":"تعذر تحميل التقرير: ")+(error.message||String(error));}salesMonthCard.hidden=true;}
   finally{button.disabled=false;}
@@ -3017,7 +3030,7 @@ document.addEventListener("click",async e=>{
    ]);
    if(reportResult.error)throw reportResult.error;if(targetResult.error)throw targetResult.error;if(statisticsResult.error)throw statisticsResult.error;
    const values={...(reportResult.data||{}),sales_target:targetResult.data?.sales_target??""};
-   salesMonthCard.querySelectorAll("[data-sales-metric]").forEach(input=>{const value=values[input.dataset.salesMetric];input.value=value===null||value===undefined?"":String(value);});
+   salesMonthCard.querySelectorAll("[data-sales-metric]").forEach(input=>{const value=values[input.dataset.salesMetric];input.value=value===null||value===undefined?"":String(value);formatMoneyField(input);});
    const monthlyTargetMirror=salesMonthCard.querySelector("#monthlyAnalysisField1"),salesTargetSource=salesMonthCard.querySelector('[data-sales-metric="sales_target"]'),monthlySalesMirror=salesMonthCard.querySelector("#monthlyAnalysisField2"),monthToDateSalesSource=salesMonthCard.querySelector('[data-sales-metric="month_to_date_sales"]');if(monthlyTargetMirror)monthlyTargetMirror.value=salesTargetSource?.value||"";if(monthlySalesMirror)monthlySalesMirror.value=monthToDateSalesSource?.value||"";
    const statisticsTable=document.querySelector(".sales-report-page .sales-statistics-table"),statisticsFields={dinein_tickets:"[data-stat-tickets='dinein']",dinein_sales:"[data-stat-sales='dinein']",takeaway_tickets:"[data-stat-tickets='takeaway']",takeaway_sales:"[data-stat-sales='takeaway']",delivery_tickets:"[data-stat-tickets='delivery']",delivery_sales:"[data-stat-sales='delivery']",catering_tickets:"[data-stat-tickets='catering']",catering_sales:"[data-stat-sales='catering']",daily_target:"[data-stat-target]"};
    if(statisticsTable){const savedRows=new Map((statisticsResult.data||[]).map(item=>[Number(item.report_day),item]));statisticsTable.querySelectorAll("tbody tr").forEach((row,index)=>{const saved=savedRows.get(index+1)||{};Object.entries(statisticsFields).forEach(([key,selector])=>{const field=row.querySelector(selector);if(field)field.value=saved[key]===null||saved[key]===undefined?"":formatStatisticsNumber(Number(saved[key]));});syncStatisticsAverages(row);});syncSelectedStatisticsDailyTarget();}
