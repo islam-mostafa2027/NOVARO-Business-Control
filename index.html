@@ -965,6 +965,21 @@ a.auth-back-link:hover{background:#e3eee8!important}
  .app-header.novaro-header-column .header-clock-panel .header-clock-time,.app-header.novaro-header-column .header-clock-panel .header-clock-date{padding-inline:0!important;}
 }
 </style>
+
+<style id="novaro-four-header-actions-final">
+.app-header.novaro-header-column .header-actions{width:100%!important;display:flex!important;justify-content:center!important;}
+.app-header.novaro-header-column .header-tools-stack{width:100%!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;align-items:stretch!important;}
+.app-header.novaro-header-column .header-icon-row{display:contents!important;}
+.app-header.novaro-header-column .header-tools-stack>button,
+.app-header.novaro-header-column .header-tools-stack .header-icon-button,
+.app-header.novaro-header-column .header-tools-stack .language-toggle-capsule,
+.app-header.novaro-header-column .header-tools-stack .logout-control{width:100%!important;min-width:0!important;max-width:none!important;height:52px!important;min-height:52px!important;max-height:52px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;padding:5px 2px!important;white-space:nowrap!important;overflow:hidden!important;}
+.app-header.novaro-header-column .header-tools-stack .header-icon-button{flex-direction:column!important;}
+.app-header.novaro-header-column .header-tools-stack .header-icon-button svg{width:19px!important;height:19px!important;flex:0 0 auto!important;}
+.app-header.novaro-header-column .header-tools-stack .header-icon-label,
+.app-header.novaro-header-column .header-tools-stack .logout-control span{font-size:10px!important;line-height:1.2!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+@media(max-width:600px){.app-header.novaro-header-column .header-tools-stack{gap:6px!important}.app-header.novaro-header-column .header-tools-stack>button,.app-header.novaro-header-column .header-tools-stack .header-icon-button,.app-header.novaro-header-column .header-tools-stack .language-toggle-capsule,.app-header.novaro-header-column .header-tools-stack .logout-control{height:50px!important;min-height:50px!important;max-height:50px!important;padding:4px 1px!important}.app-header.novaro-header-column .header-tools-stack .header-icon-label,.app-header.novaro-header-column .header-tools-stack .logout-control span{font-size:9px!important}}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
