@@ -2,7 +2,7 @@
   "name": "novaro-inventory-android",
   "version": "1.0.0",
   "private": true,
-  "description": "Android wrapper for NOVARO Inventory",
+  "description": "Android wrapper for NOVARO Business Control",
   "scripts": {
     "android": "cap sync android"
   },
