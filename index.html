@@ -1212,6 +1212,19 @@ a.auth-back-link:hover{background:#e3eee8!important}
 #app .sales-month-heading{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 #app .sales-month-heading>label{font-size:12px;font-weight:700;color:var(--muted)}
 #app .sales-month-controls{display:flex;gap:8px;align-items:center}
+#app .sales-month-controls #salesReportMonth{cursor:pointer}
+#app .sales-month-picker[hidden]{display:none!important}
+#app .sales-month-picker{position:fixed;inset:0;z-index:10050;display:grid;place-items:center;padding:18px;background:rgba(8,18,13,.55)}
+#app .sales-month-picker-panel{width:min(100%,430px);max-height:min(88vh,620px);overflow:auto;padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--card,#fff);box-shadow:0 20px 70px rgba(0,0,0,.22);color:var(--text)}
+#app .sales-month-picker-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;font-size:16px}
+#app .sales-month-picker-top button{min-width:34px;height:34px;font-size:21px;padding:0}
+#app .sales-month-picker-panel>label{display:block;margin-bottom:7px;font-size:12px;font-weight:700;color:var(--muted)}
+#app .sales-month-picker-panel select{width:100%;height:42px;margin-bottom:16px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface,#f8fbf9);color:var(--text);font:inherit}
+#app .sales-month-picker-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#app .sales-month-choice{min-height:42px;padding:8px 5px;border:1px solid var(--line);border-radius:10px;font-size:12px}
+#app .sales-month-choice:active{background:var(--accent-soft)}
+:root[data-novaro-mode="dark"] #app .sales-month-picker-panel{background:#202f28!important;color:#e5eee9!important;border-color:#40564a!important}
+:root[data-novaro-mode="dark"] #app .sales-month-picker-panel select{background:#293b33!important;color:#e5eee9!important;border-color:#40564a!important}
 #app .sales-month-controls input{flex:1;min-width:0;height:42px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card,#fff);color:var(--text);font:inherit;font-weight:700}
 #app .sales-metrics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 #app .sales-metric{min-width:0;min-height:105px;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--card,#fff);display:flex;flex-direction:column;justify-content:space-between;gap:12px}
@@ -2227,9 +2240,34 @@ document.addEventListener("click",async e=>{
  if(novaroAuditPanelOpen&&!e.target.closest("#novaroAuditBellWrap")&&!e.target.closest("#novaroAuditPanel")){novaroAuditPanelOpen=false;renderNotifications();}
 
  const salesMonthCard=e.target.closest(".sales-month-card");
+ if(salesMonthCard&&e.target.closest("#salesReportMonth")){
+  const picker=salesMonthCard.querySelector("#salesMonthPicker"),yearSelect=salesMonthCard.querySelector("#salesMonthYear"),monthInput=salesMonthCard.querySelector("#salesReportMonth");
+  const current=monthInput.dataset.reportMonth||((new Date().toLocaleString("en-US",{month:"short"}))+"-"+new Date().getFullYear());
+  const parts=current.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\\d{4})$/);
+  yearSelect.value=parts?parts[2]:String(new Date().getFullYear());
+  picker.hidden=false;
+  return;
+ }
+ if(salesMonthCard&&e.target.closest("#closeSalesMonthPicker")){
+  salesMonthCard.querySelector("#salesMonthPicker").hidden=true;return;
+ }
+ const chosenSalesMonth=e.target.closest("[data-sales-month-choice]");
+ if(salesMonthCard&&chosenSalesMonth){
+  const monthIndex=Number(chosenSalesMonth.dataset.salesMonthChoice)-1,year=salesMonthCard.querySelector("#salesMonthYear").value;
+  const shortMonths=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  const normalized=shortMonths[monthIndex]+"-"+year;
+  const monthInput=salesMonthCard.querySelector("#salesReportMonth");
+  monthInput.dataset.reportMonth=normalized;
+  monthInput.value=language==="en"?normalized:arabicMonths[monthIndex]+" "+year;
+  delete salesMonthCard.dataset.loadedMonth;
+  const status=salesMonthCard.querySelector("#salesMonthStatus");if(status)status.textContent="";
+  salesMonthCard.querySelector("#salesMonthPicker").hidden=true;
+  return;
+ }
  if(salesMonthCard&&e.target.closest("#loadSalesMonth")){
   const branch=salesReportBranches().find(b=>b.id===salesMonthCard.dataset.salesBranchId);
-  const monthInput=salesMonthCard.querySelector("#salesReportMonth"),status=salesMonthCard.querySelector("#salesMonthStatus"),month=monthInput?.value.trim();
+  const monthInput=salesMonthCard.querySelector("#salesReportMonth"),status=salesMonthCard.querySelector("#salesMonthStatus"),month=monthInput?.dataset.reportMonth;
   const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/;
   if(!branch||!monthPattern.test(month||"")){if(status)status.textContent=language==="en"?"Enter the month as Nov-2026.":"اكتب الشهر بالصيغة Nov-2026.";return;}
   const loadButton=e.target.closest("#loadSalesMonth");loadButton.disabled=true;if(status)status.textContent=language==="en"?"Loading...":"جارٍ التحميل...";
@@ -2249,7 +2287,7 @@ document.addEventListener("click",async e=>{
  }
  if(salesMonthCard&&e.target.closest("#saveSalesMonth")){
   const branch=salesReportBranches().find(b=>b.id===salesMonthCard.dataset.salesBranchId);
-  const month=salesMonthCard.querySelector("#salesReportMonth")?.value.trim(),status=salesMonthCard.querySelector("#salesMonthStatus"),saveButton=e.target.closest("#saveSalesMonth");
+  const month=salesMonthCard.querySelector("#salesReportMonth")?.dataset.reportMonth,status=salesMonthCard.querySelector("#salesMonthStatus"),saveButton=e.target.closest("#saveSalesMonth");
   const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/;
   if(!branch||!monthPattern.test(month||"")){if(status)status.textContent=language==="en"?"Enter the month as Nov-2026.":"اكتب الشهر بالصيغة Nov-2026.";return;}
   if(salesMonthCard.dataset.loadedMonth!==month){if(status)status.textContent=language==="en"?"Load this month before editing or saving.":"حمّل بيانات الشهر أولاً قبل التعديل أو الحفظ.";return;}
@@ -2754,7 +2792,7 @@ if(page==="sales"){
  }else{
   const en=language==="en",managerCanEdit=profile?.role==="branch_manager"&&selectedSalesBranch.branch_manager_user_id===user?.id;
   const metric=(key,label,editable)=>'<div class="sales-metric"><label for="salesMetric_'+key+'">'+label+'</label><input id="salesMetric_'+key+'" data-sales-metric="'+key+'" type="number" min="0" step="0.01" inputmode="decimal" '+(editable?'':'readonly')+' placeholder="—"></div>';
-  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-month-card" data-sales-branch-id="'+esc(selectedSalesBranch.id)+'"><div class="sales-month-heading"><label for="salesReportMonth">'+(en?"Report Month":"شهر التقرير")+'</label><div class="sales-month-controls"><input id="salesReportMonth" type="text" maxlength="8" placeholder="Nov-2026" autocomplete="off" spellcheck="false"><button type="button" class="soft" id="loadSalesMonth">'+(en?"Load Month":"تحميل الشهر")+'</button></div></div><div class="sales-metrics-grid">'+metric("sales_target",en?"Sales Target":"مستهدف المبيعات",managerCanEdit)+metric("daily_sales_target",en?"Daily Sales Target":"المستهدف اليومي للمبيعات",true)+metric("month_to_date_sales",en?"Month To Date Sales":"مبيعات الشهر حتى تاريخه",true)+metric("yesterday_sales",en?"Yesterday Sales":"مبيعات أمس",true)+metric("yesterday_tip",en?"Yesterday Tip":"إكرامية أمس",true)+metric("month_to_date_tip",en?"Month To Date Tip":"إكرامية الشهر حتى تاريخه",true)+'</div><div class="sales-month-actions"><button type="button" class="primary" id="saveSalesMonth">'+(en?"Save Report":"حفظ التقرير")+'</button><span class="muted" id="salesMonthStatus" role="status"></span></div></div></section>';
+  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-month-card" data-sales-branch-id="'+esc(selectedSalesBranch.id)+'"><div class="sales-month-heading"><label for="salesReportMonth">'+(en?"Report Month":"شهر التقرير")+'</label><div class="sales-month-controls"><input id="salesReportMonth" type="text" readonly placeholder="'+(en?"Choose month and year":"اختر الشهر والسنة")+'" autocomplete="off"><button type="button" class="soft" id="loadSalesMonth">'+(en?"Load Month":"تحميل الشهر")+'</button></div></div><div class="sales-month-picker" id="salesMonthPicker" hidden><div class="sales-month-picker-panel" role="dialog" aria-modal="true" aria-labelledby="salesMonthPickerTitle"><div class="sales-month-picker-top"><strong id="salesMonthPickerTitle">'+(en?"Choose month and year":"اختيار الشهر والسنة")+'</strong><button type="button" class="soft" id="closeSalesMonthPicker" aria-label="'+(en?"Close":"إغلاق")+'">×</button></div><label for="salesMonthYear">'+(en?"Year":"السنة")+'</label><select id="salesMonthYear">'+Array.from({length:16},(_,i)=>{const y=new Date().getFullYear()-10+i;return '<option value="'+y+'">'+y+'</option>';}).join("")+'</select><div class="sales-month-picker-grid">'+(en?["January","February","March","April","May","June","July","August","September","October","November","December"]:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"]).map((name,i)=>'<button type="button" class="soft sales-month-choice" data-sales-month-choice="'+String(i+1).padStart(2,"0")+'">'+name+'</button>').join("")+'</div></div></div><div class="sales-metrics-grid">'+metric("sales_target",en?"Sales Target":"مستهدف المبيعات",managerCanEdit)+metric("daily_sales_target",en?"Daily Sales Target":"المستهدف اليومي للمبيعات",true)+metric("month_to_date_sales",en?"Month To Date Sales":"مبيعات الشهر حتى تاريخه",true)+metric("yesterday_sales",en?"Yesterday Sales":"مبيعات أمس",true)+metric("yesterday_tip",en?"Yesterday Tip":"إكرامية أمس",true)+metric("month_to_date_tip",en?"Month To Date Tip":"إكرامية الشهر حتى تاريخه",true)+'</div><div class="sales-month-actions"><button type="button" class="primary" id="saveSalesMonth">'+(en?"Save Report":"حفظ التقرير")+'</button><span class="muted" id="salesMonthStatus" role="status"></span></div></div></section>';
  }
 }
 
