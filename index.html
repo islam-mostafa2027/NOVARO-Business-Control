@@ -3118,42 +3118,52 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("#printSalesReport")){
   const report=document.querySelector(".sales-report-page");
   if(!report)return;
-  const printWindow=window.open("","_blank");
-  if(!printWindow){alert(language==="en"?"Allow pop-ups to print this report.":"اسمح بالنوافذ المنبثقة لطباعة التقرير.");return;}
   const copy=report.cloneNode(true);
+  copy.id="novaro-sales-print-root";
   copy.querySelector(".sales-export-card")?.remove();
   copy.querySelector(".sales-month-actions")?.remove();
   copy.querySelector(".sales-statistics-actions")?.remove();
   copy.querySelectorAll(".sales-report-day-panel").forEach(node=>node.remove());
   copy.querySelectorAll(".sales-report-day-toggle").forEach(node=>{const span=document.createElement("span");span.className="sales-report-day-toggle";span.textContent=node.innerText.trim();node.replaceWith(span);});
-  copy.querySelectorAll("input").forEach(input=>{const span=document.createElement("span");span.className="print-sales-value";span.textContent=input.value||"—";input.replaceWith(span);});
-  const styles=[...document.querySelectorAll("style,link[rel='stylesheet']")].map(node=>node.outerHTML).join("\n");
-  const title=(language==="en"?"Sales Report - ":"تقرير المبيعات - ")+(selectedSalesBranch?nameOf(selectedSalesBranch):"") ;
-  printWindow.document.open();
-  printWindow.document.write('<!doctype html><html lang="'+(language==="en"?"en":"ar")+'" dir="'+(language==="en"?"ltr":"rtl")+'"><head><meta charset="utf-8"><title>'+esc(title)+'</title>'+styles+'<style>@page{size:A3 landscape;margin:10mm}body{background:#fff!important;color:#111!important;margin:0!important;padding:12px!important}.sales-report-page{max-width:none!important;width:100%!important;margin:0!important;padding:0!important;box-shadow:none!important;border:0!important}.sales-statistics-card,.sales-month-card{break-inside:avoid;page-break-inside:avoid}.sales-statistics-table-wrap{overflow:visible!important}.sales-statistics-table{width:100%!important;min-width:0!important;border-collapse:collapse!important;font-size:8px!important}.sales-statistics-table th,.sales-statistics-table td{padding:3px!important;white-space:normal!important;border:1px solid #aaa!important}.sales-metrics-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.sales-metric{break-inside:avoid}.print-sales-value{display:inline-block;min-width:30px;padding:3px;color:#111!important}.sales-statistics-heading{margin-bottom:8px!important}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}</style></head><body>'+copy.outerHTML+'</body></html>');
-  printWindow.document.close();
-  printWindow.focus();
-  setTimeout(()=>printWindow.print(),450);
+  copy.querySelectorAll("input,textarea,select").forEach(field=>{const span=document.createElement("span");span.className="print-sales-value";span.textContent=field.value||"—";field.replaceWith(span);});
+  const printStyle=document.createElement("style");
+  printStyle.id="novaro-sales-print-runtime-style";
+  printStyle.textContent='@page{size:A3 landscape;margin:10mm}body:has(#novaro-sales-print-root)>:not(#novaro-sales-print-root){display:none!important}#novaro-sales-print-root{display:block!important;position:static!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;background:#fff!important;color:#111!important;box-shadow:none!important;border:0!important}#novaro-sales-print-root .sales-statistics-card,#novaro-sales-print-root .sales-month-card{break-inside:avoid;page-break-inside:avoid}#novaro-sales-print-root .sales-statistics-table-wrap{overflow:visible!important}#novaro-sales-print-root .sales-statistics-table{width:100%!important;min-width:0!important;border-collapse:collapse!important;font-size:8px!important}#novaro-sales-print-root .sales-statistics-table th,#novaro-sales-print-root .sales-statistics-table td{padding:3px!important;white-space:normal!important;border:1px solid #aaa!important}#novaro-sales-print-root .sales-metrics-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}#novaro-sales-print-root .print-sales-value{display:inline-block;min-width:30px;padding:3px;color:#111!important}#novaro-sales-print-root *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}';
+  document.head.appendChild(printStyle);
+  document.body.appendChild(copy);
+  const cleanup=()=>{copy.remove();printStyle.remove();window.removeEventListener("afterprint",cleanup);};
+  window.addEventListener("afterprint",cleanup,{once:true});
+  try{window.print();}catch(error){cleanup();alert(language==="en"?"Could not open the print dialog.":"تعذر فتح نافذة الطباعة.");}
   return;
  }
  if(e.target.closest("#exportSalesExcel")){
   const report=document.querySelector(".sales-report-page");
   if(!report)return;
   const branch=salesReportBranches().find(b=>b.id===salesReportBranchId);
-  const copy=report.cloneNode(true);
-  copy.querySelector(".sales-export-card")?.remove();
-  copy.querySelector(".sales-month-actions")?.remove();
-  copy.querySelector(".sales-statistics-actions")?.remove();
-  copy.querySelectorAll(".sales-report-day-panel").forEach(node=>node.remove());
-  copy.querySelectorAll("button").forEach(node=>{const span=document.createElement("span");span.textContent=node.innerText.trim();node.replaceWith(span);});
-  copy.querySelectorAll("input").forEach(input=>{const td=input.closest("td");if(td){td.textContent=input.value||"";}else{const span=document.createElement("span");span.textContent=input.value||"";input.replaceWith(span);}});
-  copy.querySelectorAll("[hidden]").forEach(node=>node.remove());
   const title=(language==="en"?"Sales Report - ":"تقرير المبيعات - ")+(branch?nameOf(branch):"");
-  const html='<!doctype html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>'+esc(title)+'</title><style>body{font-family:Arial,sans-serif;direction:'+(language==="en"?"ltr":"rtl")+'}.sales-statistics-table{border-collapse:collapse;width:100%}.sales-statistics-table th,.sales-statistics-table td{border:1px solid #999;padding:5px;text-align:center}.sales-metric{display:inline-block;border:1px solid #ccc;padding:8px;margin:4px;min-width:140px}.sales-statistics-heading{font-weight:bold;margin:12px 0}.sales-statistics-table-wrap{overflow:visible}.sales-statistics-table{min-width:0}</style></head><body><h2>'+esc(title)+'</h2>'+copy.innerHTML+'</body></html>';
-  const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel;charset=utf-8"});
+  const csvCell=value=>'"'+String(value??"").replace(/"/g,'""').replace(/\r?\n/g," ")+'"';
+  const rows=[[title],[]];
+  report.querySelectorAll(".sales-metric").forEach(metric=>{
+   const label=metric.querySelector("label")?.innerText.trim()||"";
+   const field=metric.querySelector("input,textarea,select");
+   const value=field?field.value:(metric.querySelector(".sales-metric-value")?.innerText.trim()||metric.innerText.trim());
+   rows.push([label,value]);
+  });
+  if(rows.length>2)rows.push([]);
+  report.querySelectorAll("table").forEach((table,index)=>{
+   if(index)rows.push([]);
+   Array.from(table.rows).forEach(tr=>{
+    rows.push(Array.from(tr.cells).map(cell=>{
+     const field=cell.querySelector("input,textarea,select");
+     return field?field.value:cell.innerText.trim().replace(/\s+/g," ");
+    }));
+   });
+  });
+  const csv="\uFEFF"+rows.map(row=>row.map(csvCell).join(",")).join("\r\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
   const url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="Sales-Report-"+(salesReportSelectedMonth||"Report")+"-"+(salesReportSelectedDay||"All-Days")+".xls";
-  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+  a.href=url;a.download="Sales-Report-"+(salesReportSelectedMonth||"Report")+"-"+(salesReportSelectedDay||"All-Days")+".csv";
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
   return;
  }
  const salesBranchButton=e.target.closest("[data-sales-branch]");
