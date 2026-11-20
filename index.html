@@ -1212,10 +1212,11 @@ a.auth-back-link:hover{background:#e3eee8!important}
 #app .sales-entry-heading h3{margin:0 0 4px;font-size:17px}
 #app .sales-entry-card>label{display:block;margin:14px 0 7px;font-size:12px;font-weight:700;color:var(--muted)}
 #app .sales-entry-card>select{width:100%;height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card,#fff);color:var(--text)}
-#app .sales-entry-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}
-#app .sales-entry-month{display:flex;align-items:center;justify-content:center;gap:7px;min-height:54px;padding:8px 5px;border:1px solid var(--line);border-radius:12px;background:var(--card,#fff);color:var(--text);font-size:12px}
-#app .sales-entry-month-number{font-size:10px;font-weight:800;color:var(--muted)}
-#app .sales-entry-month.active{border-color:var(--g);background:var(--accent-soft,#e4f1eb);box-shadow:0 0 0 2px #287d6b18}
+#app .sales-entry-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px}
+#app .sales-entry-month{display:flex;align-items:center;justify-content:center;min-height:38px;padding:5px 4px;border:1px solid transparent;border-radius:9px;background:transparent!important;color:var(--text);font-size:12px;font-weight:600;line-height:1.2;box-shadow:none;transition:background .15s ease,color .15s ease,border-color .15s ease}
+#app .sales-entry-month-number{display:none!important}
+#app .sales-entry-month:hover{background:var(--accent-soft,#e4f1eb)!important;border-color:transparent}
+#app .sales-entry-month.active{border-color:var(--nv-btn-primary,var(--g));background:linear-gradient(110deg,var(--nv-btn-primary,var(--g)),var(--nv-btn-primary-deep,var(--g)))!important;color:#fff!important;box-shadow:0 3px 10px color-mix(in srgb,var(--nv-btn-primary,var(--g)) 22%,transparent)!important}
 #app .sales-entry-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px}
 #app .sales-entry-date{display:flex;flex-direction:column;gap:3px}
 #app .sales-entry-date small{font-size:11px;color:var(--muted)}
@@ -1223,7 +1224,7 @@ a.auth-back-link:hover{background:#e3eee8!important}
 #app .sales-month-static{font-size:16px;color:var(--g);font-weight:800}
 #app .sales-month-heading{display:flex;flex-direction:column;gap:5px;margin-bottom:15px}
 :root[data-novaro-mode="dark"] #app .sales-entry-card,:root[data-novaro-mode="dark"] #app .sales-entry-month{background:#18251f!important;border-color:#40564a!important;color:#e5eee9!important}
-@media(max-width:600px){#app .sales-entry-card{padding:12px!important}#app .sales-entry-grid{gap:7px!important}#app .sales-entry-month{min-height:48px;font-size:11px;flex-direction:column;gap:1px}#app .sales-entry-footer{align-items:stretch}#app .sales-entry-footer button{width:100%}}
+@media(max-width:600px){#app .sales-entry-card{padding:12px!important}#app .sales-entry-grid{gap:5px!important}#app .sales-entry-month{min-height:35px;padding:4px 2px;font-size:11px;flex-direction:row}#app .sales-entry-footer{align-items:stretch}#app .sales-entry-footer button{width:100%}}
 #app .sales-month-card{margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--surface,#f8fbf9)}
 #app .sales-month-heading{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 #app .sales-month-heading>label{font-size:12px;font-weight:700;color:var(--muted)}
@@ -2793,7 +2794,7 @@ if(page==="sales"){
  }else if(!salesReportSelectedMonth){
   const en=language==="en",months=en?["January","February","March","April","May","June","July","August","September","October","November","December"]:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   const years=Array.from({length:16},(_,i)=>{const y=new Date().getFullYear()-10+i;return '<option value="'+y+'" '+(y===new Date().getFullYear()?'selected':'')+'>'+y+'</option>';}).join("");
-  const monthButtons=months.map((name,i)=>'<button type="button" class="soft sales-entry-month" data-sales-entry-month="'+(i+1)+'"><span class="sales-entry-month-number">'+String(i+1).padStart(2,"0")+'</span><strong>'+name+'</strong></button>').join("");
+  const monthButtons=months.map((name,i)=>'<button type="button" class="soft sales-entry-month" data-sales-entry-month="'+(i+1)+'"><strong>'+name+'</strong></button>').join("");
   m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><p class="muted">'+(en?"Choose a year and one of its 12 months.":"اختار السنة والشهر من الشهور الـ12.")+'</p></div><label for="salesEntryYear">'+(en?"Year":"السنة")+'</label><select id="salesEntryYear">'+years+'</select><div class="sales-entry-grid">'+monthButtons+'</div><div class="sales-entry-footer"><div class="sales-entry-date"><small>'+(en?"Selected month":"الشهر المختار")+'</small><strong id="salesEntrySelected">'+(en?"No month selected":"لم يتم اختيار شهر")+'</strong></div><button type="button" class="primary" id="salesEntryOpen">'+(en?"Save & Open":"حفظ وفتح")+'</button></div><span class="muted" id="salesEntryStatus" role="status"></span></div></section>';
  }else{
   const en=language==="en",managerCanEdit=profile?.role==="branch_manager"&&selectedSalesBranch.branch_manager_user_id===user?.id;
