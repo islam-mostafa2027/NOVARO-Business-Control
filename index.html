@@ -1264,6 +1264,70 @@ a.auth-back-link:hover{background:#e3eee8!important}
 :root[data-novaro-mode="dark"] #app .sales-report-coming-icon{background:#293b33!important;color:#a6d8bf!important}
 @media(max-width:600px){#app .sales-report-page{padding:12px!important;margin:7px 0!important}#app .sales-branch-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}#app .sales-branch-pill{min-height:64px!important;padding:7px!important;gap:6px!important}#app .sales-branch-icon{width:24px!important;height:24px!important;font-size:13px!important}#app .sales-branch-copy strong{font-size:11px}#app .sales-branch-copy small{font-size:10px;line-height:1.35}#app .sales-report-coming{padding:22px 13px}}
 </style>
+
+<style id="novaro-sales-month-buttons-final-v1">
+/* Compact, transparent month buttons with the NOVARO green selected state. */
+#app .sales-entry-grid{
+ display:grid!important;
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:5px!important;
+ margin-top:10px!important;
+}
+#app .sales-entry-grid .sales-entry-month{
+ box-sizing:border-box!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ width:100%!important;
+ min-width:0!important;
+ min-height:33px!important;
+ height:33px!important;
+ padding:3px 5px!important;
+ margin:0!important;
+ border:1px solid transparent!important;
+ border-radius:8px!important;
+ background:transparent!important;
+ color:var(--text,var(--ink))!important;
+ box-shadow:none!important;
+ font-size:11px!important;
+ font-weight:600!important;
+ line-height:1.15!important;
+}
+#app .sales-entry-grid .sales-entry-month strong{
+ font-size:inherit!important;
+ font-weight:inherit!important;
+}
+#app .sales-entry-grid .sales-entry-month:hover{
+ background:var(--accent-soft,#e4f1eb)!important;
+ border-color:transparent!important;
+}
+#app .sales-entry-grid .sales-entry-month.active,
+#app .sales-entry-grid .sales-entry-month[aria-pressed="true"]{
+ background:linear-gradient(110deg,var(--nv-btn-primary,var(--g)),var(--nv-btn-primary-deep,var(--g)))!important;
+ color:#fff!important;
+ border-color:var(--nv-btn-primary,var(--g))!important;
+ box-shadow:0 3px 9px color-mix(in srgb,var(--nv-btn-primary,var(--g)) 20%,transparent)!important;
+}
+#app .sales-entry-grid .sales-entry-month:focus-visible{
+ outline:2px solid var(--nv-btn-primary,var(--g))!important;
+ outline-offset:2px!important;
+}
+:root[data-novaro-mode="dark"] #app .sales-entry-grid .sales-entry-month{
+ background:transparent!important;
+ color:#e5eee9!important;
+ border-color:transparent!important;
+}
+:root[data-novaro-mode="dark"] #app .sales-entry-grid .sales-entry-month.active,
+:root[data-novaro-mode="dark"] #app .sales-entry-grid .sales-entry-month[aria-pressed="true"]{
+ background:var(--nv-btn-primary,var(--g))!important;
+ color:#fff!important;
+ border-color:var(--nv-btn-primary,var(--g))!important;
+}
+@media(max-width:600px){
+ #app .sales-entry-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important}
+ #app .sales-entry-grid .sales-entry-month{min-height:31px!important;height:31px!important;padding:2px 3px!important;font-size:10px!important;border-radius:7px!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
