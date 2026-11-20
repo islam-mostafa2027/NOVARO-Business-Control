@@ -3309,8 +3309,8 @@ if(page==="sales"){
   const en=language==="en",months=en?["January","February","March","April","May","June","July","August","September","October","November","December"]:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   const currentSalesYear=new Date().getFullYear();
   const monthButtons=months.map((name,i)=>'<button type="button" class="sales-entry-month" data-sales-entry-month="'+(i+1)+'" style="background:var(--nv-btn-soft-bg,#edf3f0)!important;background-image:none!important;color:var(--nv-btn-soft-text,#315f70)!important;-webkit-text-fill-color:var(--nv-btn-soft-text,#315f70)!important;border:1px solid var(--nv-btn-border,#d5e3dc)!important;box-shadow:none!important;min-height:36px!important;height:36px!important;padding:3px 4px!important;border-radius:9px!important;font-size:11px!important"><strong>'+name+'</strong></button>').join("");
-  const salesYearOptions=Array.from({length:currentSalesYear-1999+5},(_,i)=>currentSalesYear+5-i).map(y=>'<option value="'+y+'" '+(y===currentSalesYear?'selected':'')+'>'+(en?String(y):String(y).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[Number(d)]))+'</option>').join("");
-  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><div class="sales-year-control"><label for="salesEntryYear">'+(en?"Year":"السنة")+'</label><select id="salesEntryYear" aria-label="'+(en?"Report year":"سنة التقرير")+'">'+salesYearOptions+'</select></div></div><div class="sales-entry-grid">'+monthButtons+'</div></div></section>';
+  ;
+  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><div class="sales-year-control"><label for="salesEntryYear">'+(en?"Year":"السنة")+'</label><select id="salesEntryYear" type="number" inputmode="numeric" min="1" max="9999" step="1" value="'+currentSalesYear+'" aria-label="'+(en?"Report year":"سنة التقرير")+'" placeholder="'+(en?"Year":"السنة")+'"></div></div><div class="sales-entry-grid">'+monthButtons+'</div></div></section>';
  }else{
   const en=language==="en",managerCanEdit=profile?.role==="owner_admin"||selectedSalesBranch.branch_manager_user_id===user?.id||selectedSalesBranch.branch_login_user_id===user?.id;
   const monthParts=salesReportSelectedMonth.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d{4})$/),monthIndex=monthParts?["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthParts[1]):0,year=monthParts?monthParts[2]:String(new Date().getFullYear()),arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
@@ -5555,4 +5555,20 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .sales-report-page #salesReportDay option{background:var(--card,#fff)!important;color:var(--text,var(--ink))!important;}
 :root[data-novaro-mode="dark"] #app .sales-report-page #salesReportDay{background:transparent!important;color:#e5eee9!important;border-color:#40564a!important;color-scheme:dark;}
 @media(max-width:600px){#app .sales-report-page #salesReportDay{width:36px!important;min-width:36px!important;max-width:36px!important;height:36px!important;min-height:36px!important;max-height:36px!important;}}
+</style>
+
+<style id="novaro-sales-year-square-manual-v1">
+/* Manual year entry: a compact square field, with no fixed year list. */
+#app .sales-entry-card .sales-year-control #salesEntryYear{
+ box-sizing:border-box!important;display:block!important;flex:0 0 46px!important;
+ width:46px!important;min-width:46px!important;max-width:46px!important;
+ height:46px!important;min-height:46px!important;max-height:46px!important;
+ margin:0!important;padding:3px!important;border-radius:10px!important;
+ text-align:center!important;text-align-last:center!important;direction:ltr!important;
+ font-size:14px!important;font-weight:700!important;appearance:textfield!important;
+}
+#app .sales-entry-card .sales-year-control #salesEntryYear::-webkit-inner-spin-button,
+#app .sales-entry-card .sales-year-control #salesEntryYear::-webkit-outer-spin-button{-webkit-appearance:none!important;margin:0!important}
+:root[data-novaro-mode="dark"] #app .sales-entry-card .sales-year-control #salesEntryYear{background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important}
+@media(max-width:600px){#app .sales-entry-card .sales-year-control #salesEntryYear{flex-basis:42px!important;width:42px!important;min-width:42px!important;max-width:42px!important;height:42px!important;min-height:42px!important;max-height:42px!important}}
 </style>
