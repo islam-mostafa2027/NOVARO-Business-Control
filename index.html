@@ -2689,7 +2689,7 @@ function manageBranchAccount(id){
  const en=language==="en";
  form(en?"Branch login account":"حساب دخول الفرع",
   '<p class="muted">'+esc(nameOf(b))+'</p>'+
-  inp(en?"Branch manager name":"اسم مدير الفرع","branchManagerName","required")+
+  inp(en?"Manager name (Arabic)":"اسم مدير الفرع بالعربية","branchManagerName","required")+inp(en?"Manager name (English)":"اسم مدير الفرع بالإنجليزية","branchManagerNameEn","required")+
   inp(en?"Login email":"إيميل الدخول","branchManagerEmail",'type="email" required')+
   inp(en?"New password (leave blank to keep current)":"كلمة مرور جديدة (اتركها فارغة للاحتفاظ بالحالية)","branchManagerPassword",'type="password" minlength="8" autocomplete="new-password"')+
   '<p class="muted">'+(en?"The password is securely stored by Supabase Auth and cannot be displayed again. Leave it blank unless you want to change it.":"كلمة المرور محفوظة بشكل مشفر وآمن في نظام الدخول، ولا يمكن عرضها مرة أخرى. اترك الخانة فارغة لو مش عايز تغيّرها.")+'</p>'+
