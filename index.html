@@ -2932,7 +2932,7 @@ function applySelectedDailyTargetToStatisticsRow(){
  const day=Number(salesReportSelectedDay||page.querySelector("#salesReportDay")?.value||0),source=page.querySelector('[data-sales-metric="daily_sales_target"]');
  const row=day>0?page.querySelectorAll(".sales-statistics-table tbody tr")[day-1]:null,target=row?.querySelector("[data-stat-target]");
  const raw=String(source?.value??"").trim(),value=statisticsNumber(raw);
- if(target&&raw!==""){target.value=Number.isFinite(value)?formatStatisticsNumber(value):"";syncStatisticsAverages(row);}
+ if(target){target.value=raw!==""&&Number.isFinite(value)?formatStatisticsNumber(value):"";syncStatisticsAverages(row);}
  syncSelectedStatisticsDailyTarget();
 }
 document.addEventListener("input",e=>{if(e.target.matches&&e.target.matches('.sales-report-page [data-sales-metric="daily_sales_target"]'))applySelectedDailyTargetToStatisticsRow();},true);
