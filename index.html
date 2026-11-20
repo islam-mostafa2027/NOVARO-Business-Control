@@ -2267,14 +2267,13 @@ document.addEventListener("click",async e=>{
   return;
  }
  if(e.target.closest("#salesEntryOpen")){
-  if(!/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\\d{4}$/.test(salesReportSelectedMonth)){const status=$("salesEntryStatus");if(status)status.textContent=language==="en"?"Choose a month first.":"اختار الشهر الأول.";return;}
+  if(!/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/.test(salesReportSelectedMonth)){const status=$("salesEntryStatus");if(status)status.textContent=language==="en"?"Choose a month first.":"اختار الشهر الأول.";return;}
   render();
-  const loadButton=$("loadSalesMonth");if(loadButton)loadButton.click();
   return;
  }
  if(salesMonthCard&&e.target.closest("#loadSalesMonth")){
   const branch=salesReportBranches().find(b=>b.id===salesMonthCard.dataset.salesBranchId),month=salesReportSelectedMonth,status=salesMonthCard.querySelector("#salesMonthStatus");
-  const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\\d{4}$/;
+  const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/;
   if(!branch||!monthPattern.test(month||"")){if(status)status.textContent=language==="en"?"Choose a valid month first.":"اختار شهر صحيح الأول.";return;}
   const loadButton=e.target.closest("#loadSalesMonth");loadButton.disabled=true;if(status)status.textContent=language==="en"?"Loading...":"جارٍ التحميل...";
   try{
@@ -2293,7 +2292,7 @@ document.addEventListener("click",async e=>{
  }
  if(salesMonthCard&&e.target.closest("#saveSalesMonth")){
   const branch=salesReportBranches().find(b=>b.id===salesMonthCard.dataset.salesBranchId),month=salesReportSelectedMonth,status=salesMonthCard.querySelector("#salesMonthStatus"),saveButton=e.target.closest("#saveSalesMonth");
-  const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\\d{4}$/;
+  const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/;
   if(!branch||!monthPattern.test(month||"")){if(status)status.textContent=language==="en"?"Choose a valid month first.":"اختار شهر صحيح الأول.";return;}
   if(salesMonthCard.dataset.loadedMonth!==month){if(status)status.textContent=language==="en"?"Wait for the month to load before saving.":"استنى لحد ما بيانات الشهر تتحمل قبل الحفظ.";return;}
   const readNumber=key=>{const raw=salesMonthCard.querySelector('[data-sales-metric="'+key+'"]')?.value.trim();if(raw==="")return null;const value=Number(raw);return Number.isFinite(value)&&value>=0?value:NaN;};
@@ -2311,6 +2310,10 @@ document.addEventListener("click",async e=>{
   finally{saveButton.disabled=false;}
   return;
  }
+ const salesBranchButton=e.target.closest("[data-sales-branch]");
+ if(salesBranchButton){salesReportBranchId=salesBranchButton.dataset.salesBranch;salesReportSelectedMonth="";render();return;}
+ if(e.target.closest("#salesReportBack")){salesReportBranchId="";salesReportSelectedMonth="";render();return;}
+ if(e.target.closest("#salesReportMonthBack")){salesReportSelectedMonth="";render();return;}
  const headcountBranchButton=e.target.closest("[data-headcount-branch]");
  if(headcountBranchButton){headcountBranchId=headcountBranchButton.dataset.headcountBranch;render();return;}
  if(e.target.closest("#headcountBack")){headcountBranchId="";render();return;}
@@ -2794,7 +2797,7 @@ if(page==="sales"){
   m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><p class="muted">'+(en?"Choose a year and one of its 12 months.":"اختار السنة والشهر من الشهور الـ12.")+'</p></div><label for="salesEntryYear">'+(en?"Year":"السنة")+'</label><select id="salesEntryYear">'+years+'</select><div class="sales-entry-grid">'+monthButtons+'</div><div class="sales-entry-footer"><div class="sales-entry-date"><small>'+(en?"Selected month":"الشهر المختار")+'</small><strong id="salesEntrySelected">'+(en?"No month selected":"لم يتم اختيار شهر")+'</strong></div><button type="button" class="primary" id="salesEntryOpen">'+(en?"Save & Open":"حفظ وفتح")+'</button></div><span class="muted" id="salesEntryStatus" role="status"></span></div></section>';
  }else{
   const en=language==="en",managerCanEdit=profile?.role==="branch_manager"&&selectedSalesBranch.branch_manager_user_id===user?.id;
-  const monthParts=salesReportSelectedMonth.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\\d{4})$/),monthIndex=monthParts?["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthParts[1]):0,year=monthParts?monthParts[2]:String(new Date().getFullYear()),arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  const monthParts=salesReportSelectedMonth.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d{4})$/),monthIndex=monthParts?["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthParts[1]):0,year=monthParts?monthParts[2]:String(new Date().getFullYear()),arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   const monthLabel=en?salesReportSelectedMonth:arabicMonths[monthIndex]+" "+year;
   const metric=(key,label,editable)=>'<div class="sales-metric"><label for="salesMetric_'+key+'">'+label+'</label><input id="salesMetric_'+key+'" data-sales-metric="'+key+'" type="number" min="0" step="0.01" inputmode="decimal" '+(editable?'':'readonly')+' placeholder="—"></div>';
   m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportMonthBack">← '+(en?"Choose another month":"اختيار شهر آخر")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-month-card" data-sales-branch-id="'+esc(selectedSalesBranch.id)+'"><div class="sales-month-heading"><label>'+(en?"Selected Report Month":"شهر التقرير المختار")+'</label><strong class="sales-month-static">'+esc(monthLabel)+'</strong></div><div class="sales-metrics-grid">'+metric("sales_target",en?"Sales Target":"مستهدف المبيعات",managerCanEdit)+metric("daily_sales_target",en?"Daily Sales Target":"المستهدف اليومي للمبيعات",true)+metric("month_to_date_sales",en?"Month To Date Sales":"مبيعات الشهر حتى تاريخه",true)+metric("yesterday_sales",en?"Yesterday Sales":"مبيعات أمس",true)+metric("yesterday_tip",en?"Yesterday Tip":"إكرامية أمس",true)+metric("month_to_date_tip",en?"Month To Date Tip":"إكرامية الشهر حتى تاريخه",true)+'</div><div class="sales-month-actions"><button type="button" class="primary" id="saveSalesMonth">'+(en?"Save Report":"حفظ التقرير")+'</button><span class="muted" id="salesMonthStatus" role="status">'+(en?"Loading month data...":"جارٍ تحميل بيانات الشهر...")+'</span></div><button type="button" id="loadSalesMonth" class="hidden" aria-hidden="true" tabindex="-1">Load</button></div></section>';
