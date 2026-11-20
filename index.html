@@ -1607,6 +1607,9 @@ let novaroAuditPanelOpen=false;
 function renderNotifications(){
  const wrap=$("novaroAuditBellWrap"),panel=$("novaroAuditPanel"),list=$("novaroAuditList"),badge=$("novaroAuditBadge"),title=$("novaroAuditPanelTitle"),refresh=$("novaroAuditRefresh");
  if(!wrap||!panel||!list||!badge)return;
+ // Portal the panel out of the sticky/blurred header so fixed positioning cannot be clipped.
+ const appRoot=$("app");
+ if(appRoot&&panel.parentElement!==appRoot)appRoot.appendChild(panel);
  const isOwner=profile?.role==="owner_admin";
  wrap.style.display=isOwner?"inline-flex":"none";
  if(!isOwner){panel.classList.add("hidden");return}
@@ -1620,9 +1623,16 @@ function renderNotifications(){
 }
 async function loadNotifications(){
  if(!user)return;
- const {data,error}=await db.from("notifications").select("id,title,body,created_at,read_at,branch_id,action,entity_table").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(40);
- if(error){console.warn("Notifications:",error.message);return}
- notificationRows=data||[];renderNotifications();
+ const list=$("novaroAuditList");
+ if(list)list.innerHTML='<div class="notification-empty">'+(language==="en"?"Loading messages…":"جاري تحميل الرسائل…")+'</div>';
+ try{
+  const {data,error}=await db.from("notifications").select("id,title,body,created_at,read_at,branch_id,action,entity_table").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(40);
+  if(error)throw error;
+  notificationRows=data||[];renderNotifications();
+ }catch(error){
+  console.error("NOVARO notifications load failed:",error);
+  if(list)list.innerHTML='<div class="notification-empty">'+(language==="en"?"Could not load messages. Tap Refresh to try again.":"تعذر تحميل الرسائل. اضغط تحديث للمحاولة مرة أخرى.")+'</div>';
+ }
 }
 async function markNotificationRead(id){
  const n=notificationRows.find(x=>x.id===id);if(!n||n.read_at)return;
@@ -1954,7 +1964,7 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("#novaroAuditRefresh")){await loadNotifications();return;}
  const auditEntry=e.target.closest("[data-audit-notification]");
  if(auditEntry){await markNotificationRead(auditEntry.dataset.auditNotification);return;}
- if(novaroAuditPanelOpen&&!e.target.closest("#novaroAuditBellWrap")){novaroAuditPanelOpen=false;renderNotifications();}
+ if(novaroAuditPanelOpen&&!e.target.closest("#novaroAuditBellWrap")&&!e.target.closest("#novaroAuditPanel")){novaroAuditPanelOpen=false;renderNotifications();}
 
  const headcountBranchButton=e.target.closest("[data-headcount-branch]");
  if(headcountBranchButton){headcountBranchId=headcountBranchButton.dataset.headcountBranch;render();return;}
