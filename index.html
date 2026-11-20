@@ -1603,11 +1603,11 @@ db.auth.onAuthStateChange((event,session)=>{
 
 let notificationChannel=null, catalogChannel=null, notificationRows=[];
 function notificationTime(v){const d=new Date(v);return d.toLocaleString(language==="en"?"en-US":"ar-EG",{dateStyle:"short",timeStyle:"short"})}
-let novaroAuditPanelOpen=false;
+let novaroAuditPanelOpen=false,novaroAuditShowAll=false;
 function renderNotifications(){
  const wrap=$("novaroAuditBellWrap"),panel=$("novaroAuditPanel"),list=$("novaroAuditList"),badge=$("novaroAuditBadge"),title=$("novaroAuditPanelTitle"),refresh=$("novaroAuditRefresh");
  if(!wrap||!panel||!list||!badge)return;
- // Portal the panel out of the sticky/blurred header so fixed positioning cannot be clipped.
+ // Keep the panel outside the sticky header so it can use the full viewport.
  const appRoot=$("app");
  if(appRoot&&panel.parentElement!==appRoot)appRoot.appendChild(panel);
  const isOwner=profile?.role==="owner_admin";
@@ -1619,7 +1619,10 @@ function renderNotifications(){
  if(title)title.textContent=language==="en"?"Branch messages & changes":"رسائل وتعديلات الفروع";
  if(refresh)refresh.textContent=language==="en"?"Refresh":"تحديث";
  if(!notificationRows.length){list.innerHTML='<div class="notification-empty">'+(language==="en"?"No messages yet":"لا توجد رسائل حتى الآن")+'</div>';return}
- list.innerHTML=notificationRows.map(n=>'<article class="notification-entry '+(!n.read_at?'unread':'')+'" data-audit-notification="'+esc(n.id)+'"><b>'+esc(n.title|| (language==="en"?"Branch update":"تعديل بالفرع"))+'</b><p class="notification-detail">'+esc(n.body||"")+'</p><small>'+esc(new Date(n.created_at).toLocaleString(language==="en"?"en-US":"ar-EG",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}))+'</small></article>').join("");
+ const visibleRows=novaroAuditShowAll?notificationRows:notificationRows.slice(0,3);
+ const cards=visibleRows.map(n=>'<article class="notification-entry '+(!n.read_at?'unread':'')+'" data-audit-notification="'+esc(n.id)+'"><b>'+esc(n.title|| (language==="en"?"Branch update":"تعديل بالفرع"))+'</b><p class="notification-detail">'+esc(n.body||"")+'</p><small>'+esc(new Date(n.created_at).toLocaleString(language==="en"?"en-US":"ar-EG",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}))+'</small></article>').join("");
+ const footer=notificationRows.length>3?'<div class="notification-list-footer"><button type="button" class="soft" id="novaroAuditViewAll">'+(novaroAuditShowAll?(language==="en"?"Show latest 3":"عرض أحدث 3 إشعارات"):(language==="en"?"View all "+notificationRows.length+" notifications":"عرض كل الإشعارات ("+notificationRows.length+")"))+'</button></div>':'';
+ list.innerHTML=cards+footer;
 }
 async function loadNotifications(){
  if(!user)return;
@@ -1960,7 +1963,8 @@ document.addEventListener("change",e=>{const id=e.target.id;if(!novaroSettingsDr
 document.addEventListener("input",e=>{if(e.target.id==="alertVolume"&&novaroSettingsDraft){novaroSettingsDraft.volume=Number(e.target.value);const v=$("alertVolumeValue");if(v)v.textContent=e.target.value+"%";if(novaroSoundMaster&&novaroSoundContext)novaroSoundMaster.gain.setTargetAtTime(Math.max(.01,novaroSettingsDraft.volume/100*.48),novaroSoundContext.currentTime,.025)}});
 document.addEventListener("click",async e=>{
  const auditBell=e.target.closest("#novaroAuditBell");
- if(auditBell){novaroAuditPanelOpen=!novaroAuditPanelOpen;renderNotifications();if(novaroAuditPanelOpen)await loadNotifications();return;}
+ if(auditBell){novaroAuditPanelOpen=!novaroAuditPanelOpen;if(novaroAuditPanelOpen)novaroAuditShowAll=false;renderNotifications();if(novaroAuditPanelOpen)await loadNotifications();return;}
+ if(e.target.closest("#novaroAuditViewAll")){novaroAuditShowAll=!novaroAuditShowAll;renderNotifications();return;}
  if(e.target.closest("#novaroAuditRefresh")){await loadNotifications();return;}
  const auditEntry=e.target.closest("[data-audit-notification]");
  if(auditEntry){await markNotificationRead(auditEntry.dataset.auditNotification);return;}
@@ -2248,7 +2252,65 @@ function printStocktakeReport(targetWindow,reportData){
  const en=language==="en",title=en?"STOCKTAKE REPORT":"تقرير الجرد";
  const w=targetWindow||window.open("","_blank");if(!w)return alert(en?"Allow pop-ups to open the printable report.":"اسمح بفتح النوافذ المنبثقة لعرض التقرير القابل للطباعة.");
  const report=stocktakeReportTable(data);
- const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style> *{box-sizing:border-box} html,body{margin:0;padding:0;font-family:Arial,Tahoma,sans-serif;color:#263b4a;background:#fff;font-size:11px} .single-stocktake-report{width:100%;max-width:none;margin:0 auto;display:grid;gap:8px} .print-report-head{padding:10px!important;text-align:center;border:1px solid #dcebf1!important;border-radius:12px!important;background:#f7fbfd!important;margin:0!important;break-inside:avoid} .print-report-brand{font-size:15px;font-weight:850;letter-spacing:1px;color:#315b70;line-height:1.2} .print-report-head h2{font-size:15px;font-weight:700;margin:3px 0 7px;color:#263b4a;line-height:1.3} .report-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center} .report-meta span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:42px;padding:5px 4px;background:#edf5f8;border:1px solid #d7e7ee;border-radius:9px;font-size:9px;line-height:1.25;overflow-wrap:anywhere} .report-meta span b{display:block;font-size:8px;line-height:1.25} .report-group{padding:9px!important;margin:0!important;border:1px solid #dcebf1!important;border-radius:12px!important;background:#fff!important;break-inside:auto} .stocktake-group-heading{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid #e4eef2} .stocktake-group-heading h3{margin:0;font-size:13px;color:#315b70} .stocktake-group-count{min-width:23px;height:23px;display:grid;place-items:center;padding:0 7px;border-radius:8px;background:#e4f2f7;color:#315b70;font-weight:800;font-size:10px} .stocktake-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px} .stocktake-item-card{min-width:0;padding:7px;border:1px solid #dce8ed;border-radius:10px;background:#fdfefe;break-inside:avoid;page-break-inside:avoid} .stocktake-item-top{display:flex;align-items:flex-start;gap:6px;margin-bottom:6px} .stocktake-item-number{flex:0 0 21px;height:21px;display:grid;place-items:center;border-radius:7px;background:#e5f2f7;color:#315b70;font-size:10px;font-weight:800} .stocktake-item-name{font-size:11px;line-height:1.35;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px} .stocktake-item-details>div{min-width:0;padding:5px;border-radius:7px;background:#eff5f7} .stocktake-item-details span{display:block;font-size:8px;color:#6a808c;margin-bottom:2px} .stocktake-item-details b{display:block;font-size:9px;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details .stocktake-item-quantity{grid-column:1/-1;background:#e5f2f7} .stocktake-item-quantity b{font-size:12px;color:#315b70} .app-watermark{margin-top:8px;text-align:center;color:#718894;font-size:9px} .app-watermark strong{color:#315b70} .print-actions{max-width:100%;margin:0 auto 8px;text-align:start} .print-actions button{border:0;border-radius:8px;padding:8px 14px;background:#315b70;color:#fff;font-weight:700;cursor:pointer} @page{size:A4 portrait;margin:8mm} @media print{html,body{width:100%;height:auto;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-actions{display:none!important}.single-stocktake-report{width:100%;max-width:none;margin:0;gap:6px}.report-group{break-inside:auto}.stocktake-item-card{break-inside:avoid;page-break-inside:avoid}.print-report-head,.stocktake-group-heading{break-after:avoid;page-break-after:avoid}} @media screen{body{max-width:1400px;margin:16px auto;padding:14px;background:#f1f8fb}.single-stocktake-report{max-width:none}} </style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div>'+report+'\n</body></html>';
+ const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style> *{box-sizing:border-box} html,body{margin:0;padding:0;font-family:Arial,Tahoma,sans-serif;color:#263b4a;background:#fff;font-size:11px} .single-stocktake-report{width:100%;max-width:none;margin:0 auto;display:grid;gap:8px} .print-report-head{padding:10px!important;text-align:center;border:1px solid #dcebf1!important;border-radius:12px!important;background:#f7fbfd!important;margin:0!important;break-inside:avoid} .print-report-brand{font-size:15px;font-weight:850;letter-spacing:1px;color:#315b70;line-height:1.2} .print-report-head h2{font-size:15px;font-weight:700;margin:3px 0 7px;color:#263b4a;line-height:1.3} .report-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center} .report-meta span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:42px;padding:5px 4px;background:#edf5f8;border:1px solid #d7e7ee;border-radius:9px;font-size:9px;line-height:1.25;overflow-wrap:anywhere} .report-meta span b{display:block;font-size:8px;line-height:1.25} .report-group{padding:9px!important;margin:0!important;border:1px solid #dcebf1!important;border-radius:12px!important;background:#fff!important;break-inside:auto} .stocktake-group-heading{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid #e4eef2} .stocktake-group-heading h3{margin:0;font-size:13px;color:#315b70} .stocktake-group-count{min-width:23px;height:23px;display:grid;place-items:center;padding:0 7px;border-radius:8px;background:#e4f2f7;color:#315b70;font-weight:800;font-size:10px} .stocktake-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px} .stocktake-item-card{min-width:0;padding:7px;border:1px solid #dce8ed;border-radius:10px;background:#fdfefe;break-inside:avoid;page-break-inside:avoid} .stocktake-item-top{display:flex;align-items:flex-start;gap:6px;margin-bottom:6px} .stocktake-item-number{flex:0 0 21px;height:21px;display:grid;place-items:center;border-radius:7px;background:#e5f2f7;color:#315b70;font-size:10px;font-weight:800} .stocktake-item-name{font-size:11px;line-height:1.35;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px} .stocktake-item-details>div{min-width:0;padding:5px;border-radius:7px;background:#eff5f7} .stocktake-item-details span{display:block;font-size:8px;color:#6a808c;margin-bottom:2px} .stocktake-item-details b{display:block;font-size:9px;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details .stocktake-item-quantity{grid-column:1/-1;background:#e5f2f7} .stocktake-item-quantity b{font-size:12px;color:#315b70} .app-watermark{margin-top:8px;text-align:center;color:#718894;font-size:9px} .app-watermark strong{color:#315b70} .print-actions{max-width:100%;margin:0 auto 8px;text-align:start} .print-actions button{border:0;border-radius:8px;padding:8px 14px;background:#315b70;color:#fff;font-weight:700;cursor:pointer} @page{size:A4 portrait;margin:8mm} @media print{html,body{width:100%;height:auto;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-actions{display:none!important}.single-stocktake-report{width:100%;max-width:none;margin:0;gap:6px}.report-group{break-inside:auto}.stocktake-item-card{break-inside:avoid;page-break-inside:avoid}.print-report-head,.stocktake-group-heading{break-after:avoid;page-break-after:avoid}} @media screen{body{max-width:1400px;margin:16px auto;padding:14px;background:#f1f8fb}.single-stocktake-report{max-width:none}} </style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div>'+report+'\n<style id="novaro-notifications-list-layout-v2">
+/* Notification preview: three complete messages first, with a clear path to the full history. */
+#app .notification-panel{
+ position:fixed!important;z-index:10060!important;
+ top:50%!important;bottom:auto!important;left:50%!important;right:auto!important;
+ transform:translate(-50%,-50%)!important;
+ width:min(620px,calc(100vw - 36px))!important;
+ max-height:min(78vh,720px)!important;height:auto!important;min-height:0!important;
+ padding:16px!important;overflow-x:hidden!important;overflow-y:auto!important;
+ overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;
+ border-radius:20px!important;box-shadow:0 22px 70px #142d2440!important;
+}
+#app .notification-panel-head{
+ position:sticky!important;top:-16px!important;z-index:4!important;
+ display:flex!important;align-items:center!important;justify-content:space-between!important;
+ gap:12px!important;padding:8px 4px 13px!important;margin:0 0 10px!important;
+ background:var(--surface,#fff)!important;border-bottom:1px solid var(--line,#e1ebe6)!important;
+}
+#app #novaroAuditList{display:grid!important;gap:10px!important;width:100%!important;min-width:0!important;overflow:visible!important}
+#app .notification-entry{
+ display:block!important;width:100%!important;min-width:0!important;height:auto!important;
+ max-height:none!important;overflow:visible!important;padding:14px!important;
+ border:1px solid var(--line,#e1ebe6)!important;border-radius:14px!important;
+ background:var(--surface,#fff)!important;cursor:pointer!important;
+}
+#app .notification-entry.unread{background:var(--notification-unread,#edf7f1)!important;border-color:#b9d9c8!important}
+#app .notification-entry b{display:block!important;font-size:14px!important;line-height:1.55!important;margin:0 0 6px!important;overflow-wrap:anywhere!important}
+#app .notification-entry .notification-detail{
+ display:block!important;width:100%!important;height:auto!important;max-height:none!important;
+ margin:0!important;overflow:visible!important;white-space:pre-wrap!important;
+ overflow-wrap:anywhere!important;word-break:break-word!important;text-overflow:clip!important;
+ font-size:13px!important;line-height:1.8!important;
+}
+#app .notification-entry small{display:block!important;margin-top:9px!important;font-size:11px!important;line-height:1.5!important}
+#app .notification-list-footer{position:sticky!important;bottom:-16px!important;z-index:3!important;padding:12px 0 2px!important;background:var(--surface,#fff)!important}
+#app #novaroAuditViewAll{display:block!important;width:100%!important;min-height:46px!important;border-radius:12px!important;font-weight:700!important}
+:root[data-novaro-mode="dark"] #app .notification-panel,
+:root[data-novaro-mode="dark"] #app .notification-panel-head,
+:root[data-novaro-mode="dark"] #app .notification-list-footer{background:#202f28!important;color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #app .notification-entry{background:#26382f!important;border-color:#40564a!important}
+:root[data-novaro-mode="dark"] #app .notification-entry.unread{background:#29483a!important;border-color:#527662!important}
+:root[data-novaro-mode="dark"] #app .notification-entry b{color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #app .notification-entry .notification-detail{color:#cbd8d0!important}
+@media(max-width:600px){
+ #app .notification-panel{
+  top:calc(env(safe-area-inset-top) + 62px)!important;
+  bottom:calc(env(safe-area-inset-bottom) + 76px)!important;
+  left:50%!important;right:auto!important;transform:translateX(-50%)!important;
+  width:calc(100vw - 16px)!important;max-height:none!important;height:auto!important;
+  padding:12px!important;border-radius:17px!important;
+ }
+ #app .notification-panel-head{top:-12px!important;padding:7px 2px 11px!important}
+ #app .notification-entry{padding:12px!important}
+ #app .notification-entry b{font-size:13px!important}
+ #app .notification-entry .notification-detail{font-size:12px!important;line-height:1.75!important}
+ #app .notification-list-footer{bottom:-12px!important}
+}
+</style>
+</body></html>';
  w.document.open();w.document.write(html);w.document.close();
 }
 function monthLabel(value){if(!value)return "—";const p=String(value).slice(0,7).split("-");return new Intl.DateTimeFormat(language==="en"?"en-US-u-ca-gregory-nu-latn":"ar-EG",{month:"long",year:"numeric"}).format(new Date(Number(p[0]),Number(p[1])-1,1))}
