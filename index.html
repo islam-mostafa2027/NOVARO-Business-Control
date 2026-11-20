@@ -4652,6 +4652,66 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  #app .branch-card-actions-four .branch-action-btn{height:35px!important;min-height:35px!important;max-height:35px!important;padding:4px 10px!important;font-size:11px!important}
 }
 </style>
+
+<style id="novaro-sales-day-transparent-final-v4">
+/* Explicitly exclude the report-day controls from the global green button system. */
+#app #savedSalesDayToggle,
+#app #savedSalesDayToggle:hover,
+#app #savedSalesDayToggle:active,
+#app #savedSalesDayToggle:focus,
+#app #savedSalesDayToggle:focus-visible,
+#app #savedSalesDayToggle[aria-expanded="true"],
+#app #savedSalesDayToggle.active,
+#app #savedSalesDayToggle.selected,
+#app #savedSalesDayToggle[aria-pressed="true"]{
+ background:transparent!important;background-color:transparent!important;background-image:none!important;
+ color:var(--text,var(--ink))!important;-webkit-text-fill-color:var(--text,var(--ink))!important;
+ border:1px solid var(--line,#dfe9e3)!important;box-shadow:none!important;
+ filter:none!important;transform:none!important;outline:none!important;
+}
+#app #savedSalesDayPanel > button[data-saved-sales-day],
+#app #savedSalesDayPanel > button[data-saved-sales-day]:hover,
+#app #savedSalesDayPanel > button[data-saved-sales-day]:active,
+#app #savedSalesDayPanel > button[data-saved-sales-day]:focus,
+#app #savedSalesDayPanel > button[data-saved-sales-day]:focus-visible,
+#app #savedSalesDayPanel > button[data-saved-sales-day].active,
+#app #savedSalesDayPanel > button[data-saved-sales-day].selected,
+#app #savedSalesDayPanel > button[data-saved-sales-day].is-selected,
+#app #savedSalesDayPanel > button[data-saved-sales-day][aria-pressed="true"]{
+ background:transparent!important;background-color:transparent!important;background-image:none!important;
+ color:var(--text,var(--ink))!important;-webkit-text-fill-color:var(--text,var(--ink))!important;
+ border:1px solid transparent!important;box-shadow:none!important;
+ filter:none!important;transform:none!important;outline:none!important;
+}
+#app #savedSalesDayPanel > button[data-saved-sales-day].active,
+#app #savedSalesDayPanel > button[data-saved-sales-day][aria-pressed="true"]{
+ border:1px solid var(--line,#dfe9e3)!important;font-weight:800!important;
+}
+#app #salesReportDay,
+#app #salesReportDay:hover,
+#app #salesReportDay:focus,
+#app #salesReportDay:active{
+ background:transparent!important;background-color:transparent!important;background-image:none!important;
+ box-shadow:none!important;outline:none!important;
+}
+:root[data-novaro-mode="dark"] #app #savedSalesDayToggle,
+:root[data-novaro-mode="dark"] #app #savedSalesDayPanel > button[data-saved-sales-day],
+:root[data-novaro-mode="dark"] #app #savedSalesDayPanel > button[data-saved-sales-day]:hover,
+:root[data-novaro-mode="dark"] #app #savedSalesDayPanel > button[data-saved-sales-day].active,
+:root[data-novaro-mode="dark"] #app #savedSalesDayPanel > button[data-saved-sales-day][aria-pressed="true"]{
+ background:transparent!important;background-color:transparent!important;background-image:none!important;
+ color:#e5eee9!important;-webkit-text-fill-color:#e5eee9!important;
+ border-color:transparent!important;box-shadow:none!important;
+}
+:root[data-novaro-mode="dark"] #app #savedSalesDayPanel > button[data-saved-sales-day].active,
+:root[data-novaro-mode="dark"] #app #savedSalesDayPanel > button[data-saved-sales-day][aria-pressed="true"]{
+ border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #app #salesReportDay{
+ background:transparent!important;background-color:transparent!important;color:#e5eee9!important;
+}
+</style>
+
 </body></html>
 
 <style id="novaro-item-qr-label-position-v1">
