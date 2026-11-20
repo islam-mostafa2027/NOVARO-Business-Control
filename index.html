@@ -1328,6 +1328,53 @@ a.auth-back-link:hover{background:#e3eee8!important}
  #app .sales-entry-grid .sales-entry-month{min-height:31px!important;height:31px!important;padding:2px 3px!important;font-size:10px!important;border-radius:7px!important}
 }
 </style>
+<style id="novaro-sales-month-picker-layout-v2">
+/* Month picker: title at the right, compact year field at the left. */
+#app .sales-entry-card .sales-entry-heading{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;
+ gap:12px!important;direction:rtl!important;margin:0 0 12px!important;
+}
+#app .sales-entry-card .sales-entry-heading h3{
+ margin:0!important;flex:1 1 auto!important;min-width:0!important;
+ font-size:17px!important;line-height:1.4!important;
+}
+#app .sales-entry-card #salesEntryYear{
+ display:block!important;flex:0 0 138px!important;width:138px!important;
+ min-width:0!important;height:42px!important;min-height:42px!important;
+ margin:0!important;padding:6px 10px!important;text-align:left!important;
+ border:1px solid var(--line,#dce8e1)!important;border-radius:10px!important;
+ background:var(--card,#fff)!important;color:var(--text,var(--ink))!important;
+ font-size:15px!important;box-shadow:none!important;
+}
+#app .sales-report-page .sales-entry-card .sales-entry-grid>button.sales-entry-month:not(.active):not([aria-pressed="true"]){
+ background:transparent!important;background-image:none!important;
+ color:var(--text,var(--ink))!important;border:1px solid transparent!important;
+ box-shadow:none!important;
+}
+#app .sales-report-page .sales-entry-card .sales-entry-grid>button.sales-entry-month:not(.active):not([aria-pressed="true"]):hover,
+#app .sales-report-page .sales-entry-card .sales-entry-grid>button.sales-entry-month:not(.active):not([aria-pressed="true"]):focus-visible{
+ background:var(--accent-soft,#e4f1eb)!important;color:var(--g,#287d6b)!important;
+ border-color:transparent!important;box-shadow:none!important;
+}
+#app .sales-report-page .sales-entry-card .sales-entry-grid>button.sales-entry-month:active,
+#app .sales-report-page .sales-entry-card .sales-entry-grid>button.sales-entry-month.active,
+#app .sales-report-page .sales-entry-card .sales-entry-grid>button.sales-entry-month[aria-pressed="true"]{
+ background:var(--nv-btn-primary,var(--g,#287d6b))!important;background-image:none!important;
+ color:#fff!important;border-color:var(--nv-btn-primary,var(--g,#287d6b))!important;
+ box-shadow:0 3px 9px #236e5d24!important;
+}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-entry-card .sales-entry-grid>button.sales-entry-month:not(.active):not([aria-pressed="true"]){
+ background:transparent!important;color:#e5eee9!important;border-color:transparent!important;
+}
+:root[data-novaro-mode="dark"] #app .sales-entry-card #salesEntryYear{
+ background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important;
+}
+@media(max-width:600px){
+ #app .sales-entry-card .sales-entry-heading{gap:8px!important;margin-bottom:10px!important}
+ #app .sales-entry-card .sales-entry-heading h3{font-size:16px!important}
+ #app .sales-entry-card #salesEntryYear{flex-basis:112px!important;width:112px!important;height:40px!important;min-height:40px!important;font-size:14px!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -2854,7 +2901,7 @@ if(page==="sales"){
   const en=language==="en",months=en?["January","February","March","April","May","June","July","August","September","October","November","December"]:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
   const currentSalesYear=new Date().getFullYear();
   const monthButtons=months.map((name,i)=>'<button type="button" class="soft sales-entry-month" data-sales-entry-month="'+(i+1)+'"><strong>'+name+'</strong></button>').join("");
-  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><p class="muted">'+(en?"Choose a year and one of its 12 months.":"اختار السنة والشهر من الشهور الـ12.")+'</p></div><label for="salesEntryYear">'+(en?"Year":"السنة")+'</label><input id="salesEntryYear" type="number" inputmode="numeric" min="1" max="9999" step="1" value="'+currentSalesYear+'" placeholder="'+(en?"Enter year":"اكتب السنة")+'" aria-label="'+(en?"Report year":"سنة التقرير")+'"><div class="sales-entry-grid">'+monthButtons+'</div></div></section>';
+  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportBack">← '+(en?"All branches":"كل الفروع")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-entry-card"><div class="sales-entry-heading"><h3>'+(en?"Choose report month":"اختيار شهر التقرير")+'</h3><input id="salesEntryYear" type="number" inputmode="numeric" min="1" max="9999" step="1" value="'+currentSalesYear+'" placeholder="'+(en?"Year":"السنة")+'" aria-label="'+(en?"Report year":"سنة التقرير")+'"></div><div class="sales-entry-grid">'+monthButtons+'</div></div></section>';
  }else{
   const en=language==="en",managerCanEdit=profile?.role==="branch_manager"&&selectedSalesBranch.branch_manager_user_id===user?.id;
   const monthParts=salesReportSelectedMonth.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d{4})$/),monthIndex=monthParts?["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthParts[1]):0,year=monthParts?monthParts[2]:String(new Date().getFullYear()),arabicMonths=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
