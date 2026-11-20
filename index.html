@@ -1038,7 +1038,7 @@ a.auth-back-link:hover{background:#e3eee8!important}
   }
 }
 </style>
-</head><body><script>
+<style id="novaro-notification-archive-icon-v1">#app .notification-entry-actions .notification-archive-icon{width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;padding:0!important;border-radius:9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;color:#287d6b!important;background:#eaf4ef!important;border:1px solid #d7e9df!important;box-shadow:none!important}#app .notification-entry-actions .notification-archive-icon svg{width:16px!important;height:16px!important;display:block!important}#app .notification-entry-actions .notification-archive-icon:hover{background:#dcefe5!important}</style></head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
  "use strict";
@@ -1628,7 +1628,7 @@ function renderNotifications(){
  const cards=visibleRows.map(n=>{
   const actionButton=novaroAuditShowArchive
    ?'<button type="button" class="soft" data-audit-restore="'+esc(n.id)+'">'+(language==="en"?"Restore":"استعادة")+'</button><button type="button" class="soft notification-delete" data-audit-delete="'+esc(n.id)+'">'+(language==="en"?"Delete forever":"حذف نهائي")+'</button>'
-   :'<button type="button" class="soft notification-delete" data-audit-archive="'+esc(n.id)+'">'+(language==="en"?"Archive":"أرشفة")+'</button>';
+   :'<button type="button" class="soft notification-delete notification-archive-icon" data-audit-archive="'+esc(n.id)+'" aria-label="'+(language==="en"?"Archive message":"أرشفة الرسالة")+'" title="'+(language==="en"?"Archive message":"أرشفة الرسالة")+'"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v13H3z"/><path d="M2 4h20v3H2zM9 12h6"/></svg></button>';
   return '<article class="notification-entry '+(!n.read_at&&!n.archived_at?'unread':'')+'" data-audit-notification="'+esc(n.id)+'"><div class="notification-entry-actions">'+actionButton+'</div><b>'+esc(n.title||(language==="en"?"Branch update":"تعديل بالفرع"))+'</b><p class="notification-detail">'+esc(n.body||"")+'</p><small>'+esc(new Date(n.created_at).toLocaleString(language==="en"?"en-US":"ar-EG",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}))+'</small></article>';
  }).join("");
  const footer=rows.length>3?'<div class="notification-list-footer"><button type="button" class="soft" id="novaroAuditViewAll">'+(novaroAuditShowAll?(language==="en"?"Show latest 3":"عرض أحدث 3"):(language==="en"?"View all "+rows.length+" messages":"عرض كل الرسائل ("+rows.length+")"))+'</button></div>':"";
