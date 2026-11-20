@@ -4245,3 +4245,19 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 }
 
 </style>
+
+<style id="novaro-notifications-viewport-fix-v1">
+/* Keep the messages panel attached to the viewport, not trapped inside the blurred sticky header. */
+#app .app-header.novaro-header-column{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#app .notification-wrap{z-index:10051!important}
+#app .notification-panel{position:fixed!important;z-index:10052!important;inset-inline:auto!important;left:50%!important;right:auto!important;top:clamp(88px,14vh,132px)!important;bottom:calc(82px + env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;width:min(480px,calc(100vw - 24px))!important;max-height:none!important;height:auto!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain!important;margin:0!important}
+#app .notification-panel-head{position:sticky!important;top:0!important;z-index:2!important;background:var(--surface,#fff)!important;padding:9px 4px 12px!important}
+#app .notification-entry{min-width:0!important;overflow-wrap:anywhere!important}
+#app .notification-entry .notification-detail{display:block!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;max-height:none!important;-webkit-line-clamp:unset!important;line-clamp:unset!important}
+:root[data-novaro-mode="dark"] #app .notification-panel{background:#202f28!important;border-color:#40564a!important;color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #app .notification-panel-head{background:#202f28!important;border-color:#40564a!important}
+:root[data-novaro-mode="dark"] #app .notification-entry{border-color:#40564a!important}
+:root[data-novaro-mode="dark"] #app .notification-entry b{color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #app .notification-entry p{color:#c3d1c9!important}
+@media(max-width:600px){#app .notification-panel{top:82px!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;width:calc(100vw - 18px)!important;border-radius:16px!important;padding:10px!important}#app .notification-panel-head{padding:8px 3px 10px!important}}
+</style>
