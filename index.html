@@ -949,6 +949,83 @@ a.auth-back-link:hover{background:#e3eee8!important}
 .app-header.novaro-header-column .header-clock-panel #novaroAuditBell .header-icon-label{display:none!important;}
 @media(max-width:600px){.app-header.novaro-header-column .header-clock-panel #novaroAuditBellWrap{right:8px!important}.app-header.novaro-header-column .header-clock-panel #novaroAuditBell{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important}.app-header.novaro-header-column .header-clock-panel .header-clock-time,.app-header.novaro-header-column .header-clock-panel .header-clock-date{padding-inline:42px!important;box-sizing:border-box!important;}}
 </style>
+
+<style id="novaro-header-four-actions-final-v2">
+/* Place the four utility actions in one full-width row directly below the clock panel. */
+#app .app-header.novaro-header-column .header-actions{
+ display:grid!important;
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ align-items:stretch!important;
+ justify-content:stretch!important;
+ gap:8px!important;
+ width:100%!important;
+ min-width:0!important;
+ margin:0!important;
+}
+#app .app-header.novaro-header-column .header-tools-stack{
+ display:contents!important;
+}
+#app .app-header.novaro-header-column .header-icon-row{
+ display:none!important;
+}
+#app .app-header.novaro-header-column .header-actions > #openSettings,
+#app .app-header.novaro-header-column .header-actions > #openAbout,
+#app .app-header.novaro-header-column .header-actions > #langToggleApp,
+#app .app-header.novaro-header-column .header-actions > #logout{
+ box-sizing:border-box!important;
+ display:flex!important;
+ flex:initial!important;
+ width:100%!important;
+ min-width:0!important;
+ max-width:none!important;
+ height:58px!important;
+ min-height:58px!important;
+ max-height:58px!important;
+ margin:0!important;
+ padding:5px 3px!important;
+ flex-direction:column!important;
+ align-items:center!important;
+ justify-content:center!important;
+ gap:4px!important;
+ border-radius:12px!important;
+ overflow:hidden!important;
+}
+#app .app-header.novaro-header-column .header-actions > #openSettings svg,
+#app .app-header.novaro-header-column .header-actions > #openAbout svg,
+#app .app-header.novaro-header-column .header-actions > #langToggleApp svg,
+#app .app-header.novaro-header-column .header-actions > #logout svg{
+ display:block!important;
+ width:18px!important;height:18px!important;
+ min-width:18px!important;min-height:18px!important;
+ flex:0 0 18px!important;
+}
+#app .app-header.novaro-header-column .header-actions > #openSettings .header-icon-label,
+#app .app-header.novaro-header-column .header-actions > #openAbout .header-icon-label,
+#app .app-header.novaro-header-column .header-actions > #langToggleApp .header-icon-label,
+#app .app-header.novaro-header-column .header-actions > #logout span{
+ display:block!important;
+ width:100%!important;min-width:0!important;
+ margin:0!important;
+ font-size:10px!important;line-height:1.15!important;
+ font-weight:700!important;text-align:center!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+@media(max-width:600px){
+ #app .app-header.novaro-header-column .header-actions{gap:6px!important}
+ #app .app-header.novaro-header-column .header-actions > #openSettings,
+ #app .app-header.novaro-header-column .header-actions > #openAbout,
+ #app .app-header.novaro-header-column .header-actions > #langToggleApp,
+ #app .app-header.novaro-header-column .header-actions > #logout{
+  height:58px!important;min-height:58px!important;max-height:58px!important;
+  padding:5px 2px!important;
+ }
+ #app .app-header.novaro-header-column .header-actions > #openSettings .header-icon-label,
+ #app .app-header.novaro-header-column .header-actions > #openAbout .header-icon-label,
+ #app .app-header.novaro-header-column .header-actions > #langToggleApp .header-icon-label,
+ #app .app-header.novaro-header-column .header-actions > #logout span{font-size:9px!important}
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
