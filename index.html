@@ -2934,6 +2934,21 @@ function syncStatisticsMonthlyTotals(){
 }
 window.syncStatisticsAverages=syncStatisticsAverages;
 window.syncStatisticsMonthlyTotals=syncStatisticsMonthlyTotals;
+let salesReportTipsLoadSequence=0;
+async function loadSalesReportDayTips(day){
+ const page=document.querySelector(".sales-report-page"),card=page?.querySelector(".sales-month-card");
+ const yesterdayTip=card?.querySelector('[data-sales-metric="yesterday_tip"]'),monthTip=card?.querySelector('[data-sales-metric="month_to_date_tip"]');
+ if(!card||!yesterdayTip||!monthTip)return;
+ const month=salesReportSelectedMonth,branchId=card.dataset.salesBranchId,sequence=++salesReportTipsLoadSequence;
+ if(!card.dataset.loadedMonth||card.dataset.loadedMonth!==month||!Number.isInteger(Number(day))||Number(day)<1){yesterdayTip.value="";monthTip.value="";return;}
+ try{
+  const result=await db.from("sales_report_daily_entries").select("yesterday_tip,month_to_date_tip").eq("branch_id",branchId).eq("report_month",month).eq("report_day",Number(day)).maybeSingle();
+  if(sequence!==salesReportTipsLoadSequence||salesReportSelectedMonth!==month||Number($("salesReportDay")?.value)!==Number(day))return;
+  if(result.error)throw result.error;
+  yesterdayTip.value=result.data?.yesterday_tip===null||result.data?.yesterday_tip===undefined?"":formatStatisticsNumber(statisticsNumber(result.data.yesterday_tip));
+  monthTip.value=result.data?.month_to_date_tip===null||result.data?.month_to_date_tip===undefined?"":formatStatisticsNumber(statisticsNumber(result.data.month_to_date_tip));
+ }catch(error){console.error("Could not load saved daily tip values:",error);}
+}
 function syncSelectedStatisticsDailyTarget(){
  const page=document.querySelector(".sales-report-page");if(!page)return;
  const display=page.querySelector('[data-sales-metric="daily_sales_target"]');
@@ -2987,7 +3002,7 @@ document.addEventListener("click",async e=>{
  const salesReportDayToggle=e.target.closest("#salesReportDayToggle"),salesReportDayPanel=$("salesReportDayPanel");
  if(salesReportDayToggle){const opening=salesReportDayPanel?.hidden===true;if(salesReportDayPanel)salesReportDayPanel.hidden=!opening;salesReportDayToggle.setAttribute("aria-expanded",opening?"true":"false");return;}
  const salesReportDayOption=e.target.closest("[data-sales-report-day]");
- if(salesReportDayOption){salesReportSelectedDay=Number(salesReportDayOption.dataset.salesReportDay);const hiddenDay=$("salesReportDay"),toggle=$("salesReportDayToggle"),value=toggle?.querySelector("[data-day-value]"),weekday=toggle?.querySelector("[data-day-weekday]");if(hiddenDay)hiddenDay.value=String(salesReportSelectedDay);if(value)value.textContent=language==="en"?String(salesReportSelectedDay):String(salesReportSelectedDay).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[Number(d)]);if(weekday){const monthKey=salesReportSelectedMonth.split("-")[0],monthIndex=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthKey),year=Number(salesReportSelectedMonth.split("-")[1]);weekday.textContent=new Intl.DateTimeFormat(language==="en"?"en":"ar-EG",{weekday:"long"}).format(new Date(year,monthIndex,salesReportSelectedDay));}if(salesReportDayPanel)salesReportDayPanel.hidden=true;if(toggle)toggle.setAttribute("aria-expanded","false");salesReportDayPanel?.querySelectorAll("[data-sales-report-day]").forEach(btn=>{const active=Number(btn.dataset.salesReportDay)===salesReportSelectedDay;btn.classList.toggle("active",active);btn.setAttribute("aria-pressed",active?"true":"false");});syncSelectedStatisticsDailyTarget();return;}
+ if(salesReportDayOption){salesReportSelectedDay=Number(salesReportDayOption.dataset.salesReportDay);const hiddenDay=$("salesReportDay"),toggle=$("salesReportDayToggle"),value=toggle?.querySelector("[data-day-value]"),weekday=toggle?.querySelector("[data-day-weekday]");if(hiddenDay)hiddenDay.value=String(salesReportSelectedDay);if(value)value.textContent=language==="en"?String(salesReportSelectedDay):String(salesReportSelectedDay).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[Number(d)]);if(weekday){const monthKey=salesReportSelectedMonth.split("-")[0],monthIndex=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(monthKey),year=Number(salesReportSelectedMonth.split("-")[1]);weekday.textContent=new Intl.DateTimeFormat(language==="en"?"en":"ar-EG",{weekday:"long"}).format(new Date(year,monthIndex,salesReportSelectedDay));}if(salesReportDayPanel)salesReportDayPanel.hidden=true;if(toggle)toggle.setAttribute("aria-expanded","false");salesReportDayPanel?.querySelectorAll("[data-sales-report-day]").forEach(btn=>{const active=Number(btn.dataset.salesReportDay)===salesReportSelectedDay;btn.classList.toggle("active",active);btn.setAttribute("aria-pressed",active?"true":"false");});syncSelectedStatisticsDailyTarget();loadSalesReportDayTips(salesReportSelectedDay);return;}
  if(salesReportDayPanel&&!salesReportDayPanel.hidden&&!e.target.closest(".sales-date-day-picker")){$("salesReportDayToggle")?.setAttribute("aria-expanded","false");salesReportDayPanel.hidden=true;}
  const savedDayToggle=e.target.closest("#savedSalesDayToggle"),savedDayOption=e.target.closest("[data-saved-sales-day]"),savedDayPanel=$("savedSalesDayPanel");
  if(savedDayToggle){const opening=savedDayPanel?.hidden===true;if(savedDayPanel)savedDayPanel.hidden=!opening;savedDayToggle.setAttribute("aria-expanded",opening?"true":"false");return;}
@@ -3035,6 +3050,7 @@ document.addEventListener("click",async e=>{
    const statisticsTable=document.querySelector(".sales-report-page .sales-statistics-table"),statisticsFields={dinein_tickets:"[data-stat-tickets='dinein']",dinein_sales:"[data-stat-sales='dinein']",takeaway_tickets:"[data-stat-tickets='takeaway']",takeaway_sales:"[data-stat-sales='takeaway']",delivery_tickets:"[data-stat-tickets='delivery']",delivery_sales:"[data-stat-sales='delivery']",catering_tickets:"[data-stat-tickets='catering']",catering_sales:"[data-stat-sales='catering']",daily_target:"[data-stat-target]"};
    if(statisticsTable){const savedRows=new Map((statisticsResult.data||[]).map(item=>[Number(item.report_day),item]));statisticsTable.querySelectorAll("tbody tr").forEach((row,index)=>{const saved=savedRows.get(index+1)||{};Object.entries(statisticsFields).forEach(([key,selector])=>{const field=row.querySelector(selector);if(field)field.value=saved[key]===null||saved[key]===undefined?"":formatStatisticsNumber(Number(saved[key]));});syncStatisticsAverages(row);});syncSelectedStatisticsDailyTarget();}
    salesMonthCard.dataset.loadedMonth=month;
+   await loadSalesReportDayTips(Number(salesMonthCard.querySelector("#salesReportDay")?.value));
    if(status)status.textContent=language==="en"?"Month loaded.":"تم تحميل بيانات الشهر.";
   }catch(error){delete salesMonthCard.dataset.loadedMonth;if(status)status.textContent=(language==="en"?"Could not load: ":"تعذر تحميل البيانات: ")+(error.message||String(error));}
   finally{loadButton.disabled=false;}
