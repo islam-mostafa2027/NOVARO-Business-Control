@@ -1618,12 +1618,13 @@ function renderNotifications(){
  panel.classList.toggle("hidden",!novaroAuditPanelOpen);
  if(title)title.textContent=language==="en"?"Branch messages & changes":"رسائل وتعديلات الفروع";
  if(refresh)refresh.textContent=language==="en"?"Refresh":"تحديث";
- const clearAll=$("novaroAuditClearAll");if(clearAll)clearAll.textContent=language==="en"?"Clear all":"مسح الكل";
+ const clearAll=$("novaroAuditClearAll");if(clearAll){clearAll.textContent=language==="en"?"Clear all":"مسح الكل";clearAll.onclick=async e=>{e.preventDefault();e.stopPropagation();await deleteAllNotifications();};}
  if(!notificationRows.length){list.innerHTML='<div class="notification-empty">'+(language==="en"?"No messages yet":"لا توجد رسائل حتى الآن")+'</div>';return}
  const visibleRows=novaroAuditShowAll?notificationRows:notificationRows.slice(0,3);
  const cards=visibleRows.map(n=>'<article class="notification-entry '+(!n.read_at?'unread':'')+'" data-audit-notification="'+esc(n.id)+'"><button type="button" class="notification-delete" data-audit-delete="'+esc(n.id)+'" aria-label="'+(language==="en"?"Delete message":"مسح الرسالة")+'" title="'+(language==="en"?"Delete message":"مسح الرسالة")+'"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg></button><b>'+esc(n.title|| (language==="en"?"Branch update":"تعديل بالفرع"))+'</b><p class="notification-detail">'+esc(n.body||"")+'</p><small>'+esc(new Date(n.created_at).toLocaleString(language==="en"?"en-US":"ar-EG",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}))+'</small></article>').join("");
  const footer=notificationRows.length>3?'<div class="notification-list-footer"><button type="button" class="soft" id="novaroAuditViewAll">'+(novaroAuditShowAll?(language==="en"?"Show latest 3":"عرض أحدث 3 إشعارات"):(language==="en"?"View all "+notificationRows.length+" notifications":"عرض كل الإشعارات ("+notificationRows.length+")"))+'</button></div>':'';
  list.innerHTML=cards+footer;
+ list.querySelectorAll("[data-audit-delete]").forEach(button=>{button.onclick=async e=>{e.preventDefault();e.stopPropagation();await deleteNotification(button.dataset.auditDelete);};});
 }
 async function loadNotifications(){
  if(!user)return;
