@@ -3340,7 +3340,7 @@ document.addEventListener("click",async e=>{
    clone.querySelector(".sales-statistics-actions")?.remove();
    clone.querySelector(".headcount-back")?.remove();
    clone.querySelectorAll(".sales-report-day-panel").forEach(node=>node.remove());
-   clone.querySelectorAll("input,textarea,select").forEach(field=>{
+   const sourceFields=Array.from(snapshotRoot.querySelectorAll("input,textarea,select")),clonedFields=Array.from(clone.querySelectorAll("input,textarea,select"));\n   clonedFields.forEach((field,index)=>{const source=sourceFields[index];if(!source)return;if(field.type==="checkbox"||field.type==="radio")field.checked=source.checked;else if(field.tagName==="SELECT")field.selectedIndex=source.selectedIndex;else field.value=source.value;});\n   clone.querySelectorAll("input,textarea,select").forEach(field=>{
     const span=document.createElement("span"),type=String(field.type||"").toLowerCase();
     span.className=(field.className||"")+" sales-snapshot-static-value";
     if(type==="checkbox"||type==="radio")span.textContent=field.checked?"✓":"—";
@@ -3355,7 +3355,7 @@ document.addEventListener("click",async e=>{
     button.replaceWith(span);
    });
    clone.querySelectorAll("script,iframe,object,embed").forEach(node=>node.remove());
-   clone.querySelectorAll("*").forEach(node=>Array.from(node.attributes).forEach(attr=>{if(/^on/i.test(attr.name)||attr.name==="id")node.removeAttribute(attr.name);}));
+   clone.querySelectorAll("*").forEach(node=>Array.from(node.attributes).forEach(attr=>{if(/^on/i.test(attr.name))node.removeAttribute(attr.name);}));
    const now=new Date(),pad=n=>String(n).padStart(2,"0"),reportDate=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
    const upperMetrics=Array.from(snapshotRoot.querySelectorAll(".sales-month-card [data-sales-metric]")).map(field=>({key:field.dataset.salesMetric,value:field.value??""}));
    const table=snapshotRoot.querySelector(".sales-statistics-table");
