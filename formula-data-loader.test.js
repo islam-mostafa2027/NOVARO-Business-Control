@@ -64,11 +64,11 @@ test("loader rejects invalid or excessive input before querying",async()=>{
 });
 
 test("inventory loader constrains the embedded session to the branch encoded in the cell ID",async()=>{
- const db=mockDb({inventory_counts:{counted_quantity:14,inventory_sessions:{branch_id:"branch-a"}}});
+ const db=mockDb({inventory_counts:{counted_quantity:14,is_counted:true,inventory_sessions:{branch_id:"branch-a"}}});
  const id=cells.inventoryCount("branch-a","session-1","item-1");
  const values=await loader.loadCells([id],db,cells,adapter);
  assert.equal(values[id],14);
- assert.equal(db.calls[0].columns,"counted_quantity,inventory_sessions!inner(branch_id)");
+ assert.equal(db.calls[0].columns,"counted_quantity,is_counted,inventory_sessions!inner(branch_id)");
  assert.deepEqual(db.calls[0].filters,[
   ["item_id","item-1"],
   ["session_id","session-1"],
