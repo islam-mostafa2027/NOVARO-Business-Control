@@ -31,6 +31,7 @@
   function flatten(values) { return values.flat(Infinity); }
 
   function tokenize(source) {
+    if (source.length > 4000) throw new Error("المعادلة أطول من الحد المسموح");
     const out = [];
     let i = 0;
     while (i < source.length) {
@@ -40,12 +41,22 @@
       const num = rest.match(/^(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/);
       if (num) { out.push({ type: "number", value: Number(num[0]) }); i += num[0].length; continue; }
       if (c === '"' || c === "'") {
-        let j = i + 1, value = "";
-        while (j < source.length && source[j] !== c) {
-          if (source[j] === c && source[j + 1] === c) { value += c; j += 2; }
-          else { value += source[j++]; }
+        let j = i + 1, value = "", closed = false;
+        while (j < source.length) {
+          if (source[j] === "\\" && j + 1 < source.length) {
+            const escaped = source[j + 1];
+            value += escaped === "n" ? "\n" : escaped === "t" ? "\t" : escaped;
+            j += 2;
+            continue;
+          }
+          if (source[j] === c) {
+            if (source[j + 1] === c) { value += c; j += 2; continue; }
+            closed = true;
+            break;
+          }
+          value += source[j++];
         }
-        if (j >= source.length) throw new Error("علامة اقتباس غير مكتملة");
+        if (!closed) throw new Error("علامة اقتباس غير مكتملة");
         out.push({ type: "string", value }); i = j + 1; continue;
       }
       const ref = rest.match(/^(?:[A-Za-z_][A-Za-z0-9_ .-]*!)?\$?[A-Za-z]{1,4}\$?\d+/);
@@ -53,7 +64,7 @@
       const ident = rest.match(/^[A-Za-z_][A-Za-z0-9_.!]*/);
       if (ident) { out.push({ type: "ident", value: ident[0].toUpperCase() }); i += ident[0].length; continue; }
       const op = ["<=", ">=", "<>", "=", "<", ">", "+", "-", "*", "/", "^", "%", ":", ",", "(", ")"].find(x => rest.startsWith(x));
-      if (op) { out.push({ type: op === "," ? "comma" : op, value: op }); i += op.length; continue; }
+      if (op) { out.push({ type: op === "," ? "comma" : op, value: op }); i += op.length; if (out.length > 1000) throw new Error("المعادلة تحتوي على أجزاء أكثر من المسموح"); continue; }
       throw new Error("رمز غير مدعوم في المعادلة: " + c);
     }
     out.push({ type: "eof" });
@@ -64,6 +75,7 @@
     if (typeof formula !== "string" || !formula.trim().startsWith("=")) throw new Error("المعادلة يجب أن تبدأ بعلامة =");
     if (!resolver || typeof resolver.getCell !== "function") throw new Error("مصدر قراءة الخلايا غير متاح");
     const tokens = tokenize(formula.trim().slice(1));
+    if (tokens.length > 1000) throw new Error("المعادلة تحتوي على أجزاء أكثر من المسموح");
     let pos = 0;
     const peek = () => tokens[pos];
     const take = type => {
@@ -119,7 +131,16 @@
         return resolver.getRange(node.start, node.end);
       }
       if (node.kind === "unary") { const v = number(run(node.value)); return node.op === "-" ? -v : v; }
-      if (node.kind === "call") return FUNCTIONS[node.name](node.args.map(run));
+      if (node.kind === "call") {
+        if (node.name === "IF") {
+          if (node.args.length < 2 || node.args.length > 3) throw new Error("الدالة IF تحتاج شرطًا ونتيجة، ونتيجة بديلة اختيارية");
+          return truthy(run(node.args[0])) ? run(node.args[1]) : (node.args.length === 3 ? run(node.args[2]) : false);
+        }
+        if (node.name === "NOT" && node.args.length !== 1) throw new Error("الدالة NOT تحتاج قيمة واحدة");
+        if (node.name === "ABS" && node.args.length !== 1) throw new Error("الدالة ABS تحتاج قيمة واحدة");
+        if (node.name === "ROUND" && (node.args.length < 1 || node.args.length > 2)) throw new Error("الدالة ROUND تحتاج قيمة وعدد منازل اختياري");
+        return FUNCTIONS[node.name](node.args.map(run));
+      }
       const a = run(node.left), b = run(node.right);
       switch (node.op) {
         case "+": return number(a) + number(b);
