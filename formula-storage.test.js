@@ -46,7 +46,7 @@ test("rejects malformed IDs and invalid formulas before database writes",async()
  const db=dbMock();
  await assert.rejects(()=>storage.saveFormula("NOVARO|unknown|x","=1",db,cells,adapter,engine));
  await assert.rejects(()=>storage.saveFormula(cells.itemMinimumStock("item-1"),"1+2",db,cells,adapter,engine));
- await assert.rejects(()=>storage.saveFormula(cells.itemMinimumStock("item-1"),"=UNKNOWN(2)",db,cells,adapter,engine));
+ await assert.rejects(()=>storage.saveFormula(cells.itemMinimumStock("item-1"),"=2+@",db,cells,adapter,engine));
  assert.equal(db.calls.length,0);
 });
 
