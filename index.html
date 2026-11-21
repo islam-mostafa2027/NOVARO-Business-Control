@@ -6486,3 +6486,46 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 @media(max-width:600px){#app .sales-report-page .sales-export-card{gap:8px!important;padding:8px!important}#app .sales-report-page .sales-export-pill{min-height:40px!important;padding:7px 5px!important;font-size:11px!important}}
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-export-card{background:var(--surface,#1d2923)!important}
 </style>
+
+<style id="novaro-header-five-actions-equal-width-v1">
+/* Five header actions: equal-width columns spanning the complete header card. */
+#app .app-header.novaro-header-column .header-actions{
+  width:100%!important;min-width:0!important;max-width:none!important;
+  display:flex!important;justify-content:stretch!important;align-items:stretch!important;
+}
+#app .app-header.novaro-header-column .header-tools-stack{
+  display:block!important;width:100%!important;min-width:0!important;max-width:none!important;
+}
+#app .app-header.novaro-header-column .header-icon-row{
+  display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  width:100%!important;min-width:0!important;max-width:none!important;
+  gap:7px!important;align-items:stretch!important;
+}
+#app .app-header.novaro-header-column .header-icon-row>button{
+  box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:none!important;
+  height:64px!important;min-height:64px!important;max-height:64px!important;
+  margin:0!important;padding:5px 2px!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:4px!important;white-space:normal!important;
+  overflow:hidden!important;
+}
+#app .app-header.novaro-header-column .header-icon-row>button svg{
+  display:block!important;width:18px!important;height:18px!important;flex:0 0 18px!important;
+}
+#app .app-header.novaro-header-column .header-icon-row>button .header-icon-label,
+#app .app-header.novaro-header-column .header-icon-row>button#logout span{
+  display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;
+  margin:0!important;text-align:center!important;white-space:normal!important;
+  overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere!important;
+  word-break:normal!important;font-size:10px!important;line-height:1.2!important;
+}
+@media(max-width:600px){
+  #app .app-header.novaro-header-column .header-icon-row{gap:5px!important}
+  #app .app-header.novaro-header-column .header-icon-row>button{
+    height:62px!important;min-height:62px!important;max-height:62px!important;padding:4px 1px!important;gap:3px!important;
+  }
+  #app .app-header.novaro-header-column .header-icon-row>button svg{width:17px!important;height:17px!important;flex-basis:17px!important}
+  #app .app-header.novaro-header-column .header-icon-row>button .header-icon-label,
+  #app .app-header.novaro-header-column .header-icon-row>button#logout span{font-size:9px!important;line-height:1.2!important}
+}
+</style>
