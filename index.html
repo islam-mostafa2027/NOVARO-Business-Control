@@ -5589,6 +5589,27 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-statistics-daily-target{background:#293b33!important;border-color:#40564a!important;color:#e5eee9!important}
 @media(max-width:600px){#app .sales-report-page .sales-statistics-daily-target{padding:10px 11px}#app .sales-report-page .sales-statistics-daily-target-label{font-size:12px}#app .sales-report-page .sales-statistics-daily-target strong{font-size:14px}}
 </style>
+
+<style id="novaro-sales-statistics-title-centered-v1">
+/* Center the Statistics heading across its full card width. */
+#app .sales-report-page .sales-statistics-heading{
+ position:relative!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+}
+#app .sales-report-page .sales-statistics-heading .sales-monthly-analysis-title{
+ flex:1 1 100%!important;
+ width:100%!important;
+ text-align:center!important;
+}
+#app .sales-report-page .sales-statistics-heading .sales-statistics-actions{
+ position:absolute!important;
+ inset-inline-end:0!important;
+ top:50%!important;
+ transform:translateY(-50%)!important;
+}
+</style>
 </body></html>
 
 <style id="novaro-item-qr-label-position-v1">
