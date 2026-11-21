@@ -9,7 +9,9 @@ test("inventory count maps to the existing count row without writing it",()=>{
  assert.deepEqual(d.filters,{session_id:"s",item_id:"i"});
  assert.equal(d.column,"counted_quantity");
  assert.equal(d.writeScope,"inventory_open_session");
- assert.equal(adapter.extractValue(d,{counted_quantity:"12.5"}),12.5);
+ assert.deepEqual(d.columns,["counted_quantity","is_counted"]);
+ assert.equal(adapter.extractValue(d,{counted_quantity:"12.5",is_counted:true}),12.5);
+ assert.equal(adapter.extractValue(d,{counted_quantity:"0",is_counted:false}),null);
 });
 
 test("item and branch cells map to their actual source columns",()=>{
