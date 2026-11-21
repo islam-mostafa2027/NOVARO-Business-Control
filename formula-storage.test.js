@@ -27,7 +27,7 @@ test("loads only RLS-visible formulas for validated stable cell IDs",async()=>{
  const id=cells.salesMetric("branch-1","Nov-2026","yesterday_tip");
  const db=dbMock([{cell_id:id,formula:"=12+CELL(\"NOVARO|sales|branch-1|Nov-2026|sales_target\")"}]);
  const formulas=await storage.loadFormulas([id],db,cells,adapter);
- assert.equal(formulas[id],db.calls[0]&&db.calls[0].table==="formula_cells"?db.calls.length>0?formulas[id]:null:null);
+ assert.equal(formulas[id],db.calls.length===1?`=12+CELL("NOVARO|sales|branch-1|Nov-2026|sales_target")`:null);
  assert.equal(db.calls[0].columns,"cell_id,formula");
  assert.deepEqual(db.calls[0].filters,[["cell_id",[id]]]);
 });
