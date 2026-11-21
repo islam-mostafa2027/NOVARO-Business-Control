@@ -12,7 +12,7 @@
  function idFor(input){
   if(!input||!input.matches("input"))return null;
   const page=input.closest(".sales-report-page");
-  const month=root.salesReportSelectedMonth, branch=page?.querySelector(".sales-month-card")?.dataset.salesBranchId;
+  const month=salesReportSelectedMonth, branch=page?.querySelector(".sales-month-card")?.dataset.salesBranchId;
   if(page&&branch&&month){
    const metric=input.dataset.salesMetric;
    if(["sales_target","yesterday_tip","month_to_date_tip"].includes(metric))return map().salesMetric(branch,month,metric);
@@ -29,19 +29,19 @@
   const tipCard=input.closest("#dailyTipCard");
   if(tipRow&&tipCard){
    const branch= root.document.querySelector(".sales-month-card")?.dataset.salesBranchId;
-   const sheet=root.dailyTipSheetCache?.find(x=>x.sheet_key===root.dailyTipActiveSheetKey);
+   const sheet=dailyTipSheetCache?.find(x=>x.sheet_key===dailyTipActiveSheetKey);
    if(branch&&month&&sheet){
     const field=input.hasAttribute("data-tip-amount")?"tip_amount":input.hasAttribute("data-dinein-sales")?"dinein_sales":null;
     if(field)return map().dailyTipCell(branch,month,sheet.id,Number(tipRow.dataset.dailyTipDay),field);
    }
   }
-  const countId=input.getAttribute("data-count-id"),view=root.__stocktakeView;
+  const countId=input.getAttribute("data-count-id"),view=window.__stocktakeView;
   if(countId&&view?.branch_id&&view?.id&&view?.session?.status!=="submitted"&&!view.locked)
    return map().inventoryCount(view.branch_id,view.id,countId);
   const roleRow=input.closest("[data-role-row]"),roleId=roleRow?.dataset.roleRow;
-  if(roleId&&input.classList.contains("hc-role-count")&&root.headcountBranchId)
+  if(roleId&&input.classList.contains("hc-role-count")&&headcountBranchId)
    return map().headcountRequired(root.headcountBranchId,roleId);
-  if(input.id==="requiredHeadcountInput"&&root.headcountBranchId&&root.profile?.role==="owner_admin")
+  if(input.id==="requiredHeadcountInput"&&root.headcountBranchId&&profile?.role==="owner_admin")
    return map().branchRequiredHeadcount(root.headcountBranchId);
   return null;
  }
@@ -55,7 +55,7 @@
    const batch=[...new Set(frontier)].filter(id=>!Object.prototype.hasOwnProperty.call(formulas,id));
    frontier=[];
    if(!batch.length)break;
-   const found=await storage().loadFormulas(batch,root.db,map(),adapter());
+   const found=await storage().loadFormulas(batch,db,map(),adapter());
    Object.assign(formulas,found);
    for(const formula of Object.values(found)){
     for(const dep of engine().getDependencies(formula))if(!Object.prototype.hasOwnProperty.call(formulas,dep))frontier.push(dep);
