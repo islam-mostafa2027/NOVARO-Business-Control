@@ -7,9 +7,6 @@
 
   const SALES_METRICS = Object.freeze([
     "sales_target",
-    "daily_sales_target",
-    "month_to_date_sales",
-    "yesterday_sales",
     "yesterday_tip",
     "month_to_date_tip"
   ]);
@@ -27,6 +24,7 @@
     statisticsGroups: STAT_GROUPS,
     statisticsFields: STAT_FIELDS,
     inventoryCount: (branchId, sessionId, itemId) => make("inventory", branchId, sessionId, itemId, "counted_quantity"),
+    itemMinimumStock: itemId => make("item", itemId, "min_stock"),
     salesMetric: (branchId, reportMonth, metric) => {
       if (!SALES_METRICS.includes(metric)) throw new Error("Unsupported sales metric");
       return make("sales", branchId, reportMonth, metric);
