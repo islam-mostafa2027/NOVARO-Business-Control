@@ -3146,20 +3146,20 @@ async function loadSalesReportDayTips(day){
  try{
   const sheetResult=await db.from("sales_report_tip_sheets").select("rows").eq("branch_id",branchId).eq("report_month",month);
   if(sheetResult.error)throw sheetResult.error;
-  let previousTip=null,monthTipTotal=0,hasMonthTip=false;
-  for(const sheet of (sheetResult.data||[])){
+  const sheets=sheetResult.data||[];
+  let previousTip=null;
+  for(const sheet of sheets){
    for(const row of (Array.isArray(sheet.rows)?sheet.rows:[])){
-    const rowDay=Number(row.day),raw= row.tip_amount;
-    if(raw===null||raw===undefined||String(raw).trim()==="")continue;
-    const amount=statisticsNumber(raw);
-    if(!Number.isFinite(amount))continue;
-    if(rowDay===selectedDay-1)previousTip=raw;
-    if(rowDay>=1&&rowDay<=selectedDay){monthTipTotal+=amount;hasMonthTip=true;}
+    const rowDay=Number(row.day),raw=row.tip_amount;
+    if(rowDay===selectedDay-1&&raw!==null&&raw!==undefined&&String(raw).trim()!=="")previousTip=raw;
    }
   }
+  const currentSheet=sheets.find(x=>x.sheet_key===dailyTipActiveSheetKey)
+   ||sheets.find(x=>selectedDay>=Number(x.start_day)&&selectedDay<=Number(x.end_day));
+  const currentTotal=currentSheet?dailyTipCalculateTotals(currentSheet.rows||[]).tipTotal:null;
   if(sequence!==salesReportTipsLoadSequence||salesReportSelectedMonth!==month||Number($("#salesReportDay")?.value)!==selectedDay)return;
   yesterdayTip.value=previousTip===null?"":formatStatisticsNumber(statisticsNumber(previousTip));
-  monthTip.value=hasMonthTip?formatStatisticsNumber(monthTipTotal):"";
+  monthTip.value=currentTotal===null?"":formatStatisticsNumber(currentTotal);
  }catch(error){console.error("Could not load Daily Tip values:",error);}
 }
 function syncSelectedStatisticsDailyTarget(){
@@ -3222,18 +3222,26 @@ function dailyTipRender(){
  if(!totalFoot){totalFoot=document.createElement("tfoot");card.querySelector(".daily-tip-table").appendChild(totalFoot);}
  dailyTipUpdateTotals();
  editor.replaceChildren();
+ const selectedDay=Number(document.querySelector(".sales-report-page #salesReportDay")?.value||0);
+ if(selectedDay>0)loadSalesReportDayTips(selectedDay);
 }
-function dailyTipUpdateTotals(){
- const card=document.querySelector("#dailyTipCard");if(!card)return;
+function dailyTipCalculateTotals(rows){
  let tipTotal=0,salesTotal=0;
- card.querySelectorAll("#dailyTipRows tr[data-daily-tip-day]").forEach(tr=>{
-  const tipRaw=String(tr.querySelector("[data-tip-amount]")?.value??"").trim();
-  const salesRaw=String(tr.querySelector("[data-dinein-sales]")?.value??"").trim();
+ for(const row of (Array.isArray(rows)?rows:[])){
+  const tipRaw=String(row?.tip_amount??"").trim(),salesRaw=String(row?.dinein_sales??"").trim();
   const tip=tipRaw===""?0:statisticsNumber(tipRaw),sales=salesRaw===""?0:statisticsNumber(salesRaw);
   if(Number.isFinite(tip))tipTotal+=tip;
   if(Number.isFinite(sales))salesTotal+=sales;
- });
- const pct=salesTotal>0?tipTotal/salesTotal*100:null;
+ }
+ return {tipTotal,salesTotal,pct:salesTotal>0?tipTotal/salesTotal*100:null};
+}
+function dailyTipUpdateTotals(){
+ const card=document.querySelector("#dailyTipCard");if(!card)return;
+ const rows=Array.from(card.querySelectorAll("#dailyTipRows tr[data-daily-tip-day]")).map(tr=>({
+  tip_amount:tr.querySelector("[data-tip-amount]")?.value??"",
+  dinein_sales:tr.querySelector("[data-dinein-sales]")?.value??""
+ }));
+ const {tipTotal,salesTotal,pct}=dailyTipCalculateTotals(rows);
  const fmt=n=>Number(n).toLocaleString(language==="en"?"en-US":"en-US",{maximumFractionDigits:2});
  const foot=card.querySelector(".daily-tip-table tfoot");if(!foot)return;
  foot.innerHTML='<tr class="daily-tip-total-row"><td>'+(language==="en"?"Total":"الإجمالي")+'</td><td>'+fmt(tipTotal)+'</td><td>'+fmt(salesTotal)+'</td><td>'+(pct===null?"—":fmt(pct)+"%")+'</td></tr>';
@@ -3267,14 +3275,14 @@ async function dailyTipLoad(){
  try{
   const result=await db.from("sales_report_tip_sheets").select("*").eq("branch_id",branchId).eq("report_month",salesReportSelectedMonth).order("created_at",{ascending:true});
   if(result.error)throw result.error;
-  dailyTipSheetCache=result.data||[];
+  dailyTipSheetCache=(result.data||[]).sort((a,b)=>Number(a.start_day||0)-Number(b.start_day||0));
   if(!dailyTipSheetCache.length){
    const now=new Date().toISOString(),firstEnd=Math.min(15,info.days),secondStart=firstEnd+1;
    const initial=[{branch_id:branchId,report_month:salesReportSelectedMonth,sheet_key:"first-half",sheet_name:"1-"+info.monthName+"-"+info.year+" – "+firstEnd+"-"+info.monthName+"-"+info.year,start_day:1,end_day:firstEnd,rows:[],created_by:user.id,updated_by:user.id,updated_at:now}];
    if(secondStart<=info.days)initial.push({branch_id:branchId,report_month:salesReportSelectedMonth,sheet_key:"second-half",sheet_name:secondStart+"-"+info.monthName+"-"+info.year+" – "+info.days+"-"+info.monthName+"-"+info.year,start_day:secondStart,end_day:info.days,rows:[],created_by:user.id,updated_by:user.id,updated_at:now});
    const inserted=await db.from("sales_report_tip_sheets").insert(initial).select("*");
    if(inserted.error)throw inserted.error;
-   dailyTipSheetCache=inserted.data||initial;
+   dailyTipSheetCache=(inserted.data||initial).sort((a,b)=>Number(a.start_day||0)-Number(b.start_day||0));
   }
   if(!dailyTipSheetCache.some(x=>x.sheet_key===dailyTipActiveSheetKey))dailyTipActiveSheetKey=dailyTipSheetCache[0]?.sheet_key||"";
   dailyTipRender();
