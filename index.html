@@ -3454,7 +3454,7 @@ document.addEventListener("click",async e=>{
  if(salesMonthCard&&e.target.closest("#saveSalesMonth")){
   const pageRoot=salesMonthCard.closest(".sales-report-page"),branch=salesReportBranches().find(b=>b.id===salesMonthCard.dataset.salesBranchId),month=salesReportSelectedMonth,status=salesMonthCard.querySelector("#salesMonthStatus"),statisticsStatus=pageRoot?.querySelector("#salesStatisticsStatus"),saveButton=e.target.closest("#saveSalesMonth"),table=pageRoot?.querySelector(".sales-statistics-table");
   const monthPattern=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/;
-  const showStatus=message=>{if(status)status.textContent=message;if(statisticsStatus)statisticsStatus.textContent=message;};
+  const showStatus=message=>{if(status)status.textContent=message;};
   if(!branch||!monthPattern.test(month||"")||!table){showStatus(language==="en"?"Choose a valid month first.":"اختار شهر صحيح الأول.");return;}
   if(salesMonthCard.dataset.loadedMonth!==month){showStatus(language==="en"?"Wait for the month to load before saving.":"استنى تحميل الشهر قبل الحفظ.");return;}
   const readNumber=key=>{const raw=String(salesMonthCard.querySelector('[data-sales-metric="'+key+'"]')?.value??"").trim();if(raw==="")return null;const value=statisticsNumber(raw);return Number.isFinite(value)&&value>=0?value:NaN;};
