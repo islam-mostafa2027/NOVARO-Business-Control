@@ -1,0 +1,24 @@
+name: Formula Engine Tests
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "formula-engine.js"
+      - "formula-engine.test.js"
+      - ".github/workflows/formula-tests.yml"
+  pull_request:
+    paths:
+      - "formula-engine.js"
+      - "formula-engine.test.js"
+      - ".github/workflows/formula-tests.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node --test formula-engine.test.js
