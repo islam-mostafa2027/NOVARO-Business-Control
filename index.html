@@ -3146,13 +3146,7 @@ async function loadSalesReportDayTips(day){
  try{
   const dailyResult=await db.from("sales_report_daily_entries").select("month_to_date_tip").eq("branch_id",branchId).eq("report_month",month).eq("report_day",selectedDay).maybeSingle();
   if(dailyResult.error)throw dailyResult.error;
-  const parts=month.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d{4})$/);
-  let tipMonth=month,tipDay=selectedDay-1;
-  if(selectedDay===1&&parts){
-   const monthNames=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],monthIndex=monthNames.indexOf(parts[1]),previousDate=new Date(Number(parts[2]),monthIndex-1,1);
-   tipMonth=monthNames[previousDate.getMonth()]+"-"+previousDate.getFullYear();
-   tipDay=new Date(previousDate.getFullYear(),previousDate.getMonth()+1,0).getDate();
-  }
+  const tipMonth=month,tipDay=selectedDay-1;
   let previousTip=null;
   if(tipDay>0){
    const sheetResult=await db.from("sales_report_tip_sheets").select("rows").eq("branch_id",branchId).eq("report_month",tipMonth);
