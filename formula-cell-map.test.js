@@ -6,10 +6,16 @@ test("inventory identifiers use persisted branch, session and item IDs", () => {
   const id = cells.inventoryCount("branch-1", "session-2", "item-3");
   assert.deepEqual(cells.decode(id), ["inventory", "branch-1", "session-2", "item-3", "counted_quantity"]);
 });
-test("sales identifiers are stable across display order", () => {
+test("item minimum stock identifiers use the persisted item ID", () => {
+  assert.deepEqual(cells.decode(cells.itemMinimumStock("item-17")), ["item", "item-17", "min_stock"]);
+});
+test("sales identifiers include only manually editable numeric metrics", () => {
   assert.equal(cells.salesMetric("b", "Nov-2026", "sales_target"), cells.salesMetric("b", "Nov-2026", "sales_target"));
   assert.deepEqual(cells.decode(cells.salesMetric("b", "Nov-2026", "month_to_date_tip")), ["sales", "b", "Nov-2026", "month_to_date_tip"]);
   assert.throws(() => cells.salesMetric("b", "Nov-2026", "calculated_total"));
+  assert.throws(() => cells.salesMetric("b", "Nov-2026", "daily_sales_target"));
+  assert.throws(() => cells.salesMetric("b", "Nov-2026", "month_to_date_sales"));
+  assert.throws(() => cells.salesMetric("b", "Nov-2026", "yesterday_sales"));
 });
 test("statistics identifiers validate day, group and editable field", () => {
   assert.deepEqual(cells.decode(cells.statisticsMetric("b", "Nov-2026", 21, "dinein", "tickets")), ["statistics", "b", "Nov-2026", "21", "dinein", "tickets"]);
