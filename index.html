@@ -3156,7 +3156,9 @@ async function loadSalesReportDayTips(day){
   }
   const currentSheet=sheets.find(x=>x.sheet_key===dailyTipActiveSheetKey)
    ||sheets.find(x=>selectedDay>=Number(x.start_day)&&selectedDay<=Number(x.end_day));
-  const currentTotal=currentSheet?dailyTipCalculateTotals(currentSheet.rows||[]).tipTotal:null;
+  const displayedTotalCell=document.querySelector("#dailyTipCard .daily-tip-table tfoot .daily-tip-total-row td:nth-child(2)");
+  const displayedTotalText=String(displayedTotalCell?.textContent??"").trim();
+  const currentTotal=displayedTotalText!==""?statisticsNumber(displayedTotalText):(currentSheet?dailyTipCalculateTotals(currentSheet.rows||[]).tipTotal:null);
   if(sequence!==salesReportTipsLoadSequence||salesReportSelectedMonth!==month||Number($("#salesReportDay")?.value)!==selectedDay)return;
   yesterdayTip.value=previousTip===null?"":formatStatisticsNumber(statisticsNumber(previousTip));
   monthTip.value=currentTotal===null?"":formatStatisticsNumber(currentTotal);
