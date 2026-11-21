@@ -35,7 +35,7 @@
     if(field)return map().dailyTipCell(branch,month,sheet.id,Number(tipRow.dataset.dailyTipDay),field);
    }
   }
-  const countId=input.getAttribute("data-count-id"),view=window.__stocktakeView;
+  if(input.id==="minStock"&&input.dataset.formulaItemId)return map().itemMinimumStock(input.dataset.formulaItemId);\n  const countId=input.getAttribute("data-count-id"),view=window.__stocktakeView;
   if(countId&&view?.branch_id&&view?.id&&view?.session?.status!=="submitted"&&!view.locked)
    return map().inventoryCount(view.branch_id,view.id,countId);
   const roleRow=input.closest("[data-role-row]"),roleId=roleRow?.dataset.roleRow;
@@ -79,7 +79,7 @@
  function decorate(){
   if(!root.document||!map()||!adapter())return;
   ensureStyle();
-  const selectors=['.sales-report-page [data-sales-metric]','.sales-report-page .sales-statistics-table [data-stat-tickets]','.sales-report-page .sales-statistics-table [data-stat-sales]','.sales-report-page .sales-statistics-table [data-stat-target]','#dailyTipRows [data-tip-amount]','#dailyTipRows [data-dinein-sales]','[data-count-id]','.hc-role-row .hc-role-count','#requiredHeadcountInput'];
+  const selectors=['.sales-report-page [data-sales-metric]','.sales-report-page .sales-statistics-table [data-stat-tickets]','.sales-report-page .sales-statistics-table [data-stat-sales]','.sales-report-page .sales-statistics-table [data-stat-target]','#dailyTipRows [data-tip-amount]','#dailyTipRows [data-dinein-sales]','[data-count-id]','#minStock','.hc-role-row .hc-role-count','#requiredHeadcountInput'];
   root.document.querySelectorAll(selectors.join(",")).forEach(input=>{
    if(input.dataset.novaroFormulaDecorated==="1"||!idFor(input))return;
    input.dataset.novaroFormulaDecorated="1";
