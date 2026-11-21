@@ -2531,6 +2531,7 @@ function applyLanguage(){
  headerLabels.forEach(label=>{
   if(label.closest("#openSettings"))label.textContent=language==="en"?"Settings":"الإعدادات";
   else if(label.closest("#openAbout"))label.textContent=language==="en"?"About":"عن البرنامج";
+  else if(label.closest("#openDevices"))label.textContent=language==="en"?"Device management":"إدارة الأجهزة";
   else if(label.closest("#novaroAuditBell"))label.textContent=language==="en"?"Branch Messages":"رسائل الفروع";
  });
  const auditBell=document.getElementById("novaroAuditBell");
