@@ -72,6 +72,23 @@
     return out;
   }
 
+
+  function getDependencies(formula) {
+    if (typeof formula !== "string" || !formula.trim().startsWith("=")) throw new Error("المعادلة يجب أن تبدأ بعلامة =");
+    const tokens = tokenize(formula.trim().slice(1));
+    const refs = new Set();
+    for (let i = 0; i < tokens.length - 1; i++) {
+      const token = tokens[i];
+      if (token.type === "ref") refs.add(token.value);
+      if (token.type === "ident" && token.value === "CELL" && tokens[i + 1]?.type === "(") {
+        const id = tokens[i + 2], close = tokens[i + 3];
+        if (!id || id.type !== "string" || !close || close.type !== ")") throw new Error("CELL تحتاج معرّف خلية نصيًا ثابتًا");
+        refs.add("NOVARO|" + id.value);
+      }
+    }
+    return Object.freeze([...refs]);
+  }
+
   function evaluate(formula, resolver) {
     if (typeof formula !== "string" || !formula.trim().startsWith("=")) throw new Error("المعادلة يجب أن تبدأ بعلامة =");
     if (!resolver || typeof resolver.getCell !== "function") throw new Error("مصدر قراءة الخلايا غير متاح");
@@ -176,7 +193,7 @@
     return result;
   }
 
-  const api = Object.freeze({ evaluate, supportedFunctions: Object.keys(FUNCTIONS) });
+  const api = Object.freeze({ evaluate, getDependencies, supportedFunctions: Object.keys(FUNCTIONS) });
   root.NOVAROFormulaEngine = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);
