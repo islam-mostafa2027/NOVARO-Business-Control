@@ -59,7 +59,7 @@
   const n=Number(raw);return Number.isFinite(n)?n:null;
  }
  async function evaluateCell(targetId,initialFormula){
-  const formulas={};let frontier=[targetId];
+  const formulas={};let frontier=initialFormula?[...engine().getDependencies(initialFormula)]:[targetId];
   while(frontier.length){
    const pending=[...new Set(frontier)].filter(id=>!Object.prototype.hasOwnProperty.call(formulas,id));
    const batch=pending.splice(0,300);
