@@ -6630,3 +6630,28 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .app-header.novaro-header-column .header-clock-panel .header-tools-stack>button .header-icon-label,#app .app-header.novaro-header-column .header-clock-panel .header-tools-stack>button#logout span,#app .app-header.novaro-header-column .header-clock-panel .header-icon-row>button .header-icon-label,#app .app-header.novaro-header-column .header-clock-panel .header-icon-row>button#logout span{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;text-align:center!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere!important;word-break:normal!important;font-size:clamp(8px,1vw,10px)!important;line-height:1.15!important}
 @media(max-width:600px){#app .app-header.novaro-header-column .header-clock-panel .header-tools-stack{gap:3px!important}#app .app-header.novaro-header-column .header-clock-panel .header-tools-stack>button,#app .app-header.novaro-header-column .header-clock-panel .header-icon-row>button{height:58px!important;min-height:58px!important;max-height:58px!important;padding:3px 1px!important}#app .app-header.novaro-header-column .header-clock-panel .header-tools-stack>button svg,#app .app-header.novaro-header-column .header-clock-panel .header-icon-row>button svg{width:15px!important;height:15px!important;flex-basis:15px!important}#app .app-header.novaro-header-column .header-clock-panel .header-tools-stack>button .header-icon-label,#app .app-header.novaro-header-column .header-clock-panel .header-tools-stack>button#logout span,#app .app-header.novaro-header-column .header-clock-panel .header-icon-row>button .header-icon-label,#app .app-header.novaro-header-column .header-clock-panel .header-icon-row>button#logout span{font-size:8px!important;line-height:1.08!important}}
 </style>
+
+
+<style id="novaro-sales-report-choose-day-center-v1">
+/* Center the unselected "Choose day" label precisely inside its capsule. */
+#app .sales-report-page #salesReportDayToggle{
+  position:relative!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+#app .sales-report-page #salesReportDayToggle > .sales-report-day-number{
+  display:block!important;
+  flex:1 1 100%!important;
+  width:100%!important;
+  min-width:0!important;
+  text-align:center!important;
+}
+#app .sales-report-page #salesReportDayToggle > span[aria-hidden="true"]{
+  position:absolute!important;
+  inset-inline-end:9px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+}
+</style>
