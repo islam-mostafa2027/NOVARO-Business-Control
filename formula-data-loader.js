@@ -17,6 +17,9 @@
   const groups=new Map();
   for(const d of descriptors.values()){
    const filters=Object.entries(d.filters).sort(([a],[b])=>a.localeCompare(b));
+   // The branch is encoded in an inventory cell ID but lives on the related
+   // session row. Include it in the query itself to prevent cross-branch ID spoofing.
+   if(d.type==="inventory_count") filters.push(["inventory_sessions.branch_id",d.branchId]);
    const key=JSON.stringify([d.table,filters]);
    let group=groups.get(key);
    if(!group){group={table:d.table,filters,columns:new Set(),descriptors:[]};groups.set(key,group);}
@@ -26,7 +29,10 @@
   const values={};
   await Promise.all([...groups.values()].map(async group=>{
    const columns=[...group.columns].sort();
-   let query=db.from(group.table).select(columns.join(","));
+   const selectColumns=group.descriptors[0]?.type==="inventory_count"
+    ?columns.join(",")+",inventory_sessions!inner(branch_id)"
+    :columns.join(",");
+   let query=db.from(group.table).select(selectColumns);
    for(const [column,value] of group.filters)query=query.eq(column,value);
    const result=await query.maybeSingle();
    if(result?.error)throw result.error;
