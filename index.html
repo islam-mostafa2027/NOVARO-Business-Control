@@ -2033,6 +2033,26 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
  #app .app-header.novaro-header-column .header-clock-panel .header-icon-row>button#logout span{font-size:8px!important;line-height:1.08!important}
 }
 </style>
+
+<style id="novaro-clock-centered-raised-v1">
+/* Center the clock/date stack precisely and raise it slightly inside its card. */
+#app .app-header.novaro-header-column .header-clock-panel .header-clock-time{
+  display:flex!important;
+  width:100%!important;
+  align-items:baseline!important;
+  justify-content:center!important;
+  text-align:center!important;
+  margin:0 auto!important;
+  transform:translateY(-8px)!important;
+}
+#app .app-header.novaro-header-column .header-clock-panel .header-clock-date{
+  display:block!important;
+  width:100%!important;
+  text-align:center!important;
+  margin:0 auto!important;
+  transform:translateY(-8px)!important;
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
