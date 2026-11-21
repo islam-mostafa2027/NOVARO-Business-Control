@@ -105,7 +105,10 @@
      const formula=root.prompt("اكتب المعادلة باستخدام =، وللإشارة إلى خلية أخرى استخدم CELL(\"معرّف الخلية\"):",current);
      if(formula===null)return;
      if(!formula.trim()){
-      if(current&&root.confirm("هل تريد حذف المعادلة المحفوظة؟")){await storage().removeFormula(id,db,map(),adapter());scheduleRestore();}
+      if(current){
+       if(root.confirm("هل تريد حذف المعادلة المحفوظة؟"))await storage().removeFormula(id,db,map(),adapter());
+       scheduleRestore();
+      }
       result.hidden=true;button.textContent="ƒx";return;
      }
      const calculated=await evaluateCell(id,formula);
