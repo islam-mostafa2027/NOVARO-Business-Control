@@ -152,7 +152,7 @@
   if(root.__NOVAROFormulaUIStarted)return;root.__NOVAROFormulaUIStarted=true;
   decorate();
   const observer=new MutationObserver(()=>{decorate();scheduleRestore();});
-  observer.observe(root.document.body,{childList:true,subtree:true});\n  const prior=decorate;\n  const wrapped=()=>{prior();scheduleRestore();};\n  root.NOVAROFormulaUI=Object.freeze({refresh:wrapped,recalculate:restoreVisibleFormulas});
+  observer.observe(root.document.body,{childList:true,subtree:true});\n  root.NOVAROFormulaUI=Object.freeze({refresh:()=>{decorate();scheduleRestore();},recalculate:restoreVisibleFormulas});
   root.__NOVAROFormulaUIObserver=observer;
  }
  if(root.document){if(root.document.readyState==="loading")root.document.addEventListener("DOMContentLoaded",start,{once:true});else start();}
