@@ -3147,12 +3147,13 @@ async function loadSalesReportDayTips(day){
   const sheetResult=await db.from("sales_report_tip_sheets").select("sheet_key,start_day,end_day,rows").eq("branch_id",branchId).eq("report_month",month);
   if(sheetResult.error)throw sheetResult.error;
   const sheets=sheetResult.data||[];
-  let previousTip=null;
-  for(const sheet of sheets){
-   for(const row of (Array.isArray(sheet.rows)?sheet.rows:[])){
-    const rowDay=Number(row.day),raw=row.tip_amount;
-    if(rowDay===selectedDay-1&&raw!==null&&raw!==undefined&&String(raw).trim()!=="")previousTip=raw;
-   }
+  let previousTip=0;
+  if(selectedDay>1){
+   const previousDay=selectedDay-1;
+   const previousSheet=sheets.find(sheet=>previousDay>=Number(sheet.start_day)&&previousDay<=Number(sheet.end_day));
+   const previousRow=(Array.isArray(previousSheet?.rows)?previousSheet.rows:[]).find(row=>Number(row.day)===previousDay);
+   const raw=previousRow?.tip_amount;
+   previousTip=raw===null||raw===undefined||String(raw).trim()===""?0:statisticsNumber(raw);
   }
   const currentSheet=sheets.find(x=>x.sheet_key===dailyTipActiveSheetKey)
    ||sheets.find(x=>selectedDay>=Number(x.start_day)&&selectedDay<=Number(x.end_day));
@@ -3160,7 +3161,7 @@ async function loadSalesReportDayTips(day){
   const displayedTotalText=String(displayedTotalCell?.textContent??"").trim();
   const currentTotal=displayedTotalText!==""?statisticsNumber(displayedTotalText):(currentSheet?dailyTipCalculateTotals(currentSheet.rows||[]).tipTotal:null);
   if(sequence!==salesReportTipsLoadSequence||salesReportSelectedMonth!==month||Number($("#salesReportDay")?.value)!==selectedDay)return;
-  yesterdayTip.value=previousTip===null?"":formatStatisticsNumber(statisticsNumber(previousTip));
+  yesterdayTip.value=formatStatisticsNumber(Number.isFinite(previousTip)?previousTip:0);
   monthTip.value=currentTotal===null?"":formatStatisticsNumber(currentTotal);
  }catch(error){console.error("Could not load Daily Tip values:",error);}
 }
