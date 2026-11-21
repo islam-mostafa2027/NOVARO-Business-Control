@@ -108,8 +108,8 @@
       if(current&&root.confirm("هل تريد حذف المعادلة المحفوظة؟"))await storage().removeFormula(id,db,map(),adapter());
       result.hidden=true;button.textContent="ƒx";return;
      }
-     await storage().saveFormula(id,formula,db,map(),adapter(),engine());
      const calculated=await evaluateCell(id,formula);
+     await storage().saveFormula(id,formula,db,map(),adapter(),engine());
      result.textContent="= "+Number(calculated.value).toLocaleString("en-US",{maximumFractionDigits:4});
      result.hidden=false;button.textContent="ƒx ✓";
      result.title="نتيجة محسوبة للعرض فقط؛ القيمة الأصلية لم تتغير";
