@@ -3340,7 +3340,9 @@ document.addEventListener("click",async e=>{
    clone.querySelector(".sales-statistics-actions")?.remove();
    clone.querySelector(".headcount-back")?.remove();
    clone.querySelectorAll(".sales-report-day-panel").forEach(node=>node.remove());
-   const sourceFields=Array.from(snapshotRoot.querySelectorAll("input,textarea,select")),clonedFields=Array.from(clone.querySelectorAll("input,textarea,select"));\n   clonedFields.forEach((field,index)=>{const source=sourceFields[index];if(!source)return;if(field.type==="checkbox"||field.type==="radio")field.checked=source.checked;else if(field.tagName==="SELECT")field.selectedIndex=source.selectedIndex;else field.value=source.value;});\n   clone.querySelectorAll("input,textarea,select").forEach(field=>{
+   const sourceFields=Array.from(snapshotRoot.querySelectorAll("input,textarea,select")),clonedFields=Array.from(clone.querySelectorAll("input,textarea,select"));
+   clonedFields.forEach((field,index)=>{const source=sourceFields[index];if(!source)return;if(field.type==="checkbox"||field.type==="radio")field.checked=source.checked;else if(field.tagName==="SELECT")field.selectedIndex=source.selectedIndex;else field.value=source.value;});
+   clone.querySelectorAll("input,textarea,select").forEach(field=>{
     const span=document.createElement("span"),type=String(field.type||"").toLowerCase();
     span.className=(field.className||"")+" sales-snapshot-static-value";
     if(type==="checkbox"||type==="radio")span.textContent=field.checked?"✓":"—";
