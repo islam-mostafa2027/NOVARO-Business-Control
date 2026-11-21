@@ -3207,8 +3207,7 @@ function dailyTipRender(){
   const row=byDay.get(day)||{},tip=row.tip_amount??"",sales=row.dinein_sales??"",pct=Number(sales)>0&&tip!==""?(Number(tip)/Number(sales)*100):null;
   return '<tr data-daily-tip-day="'+day+'"><td class="daily-tip-date">'+dailyTipDate(day)+'</td><td><input class="sales-stat-cell-input daily-tip-input" type="text" inputmode="decimal" autocomplete="off" data-tip-amount value="'+dailyTipEscape(tip)+'" aria-label="Tip Amount '+day+'"></td><td><input class="sales-stat-cell-input daily-tip-input" type="text" inputmode="decimal" autocomplete="off" data-dinein-sales value="'+dailyTipEscape(sales)+'" aria-label="Dine-in Sales '+day+'"></td><td class="daily-tip-percent">'+(pct===null?'—':pct.toFixed(2).replace(/\.?0+$/,"")+'%')+'</td></tr>';
  }).join("")||'<tr><td colspan="4">No dates in this sheet</td></tr>';
- const en=language==="en";
- editor.innerHTML='<button type="button" class="soft daily-tip-duration-toggle" id="dailyTipDurationToggle"><span>'+(en?"Actual sheet duration":"المدة الفعلية للشيت")+'</span><strong>'+dailyTipDate(active.start_day)+' – '+dailyTipDate(active.end_day)+'</strong></button>';
+ editor.replaceChildren();
 }
 async function dailyTipLoad(){
  const card=document.querySelector("#dailyTipCard"),monthCard=document.querySelector(".sales-month-card"),status=card?.querySelector("#dailyTipStatus");
@@ -3352,21 +3351,7 @@ document.addEventListener("click",async e=>{
   return;
  }
 
- if(e.target.closest("#dailyTipDurationToggle")){
-  const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey),info=dailyTipMonthParts(),editor=document.querySelector("#dailyTipSheetEditor"),en=language==="en";
-  if(!active||!info||!editor)return;
-  editor.innerHTML='<label>'+(en?"From day":"من يوم")+' <input type="number" min="1" max="'+info.days+'" id="dailyTipStartDay" value="'+active.start_day+'"></label><label>'+(en?"To day":"إلى يوم")+' <input type="number" min="1" max="'+info.days+'" id="dailyTipEndDay" value="'+active.end_day+'"></label><button type="button" class="soft" id="dailyTipApplyRange">'+(en?"Apply":"تطبيق")+'</button><button type="button" class="soft" id="dailyTipCancelRange">'+(en?"Cancel":"إلغاء")+'</button>';
-  return;
- }
- if(e.target.closest("#dailyTipCancelRange")){dailyTipRender();return;}
- if(e.target.closest("#dailyTipApplyRange")){
-  const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey),info=dailyTipMonthParts(),status=document.querySelector("#dailyTipStatus");
-  if(!active||!info)return;
-  const start=Number(document.querySelector("#dailyTipStartDay")?.value),end=Number(document.querySelector("#dailyTipEndDay")?.value);
-  if(!Number.isInteger(start)||!Number.isInteger(end)||start<1||end<start||end>info.days){if(status)status.textContent=language==="en"?"Enter a valid date range for this month.":"أدخل نطاق تواريخ صحيح للشهر.";return;}
-  try{const result=await db.from("sales_report_tip_sheets").update({start_day:start,end_day:end,updated_by:user.id,updated_at:new Date().toISOString()}).eq("id",active.id).select("*").single();if(result.error)throw result.error;dailyTipSheetCache=dailyTipSheetCache.map(x=>x.id===active.id?result.data:x);dailyTipRender();if(status)status.textContent=language==="en"?"Date range updated.":"تم تعديل نطاق التواريخ.";}catch(error){if(status)status.textContent=error.message||String(error);}
-  return;
- }
+
 
  if(salesMonthCard&&e.target.closest("#loadSalesMonth")){
   const branch=salesReportBranches().find(b=>b.id===salesMonthCard.dataset.salesBranchId),month=salesReportSelectedMonth,status=salesMonthCard.querySelector("#salesMonthStatus");
