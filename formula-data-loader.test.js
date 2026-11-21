@@ -70,8 +70,8 @@ test("inventory loader constrains the embedded session to the branch encoded in 
  assert.equal(values[id],14);
  assert.equal(db.calls[0].columns,"counted_quantity,inventory_sessions!inner(branch_id)");
  assert.deepEqual(db.calls[0].filters,[
-  ["inventory_sessions.branch_id","branch-a"],
   ["item_id","item-1"],
-  ["session_id","session-1"]
+  ["session_id","session-1"],
+  ["inventory_sessions.branch_id","branch-a"]
  ]);
 });
