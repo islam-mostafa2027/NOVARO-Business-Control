@@ -4,11 +4,7 @@
  */
 (function(root){
  "use strict";
- const UUID_PARTS = Object.freeze({
-  inventory: 5, item: 3, branch: 3, sales: 4,
-  statistics: null, daily_tip: 6, headcount: 4
- });
- const MONTH = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\\d{4}$/;
+ const MONTH = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{4}$/;
  const GROUPS = Object.freeze(["dinein","takeaway","delivery","catering"]);
  const METRICS = Object.freeze(["sales_target","yesterday_tip","month_to_date_tip"]);
  const FIELDS = Object.freeze(["tickets","sales"]);
@@ -50,9 +46,8 @@
     if(!Number.isInteger(d.filters.report_day)||d.filters.report_day<1||d.filters.report_day>31)invalid();
     break;
    case "daily_tip":
-    if(p.length!==7||!MONTH.test(p[2])||!/^\\d+$/.test(p[4])||!["tip_amount","dinein_sales"].includes(p[5])&&p.length===6)invalid();
-    // The current stable map shape is: daily_tip|branch|month|sheet|day|field.
-    if(p.length!==6||!/^\\d+$/.test(p[4])||!["tip_amount","dinein_sales"].includes(p[5]))invalid();
+    // Stable map shape: daily_tip|branch|month|sheet|day|field.
+    if(p.length!==6||!MONTH.test(p[2])||!/^\d+$/.test(p[4])||!["tip_amount","dinein_sales"].includes(p[5]))invalid();
     d={type:"daily_tip",table:"sales_report_tip_sheets",column:"rows",branchId:p[1],filters:{id:p[3],branch_id:p[1],report_month:p[2]},source:{sheetId:p[3],reportMonth:p[2],day:Number(p[4]),field:p[5]},writeScope:"sales_report_editor"};
     if(d.source.day<1||d.source.day>31)invalid();
     break;
