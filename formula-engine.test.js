@@ -8,6 +8,11 @@ const resolver = {
     if (!Object.prototype.hasOwnProperty.call(values, ref)) throw new Error("Unknown cell: " + ref);
     return values[ref];
   },
+  getCellById(id) {
+    const cells = { "NOVARO|sales|branch-1|Nov-2026|sales_target": 1200, "NOVARO|inventory|branch-1|session-1|item-1|counted_quantity": 35 };
+    if (!Object.prototype.hasOwnProperty.call(cells, id)) throw new Error("Unknown stable cell: " + id);
+    return cells[id];
+  },
   getRange(start, end) {
     const cells = { "A1:B2": [[10, 5], [3, 2]] };
     const key = start + ":" + end;
@@ -51,4 +56,10 @@ test("invalid formulas fail safely", () => {
   assert.throws(() => engine.evaluate("=A1+", resolver));
   assert.throws(() => engine.evaluate("=1+2;alert(1)", resolver));
   assert.throws(() => engine.evaluate("=" + "1+".repeat(2500) + "1", resolver));
+});
+
+test("stable cross-page CELL references", () => {
+  assert.equal(engine.evaluate('=CELL("NOVARO|sales|branch-1|Nov-2026|sales_target")+CELL("NOVARO|inventory|branch-1|session-1|item-1|counted_quantity")', resolver), 1235);
+  assert.throws(() => engine.evaluate('=CELL("missing")', resolver), /Unknown stable cell/);
+  assert.throws(() => engine.evaluate("=CELL(A1)", resolver), /معرّف خلية نصيًا ثابتًا/);
 });
