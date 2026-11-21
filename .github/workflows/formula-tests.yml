@@ -14,6 +14,8 @@ on:
       - "formula-runtime.test.js"
       - "formula-source-adapter.js"
       - "formula-source-adapter.test.js"
+      - "formula-data-loader.js"
+      - "formula-data-loader.test.js"
       - ".github/workflows/formula-tests.yml"
   pull_request:
     paths:
@@ -27,6 +29,8 @@ on:
       - "formula-runtime.test.js"
       - "formula-source-adapter.js"
       - "formula-source-adapter.test.js"
+      - "formula-data-loader.js"
+      - "formula-data-loader.test.js"
       - ".github/workflows/formula-tests.yml"
 
 jobs:
@@ -37,4 +41,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: node --test formula-engine.test.js formula-cell-map.test.js formula-dependency-graph.test.js formula-runtime.test.js formula-source-adapter.test.js
+      - run: node --test formula-engine.test.js formula-cell-map.test.js formula-dependency-graph.test.js formula-runtime.test.js formula-source-adapter.test.js formula-data-loader.test.js
