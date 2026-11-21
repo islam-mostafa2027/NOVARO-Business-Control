@@ -3458,8 +3458,8 @@ document.addEventListener("click",async e=>{
    infoRow.eachCell(cell=>{cell.border={bottom:{style:"thin",color:{argb:"FFCBD9D0"}}};cell.alignment={vertical:"middle",wrapText:true};});
    const metrics=Array.from(report.querySelectorAll(".sales-metric")).map(metric=>{
     const label=metric.querySelector("label")?.innerText.trim()||"";
-    const field=metric.querySelector("input,textarea,select");
-    const value=field?field.value:(metric.querySelector(".sales-metric-value")?.innerText.trim()||metric.innerText.trim());
+    const field=metric.querySelector("input,textarea,select,.sales-snapshot-static-value");
+    const value=field?(field.value??field.innerText.trim()):(metric.querySelector(".sales-metric-value")?.innerText.trim()||metric.innerText.trim());
     return [label,value||"—"];
    });
    for(let i=0;i<metrics.length;i+=3){
