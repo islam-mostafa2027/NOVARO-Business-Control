@@ -65,7 +65,7 @@ test("stable cross-page CELL references", () => {
 });
 
 test("extracts direct, range and stable CELL dependencies", () => {
-  const refs = engine.getDependencies('=SUM(A1:B4)+CELL("sales|branch|Nov-2026|sales_target")');
+  const refs = engine.getDependencies('=SUM(A1:B4)+CELL("NOVARO|sales|branch|Nov-2026|sales_target")');
   assert.deepEqual(refs, ["A1", "B4", "NOVARO|sales|branch|Nov-2026|sales_target"]);
 });
 test("dependency extraction rejects malformed formulas", () => {
