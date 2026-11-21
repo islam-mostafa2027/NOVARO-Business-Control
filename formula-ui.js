@@ -151,7 +151,15 @@
  function start(){
   if(root.__NOVAROFormulaUIStarted)return;root.__NOVAROFormulaUIStarted=true;
   decorate();
-  const observer=new MutationObserver(()=>{decorate();scheduleRestore();});
+  const observer=new MutationObserver(records=>{
+   const relevant=records.some(record=>{
+    const target=record.target.nodeType===1?record.target:record.target.parentElement;
+    if(target?.closest(".novaro-fx-wrap"))return false;
+    const nodes=[...record.addedNodes,...record.removedNodes];
+    return nodes.some(node=>node.nodeType!==1||(!node.matches(".novaro-fx-wrap")&&!node.closest(".novaro-fx-wrap")));
+   });
+   if(relevant){decorate();scheduleRestore();}
+  });
   observer.observe(root.document.body,{childList:true,subtree:true});
   root.NOVAROFormulaUI=Object.freeze({refresh:()=>{decorate();scheduleRestore();},recalculate:restoreVisibleFormulas});
   root.__NOVAROFormulaUIObserver=observer;
