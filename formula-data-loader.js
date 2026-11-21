@@ -23,7 +23,7 @@
    const key=JSON.stringify([d.table,filters]);
    let group=groups.get(key);
    if(!group){group={table:d.table,filters,columns:new Set(),descriptors:[]};groups.set(key,group);}
-   group.columns.add(d.column);
+   for(const column of (d.columns||[d.column]))group.columns.add(column);
    group.descriptors.push(d);
   }
   const values={};
