@@ -61,8 +61,9 @@
  async function evaluateCell(targetId,initialFormula){
   const formulas={};let frontier=[targetId];
   while(frontier.length){
-   const batch=[...new Set(frontier)].filter(id=>!Object.prototype.hasOwnProperty.call(formulas,id));
-   frontier=[];
+   const pending=[...new Set(frontier)].filter(id=>!Object.prototype.hasOwnProperty.call(formulas,id));
+   const batch=pending.splice(0,300);
+   frontier=pending;
    if(!batch.length)break;
    const found=await storage().loadFormulas(batch,db,map(),adapter());
    Object.assign(formulas,found);
@@ -74,6 +75,7 @@
   if(initialFormula)formulas[targetId]=initialFormula;
   const refs=new Set([targetId]);
   for(const formula of Object.values(formulas))for(const dep of engine().getDependencies(formula))refs.add(dep);
+  if(refs.size>300)throw new Error("المعادلة تحتوي على أكثر من 300 مرجع؛ قلّل عدد المراجع");
   const values=applyVisibleValues(await loader().loadCells([...refs],db,map(),adapter()));
   const result=runtime().recalculate(formulas,values,{engine:engine(),graph:graph()});
   if(result.errors[targetId])throw new Error(result.errors[targetId]);
@@ -135,7 +137,8 @@
    if(!cells.size)return;
    const formulas={};let frontier=[...cells.keys()];
    while(frontier.length){
-    const batch=[...new Set(frontier)].filter(id=>!Object.prototype.hasOwnProperty.call(formulas,id));frontier=[];
+    const pending=[...new Set(frontier)].filter(id=>!Object.prototype.hasOwnProperty.call(formulas,id));
+    const batch=pending.splice(0,300);frontier=pending;
     if(!batch.length)break;
     const found=await storage().loadFormulas(batch,db,map(),adapter());Object.assign(formulas,found);
     for(const formula of Object.values(found))for(const dep of engine().getDependencies(formula))if(!Object.prototype.hasOwnProperty.call(formulas,dep))frontier.push(dep);
@@ -144,6 +147,7 @@
    const active=Object.keys(formulas);if(!active.length)return;
    const refs=new Set(active);
    for(const formula of Object.values(formulas))for(const dep of engine().getDependencies(formula))refs.add(dep);
+   if(refs.size>300)throw new Error("عدد مراجع المعادلات المعروضة تجاوز الحد الآمن (300)");
    const values=applyVisibleValues(await loader().loadCells([...refs],db,map(),adapter()));
    const calculated=runtime().recalculate(formulas,values,{engine:engine(),graph:graph()});
    for(const id of active){
