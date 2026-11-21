@@ -5,6 +5,7 @@ const map = require('./formula-cell-map');
 const adapter = require('./formula-source-adapter');
 const graph = require('./formula-dependency-graph');
 const runtime = require('./formula-runtime');
+const storage = require('./formula-storage');
 
 const branch = '11111111-1111-4111-8111-111111111111';
 const sheet = '22222222-2222-4222-8222-222222222222';
@@ -60,6 +61,34 @@ test('invalid formulas fail safely without executing arbitrary code', () => {
   assert.throws(() => engine.evaluate('=1/0', {getCell(){return 0;}}), /القسمة على صفر/);
   assert.throws(() => engine.evaluate('=UNKNOWN(1)', {getCell(){return 0;}}), /غير مدعومة/);
   assert.throws(() => engine.getDependencies('=1+2'), /تبدأ بعلامة/);
+});
+
+test('formula storage validates, saves, loads and removes without touching source tables', async () => {
+  const rows = new Map();
+  const db = {
+    from(table) {
+      assert.equal(table, 'formula_cells');
+      return {
+        select() {
+          return { in: async (column, ids) => ({
+            data: ids.filter(id => rows.has(id)).map(id => ({ cell_id: id, formula: rows.get(id) })),
+            error: null
+          }) };
+        },
+        upsert: async row => { rows.set(row.cell_id, row.formula); return { error: null }; },
+        delete() {
+          return { eq: async (column, id) => { rows.delete(id); return { error: null }; } };
+        }
+      };
+    }
+  };
+  const cell = map.salesMetric(branch, 'Nov-2026', 'sales_target');
+  await storage.saveFormula(cell, '=SUM(2,3)', db, map, adapter, engine);
+  assert.equal((await storage.loadFormulas([cell], db, map, adapter))[cell], '=SUM(2,3)');
+  await assert.rejects(storage.saveFormula(cell, '=UNKNOWN(1)', db, map, adapter, engine));
+  await assert.rejects(storage.saveFormula(cell, '=1/0', db, map, adapter, engine));
+  await storage.removeFormula(cell, db, map, adapter);
+  assert.equal(rows.size, 0);
 });
 
 test('inventory, item, branch and staffing cells resolve to their intended records', () => {
