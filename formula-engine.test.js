@@ -63,3 +63,12 @@ test("stable cross-page CELL references", () => {
   assert.throws(() => engine.evaluate('=CELL("missing")', resolver), /Unknown stable cell/);
   assert.throws(() => engine.evaluate("=CELL(A1)", resolver), /معرّف خلية نصيًا ثابتًا/);
 });
+
+test("extracts direct, range and stable CELL dependencies", () => {
+  const refs = engine.getDependencies('=SUM(A1:B4)+CELL("sales|branch|Nov-2026|sales_target")');
+  assert.deepEqual(refs, ["A1", "B4", "NOVARO|sales|branch|Nov-2026|sales_target"]);
+});
+test("dependency extraction rejects malformed formulas", () => {
+  assert.throws(() => engine.getDependencies("A1+2"));
+  assert.throws(() => engine.getDependencies('=CELL(A1)'));
+});
