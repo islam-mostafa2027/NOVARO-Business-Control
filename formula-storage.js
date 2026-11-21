@@ -12,8 +12,16 @@
  function validateFormula(formula,engine){
   if(typeof formula!=="string"||formula.length>4000||!formula.trim().startsWith("="))throw new Error("المعادلة يجب أن تبدأ بعلامة = وألا تتجاوز 4000 حرف");
   if(!engine||typeof engine.getDependencies!=="function")throw new Error("محرك المعادلات غير متاح");
-  // Tokenize and extract dependencies before persistence; evaluation stays in runtime.
-  return engine.getDependencies(formula);
+  // Validate the full expression before persistence using harmless placeholder values.
+  // Real source values and permissions are still resolved only by the runtime.
+  const dependencies=engine.getDependencies(formula);
+  const preview=engine.evaluate(formula,{
+   getCell:()=>0,
+   getCellById:()=>0,
+   getRange:()=>[0]
+  });
+  if(typeof preview!=="number"||!Number.isFinite(preview))throw new Error("يجب أن تُرجع المعادلة رقمًا صالحًا");
+  return dependencies;
  }
  async function loadFormulas(cellIds,db,cellMap,adapter){
   if(!Array.isArray(cellIds)||cellIds.length>300)throw new Error("قائمة خلايا المعادلات غير صالحة");
