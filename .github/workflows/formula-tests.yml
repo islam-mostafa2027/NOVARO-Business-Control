@@ -13,6 +13,8 @@ on:
     paths:
       - "formula-engine.js"
       - "formula-engine.test.js"
+      - "formula-cell-map.js"
+      - "formula-cell-map.test.js"
       - ".github/workflows/formula-tests.yml"
 
 jobs:
