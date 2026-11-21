@@ -22,6 +22,9 @@ test("statistics identifiers validate day, group and editable field", () => {
   assert.throws(() => cells.statisticsMetric("b", "Nov-2026", 32, "dinein", "sales"));
   assert.throws(() => cells.statisticsMetric("b", "Nov-2026", 2, "dinein", "average"));
 });
+test("branch required headcount uses the persisted branch ID", () => {
+  assert.deepEqual(cells.decode(cells.branchRequiredHeadcount("branch-5")), ["branch", "branch-5", "required_headcount"]);
+});
 test("headcount identifiers use role record ID, not row position or title", () => {
   assert.deepEqual(cells.decode(cells.headcountRequired("b", "role-9")), ["headcount", "b", "role-9", "required_count"]);
 });
