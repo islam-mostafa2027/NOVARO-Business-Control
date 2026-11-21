@@ -110,11 +110,49 @@
    });
   });
  }
+ let restoreTimer=0,restoreBusy=false;
+ async function restoreVisibleFormulas(){
+  if(restoreBusy||!root.db&&!db)return;
+  restoreBusy=true;
+  try{
+   const cells=new Map();
+   root.document.querySelectorAll(".novaro-fx-wrap").forEach(wrap=>{
+    const input=wrap.previousElementSibling,id=idFor(input);if(id)cells.set(id,{input,wrap,result:wrap.querySelector(".novaro-fx-result"),button:wrap.querySelector(".novaro-fx-btn")});
+   });
+   if(!cells.size)return;
+   const formulas={};let frontier=[...cells.keys()];
+   while(frontier.length){
+    const batch=[...new Set(frontier)].filter(id=>!Object.prototype.hasOwnProperty.call(formulas,id));frontier=[];
+    if(!batch.length)break;
+    const found=await storage().loadFormulas(batch,db,map(),adapter());Object.assign(formulas,found);
+    for(const formula of Object.values(found))for(const dep of engine().getDependencies(formula))if(!Object.prototype.hasOwnProperty.call(formulas,dep))frontier.push(dep);
+    if(Object.keys(formulas).length>300)throw new Error("عدد مراجع المعادلات تجاوز الحد الآمن");
+   }
+   const active=Object.keys(formulas);if(!active.length)return;
+   const refs=new Set(active);
+   for(const formula of Object.values(formulas))for(const dep of engine().getDependencies(formula))refs.add(dep);
+   const values=await loader().loadCells([...refs],db,map(),adapter());
+   const calculated=runtime().recalculate(formulas,values,{engine:engine(),graph:graph()});
+   for(const id of active){
+    const cell=cells.get(id);if(!cell)continue;
+    const error=calculated.errors[id],value=calculated.results[id];
+    cell.result.textContent=error||("= "+Number(value).toLocaleString("en-US",{maximumFractionDigits:4}));
+    cell.result.hidden=false;cell.result.classList.toggle("novaro-fx-error",!!error);
+    cell.button.textContent=error?"ƒx !":"ƒx ✓";
+    cell.result.title="نتيجة محسوبة للعرض فقط؛ القيمة الأصلية لم تتغير";
+   }
+  }catch(error){console.warn("NOVARO formula refresh:",error);}
+  finally{restoreBusy=false;}
+ }
+ function scheduleRestore(){
+  if(restoreTimer)root.clearTimeout(restoreTimer);
+  restoreTimer=root.setTimeout(()=>{restoreTimer=0;restoreVisibleFormulas();},350);
+ }
  function start(){
   if(root.__NOVAROFormulaUIStarted)return;root.__NOVAROFormulaUIStarted=true;
   decorate();
   const observer=new MutationObserver(()=>decorate());
-  observer.observe(root.document.body,{childList:true,subtree:true});
+  observer.observe(root.document.body,{childList:true,subtree:true});\n  const prior=decorate;\n  const wrapped=()=>{prior();scheduleRestore();};\n  root.NOVAROFormulaUI=Object.freeze({refresh:wrapped,recalculate:restoreVisibleFormulas});
   root.__NOVAROFormulaUIObserver=observer;
  }
  if(root.document){if(root.document.readyState==="loading")root.document.addEventListener("DOMContentLoaded",start,{once:true});else start();}
