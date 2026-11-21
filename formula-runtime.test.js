@@ -5,8 +5,8 @@ const engine=require("./formula-engine.js");
 const graph=require("./formula-dependency-graph.js");
 const options={engine,graph};
 test("recalculates dependent cells in dependency order",()=>{
- const r=runtime.recalculate({A:"=B+2",B:"=C*3",C:"=4"},{C:4},{...options});
- assert.deepEqual(r.results,{C:4,B:12,A:14});
+ const r=runtime.recalculate({A1:"=B1+2",B1:"=C1*3",C1:"=4"},{C1:4},{...options});
+ assert.deepEqual(r.results,{C1:4,B1:12,A1:14});
  assert.deepEqual(r.errors,{});
 });
 test("resolves stable cross-page CELL references from authorized prefetched values",()=>{
@@ -15,16 +15,16 @@ test("resolves stable cross-page CELL references from authorized prefetched valu
  assert.equal(r.results.A,250);
 });
 test("reports circular references without evaluating them",()=>{
- const r=runtime.recalculate({A:"=B+1",B:"=A+1"},{},{...options});
+ const r=runtime.recalculate({A1:"=B1+1",B1:"=A1+1"},{},{...options});
  assert.equal(r.cycles.length,1);
- assert.ok(r.errors.A&&r.errors.B);
+ assert.ok(r.errors.A1&&r.errors.B1);
 });
 test("reports inaccessible references without returning fabricated values",()=>{
- const r=runtime.recalculate({A:"=CELL(\"NOVARO|sales|other-branch|Nov-2026|sales_target\")"},{},{...options});
- assert.match(r.errors.A,/غير متاحة/);
+ const r=runtime.recalculate({A1:"=CELL(\"NOVARO|sales|other-branch|Nov-2026|sales_target\")"},{},{...options});
+ assert.match(r.errors.A1,/غير متاحة/);
 });
 test("preserves independent formulas when another formula has a bad reference",()=>{
- const r=runtime.recalculate({A:"=MISSING+1",B:"=2+3"},{},{...options});
- assert.equal(r.results.B,5);
- assert.ok(r.errors.A);
+ const r=runtime.recalculate({A1:"=MISSING1+1",B1:"=2+3"},{},{...options});
+ assert.equal(r.results.B1,5);
+ assert.ok(r.errors.A1);
 });
