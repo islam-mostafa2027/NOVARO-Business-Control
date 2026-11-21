@@ -3606,6 +3606,7 @@ document.addEventListener("click",async e=>{
   const report=savedView?savedView.querySelector(".sales-report-page"):document.querySelector(".sales-report-page");
   if(!report)return;
   const copy=report.cloneNode(true);
+  copy.querySelectorAll(".novaro-fx-wrap").forEach(node=>node.remove());
   copy.id="novaro-sales-print-root";
   copy.querySelector(".sales-export-card")?.remove();
   copy.querySelector(".sales-month-actions")?.remove();
