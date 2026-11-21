@@ -46,6 +46,14 @@
    return map().branchRequiredHeadcount(headcountBranchId);
   return null;
  }
+ function applyVisibleValues(values){
+  const next={...values};
+  root.document.querySelectorAll(".novaro-fx-wrap").forEach(wrap=>{
+   const input=wrap.previousElementSibling,id=idFor(input);if(!id)return;
+   const value=numberValue(input.value);if(value!==null)next[id]=value;
+  });
+  return next;
+ }
  function numberValue(value){
   const raw=clean(value);if(raw==="")return null;
   const n=Number(raw);return Number.isFinite(n)?n:null;
