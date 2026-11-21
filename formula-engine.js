@@ -18,7 +18,8 @@
     IF: a => truthy(a[0]) ? a[1] : a[2],
     AND: a => flatten(a).every(truthy),
     OR: a => flatten(a).some(truthy),
-    NOT: a => !truthy(a[0])
+    NOT: a => !truthy(a[0]),
+    CELL: () => { throw new Error("مرجع الخلية غير مهيأ"); }
   });
 
   function number(v) {
@@ -139,6 +140,11 @@
       }
       if (node.kind === "unary") { const v = number(run(node.value)); return node.op === "-" ? -v : v; }
       if (node.kind === "call") {
+        if (node.name === "CELL") {
+          if (node.args.length !== 1 || node.args[0].kind !== "literal" || typeof node.args[0].value !== "string") throw new Error("CELL تحتاج معرّف خلية نصيًا ثابتًا");
+          if (!resolver || typeof resolver.getCellById !== "function") throw new Error("قراءة الخلايا ذات المعرّفات الثابتة غير مفعّلة بعد");
+          return resolver.getCellById(node.args[0].value);
+        }
         if (node.name === "IF") {
           if (node.args.length < 2 || node.args.length > 3) throw new Error("الدالة IF تحتاج شرطًا ونتيجة، ونتيجة بديلة اختيارية");
           return truthy(run(node.args[0])) ? run(node.args[1]) : (node.args.length === 3 ? run(node.args[2]) : false);
