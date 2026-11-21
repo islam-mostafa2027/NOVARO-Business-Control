@@ -3353,7 +3353,12 @@ document.addEventListener("click",async e=>{
  }
 
  const dailyTipTab=e.target.closest("[data-daily-tip-sheet]");
- if(dailyTipTab){dailyTipActiveSheetKey=dailyTipTab.dataset.dailyTipSheet;dailyTipRender();return;}
+ if(dailyTipTab){
+  dailyTipActiveSheetKey=dailyTipTab.dataset.dailyTipSheet;
+  document.querySelectorAll("#dailyTipSheetTabs [data-daily-tip-sheet]").forEach(tab=>{const active=tab===dailyTipTab;tab.classList.toggle("is-active",active);tab.setAttribute("aria-selected",active?"true":"false");});
+  if(e.detail===2)dailyTipBeginRename(dailyTipTab);
+  return;
+ }
  const dailyTipAdd=e.target.closest("#dailyTipAddSheetInline");
  if(dailyTipAdd){
   const info=dailyTipMonthParts(),monthCard=document.querySelector(".sales-month-card"),status=document.querySelector("#dailyTipStatus");
