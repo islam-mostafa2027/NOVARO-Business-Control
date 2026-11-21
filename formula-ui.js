@@ -105,7 +105,7 @@
      const formula=root.prompt("اكتب المعادلة باستخدام =، وللإشارة إلى خلية أخرى استخدم CELL(\"معرّف الخلية\"):",current);
      if(formula===null)return;
      if(!formula.trim()){
-      if(current&&root.confirm("هل تريد حذف المعادلة المحفوظة؟"))await storage().removeFormula(id,db,map(),adapter());
+      if(current&&root.confirm("هل تريد حذف المعادلة المحفوظة؟")){await storage().removeFormula(id,db,map(),adapter());scheduleRestore();}
       result.hidden=true;button.textContent="ƒx";return;
      }
      const calculated=await evaluateCell(id,formula);
@@ -113,6 +113,7 @@
      result.textContent="= "+Number(calculated.value).toLocaleString("en-US",{maximumFractionDigits:4});
      result.hidden=false;button.textContent="ƒx ✓";
      result.title="نتيجة محسوبة للعرض فقط؛ القيمة الأصلية لم تتغير";
+     scheduleRestore();
     }catch(error){
      result.textContent=error?.message||"تعذر حساب المعادلة";result.hidden=false;result.classList.add("novaro-fx-error");button.textContent="ƒx";
     }finally{button.disabled=false;}
