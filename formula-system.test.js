@@ -32,6 +32,18 @@ test('formula engine evaluates arithmetic, functions and stable cell references'
   assert.deepEqual(result.errors, {});
 });
 
+test('formula errors propagate to dependent cells instead of using stale source values', () => {
+  const broken = map.salesMetric(branch, 'Nov-2026', 'sales_target');
+  const dependent = map.statisticsMetric(branch, 'Nov-2026', 1, 'dinein', 'sales');
+  const result = runtime.recalculate({
+    [broken]: '=1/0',
+    [dependent]: `=CELL("${broken}")+5`
+  }, {[broken]: 100, [dependent]: 200}, {engine, graph});
+  assert.ok(result.errors[broken].includes('القسمة على صفر'));
+  assert.ok(result.errors[dependent].includes('بسبب خطأ'));
+  assert.equal(Object.hasOwn(result.results, dependent), false);
+});
+
 test('dependency graph rejects circular formula references', () => {
   const a = map.salesMetric(branch, 'Nov-2026', 'sales_target');
   const b = map.statisticsMetric(branch, 'Nov-2026', 1, 'dinein', 'sales');
