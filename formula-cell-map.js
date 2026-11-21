@@ -25,6 +25,7 @@
     statisticsFields: STAT_FIELDS,
     inventoryCount: (branchId, sessionId, itemId) => make("inventory", branchId, sessionId, itemId, "counted_quantity"),
     itemMinimumStock: itemId => make("item", itemId, "min_stock"),
+    branchRequiredHeadcount: branchId => make("branch", branchId, "required_headcount"),
     salesMetric: (branchId, reportMonth, metric) => {
       if (!SALES_METRICS.includes(metric)) throw new Error("Unsupported sales metric");
       return make("sales", branchId, reportMonth, metric);
