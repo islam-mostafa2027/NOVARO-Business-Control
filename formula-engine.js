@@ -83,7 +83,7 @@
       if (token.type === "ident" && token.value === "CELL" && tokens[i + 1]?.type === "(") {
         const id = tokens[i + 2], close = tokens[i + 3];
         if (!id || id.type !== "string" || !close || close.type !== ")") throw new Error("CELL تحتاج معرّف خلية نصيًا ثابتًا");
-        refs.add("NOVARO|" + id.value);
+        refs.add(id.value);
       }
     }
     return Object.freeze([...refs]);
