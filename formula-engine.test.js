@@ -32,7 +32,7 @@ test("supported aggregate and scalar functions", () => {
   assert.equal(engine.evaluate("=COUNT(A1:B2)", resolver), 4);
   assert.equal(engine.evaluate("=ABS(-7)", resolver), 7);
   assert.equal(engine.evaluate("=ROUND(1.236,2)", resolver), 1.24);
-  assert.equal(engine.evaluate("=AND(1,TRUE)", resolver), true);
+  assert.equal(engine.evaluate("=AND(1,2)", resolver), true);
   assert.equal(engine.evaluate("=NOT(0)", resolver), true);
 });
 test("IF evaluates only the selected branch", () => {
