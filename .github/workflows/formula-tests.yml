@@ -25,6 +25,8 @@ on:
       - "formula-dependency-graph.test.js"
       - "formula-runtime.js"
       - "formula-runtime.test.js"
+      - "formula-source-adapter.js"
+      - "formula-source-adapter.test.js"
       - ".github/workflows/formula-tests.yml"
 
 jobs:
