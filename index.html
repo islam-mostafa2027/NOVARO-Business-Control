@@ -3500,6 +3500,7 @@ document.addEventListener("click",async e=>{
   saveSalesSnapshotButton.disabled=true;if(status)status.textContent=language==="en"?"Saving full report page...":"جارٍ حفظ صفحة التقرير بالكامل...";
   try{
    const clone=snapshotRoot.cloneNode(true);
+   clone.querySelectorAll(".novaro-fx-wrap").forEach(node=>node.remove());
    clone.querySelector(".sales-export-card")?.remove();
    clone.querySelector(".sales-snapshot-status")?.remove();
    clone.querySelector(".sales-snapshot-modal")?.remove();
