@@ -3352,11 +3352,24 @@ document.addEventListener("click",async e=>{
   return;
  }
 
- const dailyTipTab=e.target.closest("[data-daily-tip-sheet]");
+ const dailyTipTab=e.target.closest("#dailyTipSheetTabs [data-daily-tip-sheet]");
  if(dailyTipTab){
-  dailyTipActiveSheetKey=dailyTipTab.dataset.dailyTipSheet;
-  document.querySelectorAll("#dailyTipSheetTabs [data-daily-tip-sheet]").forEach(tab=>{const active=tab===dailyTipTab;tab.classList.toggle("is-active",active);tab.setAttribute("aria-selected",active?"true":"false");});
-  if(e.detail===2)dailyTipBeginRename(dailyTipTab);
+  const nextSheetKey=dailyTipTab.dataset.dailyTipSheet;
+  if(nextSheetKey!==dailyTipActiveSheetKey){
+   try{
+    await dailyTipSaveActive();
+    dailyTipActiveSheetKey=nextSheetKey;
+    dailyTipRender();
+   }catch(error){
+    const status=document.querySelector("#dailyTipStatus");
+    if(status)status.textContent=(language==="en"?"Could not save the current sheet: ":"تعذر حفظ الشيت الحالي: ")+(error.message||String(error));
+    return;
+   }
+  }
+  if(e.detail===2){
+   const currentTab=Array.from(document.querySelectorAll("#dailyTipSheetTabs [data-daily-tip-sheet]")).find(tab=>tab.dataset.dailyTipSheet===nextSheetKey);
+   if(currentTab)dailyTipBeginRename(currentTab);
+  }
   return;
  }
  const dailyTipAdd=e.target.closest("#dailyTipAddSheetInline");
@@ -7045,22 +7058,49 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .sales-report-page .daily-tip-sheet-name-input{width:clamp(100px,24vw,190px);max-width:100%;min-height:28px;padding:4px 6px;border:1px solid #23845f;border-radius:5px;background:var(--card,#fff);color:var(--text,var(--ink));font:inherit;font-size:10px;text-align:center;outline:none}
 #app .sales-report-page .daily-tip-sheet-add-inline{flex:0 0 32px;width:32px;height:32px;min-height:32px;padding:0;border:1px dashed var(--line);border-radius:8px;background:transparent;color:var(--text,var(--ink));font-size:20px;line-height:1;cursor:pointer}
 #app .sales-report-page .daily-tip-sheet-add-inline:active{background:var(--surface-2,var(--surface))}
-/* Daily Tip sheet selection: only the active sheet is green. */
-.daily-tip-sheet-tabs .daily-tip-sheet-tab,
-.daily-tip-sheet-editor .daily-tip-duration-toggle {
-  background: transparent !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
+/* Daily Tip date capsules: transparent at rest, green only on hover/focus. */
+#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab,
+#app .sales-report-page .daily-tip-sheet-editor .daily-tip-duration-toggle {
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:38px !important;
+  padding:8px 15px !important;
+  background:transparent !important;
+  background-color:transparent !important;
+  color:var(--text,var(--ink)) !important;
+  border:1px solid transparent !important;
+  border-radius:999px !important;
+  box-shadow:none !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1.35 !important;
+  white-space:nowrap !important;
+  opacity:1 !important;
+  transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease !important;
 }
-.daily-tip-sheet-tabs .daily-tip-sheet-tab:not(.is-active) {
-  color: var(--text, inherit) !important;
-  border-color: transparent !important;
+#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab:hover,
+#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab:focus-visible,
+#app .sales-report-page .daily-tip-sheet-editor .daily-tip-duration-toggle:hover,
+#app .sales-report-page .daily-tip-sheet-editor .daily-tip-duration-toggle:focus-visible {
+  background:#23845f !important;
+  background-color:#23845f !important;
+  color:#fff !important;
+  border-color:#23845f !important;
+  box-shadow:0 4px 13px #23845f35 !important;
+  outline:none !important;
 }
-.daily-tip-sheet-tabs .daily-tip-sheet-tab.is-active,
-.daily-tip-sheet-tabs .daily-tip-sheet-tab[aria-selected="true"] {
-  background: #23845f !important;
-  background-color: #23845f !important;
-  color: #fff !important;
-  border-color: #23845f !important;
+#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab:active,
+#app .sales-report-page .daily-tip-sheet-editor .daily-tip-duration-toggle:active {
+  background:#23845f !important;
+  color:#fff !important;
+}
+@media(max-width:600px){
+ #app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab,
+ #app .sales-report-page .daily-tip-sheet-editor .daily-tip-duration-toggle{
+  min-height:36px !important;
+  padding:7px 12px !important;
+  font-size:12px !important;
+ }
 }
 </style>
