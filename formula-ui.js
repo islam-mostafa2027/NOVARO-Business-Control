@@ -35,7 +35,8 @@
     if(field)return map().dailyTipCell(branch,month,sheet.id,Number(tipRow.dataset.dailyTipDay),field);
    }
   }
-  if(input.id==="minStock"&&input.dataset.formulaItemId)return map().itemMinimumStock(input.dataset.formulaItemId);\n  const countId=input.getAttribute("data-count-id"),view=window.__stocktakeView;
+  if(input.id==="minStock"&&input.dataset.formulaItemId)return map().itemMinimumStock(input.dataset.formulaItemId);
+  const countId=input.getAttribute("data-count-id"),view=window.__stocktakeView;
   if(countId&&view?.branch_id&&view?.id&&view?.session?.status!=="submitted"&&!view.locked)
    return map().inventoryCount(view.branch_id,view.id,countId);
   const roleRow=input.closest("[data-role-row]"),roleId=roleRow?.dataset.roleRow;
