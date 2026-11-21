@@ -18,7 +18,7 @@
   switch(p[0]){
    case "inventory":
     if(p.length!==5||p[4]!=="counted_quantity")invalid();
-    d={type:"inventory_count",table:"inventory_counts",column:"counted_quantity",branchId:p[1],filters:{session_id:p[2],item_id:p[3]},source:{sessionId:p[2],itemId:p[3]},writeScope:"inventory_open_session"};
+    d={type:"inventory_count",table:"inventory_counts",column:"counted_quantity",columns:["counted_quantity","is_counted"],branchId:p[1],filters:{session_id:p[2],item_id:p[3]},source:{sessionId:p[2],itemId:p[3]},writeScope:"inventory_open_session"};
     break;
    case "item":
     if(p.length!==3||p[2]!=="min_stock")invalid();
@@ -67,6 +67,9 @@
    if(!Array.isArray(row.rows))throw new Error("بيانات شيت الإكراميات غير صالحة");
    const dayRow=row.rows.find(x=>Number(x?.day)===descriptor.source.day);
    value=dayRow?.[descriptor.source.field];
+  }else if(descriptor.type==="inventory_count"){
+   if(row.is_counted!==true)return null;
+   value=row[descriptor.column];
   }else value=row[descriptor.column];
   if(value===null||value===undefined||value==="")return null;
   const n=Number(value);
