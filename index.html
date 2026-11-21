@@ -3150,10 +3150,12 @@ async function loadSalesReportDayTips(day){
   let previousTip=0;
   if(selectedDay>1){
    const previousDay=selectedDay-1;
-   const previousSheet=sheets.find(sheet=>previousDay>=Number(sheet.start_day)&&previousDay<=Number(sheet.end_day));
-   const previousRow=(Array.isArray(previousSheet?.rows)?previousSheet.rows:[]).find(row=>Number(row.day)===previousDay);
-   const raw=previousRow?.tip_amount;
-   previousTip=raw===null||raw===undefined||String(raw).trim()===""?0:statisticsNumber(raw);
+   const previousRows=sheets
+    .map(sheet=>({sheet,row:(Array.isArray(sheet.rows)?sheet.rows:[]).find(item=>Number(item.day)===previousDay)}))
+    .filter(item=>item.row&&item.row.tip_amount!==null&&item.row.tip_amount!==undefined&&String(item.row.tip_amount).trim()!=="")
+    .sort((a,b)=>String(b.sheet.updated_at||"").localeCompare(String(a.sheet.updated_at||"")));
+   const raw=previousRows[0]?.row?.tip_amount;
+   previousTip=raw===undefined?0:statisticsNumber(raw);
   }
   const currentSheet=sheets.find(x=>x.sheet_key===dailyTipActiveSheetKey)
    ||sheets.find(x=>selectedDay>=Number(x.start_day)&&selectedDay<=Number(x.end_day));
