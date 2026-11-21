@@ -40,9 +40,9 @@
    return map().inventoryCount(view.branch_id,view.id,countId);
   const roleRow=input.closest("[data-role-row]"),roleId=roleRow?.dataset.roleRow;
   if(roleId&&input.classList.contains("hc-role-count")&&headcountBranchId)
-   return map().headcountRequired(root.headcountBranchId,roleId);
-  if(input.id==="requiredHeadcountInput"&&root.headcountBranchId&&profile?.role==="owner_admin")
-   return map().branchRequiredHeadcount(root.headcountBranchId);
+   return map().headcountRequired(headcountBranchId,roleId);
+  if(input.id==="requiredHeadcountInput"&&headcountBranchId&&profile?.role==="owner_admin")
+   return map().branchRequiredHeadcount(headcountBranchId);
   return null;
  }
  function numberValue(value){
@@ -65,7 +65,7 @@
   if(initialFormula)formulas[targetId]=initialFormula;
   const refs=new Set([targetId]);
   for(const formula of Object.values(formulas))for(const dep of engine().getDependencies(formula))refs.add(dep);
-  const values=await loader().loadCells([...refs],root.db,map(),adapter());
+  const values=await loader().loadCells([...refs],db,map(),adapter());
   const result=runtime().recalculate(formulas,values,{engine:engine(),graph:graph()});
   if(result.errors[targetId])throw new Error(result.errors[targetId]);
   return {value:result.values[targetId],formula:formulas[targetId]||null};
@@ -91,15 +91,15 @@
     const id=idFor(input);if(!id)return;
     button.disabled=true;button.textContent="…";result.hidden=true;result.classList.remove("novaro-fx-error");
     try{
-     const existing=await storage().loadFormulas([id],root.db,map(),adapter());
+     const existing=await storage().loadFormulas([id],db,map(),adapter());
      const current=existing[id]||"";
      const formula=root.prompt("اكتب المعادلة باستخدام =، وللإشارة إلى خلية أخرى استخدم CELL(\"معرّف الخلية\"):",current);
      if(formula===null)return;
      if(!formula.trim()){
-      if(current&&root.confirm("هل تريد حذف المعادلة المحفوظة؟"))await storage().removeFormula(id,root.db,map(),adapter());
+      if(current&&root.confirm("هل تريد حذف المعادلة المحفوظة؟"))await storage().removeFormula(id,db,map(),adapter());
       result.hidden=true;button.textContent="ƒx";return;
      }
-     await storage().saveFormula(id,formula,root.db,map(),adapter(),engine());
+     await storage().saveFormula(id,formula,db,map(),adapter(),engine());
      const calculated=await evaluateCell(id,formula);
      result.textContent="= "+Number(calculated.value).toLocaleString("en-US",{maximumFractionDigits:4});
      result.hidden=false;button.textContent="ƒx ✓";
