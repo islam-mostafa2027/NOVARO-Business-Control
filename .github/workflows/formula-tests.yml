@@ -12,8 +12,6 @@ on:
       - "formula-dependency-graph.test.js"
       - "formula-runtime.js"
       - "formula-runtime.test.js"
-      - "formula-runtime.js"
-      - "formula-runtime.test.js"
       - ".github/workflows/formula-tests.yml"
   pull_request:
     paths:
@@ -23,6 +21,8 @@ on:
       - "formula-cell-map.test.js"
       - "formula-dependency-graph.js"
       - "formula-dependency-graph.test.js"
+      - "formula-runtime.js"
+      - "formula-runtime.test.js"
       - ".github/workflows/formula-tests.yml"
 
 jobs:
