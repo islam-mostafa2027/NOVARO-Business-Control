@@ -112,7 +112,7 @@
  }
  let restoreTimer=0,restoreBusy=false;
  async function restoreVisibleFormulas(){
-  if(restoreBusy||!root.db&&!db)return;
+  if(restoreBusy)return;
   restoreBusy=true;
   try{
    const cells=new Map();
@@ -151,7 +151,7 @@
  function start(){
   if(root.__NOVAROFormulaUIStarted)return;root.__NOVAROFormulaUIStarted=true;
   decorate();
-  const observer=new MutationObserver(()=>decorate());
+  const observer=new MutationObserver(()=>{decorate();scheduleRestore();});
   observer.observe(root.document.body,{childList:true,subtree:true});\n  const prior=decorate;\n  const wrapped=()=>{prior();scheduleRestore();};\n  root.NOVAROFormulaUI=Object.freeze({refresh:wrapped,recalculate:restoreVisibleFormulas});
   root.__NOVAROFormulaUIObserver=observer;
  }
