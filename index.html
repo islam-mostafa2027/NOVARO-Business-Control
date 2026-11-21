@@ -3390,9 +3390,10 @@ document.addEventListener("click",async e=>{
   try{
    const result=await db.from("sales_report_page_snapshots").select("snapshot_html,branch_name,report_month,report_date").eq("id",chosenSalesSnapshot.dataset.salesSnapshotOpen).eq("branch_id",branchId).maybeSingle();
    if(result.error)throw result.error;if(!result.data)throw new Error(language==="en"?"Saved report not found.":"التقرير المحفوظ غير موجود.");
-   view.innerHTML=result.data.snapshot_html;
-   view.querySelectorAll("script,iframe,object,embed").forEach(node=>node.remove());
-   view.querySelectorAll("*").forEach(node=>Array.from(node.attributes).forEach(attr=>{if(/^on/i.test(attr.name)||attr.name==="id")node.removeAttribute(attr.name);}));
+   const snapshotTemplate=document.createElement("template");snapshotTemplate.innerHTML=result.data.snapshot_html;
+   snapshotTemplate.content.querySelectorAll("script,iframe,object,embed,svg,math,form,link,meta,base,style").forEach(node=>node.remove());
+   snapshotTemplate.content.querySelectorAll("*").forEach(node=>Array.from(node.attributes).forEach(attr=>{const attrName=attr.name.toLowerCase(),attrValue=attr.value;if(attrName.startsWith("on")||["srcdoc","href","src","xlink:href","formaction"].includes(attrName)||(attrName==="style"&&/(url\s*\(|expression\s*\(|javascript:|@import|behavior\s*:)/i.test(attrValue)))node.removeAttribute(attr.name);}));
+   view.replaceChildren(snapshotTemplate.content);
    title.textContent=(language==="en"?"Saved report":"تقرير محفوظ")+" — "+result.data.report_month+" — "+result.data.report_date;
    list.hidden=true;view.hidden=false;back.hidden=false;
   }catch(error){const message=document.createElement("p");message.className="sales-snapshot-empty";message.textContent=(language==="en"?"Could not open report: ":"تعذر فتح التقرير: ")+(error.message||String(error));list.replaceChildren(message);}
