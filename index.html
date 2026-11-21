@@ -4498,7 +4498,7 @@ function itemForm(existing=null){
  document.addEventListener("visibilitychange",recoverCameraImage,{signal:cameraEvents.signal});
  window.addEventListener("pageshow",recoverCameraImage,{signal:cameraEvents.signal});
  $("n").value=i.name_ar||"";$("en").value=i.name_en||"";if($("n").__novaroTranslationManual){$("n").__novaroTranslationManual[0]=!!i.name_ar;$("en").__novaroTranslationManual[1]=!!i.name_en}$("code").value=i.item_code||"";
-$("itemMainCategory").value=initialGroup;novaroFilterItemCategories(initialGroup,i.category_id||"");$("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";if($("unit").__novaroTranslationManual){$("unit").__novaroTranslationManual[0]=!!i.unit_ar;$("unitEn").__novaroTranslationManual[1]=!!i.unit_en}$("minStock").value=Number(i.min_stock||0);
+$("itemMainCategory").value=initialGroup;novaroFilterItemCategories(initialGroup,i.category_id||"");$("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";if($("unit").__novaroTranslationManual){$("unit").__novaroTranslationManual[0]=!!i.unit_ar;$("unitEn").__novaroTranslationManual[1]=!!i.unit_en}$("minStock").value=Number(i.min_stock||0);$("minStock").dataset.formulaItemId=i.id||"";
  const help=$("categoryHelp");if(help&&!cats.length)help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات متاحة لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
 }
 function showItemFormFailure(error,source="add-item"){
