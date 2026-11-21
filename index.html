@@ -3150,12 +3150,15 @@ async function loadSalesReportDayTips(day){
   let previousTip=0;
   if(selectedDay>1){
    const previousDay=selectedDay-1;
-   const previousRows=sheets
-    .map(sheet=>({sheet,row:(Array.isArray(sheet.rows)?sheet.rows:[]).find(item=>Number(item.day)===previousDay)}))
-    .filter(item=>item.row&&item.row.tip_amount!==null&&item.row.tip_amount!==undefined&&String(item.row.tip_amount).trim()!=="")
-    .sort((a,b)=>String(b.sheet.updated_at||"").localeCompare(String(a.sheet.updated_at||"")));
-   const raw=previousRows[0]?.row?.tip_amount;
-   previousTip=raw===undefined?0:statisticsNumber(raw);
+   const visiblePreviousTip=document.querySelector('#dailyTipCard #dailyTipRows tr[data-daily-tip-day="'+previousDay+'"] [data-tip-amount]');
+   let raw=visiblePreviousTip?visiblePreviousTip.value:undefined;
+   if(raw===undefined){
+    const matchingRows=sheets
+     .map(sheet=>(Array.isArray(sheet.rows)?sheet.rows:[]).find(item=>Number(item.day)===previousDay))
+     .filter(row=>row&&row.tip_amount!==null&&row.tip_amount!==undefined&&String(row.tip_amount).trim()!=="");
+    raw=matchingRows.length?matchingRows[matchingRows.length-1].tip_amount:undefined;
+   }
+   previousTip=raw===undefined||String(raw).trim()===""?0:statisticsNumber(raw);
   }
   const currentSheet=sheets.find(x=>x.sheet_key===dailyTipActiveSheetKey)
    ||sheets.find(x=>selectedDay>=Number(x.start_day)&&selectedDay<=Number(x.end_day));
