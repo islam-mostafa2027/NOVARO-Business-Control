@@ -3199,7 +3199,7 @@ function dailyTipRender(){
  const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey)||dailyTipSheetCache[0];
  if(!active){tbody.innerHTML='<tr><td colspan="4">—</td></tr>';tabs.replaceChildren();editor.replaceChildren();return;}
  dailyTipActiveSheetKey=active.sheet_key;
- tabs.innerHTML=dailyTipSheetCache.map(x=>'<button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="daily-tip-sheet-tab'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'">'+dailyTipEscape(x.sheet_name)+'</button>').join("")+'<button type="button" class="daily-tip-sheet-add-inline" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>';
+ tabs.innerHTML=dailyTipSheetCache.map(x=>'<span class="daily-tip-sheet-pill"><button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="daily-tip-sheet-tab'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'">'+dailyTipEscape(x.sheet_name)+'</button><button type="button" class="daily-tip-sheet-delete" data-delete-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</button></span>').join("")+'<button type="button" class="daily-tip-sheet-add-inline" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>';
  const rows=Array.isArray(active.rows)?active.rows:[];
  const byDay=new Map(rows.map(x=>[Number(x.day),x]));
  const days=Array.from({length:Math.max(0,Math.min(info.days,Number(active.end_day))-Math.max(1,Number(active.start_day))+1)},(_,i)=>Math.max(1,Number(active.start_day))+i);
@@ -3207,7 +3207,25 @@ function dailyTipRender(){
   const row=byDay.get(day)||{},tip=row.tip_amount??"",sales=row.dinein_sales??"",pct=Number(sales)>0&&tip!==""?(Number(tip)/Number(sales)*100):null;
   return '<tr data-daily-tip-day="'+day+'"><td class="daily-tip-date">'+dailyTipDate(day)+'</td><td><input class="sales-stat-cell-input daily-tip-input" type="text" inputmode="decimal" autocomplete="off" data-tip-amount value="'+dailyTipEscape(tip)+'" aria-label="Tip Amount '+day+'"></td><td><input class="sales-stat-cell-input daily-tip-input" type="text" inputmode="decimal" autocomplete="off" data-dinein-sales value="'+dailyTipEscape(sales)+'" aria-label="Dine-in Sales '+day+'"></td><td class="daily-tip-percent">'+(pct===null?'—':pct.toFixed(2).replace(/\.?0+$/,"")+'%')+'</td></tr>';
  }).join("")||'<tr><td colspan="4">No dates in this sheet</td></tr>';
+ let totalFoot=card.querySelector(".daily-tip-table tfoot");
+ if(!totalFoot){totalFoot=document.createElement("tfoot");card.querySelector(".daily-tip-table").appendChild(totalFoot);}
+ dailyTipUpdateTotals();
  editor.replaceChildren();
+}
+function dailyTipUpdateTotals(){
+ const card=document.querySelector("#dailyTipCard");if(!card)return;
+ let tipTotal=0,salesTotal=0;
+ card.querySelectorAll("#dailyTipRows tr[data-daily-tip-day]").forEach(tr=>{
+  const tipRaw=String(tr.querySelector("[data-tip-amount]")?.value??"").trim();
+  const salesRaw=String(tr.querySelector("[data-dinein-sales]")?.value??"").trim();
+  const tip=tipRaw===""?0:statisticsNumber(tipRaw),sales=salesRaw===""?0:statisticsNumber(salesRaw);
+  if(Number.isFinite(tip))tipTotal+=tip;
+  if(Number.isFinite(sales))salesTotal+=sales;
+ });
+ const pct=salesTotal>0?tipTotal/salesTotal*100:null;
+ const fmt=n=>Number(n).toLocaleString(language==="en"?"en-US":"en-US",{maximumFractionDigits:2});
+ const foot=card.querySelector(".daily-tip-table tfoot");if(!foot)return;
+ foot.innerHTML='<tr class="daily-tip-total-row"><td>'+(language==="en"?"Total":"الإجمالي")+'</td><td>'+fmt(tipTotal)+'</td><td>'+fmt(salesTotal)+'</td><td>'+(pct===null?"—":fmt(pct)+"%")+'</td></tr>';
 }
 function dailyTipBeginRename(tab){
  const selected=dailyTipSheetCache.find(x=>x.sheet_key===tab?.dataset.dailyTipSheet);if(!selected||tab.querySelector("input"))return;
@@ -3277,6 +3295,7 @@ document.addEventListener("input",e=>{
  if(!field)return;
  const tr=field.closest("tr"),tip=statisticsNumber(tr.querySelector("[data-tip-amount]")?.value||""),sales=statisticsNumber(tr.querySelector("[data-dinein-sales]")?.value||""),cell=tr.querySelector(".daily-tip-percent");
  if(cell)cell.textContent=String(tr.querySelector("[data-tip-amount]")?.value??"").trim()!==""&&String(tr.querySelector("[data-dinein-sales]")?.value??"").trim()!==""&&Number.isFinite(tip)&&Number.isFinite(sales)&&sales>0?(tip/sales*100).toFixed(2).replace(/\.?0+$/,"")+"%":"—";
+ dailyTipUpdateTotals();
 });
 document.addEventListener("change",async e=>{
  if(!e.target.matches("#dailyTipRows [data-tip-amount],#dailyTipRows [data-dinein-sales]"))return;
@@ -3352,6 +3371,26 @@ document.addEventListener("click",async e=>{
   return;
  }
 
+ const dailyTipDelete=e.target.closest("#dailyTipSheetTabs [data-delete-daily-tip-sheet]");
+ if(dailyTipDelete){
+  e.preventDefault();e.stopPropagation();
+  const key=dailyTipDelete.dataset.deleteDailyTipSheet,selected=dailyTipSheetCache.find(x=>x.sheet_key===key),status=document.querySelector("#dailyTipStatus");
+  if(!selected)return;
+  if(dailyTipSheetCache.length<=1){if(status)status.textContent=language==="en"?"At least one sheet must remain.":"لازم يفضل فيه شيت واحد على الأقل.";return;}
+  const question=language==="en"?'Delete the sheet "'+selected.sheet_name+'" and all its saved entries?': 'هل تريد حذف الشيت "'+selected.sheet_name+'" وكل البيانات المسجلة بداخله؟';
+  if(!window.confirm(question))return;
+  dailyTipDelete.disabled=true;
+  try{
+   if(key===dailyTipActiveSheetKey)await dailyTipSaveActive();
+   const result=await db.from("sales_report_tip_sheets").delete().eq("id",selected.id);
+   if(result.error)throw result.error;
+   dailyTipSheetCache=dailyTipSheetCache.filter(x=>x.id!==selected.id);
+   if(key===dailyTipActiveSheetKey)dailyTipActiveSheetKey=dailyTipSheetCache[0]?.sheet_key||"";
+   dailyTipRender();
+   if(status)status.textContent=language==="en"?"Sheet deleted.":"تم حذف الشيت.";
+  }catch(error){if(status)status.textContent=(language==="en"?"Could not delete sheet: ":"تعذر حذف الشيت: ")+(error.message||String(error));}
+  return;
+ }
  const dailyTipTab=e.target.closest("#dailyTipSheetTabs [data-daily-tip-sheet]");
  if(dailyTipTab){
   const nextSheetKey=dailyTipTab.dataset.dailyTipSheet;
@@ -3941,7 +3980,26 @@ function printStocktakeReport(targetWindow,reportData){
  const en=language==="en",title=en?"STOCKTAKE REPORT":"تقرير الجرد";
  const w=targetWindow||window.open("","_blank");if(!w)return alert(en?"Allow pop-ups to open the printable report.":"اسمح بفتح النوافذ المنبثقة لعرض التقرير القابل للطباعة.");
  const report=stocktakeReportTable(data);
- const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style> *{box-sizing:border-box} html,body{margin:0;padding:0;font-family:Arial,Tahoma,sans-serif;color:#263b4a;background:#fff;font-size:11px} .single-stocktake-report{width:100%;max-width:none;margin:0 auto;display:grid;gap:8px} .print-report-head{padding:10px!important;text-align:center;border:1px solid #dcebf1!important;border-radius:12px!important;background:#f7fbfd!important;margin:0!important;break-inside:avoid} .print-report-brand{font-size:15px;font-weight:850;letter-spacing:1px;color:#315b70;line-height:1.2} .print-report-head h2{font-size:15px;font-weight:700;margin:3px 0 7px;color:#263b4a;line-height:1.3} .report-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center} .report-meta span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:42px;padding:5px 4px;background:#edf5f8;border:1px solid #d7e7ee;border-radius:9px;font-size:9px;line-height:1.25;overflow-wrap:anywhere} .report-meta span b{display:block;font-size:8px;line-height:1.25} .report-group{padding:9px!important;margin:0!important;border:1px solid #dcebf1!important;border-radius:12px!important;background:#fff!important;break-inside:auto} .stocktake-group-heading{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid #e4eef2} .stocktake-group-heading h3{margin:0;font-size:13px;color:#315b70} .stocktake-group-count{min-width:23px;height:23px;display:grid;place-items:center;padding:0 7px;border-radius:8px;background:#e4f2f7;color:#315b70;font-weight:800;font-size:10px} .stocktake-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px} .stocktake-item-card{min-width:0;padding:7px;border:1px solid #dce8ed;border-radius:10px;background:#fdfefe;break-inside:avoid;page-break-inside:avoid} .stocktake-item-top{display:flex;align-items:flex-start;gap:6px;margin-bottom:6px} .stocktake-item-number{flex:0 0 21px;height:21px;display:grid;place-items:center;border-radius:7px;background:#e5f2f7;color:#315b70;font-size:10px;font-weight:800} .stocktake-item-name{font-size:11px;line-height:1.35;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px} .stocktake-item-details>div{min-width:0;padding:5px;border-radius:7px;background:#eff5f7} .stocktake-item-details span{display:block;font-size:8px;color:#6a808c;margin-bottom:2px} .stocktake-item-details b{display:block;font-size:9px;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details .stocktake-item-quantity{grid-column:1/-1;background:#e5f2f7} .stocktake-item-quantity b{font-size:12px;color:#315b70} .app-watermark{margin-top:8px;text-align:center;color:#718894;font-size:9px} .app-watermark strong{color:#315b70} .print-actions{max-width:100%;margin:0 auto 8px;text-align:start} .print-actions button{border:0;border-radius:8px;padding:8px 14px;background:#315b70;color:#fff;font-weight:700;cursor:pointer} @page{size:auto;margin:8mm} @media print{html,body{width:100%;height:auto;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-actions{display:none!important}.single-stocktake-report{width:100%;max-width:none;margin:0;gap:6px}.report-group{break-inside:auto}.stocktake-item-card{break-inside:avoid;page-break-inside:avoid}.print-report-head,.stocktake-group-heading{break-after:avoid;page-break-after:avoid}} @media screen{body{max-width:1400px;margin:16px auto;padding:14px;background:#f1f8fb}.single-stocktake-report{max-width:none}} </style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div>'+report+'\\n</body></html>';
+ const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style> *{box-sizing:border-box} html,body{margin:0;padding:0;font-family:Arial,Tahoma,sans-serif;color:#263b4a;background:#fff;font-size:11px} .single-stocktake-report{width:100%;max-width:none;margin:0 auto;display:grid;gap:8px} .print-report-head{padding:10px!important;text-align:center;border:1px solid #dcebf1!important;border-radius:12px!important;background:#f7fbfd!important;margin:0!important;break-inside:avoid} .print-report-brand{font-size:15px;font-weight:850;letter-spacing:1px;color:#315b70;line-height:1.2} .print-report-head h2{font-size:15px;font-weight:700;margin:3px 0 7px;color:#263b4a;line-height:1.3} .report-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center} .report-meta span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:42px;padding:5px 4px;background:#edf5f8;border:1px solid #d7e7ee;border-radius:9px;font-size:9px;line-height:1.25;overflow-wrap:anywhere} .report-meta span b{display:block;font-size:8px;line-height:1.25} .report-group{padding:9px!important;margin:0!important;border:1px solid #dcebf1!important;border-radius:12px!important;background:#fff!important;break-inside:auto} .stocktake-group-heading{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid #e4eef2} .stocktake-group-heading h3{margin:0;font-size:13px;color:#315b70} .stocktake-group-count{min-width:23px;height:23px;display:grid;place-items:center;padding:0 7px;border-radius:8px;background:#e4f2f7;color:#315b70;font-weight:800;font-size:10px} .stocktake-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px} .stocktake-item-card{min-width:0;padding:7px;border:1px solid #dce8ed;border-radius:10px;background:#fdfefe;break-inside:avoid;page-break-inside:avoid} .stocktake-item-top{display:flex;align-items:flex-start;gap:6px;margin-bottom:6px} .stocktake-item-number{flex:0 0 21px;height:21px;display:grid;place-items:center;border-radius:7px;background:#e5f2f7;color:#315b70;font-size:10px;font-weight:800} .stocktake-item-name{font-size:11px;line-height:1.35;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px} .stocktake-item-details>div{min-width:0;padding:5px;border-radius:7px;background:#eff5f7} .stocktake-item-details span{display:block;font-size:8px;color:#6a808c;margin-bottom:2px} .stocktake-item-details b{display:block;font-size:9px;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details .stocktake-item-quantity{grid-column:1/-1;background:#e5f2f7} .stocktake-item-quantity b{font-size:12px;color:#315b70} .app-watermark{margin-top:8px;text-align:center;color:#718894;font-size:9px} .app-watermark strong{color:#315b70} .print-actions{max-width:100%;margin:0 auto 8px;text-align:start} .print-actions button{border:0;border-radius:8px;padding:8px 14px;background:#315b70;color:#fff;font-weight:700;cursor:pointer} @page{size:auto;margin:8mm} @media print{html,body{width:100%;height:auto;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-actions{display:none!important}.single-stocktake-report{width:100%;max-width:none;margin:0;gap:6px}.report-group{break-inside:auto}.stocktake-item-card{break-inside:avoid;page-break-inside:avoid}.print-report-head,.stocktake-group-heading{break-after:avoid;page-break-after:avoid}} @media screen{body{max-width:1400px;margin:16px auto;padding:14px;background:#f1f8fb}.single-stocktake-report{max-width:none}} </style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div>'+report+'\\n</body></html>
+<style id="novaro-daily-tip-sheet-delete-total-v2">
+/* Sheet capsules: neutral/transparent at rest, green only while hovered. */
+#app .sales-report-page #dailyTipSheetTabs{display:flex!important;align-items:center!important;gap:7px!important}
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-pill{display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;gap:3px!important;padding:2px 5px 2px 9px!important;border:1px solid var(--line)!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important}
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-tab,
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-tab.is-active{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:34px!important;max-width:180px!important;padding:5px 7px!important;border:0!important;border-radius:999px!important;background:transparent!important;background-color:transparent!important;color:var(--text,var(--ink))!important;box-shadow:none!important;font-size:12px!important;font-weight:700!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-pill:hover{background:#23845f!important;border-color:#23845f!important;box-shadow:0 4px 13px #23845f22!important}
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-pill:hover .daily-tip-sheet-tab{background:transparent!important;color:#fff!important}
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-tab:focus-visible{outline:2px solid #23845f!important;outline-offset:2px!important}
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-delete{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 19px!important;width:19px!important;height:19px!important;min-height:19px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;color:var(--muted,var(--ink))!important;font-size:16px!important;font-weight:700!important;line-height:1!important;cursor:pointer!important}
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-delete:hover{background:#b83d3d!important;color:#fff!important}
+#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-add-inline{flex:0 0 32px!important}
+#app .sales-report-page .daily-tip-table thead th{background:#293b33!important;color:#f2f6f3!important;border-color:#40564b!important;font-weight:800!important}
+#app .sales-report-page .daily-tip-table tfoot td{height:34px!important;padding:6px 4px!important;background:#e8edf7!important;border:1px solid #9eacc4!important;color:#263b5b!important;font-weight:900!important;text-align:center!important;white-space:nowrap!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-table thead th{background:#293b33!important;color:#e5eee9!important;border-color:#40564b!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-table tfoot td{background:#34445b!important;border-color:#526783!important;color:#edf2fa!important}
+@media(max-width:600px){#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-tab{min-height:32px!important;padding:4px 5px!important;font-size:11px!important}#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-pill{gap:1px!important;padding-inline:4px!important}}
+</style>
+';
  w.document.open();w.document.write(html);w.document.close();
 }
 function monthLabel(value){if(!value)return "—";const p=String(value).slice(0,7).split("-");return new Intl.DateTimeFormat(language==="en"?"en-US-u-ca-gregory-nu-latn":"ar-EG",{month:"long",year:"numeric"}).format(new Date(Number(p[0]),Number(p[1])-1,1))}
