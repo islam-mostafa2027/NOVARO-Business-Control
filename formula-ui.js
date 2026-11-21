@@ -74,7 +74,7 @@
   if(initialFormula)formulas[targetId]=initialFormula;
   const refs=new Set([targetId]);
   for(const formula of Object.values(formulas))for(const dep of engine().getDependencies(formula))refs.add(dep);
-  const values=await loader().loadCells([...refs],db,map(),adapter());
+  const values=applyVisibleValues(await loader().loadCells([...refs],db,map(),adapter()));
   const result=runtime().recalculate(formulas,values,{engine:engine(),graph:graph()});
   if(result.errors[targetId])throw new Error(result.errors[targetId]);
   return {value:result.values[targetId],formula:formulas[targetId]||null};
@@ -140,7 +140,7 @@
    const active=Object.keys(formulas);if(!active.length)return;
    const refs=new Set(active);
    for(const formula of Object.values(formulas))for(const dep of engine().getDependencies(formula))refs.add(dep);
-   const values=await loader().loadCells([...refs],db,map(),adapter());
+   const values=applyVisibleValues(await loader().loadCells([...refs],db,map(),adapter()));
    const calculated=runtime().recalculate(formulas,values,{engine:engine(),graph:graph()});
    for(const id of active){
     const cell=cells.get(id);if(!cell)continue;
