@@ -7029,4 +7029,23 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .sales-report-page .sales-snapshot-list-item .sales-snapshot-branch-details strong{font-size:10px!important;line-height:1.25!important}
 #app .sales-report-page .sales-snapshot-list-item .sales-snapshot-branch-address{font-size:8px!important;line-height:1.2!important}
 #app .sales-report-page .sales-snapshot-list-item .sales-snapshot-report-date{font-size:10px!important;line-height:1.2!important}
+
+/* Daily Tip sheet selection: only the active sheet is green. */
+.daily-tip-sheet-tabs .daily-tip-sheet-tab,
+.daily-tip-sheet-editor .daily-tip-duration-toggle {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+.daily-tip-sheet-tabs .daily-tip-sheet-tab:not(.is-active) {
+  color: var(--text, inherit) !important;
+  border-color: transparent !important;
+}
+.daily-tip-sheet-tabs .daily-tip-sheet-tab.is-active,
+.daily-tip-sheet-tabs .daily-tip-sheet-tab[aria-selected="true"] {
+  background: #23845f !important;
+  background-color: #23845f !important;
+  color: #fff !important;
+  border-color: #23845f !important;
+}
 </style>
