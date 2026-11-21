@@ -3302,6 +3302,7 @@ async function dailyTipSaveActive(){
  const result=await db.from("sales_report_tip_sheets").upsert(payload,{onConflict:"branch_id,report_month,sheet_key"}).select("*").single();
  if(result.error)throw result.error;
  dailyTipSheetCache=dailyTipSheetCache.map(x=>x.sheet_key===active.sheet_key?result.data:x);
+ await loadSalesReportDayTips(Number(document.querySelector(".sales-report-page #salesReportDay")?.value||0));
  if(status)status.textContent=language==="en"?"Daily Tip saved.":"تم حفظ الإكراميات اليومية.";
 }
 
