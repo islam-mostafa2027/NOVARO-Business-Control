@@ -89,6 +89,8 @@
       if (t.type === "ref") return { kind: "ref", value: t.value };
       if (t.type === "(") { const n = parseCompare(); take(")"); return n; }
       if (t.type === "ident") {
+        if (t.value === "TRUE") return { kind: "literal", value: true };
+        if (t.value === "FALSE") return { kind: "literal", value: false };
         if (peek().type !== "(") throw new Error("اسم غير معروف: " + t.value);
         take("("); const args = [];
         if (peek().type !== ")") { do { args.push(parseCompare()); if (peek().type !== "comma") break; take("comma"); } while (true); }
@@ -116,7 +118,12 @@
       while (ops.includes(peek().type)) { const op = take().type; node = { kind: "binary", op, left: node, right: next() }; }
       return node;
     };
-    const parsePower = binary(parseUnary, ["^"]);
+    const parsePower = () => {
+      const left = parseUnary();
+      if (peek().type !== "^") return left;
+      take("^");
+      return { kind: "binary", op: "^", left, right: parsePower() };
+    };
     const parseMul = binary(parsePower, ["*", "/", "%"]);
     const parseAdd = binary(parseMul, ["+", "-"]);
     const parseCompare = binary(parseAdd, ["=", "<>", "<", ">", "<=", ">="]);
