@@ -34,6 +34,8 @@
    }
   };
   for(const id of graph.order){
+   const failedDependency=(dependencies[id]||[]).find(dep=>Object.prototype.hasOwnProperty.call(errors,dep));
+   if(failedDependency){errors[id]="تعذر الحساب بسبب خطأ في الخلية المرتبطة: "+failedDependency;continue;}
    try{
     const value=engine.evaluate(formulas[id],resolver);
     if(typeof value!=="number"||!Number.isFinite(value))throw new Error("يجب أن تكون نتيجة المعادلة رقمًا صالحًا");
