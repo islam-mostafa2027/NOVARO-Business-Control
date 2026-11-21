@@ -3367,13 +3367,15 @@ document.addEventListener("click",async e=>{
     if(!modal.__salesSnapshotRows.length){const empty=document.createElement("p");empty.className="sales-snapshot-empty";empty.textContent=language==="en"?"No saved full-page reports yet.":"لا توجد تقارير محفوظة للصفحة بالكامل حتى الآن.";list.appendChild(empty);return;}
     modal.__salesSnapshotRows.forEach(row=>{
      const button=document.createElement("button");button.type="button";button.className="sales-snapshot-list-item";button.dataset.salesSnapshotOpen=row.id;
+     const details=document.createElement("div");details.className="sales-snapshot-branch-details";
      const name=document.createElement("strong");name.textContent=row.branch_name||"";
      const currentBranch=salesReportBranches().find(branch=>branch.id===row.branch_id);
      const address=document.createElement("span");address.className="sales-snapshot-branch-address";address.textContent=row.snapshot_data?.branchAddress||branchLocationOf(currentBranch)||"—";
+     details.append(name,address);
      const rawDate=String(row.report_date||"").slice(0,10),dateParts=rawDate.split("-");
      const dateLabel=document.createElement("span");dateLabel.className="sales-snapshot-report-date";
      dateLabel.textContent=dateParts.length===3?Number(dateParts[2])+"-"+["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][Number(dateParts[1])-1]+"-"+dateParts[0]:rawDate;
-     button.append(name,address,dateLabel);list.appendChild(button);
+     button.append(details,dateLabel);list.appendChild(button);
     });
    };
    modal.__renderSalesSnapshotList=renderSnapshotList;renderSnapshotList();modal.hidden=false;
@@ -6822,8 +6824,11 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .sales-statistics-actions{justify-content:flex-end!important}
 </style>
 
-<style id="novaro-sales-snapshot-branch-date-v1">
-#app .sales-report-page .sales-snapshot-list-item{align-items:flex-start!important;text-align:start!important;gap:5px!important}
-#app .sales-report-page .sales-snapshot-list-item .sales-snapshot-branch-address{font-size:12px!important;line-height:1.5!important;color:var(--muted)!important}
+<style id="novaro-sales-snapshot-branch-date-v2">
+#app .sales-report-page .sales-snapshot-list{grid-template-columns:repeat(auto-fill,minmax(116px,1fr))!important;gap:8px!important}
+#app .sales-report-page .sales-snapshot-list-item{box-sizing:border-box!important;aspect-ratio:1/1!important;min-width:0!important;min-height:116px!important;width:100%!important;padding:9px!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:9px!important;overflow:hidden!important;text-align:start!important;border-radius:12px!important}
+#app .sales-report-page .sales-snapshot-branch-details{display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;align-items:baseline!important;gap:3px 6px!important;min-width:0!important}
+#app .sales-report-page .sales-snapshot-list-item .sales-snapshot-branch-details strong{font-size:12px!important;line-height:1.35!important;max-width:100%!important;overflow-wrap:anywhere!important}
+#app .sales-report-page .sales-snapshot-list-item .sales-snapshot-branch-address{font-size:10px!important;line-height:1.35!important;color:var(--muted)!important;overflow-wrap:anywhere!important}
 #app .sales-report-page .sales-snapshot-list-item .sales-snapshot-report-date{font-size:12px!important;font-weight:800!important;letter-spacing:.2px!important;color:var(--text,var(--ink))!important;direction:ltr!important;text-align:start!important}
 </style>
