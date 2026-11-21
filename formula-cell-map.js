@@ -37,7 +37,18 @@
       if (!STAT_GROUPS.includes(group) || !STAT_FIELDS.includes(field)) throw new Error("Unsupported statistics metric");
       return make("statistics", branchId, reportMonth, dayNumber, group, field);
     },
-    statisticsDailyTarget: (branchId, reportMonth, day) => {\n      const dayNumber = Number(day);\n      if (!Number.isInteger(dayNumber) || dayNumber < 1 || dayNumber > 31) throw new Error("Invalid report day");\n      return make("statistics", branchId, reportMonth, dayNumber, "daily_target");\n    },\n    dailyTipCell: (branchId, reportMonth, sheetId, day, field) => {\n      const dayNumber = Number(day);\n      if (!Number.isInteger(dayNumber) || dayNumber < 1 || dayNumber > 31) throw new Error("Invalid tip day");\n      if (!["tip_amount", "dinein_sales"].includes(field)) throw new Error("Unsupported daily tip field");\n      return make("daily_tip", branchId, reportMonth, sheetId, dayNumber, field);\n    },\n    headcountRequired: (branchId, roleId) => make("headcount", branchId, roleId, "required_count"),
+    statisticsDailyTarget: (branchId, reportMonth, day) => {
+      const dayNumber = Number(day);
+      if (!Number.isInteger(dayNumber) || dayNumber < 1 || dayNumber > 31) throw new Error("Invalid report day");
+      return make("statistics", branchId, reportMonth, dayNumber, "daily_target");
+    },
+    dailyTipCell: (branchId, reportMonth, sheetId, day, field) => {
+      const dayNumber = Number(day);
+      if (!Number.isInteger(dayNumber) || dayNumber < 1 || dayNumber > 31) throw new Error("Invalid tip day");
+      if (!["tip_amount", "dinein_sales"].includes(field)) throw new Error("Unsupported daily tip field");
+      return make("daily_tip", branchId, reportMonth, sheetId, dayNumber, field);
+    },
+    headcountRequired: (branchId, roleId) => make("headcount", branchId, roleId, "required_count"),
     decode: id => {
       if (typeof id !== "string" || !id.startsWith("NOVARO|")) throw new Error("Invalid formula cell identifier");
       const parts = id.slice(7).split("|").map(decodeURIComponent);
