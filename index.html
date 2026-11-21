@@ -2468,6 +2468,14 @@ Object.assign(translations,{
   "تقرير المبيعات":"Sales Report"
 
 });
+Object.assign(translations,{
+  "طرق تسجيل الدخول والأجهزة":"Sign-in methods & devices",
+  "أضف مفتاح دخول لهذا الجهاز بعد تسجيل الدخول بالبريد وكلمة المرور. سيظل تسجيل الدخول بكلمة المرور متاحًا دائمًا.":"Add a passkey for this device after signing in with your email and password. Password sign-in will always remain available.",
+  "تسجيل هذا الجهاز":"Register this device",
+  "تحديث الأجهزة":"Refresh devices",
+  "اضغط «تحديث الأجهزة» لعرض مفاتيح الدخول المسجلة.":"Select “Refresh devices” to view registered passkeys.",
+  "قد يظهر طلب البصمة أو Face ID أو PIN الجهاز حسب إعدادات الأمان على هاتفك أو حاسوبك. لا يتم إرسال البصمة نفسها إلى NOVARO.":"Your device may ask you to verify with biometrics, Face ID, or your device PIN, depending on its security settings. Your biometric data is never sent to NOVARO."
+});
 const reverseTranslations=Object.fromEntries(Object.entries(translations).map(([a,b])=>[b,a]));
 let language=localStorage.getItem("novaro-language")==="en"?"en":"ar";
 function translateCanonical(value){
