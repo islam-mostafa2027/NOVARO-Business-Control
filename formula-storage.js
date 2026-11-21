@@ -12,7 +12,7 @@
  function validateFormula(formula,engine){
   if(typeof formula!=="string"||formula.length>4000||!formula.trim().startsWith("="))throw new Error("المعادلة يجب أن تبدأ بعلامة = وألا تتجاوز 4000 حرف");
   if(!engine||typeof engine.getDependencies!=="function")throw new Error("محرك المعادلات غير متاح");
-  // Parse before persistence; never execute or evaluate during save.
+  // Tokenize and extract dependencies before persistence; evaluation stays in runtime.
   return engine.getDependencies(formula);
  }
  async function loadFormulas(cellIds,db,cellMap,adapter){
