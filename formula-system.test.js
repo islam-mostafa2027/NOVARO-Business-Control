@@ -49,3 +49,13 @@ test('invalid formulas fail safely without executing arbitrary code', () => {
   assert.throws(() => engine.evaluate('=UNKNOWN(1)', {getCell(){return 0;}}), /غير مدعومة/);
   assert.throws(() => engine.getDependencies('=1+2'), /تبدأ بعلامة/);
 });
+
+test('inventory, item, branch and staffing cells resolve to their intended records', () => {
+  const session = '33333333-3333-4333-8333-333333333333';
+  const item = '44444444-4444-4444-8444-444444444444';
+  const role = '55555555-5555-4555-8555-555555555555';
+  assert.equal(adapter.describeCell(map.inventoryCount(branch, session, item), map).table, 'inventory_counts');
+  assert.equal(adapter.describeCell(map.itemMinimumStock(item), map).column, 'min_stock');
+  assert.equal(adapter.describeCell(map.branchRequiredHeadcount(branch), map).column, 'required_headcount');
+  assert.equal(adapter.describeCell(map.headcountRequired(branch, role), map).column, 'required_count');
+});
