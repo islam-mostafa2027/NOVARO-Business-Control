@@ -3207,7 +3207,8 @@ function dailyTipRender(){
   const row=byDay.get(day)||{},tip=row.tip_amount??"",sales=row.dinein_sales??"",pct=Number(sales)>0&&tip!==""?(Number(tip)/Number(sales)*100):null;
   return '<tr data-daily-tip-day="'+day+'"><td class="daily-tip-date">'+dailyTipDate(day)+'</td><td><input class="sales-stat-cell-input daily-tip-input" type="text" inputmode="decimal" autocomplete="off" data-tip-amount value="'+dailyTipEscape(tip)+'" aria-label="Tip Amount '+day+'"></td><td><input class="sales-stat-cell-input daily-tip-input" type="text" inputmode="decimal" autocomplete="off" data-dinein-sales value="'+dailyTipEscape(sales)+'" aria-label="Dine-in Sales '+day+'"></td><td class="daily-tip-percent">'+(pct===null?'—':pct.toFixed(2).replace(/\.?0+$/,"")+'%')+'</td></tr>';
  }).join("")||'<tr><td colspan="4">No dates in this sheet</td></tr>';
- editor.innerHTML='<label>From day <input type="number" min="1" max="'+info.days+'" id="dailyTipStartDay" value="'+active.start_day+'"></label><label>To day <input type="number" min="1" max="'+info.days+'" id="dailyTipEndDay" value="'+active.end_day+'"></label><button type="button" class="soft" id="dailyTipApplyRange">Apply dates</button>';
+ const en=language==="en";
+ editor.innerHTML='<button type="button" class="soft daily-tip-duration-toggle" id="dailyTipDurationToggle"><span>'+(en?"Actual sheet duration":"المدة الفعلية للشيت")+'</span><strong>'+dailyTipDate(active.start_day)+' – '+dailyTipDate(active.end_day)+'</strong></button>';
 }
 async function dailyTipLoad(){
  const card=document.querySelector("#dailyTipCard"),monthCard=document.querySelector(".sales-month-card"),status=card?.querySelector("#dailyTipStatus");
@@ -3351,6 +3352,13 @@ document.addEventListener("click",async e=>{
   return;
  }
 
+ if(e.target.closest("#dailyTipDurationToggle")){
+  const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey),info=dailyTipMonthParts(),editor=document.querySelector("#dailyTipSheetEditor"),en=language==="en";
+  if(!active||!info||!editor)return;
+  editor.innerHTML='<label>'+(en?"From day":"من يوم")+' <input type="number" min="1" max="'+info.days+'" id="dailyTipStartDay" value="'+active.start_day+'"></label><label>'+(en?"To day":"إلى يوم")+' <input type="number" min="1" max="'+info.days+'" id="dailyTipEndDay" value="'+active.end_day+'"></label><button type="button" class="soft" id="dailyTipApplyRange">'+(en?"Apply":"تطبيق")+'</button><button type="button" class="soft" id="dailyTipCancelRange">'+(en?"Cancel":"إلغاء")+'</button>';
+  return;
+ }
+ if(e.target.closest("#dailyTipCancelRange")){dailyTipRender();return;}
  if(e.target.closest("#dailyTipApplyRange")){
   const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey),info=dailyTipMonthParts(),status=document.querySelector("#dailyTipStatus");
   if(!active||!info)return;
@@ -5755,6 +5763,8 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .sales-report-page .daily-tip-sheet-tab{flex:0 0 auto;max-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px 8px 0 0;background:var(--surface,#f8fbf9);color:var(--text,var(--ink));font-size:10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #app .sales-report-page .daily-tip-sheet-tab.is-active{background:var(--card,#fff);border-bottom:2px solid #32866a;color:var(--text,var(--ink))}
 #app .sales-report-page .daily-tip-sheet-editor{display:flex;align-items:end;gap:7px;flex-wrap:wrap;padding:8px 2px;border-top:1px solid var(--line)}
+#app .sales-report-page .daily-tip-duration-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2,var(--surface));color:var(--text);font-size:11px;font-weight:700;text-align:start}
+#app .sales-report-page .daily-tip-duration-toggle strong{font-size:10px;font-weight:800;direction:ltr;white-space:nowrap}
 #app .sales-report-page .daily-tip-sheet-editor label{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
 #app .sales-report-page .daily-tip-sheet-editor input{width:54px;min-height:30px;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--text);text-align:center}
 #app .sales-report-page .daily-tip-sheet-editor button{min-height:30px;padding:5px 10px;font-size:10px}
