@@ -23,3 +23,12 @@ test("identifiers encode separators safely", () => {
   const id = cells.headcountRequired("branch|one", "role/2");
   assert.deepEqual(cells.decode(id), ["headcount", "branch|one", "role/2", "required_count"]);
 });
+
+test("statistics daily target has a stable day-level identifier", () => {
+  assert.deepEqual(cells.decode(cells.statisticsDailyTarget("b", "Nov-2026", 21)), ["statistics", "b", "Nov-2026", "21", "daily_target"]);
+  assert.throws(() => cells.statisticsDailyTarget("b", "Nov-2026", 0));
+});
+test("daily tip cells use persisted sheet identity and editable fields only", () => {
+  assert.deepEqual(cells.decode(cells.dailyTipCell("b", "Nov-2026", "sheet-uuid", 21, "tip_amount")), ["daily_tip", "b", "Nov-2026", "sheet-uuid", "21", "tip_amount"]);
+  assert.throws(() => cells.dailyTipCell("b", "Nov-2026", "sheet-uuid", 21, "percentage"));
+});
