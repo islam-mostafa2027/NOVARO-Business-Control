@@ -19,7 +19,7 @@ const resolver = {
 test("arithmetic and precedence", () => {
   assert.equal(engine.evaluate("=2+3*4", resolver), 14);
   assert.equal(engine.evaluate("=(2+3)*4", resolver), 20);
-  assert.equal(engine.evaluate("=2^3^2", resolver), 64);
+  assert.equal(engine.evaluate("=2^3^2", resolver), 512);
 });
 test("cell references and ranges", () => {
   assert.equal(engine.evaluate("=A1+B1", resolver), 15);
@@ -34,6 +34,7 @@ test("supported aggregate and scalar functions", () => {
   assert.equal(engine.evaluate("=ROUND(1.236,2)", resolver), 1.24);
   assert.equal(engine.evaluate("=AND(1,2)", resolver), true);
   assert.equal(engine.evaluate("=NOT(0)", resolver), true);
+  assert.equal(engine.evaluate("=AND(TRUE,NOT(FALSE))", resolver), true);
 });
 test("IF evaluates only the selected branch", () => {
   assert.equal(engine.evaluate("=IF(1=1,25,1/0)", resolver), 25);
