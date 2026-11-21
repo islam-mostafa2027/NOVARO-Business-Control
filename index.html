@@ -3249,6 +3249,22 @@ async function dailyTipSaveActive(){
  if(status)status.textContent=language==="en"?"Daily Tip saved.":"تم حفظ الإكراميات اليومية.";
 }
 
+
+document.addEventListener("input",e=>{
+ const field=e.target.closest("#dailyTipRows [data-tip-amount],#dailyTipRows [data-dinein-sales]");
+ if(!field)return;
+ const tr=field.closest("tr"),tip=statisticsNumber(tr.querySelector("[data-tip-amount]")?.value||""),sales=statisticsNumber(tr.querySelector("[data-dinein-sales]")?.value||""),cell=tr.querySelector(".daily-tip-percent");
+ if(cell)cell.textContent=Number.isFinite(tip)&&Number.isFinite(sales)&&sales>0?(tip/sales*100).toFixed(2).replace(/\.?0+$/,"")+"%":"—";
+});
+document.addEventListener("change",async e=>{
+ if(!e.target.matches("#dailyTipRows [data-tip-amount],#dailyTipRows [data-dinein-sales]"))return;
+ const status=document.querySelector("#dailyTipStatus");if(dailyTipBusy)return;
+ dailyTipBusy=true;
+ try{await dailyTipSaveActive();}
+ catch(error){if(status)status.textContent=(language==="en"?"Could not save: ":"تعذر الحفظ: ")+(error.message||String(error));}
+ finally{dailyTipBusy=false;}
+});
+
 document.addEventListener("click",async e=>{
  const auditBell=e.target.closest("#novaroAuditBell");
  if(auditBell){novaroAuditPanelOpen=!novaroAuditPanelOpen;if(novaroAuditPanelOpen)novaroAuditShowAll=false;renderNotifications();if(novaroAuditPanelOpen)await loadNotifications();return;}
@@ -3315,7 +3331,7 @@ document.addEventListener("click",async e=>{
  }
 
  const dailyTipTab=e.target.closest("[data-daily-tip-sheet]");
- if(dailyTipTab){dailyTipActiveSheetKey=dailyTipTab.dataset.dailyTipSheet;dailyTipRender();return;}
+ if(dailyTipTab){const selected=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipTab.dataset.dailyTipSheet);if(e.detail===2&&selected){const name=window.prompt(language==="en"?"Rename sheet:":"تعديل اسم الشيت:",selected.sheet_name);if(name!==null&&name.trim()){try{const renamed=await db.from("sales_report_tip_sheets").update({sheet_name:name.trim(),updated_by:user.id,updated_at:new Date().toISOString()}).eq("id",selected.id).select("*").single();if(renamed.error)throw renamed.error;dailyTipSheetCache=dailyTipSheetCache.map(x=>x.id===selected.id?renamed.data:x);document.querySelector("#dailyTipStatus").textContent=language==="en"?"Sheet renamed.":"تم تعديل اسم الشيت.";}catch(error){document.querySelector("#dailyTipStatus").textContent=error.message||String(error);}}}else{dailyTipActiveSheetKey=dailyTipTab.dataset.dailyTipSheet;dailyTipRender();}return;}
  const dailyTipAdd=e.target.closest("#dailyTipAddSheet");
  if(dailyTipAdd){
   const info=dailyTipMonthParts(),monthCard=document.querySelector(".sales-month-card"),status=document.querySelector("#dailyTipStatus");
@@ -3333,14 +3349,7 @@ document.addEventListener("click",async e=>{
   finally{dailyTipAdd.disabled=false;}
   return;
  }
- const dailyTipTabRename=e.target.closest("[data-daily-tip-sheet]");
- if(dailyTipTabRename&&e.detail===2){
-  const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipTabRename.dataset.dailyTipSheet);if(!active)return;
-  const name=window.prompt(language==="en"?"Rename sheet:":"تعديل اسم الشيت:",active.sheet_name);if(name===null)return;
-  const clean=name.trim(),status=document.querySelector("#dailyTipStatus");if(!clean)return;
-  try{const result=await db.from("sales_report_tip_sheets").update({sheet_name:clean,updated_by:user.id,updated_at:new Date().toISOString()}).eq("id",active.id).select("*").single();if(result.error)throw result.error;dailyTipSheetCache=dailyTipSheetCache.map(x=>x.id===active.id?result.data:x);dailyTipRender();if(status)status.textContent=language==="en"?"Sheet renamed.":"تم تعديل اسم الشيت.";}catch(error){if(status)status.textContent=error.message||String(error);}
-  return;
- }
+
  if(e.target.closest("#dailyTipApplyRange")){
   const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey),info=dailyTipMonthParts(),status=document.querySelector("#dailyTipStatus");
   if(!active||!info)return;
