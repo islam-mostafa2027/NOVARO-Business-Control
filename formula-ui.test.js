@@ -104,8 +104,8 @@ test('mobile formula editing opens from a long press and uses the full text keyb
 
 
 test('Android context-menu gesture opens and focuses the text editor before async formula loading', () => {
-  assert.match(source, /function handleCellContextMenu\\(event\\)/);
-  assert.match(source, /openExistingFormula\\(input,true\\)/);
-  assert.match(source, /if\\(focusFromGesture\\)openEditor\\(id,\\"=\\",label\\)/);
-  assert.match(source, /updateSuggestions\\(\\);ui\\.textarea\\.focus\\(\\)/);
+  assert.ok(source.includes('function handleCellContextMenu(event)'));
+  assert.ok(source.includes('openExistingFormula(input,true)'));
+  assert.ok(source.includes('if(focusFromGesture)openEditor(id,"=",label)'));
+  assert.ok(source.includes('updateSuggestions();ui.textarea.focus()'));
 });
