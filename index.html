@@ -8311,4 +8311,49 @@ html body #splash .splash-mark:after{background:linear-gradient(90deg,#5eaa7d,#2
 :root[data-novaro-mode="dark"] body #splash .splash-orbit{border-color:#d7f4e52a!important}
 :root[data-novaro-mode="dark"] body #splash .splash-mark:after{background:linear-gradient(90deg,#b6e4ce,#5eaa7d)!important}
 
+
+/* Targeted appearance fix: the five header capsules only. */
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices,
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings,
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout,
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#logout {
+  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+  background-color:#dff5e9!important;
+  border:1px solid #b9dfcf!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  box-shadow:0 3px 10px rgba(33,107,85,.12)!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices,
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings,
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout,
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#logout {
+  background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;
+  background-color:#294638!important;
+  border:1px solid #5b9278!important;
+  color:#effff6!important;
+  -webkit-text-fill-color:#effff6!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.28)!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices :is(svg,span),
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings :is(svg,span),
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout :is(svg,span),
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp :is(svg,span),
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#logout :is(svg,span) {
+  color:#effff6!important;
+  -webkit-text-fill-color:#effff6!important;
+  stroke:#effff6!important;
+}
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices :is(svg,span),
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings :is(svg,span),
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout :is(svg,span),
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp :is(svg,span),
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#logout :is(svg,span) {
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  stroke:#216b55!important;
+}
+
 </style>
