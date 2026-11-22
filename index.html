@@ -2062,33 +2062,34 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 </style>
 
 
-<style id="novaro-auth-welcome-light-mint-v1">
-/* Light mint welcome panel before sign-in; keep the login form unchanged. */
-#app .auth-shell .auth-visual{
+<style id="novaro-auth-welcome-light-mint-v2">
+/* Force the light mint welcome panel on the actual pre-login #login shell.
+   This intentionally overrides the later blue auth theme without touching the login form. */
+#login.auth-shell .auth-visual{
  background:linear-gradient(145deg,#effaf3 0%,#e2f4e9 54%,#d6eee0 100%)!important;
  color:#174b3e!important;
  box-shadow:0 28px 80px #236e5d18!important;
  border:1px solid #c8e6d4!important;
 }
-#app .auth-shell .visual-grid{
+#login.auth-shell .visual-grid{
  opacity:.22!important;
  background-image:linear-gradient(#286b5012 1px,transparent 1px),linear-gradient(90deg,#286b5012 1px,transparent 1px)!important;
 }
-#app .auth-shell .glow-a{background:radial-gradient(circle,#a8dfbd88,transparent 70%)!important}
-#app .auth-shell .glow-b{background:radial-gradient(circle,#bce8cb99,transparent 70%)!important}
-#app .auth-shell .visual-mark{
+#login.auth-shell .visual-glow.glow-a{background:radial-gradient(circle,#a8dfbd88,transparent 70%)!important}
+#login.auth-shell .visual-glow.glow-b{background:radial-gradient(circle,#bce8cb99,transparent 70%)!important}
+#login.auth-shell .visual-mark{
  border-color:#8fc9a866!important;
  background:linear-gradient(145deg,#ffffffd9,#dff3e7cc)!important;
  color:#24684f!important;
  box-shadow:0 8px 22px #286b4d16!important;
 }
-#app .auth-shell .visual-brand{color:#245b45!important}
-#app .auth-shell .eyebrow{color:#397d5d!important}
-#app .auth-shell .visual-copy h1{color:#174b3e!important}
-#app .auth-shell .visual-copy h1 em{color:#39865f!important}
-#app .auth-shell .visual-copy p{color:#527763!important}
-#app .auth-shell .visual-foot{color:#56836a!important}
-#app .auth-shell .visual-foot i{background:#75b98e!important}
+#login.auth-shell .visual-brand{color:#245b45!important}
+#login.auth-shell .eyebrow{color:#397d5d!important}
+#login.auth-shell .visual-copy h1{color:#174b3e!important}
+#login.auth-shell .visual-copy h1 em{color:#39865f!important}
+#login.auth-shell .visual-copy p{color:#527763!important}
+#login.auth-shell .visual-foot{color:#56836a!important}
+#login.auth-shell .visual-foot i{background:#75b98e!important}
 </style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
