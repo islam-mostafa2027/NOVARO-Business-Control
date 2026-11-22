@@ -8060,8 +8060,8 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 
 <style id="novaro-unified-mint-buttons-except-bottom-nav-v1">
 /* One light-mint identity for every ordinary action button. Keep the bottom navigation untouched and preserve destructive-action colors. */
-#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher),
-#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher),
+#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
+#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
 #login.auth-shell #loginView .auth-submit,
 #login.auth-shell #loginView .forgot-password-link{
   background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
@@ -8071,8 +8071,8 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   -webkit-text-fill-color:#216b55!important;
   box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
 }
-#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):hover,
-#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):hover,
+#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
+#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
 #login.auth-shell #loginView .auth-submit:hover,
 #login.auth-shell #loginView .forgot-password-link:hover{
   background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
@@ -8082,13 +8082,13 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   -webkit-text-fill-color:#216b55!important;
   box-shadow:0 6px 18px rgba(34,112,83,.14)!important;
 }
-#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):active,
-#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):active{
+#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):active,
+#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):active{
   background:linear-gradient(145deg,#dff5e9 0%,#cceedd 100%)!important;
   background-color:#cceedd!important;
 }
-:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher),
-:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher),
+:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
+:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
 :root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
 :root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link{
   background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
@@ -8098,8 +8098,8 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   -webkit-text-fill-color:#216b55!important;
   box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
 }
-:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):hover,
-:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):hover,
+:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
+:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
 :root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
 :root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover{
   background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
@@ -8127,5 +8127,38 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   color:#216b55!important;
   -webkit-text-fill-color:#216b55!important;
   box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
+}
+
+/* The bottom navigation is the one intentional exception: retain its green active state. */
+#app #tabs button,
+#appLayout #tabs button{
+  background:var(--nv-btn-soft-bg)!important;
+  background-image:none!important;
+  color:var(--nv-btn-soft-text)!important;
+  -webkit-text-fill-color:var(--nv-btn-soft-text)!important;
+  border-color:var(--nv-btn-border)!important;
+}
+#app #tabs button.active,
+#appLayout #tabs button.active{
+  background:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;
+  background-image:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  border-color:var(--nv-btn-primary)!important;
+}
+:root[data-novaro-mode="dark"] #app #tabs button:not(.active),
+:root[data-novaro-mode="dark"] #appLayout #tabs button:not(.active){
+  background:transparent!important;
+  background-image:none!important;
+  color:#c8d8cf!important;
+  -webkit-text-fill-color:#c8d8cf!important;
+}
+:root[data-novaro-mode="dark"] #app #tabs button.active,
+:root[data-novaro-mode="dark"] #appLayout #tabs button.active{
+  background:linear-gradient(145deg,#287d6b,#1d5c4d)!important;
+  background-image:linear-gradient(145deg,#287d6b,#1d5c4d)!important;
+  border-color:#55a58a!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
 }
 </style>
