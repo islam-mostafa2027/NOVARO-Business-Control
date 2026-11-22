@@ -7665,3 +7665,38 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   #app .headcount-page-card .headcount-branch-pill{transition:none!important}
 }
 </style>
+
+
+<style id="novaro-login-actions-light-mint-v1">
+/* Match the three visible login actions to the light mint welcome panel. */
+#login.auth-shell #loginView .auth-submit,
+#login.auth-shell #loginView .forgot-password-link{
+  background:linear-gradient(135deg,#effaf3 0%,#e2f4e9 54%,#d6eee0 100%)!important;
+  background-color:#e2f4e9!important;
+  color:#174b3e!important;
+  -webkit-text-fill-color:#174b3e!important;
+  border:1px solid #c8e6d4!important;
+  box-shadow:0 5px 16px #236e5d12!important;
+}
+#login.auth-shell #loginView .auth-submit:hover,
+#login.auth-shell #loginView .forgot-password-link:hover{
+  background:linear-gradient(135deg,#e2f4e9 0%,#d6eee0 100%)!important;
+  border-color:#9fd2b5!important;
+  box-shadow:0 8px 20px #236e5d1c!important;
+}
+#login.auth-shell #loginView .auth-submit span{color:inherit!important}
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link{
+  background:linear-gradient(135deg,#294638 0%,#243d31 100%)!important;
+  background-color:#294638!important;
+  color:#e6f5eb!important;
+  -webkit-text-fill-color:#e6f5eb!important;
+  border-color:#527b63!important;
+  box-shadow:0 6px 18px #0003!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover{
+  background:linear-gradient(135deg,#315542 0%,#294638 100%)!important;
+  border-color:#78bd96!important;
+}
+</style>
