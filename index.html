@@ -2311,6 +2311,58 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
  color:#effff5!important;stroke:#effff5!important;
 }
 </style>
+
+<style id="novaro-header-five-controls-theme-fix">
+/* Explicit theme colors for the five requested header controls only. */
+:root[data-novaro-mode="light"] #app .app-header button#openDevices,
+:root[data-novaro-mode="light"] #app .app-header button#openSettings,
+:root[data-novaro-mode="light"] #app .app-header button#openAbout,
+:root[data-novaro-mode="light"] #app .app-header button#logout,
+:root[data-novaro-mode="light"] #app .app-header button#novaroAuditBell{
+ background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+ background-color:#e5f5ec!important;border:1px solid #b9dfcf!important;
+ color:#216b55!important;-webkit-text-fill-color:#216b55!important;
+ box-shadow:0 4px 14px rgba(34,112,83,.12)!important;
+}
+:root[data-novaro-mode="light"] #app .app-header button#openDevices svg,
+:root[data-novaro-mode="light"] #app .app-header button#openSettings svg,
+:root[data-novaro-mode="light"] #app .app-header button#openAbout svg,
+:root[data-novaro-mode="light"] #app .app-header button#logout svg,
+:root[data-novaro-mode="light"] #app .app-header button#novaroAuditBell svg{
+ color:#216b55!important;stroke:#216b55!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header button#openDevices,
+:root[data-novaro-mode="dark"] #app .app-header button#openSettings,
+:root[data-novaro-mode="dark"] #app .app-header button#openAbout,
+:root[data-novaro-mode="dark"] #app .app-header button#novaroAuditBell{
+ background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
+ background-color:#285f4e!important;border:1px solid #548f79!important;
+ color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+ box-shadow:0 4px 14px rgba(0,0,0,.2)!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header button#openDevices svg,
+:root[data-novaro-mode="dark"] #app .app-header button#openSettings svg,
+:root[data-novaro-mode="dark"] #app .app-header button#openAbout svg,
+:root[data-novaro-mode="dark"] #app .app-header button#novaroAuditBell svg{
+ color:#effff6!important;stroke:#effff6!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header button#logout{
+ background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;
+ background-color:#294638!important;border:1px solid #5b9278!important;
+ color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+ box-shadow:0 3px 12px #0005!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header button#logout svg,
+:root[data-novaro-mode="dark"] #app .app-header button#logout span{
+ color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header button#openDevices:hover,
+:root[data-novaro-mode="dark"] #app .app-header button#openSettings:hover,
+:root[data-novaro-mode="dark"] #app .app-header button#openAbout:hover,
+:root[data-novaro-mode="dark"] #app .app-header button#novaroAuditBell:hover{
+ background:linear-gradient(145deg,#32745f 0%,#285d4d 100%)!important;border-color:#70b596!important;
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
