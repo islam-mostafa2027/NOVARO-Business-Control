@@ -3446,8 +3446,6 @@ document.addEventListener("click",async e=>{
    await loadSalesReportDayTips(Number(salesMonthCard.querySelector("#salesReportDay")?.value));
    await dailyTipLoad();
    await loadSalesReportDayTips(Number(salesMonthCard.querySelector("#salesReportDay")?.value));
-   // Source inputs are populated programmatically; refresh formulas after all month data is ready.
-   window.NOVAROFormulaUI?.refresh?.();
    if(status)status.textContent=language==="en"?"Month loaded.":"تم تحميل بيانات الشهر.";
   }catch(error){delete salesMonthCard.dataset.loadedMonth;if(status)status.textContent=(language==="en"?"Could not load: ":"تعذر تحميل البيانات: ")+(error.message||String(error));}
   finally{loadButton.disabled=false;}
@@ -3502,7 +3500,7 @@ document.addEventListener("click",async e=>{
   saveSalesSnapshotButton.disabled=true;if(status)status.textContent=language==="en"?"Saving full report page...":"جارٍ حفظ صفحة التقرير بالكامل...";
   try{
    const clone=snapshotRoot.cloneNode(true);
-   clone.querySelectorAll(".novaro-fx-wrap,.novaro-fx-display").forEach(node=>node.remove());
+   clone
    clone.querySelector(".sales-export-card")?.remove();
    clone.querySelector(".sales-snapshot-status")?.remove();
    clone.querySelector(".sales-snapshot-modal")?.remove();
@@ -3534,7 +3532,7 @@ document.addEventListener("click",async e=>{
    const tableHeaders=Array.from(table.querySelectorAll("thead th")).map(cell=>cell.innerText.trim());
    const tableRows=Array.from(table.querySelectorAll("tbody tr,tfoot tr")).map(row=>Array.from(row.cells).map(cell=>{
      const cleanCell=cell.cloneNode(true);
-     cleanCell.querySelectorAll(".novaro-fx-wrap,.novaro-fx-display").forEach(node=>node.remove());
+     cleanCell
      return {text:cleanCell.innerText.trim(),values:Array.from(cell.querySelectorAll("input")).map(field=>field.value??"")};
     }));
    const snapshotData={version:1,branchId:branch.id,branchName:nameOf(branch),branchAddress:branchLocationOf(branch),reportMonth:month,reportDate,savedAt:now.toISOString(),language,upperCardMetrics:upperMetrics,tableHeaders,tableRows};
@@ -3612,7 +3610,7 @@ document.addEventListener("click",async e=>{
   const report=savedView?savedView.querySelector(".sales-report-page"):document.querySelector(".sales-report-page");
   if(!report)return;
   const copy=report.cloneNode(true);
-  copy.querySelectorAll(".novaro-fx-wrap,.novaro-fx-display").forEach(node=>node.remove());
+  copy
   copy.id="novaro-sales-print-root";
   copy.querySelector(".sales-export-card")?.remove();
   copy.querySelector(".sales-month-actions")?.remove();
@@ -4506,7 +4504,7 @@ function itemForm(existing=null){
  document.addEventListener("visibilitychange",recoverCameraImage,{signal:cameraEvents.signal});
  window.addEventListener("pageshow",recoverCameraImage,{signal:cameraEvents.signal});
  $("n").value=i.name_ar||"";$("en").value=i.name_en||"";if($("n").__novaroTranslationManual){$("n").__novaroTranslationManual[0]=!!i.name_ar;$("en").__novaroTranslationManual[1]=!!i.name_en}$("code").value=i.item_code||"";
-$("itemMainCategory").value=initialGroup;novaroFilterItemCategories(initialGroup,i.category_id||"");$("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";if($("unit").__novaroTranslationManual){$("unit").__novaroTranslationManual[0]=!!i.unit_ar;$("unitEn").__novaroTranslationManual[1]=!!i.unit_en}$("minStock").value=Number(i.min_stock||0);$("minStock").dataset.formulaItemId=i.id||"";
+$("itemMainCategory").value=initialGroup;novaroFilterItemCategories(initialGroup,i.category_id||"");$("cat").value=i.category_id||"";$("unit").value=i.unit_ar||"";$("unitEn").value=i.unit_en||"";if($("unit").__novaroTranslationManual){$("unit").__novaroTranslationManual[0]=!!i.unit_ar;$("unitEn").__novaroTranslationManual[1]=!!i.unit_en}$("minStock").value=Number(i.min_stock||0);
  const help=$("categoryHelp");if(help&&!cats.length)help.textContent=en?"No categories yet. Use New category to add one.":"مفيش تصنيفات متاحة لسه. استخدم زر تصنيف جديد لإضافة تصنيف.";
 }
 function showItemFormFailure(error,source="add-item"){
