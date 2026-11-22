@@ -11,8 +11,9 @@
  const clean=v=>String(v??"").replace(/,/g,"").trim();
  function idFor(input){
   if(!input||!input.matches("input"))return null;
+  const month=salesReportSelectedMonth;
   const page=input.closest(".sales-report-page");
-  const month=salesReportSelectedMonth, branch=page?.querySelector(".sales-month-card")?.dataset.salesBranchId;
+  const branch=page?.querySelector(".sales-month-card")?.dataset.salesBranchId;
   if(page&&branch&&month){
    const metric=input.dataset.salesMetric;
    if(["sales_target","yesterday_tip","month_to_date_tip"].includes(metric))return map().salesMetric(branch,month,metric);
@@ -46,10 +47,12 @@
    return map().branchRequiredHeadcount(headcountBranchId);
   return null;
  }
- function applyVisibleValues(values){
+ function applyVisibleValues(values,formulas={}){
   const next={...values};
   root.document.querySelectorAll(".novaro-fx-wrap").forEach(wrap=>{
    const input=wrap.previousElementSibling,id=idFor(input);if(!id)return;
+   // Formula-backed cells are recalculated, never replaced by stale input values.
+   if(Object.prototype.hasOwnProperty.call(formulas,id))return;
    const value=numberValue(input.value);if(value!==null)next[id]=value;
   });
   return next;
@@ -76,7 +79,7 @@
   const refs=new Set([targetId]);
   for(const formula of Object.values(formulas))for(const dep of engine().getDependencies(formula))refs.add(dep);
   if(refs.size>300)throw new Error("المعادلة تحتوي على أكثر من 300 مرجع؛ قلّل عدد المراجع");
-  const values=applyVisibleValues(await loader().loadCells([...refs],db,map(),adapter()));
+  const values=applyVisibleValues(await loader().loadCells([...refs],db,map(),adapter()),formulas);
   const result=runtime().recalculate(formulas,values,{engine:engine(),graph:graph()});
   if(result.errors[targetId])throw new Error(result.errors[targetId]);
   return {value:result.values[targetId],formula:formulas[targetId]||null};
@@ -125,9 +128,9 @@
    });
   });
  }
- let restoreTimer=0,restoreBusy=false;
+ let restoreTimer=0,restoreBusy=false,restoreQueued=false;
  async function restoreVisibleFormulas(){
-  if(restoreBusy)return;
+  if(restoreBusy){restoreQueued=true;return;}
   restoreBusy=true;
   try{
    const cells=new Map();
@@ -148,7 +151,7 @@
    const refs=new Set(active);
    for(const formula of Object.values(formulas))for(const dep of engine().getDependencies(formula))refs.add(dep);
    if(refs.size>300)throw new Error("عدد مراجع المعادلات المعروضة تجاوز الحد الآمن (300)");
-   const values=applyVisibleValues(await loader().loadCells([...refs],db,map(),adapter()));
+   const values=applyVisibleValues(await loader().loadCells([...refs],db,map(),adapter()),formulas);
    const calculated=runtime().recalculate(formulas,values,{engine:engine(),graph:graph()});
    for(const id of active){
     const cell=cells.get(id);if(!cell)continue;
@@ -159,15 +162,26 @@
     cell.result.title="نتيجة محسوبة للعرض فقط؛ القيمة الأصلية لم تتغير";
    }
   }catch(error){console.warn("NOVARO formula refresh:",error);}
-  finally{restoreBusy=false;}
+  finally{
+   restoreBusy=false;
+   if(restoreQueued){restoreQueued=false;scheduleRestore();}
+  }
  }
  function scheduleRestore(){
+  restoreQueued=true;
   if(restoreTimer)root.clearTimeout(restoreTimer);
-  restoreTimer=root.setTimeout(()=>{restoreTimer=0;restoreVisibleFormulas();},350);
+  restoreTimer=root.setTimeout(()=>{restoreTimer=0;restoreQueued=false;restoreVisibleFormulas();},350);
+ }
+ function handleCellValueChange(event){
+  const input=event?.target;
+  if(input?.matches?.("input")&&idFor(input))scheduleRestore();
  }
  function start(){
   if(root.__NOVAROFormulaUIStarted)return;root.__NOVAROFormulaUIStarted=true;
   decorate();
+  // Delegated listeners also cover formula cells rendered after page load.
+  root.document.body.addEventListener("input",handleCellValueChange,true);
+  root.document.body.addEventListener("change",handleCellValueChange,true);
   const observer=new MutationObserver(records=>{
    const relevant=records.some(record=>{
     const target=record.target.nodeType===1?record.target:record.target.parentElement;
