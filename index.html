@@ -7410,3 +7410,57 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  color:inherit!important;-webkit-text-fill-color:currentColor!important;
 }
 </style>
+
+<style id="novaro-dark-mode-global-surface-hardening-v1">
+/* Theme hardening: normalize light surfaces that use legacy inline styles or arbitrary surface classes. */
+:root[data-novaro-mode="dark"] { color-scheme: dark; --bg:#19251f; --ink:#e5eee9; --muted:#a6b8ad; --line:#40564a; }
+:root[data-novaro-mode="dark"] body,
+:root[data-novaro-mode="dark"] #app,
+:root[data-novaro-mode="dark"] #main,
+:root[data-novaro-mode="dark"] .wrap { background-color:#19251f!important; color:#e5eee9!important; }
+/* Legacy inline whites and near-white fills, including dynamically inserted nodes. */
+:root[data-novaro-mode="dark"] body [style*="background:#fff"],
+:root[data-novaro-mode="dark"] body [style*="background: #fff"],
+:root[data-novaro-mode="dark"] body [style*="background-color:#fff"],
+:root[data-novaro-mode="dark"] body [style*="background-color: #fff"],
+:root[data-novaro-mode="dark"] body [style*="background:white"],
+:root[data-novaro-mode="dark"] body [style*="background: white"],
+:root[data-novaro-mode="dark"] body [style*="background-color:white"],
+:root[data-novaro-mode="dark"] body [style*="background-color: white"],
+:root[data-novaro-mode="dark"] body [style*="background:rgb(255"],
+:root[data-novaro-mode="dark"] body [style*="background: rgb(255"],
+:root[data-novaro-mode="dark"] body [style*="background-color:rgb(255"],
+:root[data-novaro-mode="dark"] body [style*="background-color: rgb(255"] {
+ background:#202f28!important; background-color:#202f28!important; background-image:none!important;
+ color:#e5eee9!important; border-color:#40564a!important;
+}
+/* Common surface/container families; keep branding, media, charts and scan codes untouched. */
+:root[data-novaro-mode="dark"] body :is(
+ .card,.panel,.modal,.modal-content,.dialog,.dialog-content,[role="dialog"],[aria-modal="true"],
+ .drawer,.popover,.popover-content,.dropdown-menu,.sheet,.bottom-sheet,.toast,
+ [class*="card"],[class*="panel"],[class*="modal"],[class*="dialog"],[class*="drawer"],
+ [class*="popover"],[class*="dropdown"],[class*="sheet"],[class*="tile"],[class*="surface"],
+ [class*="section-box"],[class*="detail-box"],[class*="info-box"],[class*="summary-box"],[class*="content-box"]
+):not([class*="logo"]):not([class*="chart"]):not([class*="graph"]):not([class*="barcode"]):not([class*="qrcode"]):not([class*="qr-code"]):not([class*="print"]):not([class*="image"]):not([class*="photo"]){
+ background-color:#202f28!important; background-image:none!important; border-color:#40564a!important; color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] body :is(
+ .card,.panel,.modal,.modal-content,.dialog,.dialog-content,[role="dialog"],[aria-modal="true"],
+ .drawer,.popover,.popover-content,.dropdown-menu,.sheet,.bottom-sheet,.toast,
+ [class*="card"],[class*="panel"],[class*="modal"],[class*="dialog"],[class*="drawer"],
+ [class*="popover"],[class*="dropdown"],[class*="sheet"],[class*="tile"],[class*="surface"],
+ [class*="section-box"],[class*="detail-box"],[class*="info-box"],[class*="summary-box"],[class*="content-box"]
+):not([class*="logo"]):not([class*="chart"]):not([class*="graph"]):not([class*="barcode"]):not([class*="qrcode"]):not([class*="qr-code"]):not([class*="print"]):not([class*="image"]):not([class*="photo"]) :is(h1,h2,h3,h4,h5,p,span,strong,b,label,small,em){
+ color:inherit!important; -webkit-text-fill-color:currentColor!important;
+}
+:root[data-novaro-mode="dark"] body :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea){
+ background:#18251f!important; color:#e5eee9!important; border-color:#40564a!important; color-scheme:dark;
+}
+:root[data-novaro-mode="dark"] body :is(input,textarea)::placeholder{color:#91a69a!important;opacity:1!important}
+:root[data-novaro-mode="dark"] body :is(table,thead,tbody,tfoot,th,td){border-color:#40564a!important}
+:root[data-novaro-mode="dark"] body th{background:#26382f!important;color:#cbd9d1!important}
+:root[data-novaro-mode="dark"] body tbody tr:nth-child(even){background:#22332b!important}
+:root[data-novaro-mode="dark"] body tbody tr:hover{background:#2b4035!important}
+/* Preserve scan-code contrast and print-only surfaces. */
+:root[data-novaro-mode="dark"] body :is([class*="barcode"],[class*="qrcode"],[class*="qr-code"],.item-barcode,.item-qrcode){background:#f4f8f5!important;color:#20372f!important}
+</style>
