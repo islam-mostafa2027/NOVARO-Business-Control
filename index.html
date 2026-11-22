@@ -7861,6 +7861,27 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   color:#9bdab4!important;
   -webkit-text-fill-color:#9bdab4!important;
 }
+/* Force the same branch-card mint fill on disabled Operations shortcuts. */
+#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill:disabled{
+  -webkit-appearance:none!important;
+  appearance:none!important;
+  background-color:#e5f4eb!important;
+  background-image:linear-gradient(135deg,#f4fcf7,#e5f4eb)!important;
+  border-color:#b9dfc8!important;
+  color:#204b3b!important;
+  -webkit-text-fill-color:#204b3b!important;
+  box-shadow:0 5px 16px #286b4d12!important;
+  opacity:1!important;
+  filter:none!important;
+}
+:root[data-novaro-mode="dark"] #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill:disabled{
+  background-color:#20352b!important;
+  background-image:linear-gradient(135deg,#263b31,#20352b)!important;
+  border-color:#466c59!important;
+  color:#e4f4e9!important;
+  -webkit-text-fill-color:#e4f4e9!important;
+  box-shadow:0 7px 20px #0003!important;
+}
 </style>
 
 
