@@ -2289,6 +2289,23 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 }
 </style>
 
+
+<style id="novaro-audit-envelope-mint-force-v3">
+/* Directly override the audit envelope's dedicated ID-based styles. */
+#app #novaroAuditBell,#app .app-header #novaroAuditBell,#app .app-header .header-clock-panel #novaroAuditBell,#app .app-header .header-icon-row #novaroAuditBell,#app .app-header .notification-wrap>#novaroAuditBell{
+ background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;
+ border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
+ box-shadow:0 4px 14px rgba(34,112,83,.12)!important;
+}
+#app #novaroAuditBell svg{color:#216b55!important;stroke:#216b55!important}
+:root[data-novaro-mode="dark"] #app #novaroAuditBell,:root[data-novaro-mode="dark"] #app .app-header #novaroAuditBell,:root[data-novaro-mode="dark"] #app .app-header .header-clock-panel #novaroAuditBell,:root[data-novaro-mode="dark"] #app .app-header .header-icon-row #novaroAuditBell,:root[data-novaro-mode="dark"] #app .app-header .notification-wrap>#novaroAuditBell{
+ background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;background-color:#285f4e!important;
+ border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+ box-shadow:0 4px 14px rgba(0,0,0,.2)!important;
+}
+:root[data-novaro-mode="dark"] #app #novaroAuditBell svg{color:#effff6!important;stroke:#effff6!important}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -4324,7 +4341,7 @@ async function sessions(){
  const cards=(r.data||[]).map(x=>{
   const submitted=["submitted","reviewed","approved"].includes(x.status);
   const archiveAction=owner&&submitted?(archiveMode?'<button class="soft" onclick="restoreStocktakeSession(&quot;'+x.id+'&quot;)">'+(en?"Restore":"استعادة")+'</button><button class="danger" onclick="permanentlyDeleteArchivedStocktake(&quot;'+x.id+'&quot;,&quot;sessions&quot;)">'+(en?"Delete permanently":"حذف نهائي")+'</button>':'<button class="soft" onclick="deleteSession(&quot;'+x.id+'&quot;)">'+(en?"Archive":"أرشفة")+'</button>'):"";
-  return '<article class="card stocktake-session-card"><div class="stocktake-session-card-head"><div><div class="stocktake-session-card-title">'+esc(sessionTitle(x))+'</div>'+(owner?'<p class="muted">'+esc(branchLabel(allBranches.find(b=>b.id===x.branch_id)||branches.find(b=>b.id===x.branch_id))||"—")+'</p>':"")+'</div></div><div class="stocktake-session-meta"><span>'+esc(monthLabel(x.inventory_date))+'</span><span>'+esc(x.status)+'</span></div><div class="stocktake-session-actions '+(archiveMode?'stocktake-session-actions-archive':'')+'"><button onclick="openSession(&quot;'+x.id+'&quot;)">'+(en?"View Stocktake":"عرض الجرد")+'</button> <button class="soft" onclick="printStocktakeReportById(&quot;'+x.id+'&quot;)">'+(en?"Print / PDF":"طباعة / PDF")+'</button> <button class="soft" onclick="exportStocktakeReport(&quot;'+x.id+'&quot;)">'+(en?"Export Excel":"تصدير Excel")+'</button>'+(!archiveMode&&["draft","in_progress"].includes(x.status)?' <button class="soft" onclick="editSession(&quot;'+x.id+'&quot;)">'+(en?"Edit":"تعديل")+'</button>':"")+(!archiveMode&&(owner||profile.role==="branch_manager")&&["draft","in_progress"].includes(x.status)?'<button class="soft stocktake-transfer-button" onclick="submitStocktakeSessionById(&quot;'+x.id+'&quot;)">'+(en?"Transfer to Reports":"ترحيل للتقارير")+'</button>':"")+archiveAction+'</div></article>'
+  return '<article class="card stocktake-session-card"><div class="stocktake-session-card-head"><div><div class="stocktake-session-card-title">'+esc(sessionTitle(x))+'</div>'+(owner?'<p class="muted">'+esc(branchLabel(allBranches.find(b=>b.id===x.branch_id)||branches.find(b=>b.id===x.branch_id))||"—")+'</p>':"")+'</div></div><div class="stocktake-session-actions '+(archiveMode?'stocktake-session-actions-archive':'')+'"><button onclick="openSession(&quot;'+x.id+'&quot;)">'+(en?"View Stocktake":"عرض الجرد")+'</button> <button class="soft" onclick="printStocktakeReportById(&quot;'+x.id+'&quot;)">'+(en?"Print / PDF":"طباعة / PDF")+'</button> <button class="soft" onclick="exportStocktakeReport(&quot;'+x.id+'&quot;)">'+(en?"Export Excel":"تصدير Excel")+'</button>'+(!archiveMode&&["draft","in_progress"].includes(x.status)?' <button class="soft" onclick="editSession(&quot;'+x.id+'&quot;)">'+(en?"Edit":"تعديل")+'</button>':"")+(!archiveMode&&(owner||profile.role==="branch_manager")&&["draft","in_progress"].includes(x.status)?'<button class="soft stocktake-transfer-button" onclick="submitStocktakeSessionById(&quot;'+x.id+'&quot;)">'+(en?"Transfer to Reports":"ترحيل للتقارير")+'</button>':"")+archiveAction+'</div></article>'
  }).join("");
  area.innerHTML=toolbar+(cards?'<div class="stocktake-session-grid">'+cards+'</div>':'<div class="empty">'+(archiveMode?(en?"No archived stocktake sessions.":"لا توجد جلسات جرد مؤرشفة."):(en?"No stocktake sessions yet.":"لا توجد جلسات بعد"))+'</div>');
  area.querySelectorAll("[data-sessions-archive-toggle]").forEach(btn=>btn.addEventListener("click",()=>{window.__novaroSessionsArchiveMode=!archiveMode;sessions()}));
