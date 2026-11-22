@@ -101,3 +101,11 @@ test('mobile formula editing opens from a long press and uses the full text keyb
   assert.match(source, /addEventListener\("pointerdown",handleCellPointerDown,true\)/);
   assert.match(source, /addEventListener\("contextmenu",handleCellContextMenu,true\)/);
 });
+
+
+test('Android context-menu gesture opens and focuses the text editor before async formula loading', () => {
+  assert.match(source, /function handleCellContextMenu\\(event\\)/);
+  assert.match(source, /openExistingFormula\\(input,true\\)/);
+  assert.match(source, /if\\(focusFromGesture\\)openEditor\\(id,\\"=\\",label\\)/);
+  assert.match(source, /updateSuggestions\\(\\);ui\\.textarea\\.focus\\(\\)/);
+});
