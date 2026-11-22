@@ -3502,7 +3502,7 @@ document.addEventListener("click",async e=>{
   saveSalesSnapshotButton.disabled=true;if(status)status.textContent=language==="en"?"Saving full report page...":"جارٍ حفظ صفحة التقرير بالكامل...";
   try{
    const clone=snapshotRoot.cloneNode(true);
-   clone.querySelectorAll(".novaro-fx-wrap").forEach(node=>node.remove());
+   clone.querySelectorAll(".novaro-fx-wrap,.novaro-fx-display").forEach(node=>node.remove());
    clone.querySelector(".sales-export-card")?.remove();
    clone.querySelector(".sales-snapshot-status")?.remove();
    clone.querySelector(".sales-snapshot-modal")?.remove();
@@ -3534,7 +3534,7 @@ document.addEventListener("click",async e=>{
    const tableHeaders=Array.from(table.querySelectorAll("thead th")).map(cell=>cell.innerText.trim());
    const tableRows=Array.from(table.querySelectorAll("tbody tr,tfoot tr")).map(row=>Array.from(row.cells).map(cell=>{
      const cleanCell=cell.cloneNode(true);
-     cleanCell.querySelectorAll(".novaro-fx-wrap").forEach(node=>node.remove());
+     cleanCell.querySelectorAll(".novaro-fx-wrap,.novaro-fx-display").forEach(node=>node.remove());
      return {text:cleanCell.innerText.trim(),values:Array.from(cell.querySelectorAll("input")).map(field=>field.value??"")};
     }));
    const snapshotData={version:1,branchId:branch.id,branchName:nameOf(branch),branchAddress:branchLocationOf(branch),reportMonth:month,reportDate,savedAt:now.toISOString(),language,upperCardMetrics:upperMetrics,tableHeaders,tableRows};
@@ -3612,7 +3612,7 @@ document.addEventListener("click",async e=>{
   const report=savedView?savedView.querySelector(".sales-report-page"):document.querySelector(".sales-report-page");
   if(!report)return;
   const copy=report.cloneNode(true);
-  copy.querySelectorAll(".novaro-fx-wrap").forEach(node=>node.remove());
+  copy.querySelectorAll(".novaro-fx-wrap,.novaro-fx-display").forEach(node=>node.remove());
   copy.id="novaro-sales-print-root";
   copy.querySelector(".sales-export-card")?.remove();
   copy.querySelector(".sales-month-actions")?.remove();
