@@ -3077,6 +3077,28 @@ function novaroApplyColorMode(p){
   opacity:1!important;visibility:visible!important;filter:none!important;
  }
  `;
+ colorModeCss += String.raw`
+ /* Audit message button: restore dark surface and explicitly paint the envelope icon. */
+ :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell {
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  background:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;
+  background-color:#294638!important;border:1px solid #5b9278!important;border-radius:50%!important;
+  color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.28)!important;opacity:1!important;filter:none!important;
+ }
+ :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell > svg {
+  display:block!important;visibility:visible!important;opacity:1!important;width:21px!important;height:21px!important;
+  overflow:visible!important;color:#effff6!important;stroke:#effff6!important;fill:none!important;
+ }
+ :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell > svg > rect,
+ :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell > svg > path {
+  stroke:#effff6!important;stroke-width:1.9!important;fill:none!important;opacity:1!important;visibility:visible!important;
+ }
+ :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell > .notification-badge {
+  background:#e65f72!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
+  border:2px solid #202f28!important;stroke:none!important;
+ }
+ `;
 if(style.textContent!==colorModeCss)style.textContent=colorModeCss;
  const meta=document.querySelector('meta[name="theme-color"]');
  const nextThemeColor=mode==="dark"?"#19251f":(novaroThemeMap()[p.theme]||novaroThemeMap().default)[1];
