@@ -3078,26 +3078,13 @@ function novaroApplyColorMode(p){
  }
  `;
  colorModeCss += String.raw`
- /* Audit message button: restore dark surface and explicitly paint the envelope icon. */
- :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell {
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  background:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;
-  background-color:#294638!important;border:1px solid #5b9278!important;border-radius:50%!important;
-  color:#effff6!important;-webkit-text-fill-color:#effff6!important;
-  box-shadow:0 3px 12px rgba(0,0,0,.28)!important;opacity:1!important;filter:none!important;
- }
- :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell > svg {
-  display:block!important;visibility:visible!important;opacity:1!important;width:21px!important;height:21px!important;
-  overflow:visible!important;color:#effff6!important;stroke:#effff6!important;fill:none!important;
- }
- :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell > svg > rect,
- :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell > svg > path {
-  stroke:#effff6!important;stroke-width:1.9!important;fill:none!important;opacity:1!important;visibility:visible!important;
- }
- :root[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.notification-bell > .notification-badge {
-  background:#e65f72!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
-  border:2px solid #202f28!important;stroke:none!important;
- }
+ /* Notification button: preserve rounded-square shape and force visible theme-aware envelope. */
+ html[data-novaro-mode="light"] body #novaroAuditBell {width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;padding:8px!important;border-radius:13px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;box-shadow:0 3px 10px rgba(33,107,85,.12)!important;}
+ html[data-novaro-mode="dark"] body #novaroAuditBell {width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;padding:8px!important;border-radius:13px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 3px 12px rgba(0,0,0,.28)!important;}
+ html[data-novaro-mode="light"] body #novaroAuditBell svg, html[data-novaro-mode="dark"] body #novaroAuditBell svg {display:block!important;visibility:visible!important;opacity:1!important;width:21px!important;height:21px!important;overflow:visible!important;fill:none!important;}
+ html[data-novaro-mode="light"] body #novaroAuditBell svg rect, html[data-novaro-mode="light"] body #novaroAuditBell svg path {stroke:#216b55!important;stroke-width:1.9!important;fill:none!important;opacity:1!important;}
+ html[data-novaro-mode="dark"] body #novaroAuditBell svg rect, html[data-novaro-mode="dark"] body #novaroAuditBell svg path {stroke:#effff6!important;stroke-width:1.9!important;fill:none!important;opacity:1!important;}
+ html[data-novaro-mode="light"] body #novaroAuditBell .notification-badge, html[data-novaro-mode="dark"] body #novaroAuditBell .notification-badge {background:#e65f72!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border:2px solid #202f28!important;stroke:none!important;}
  `;
 if(style.textContent!==colorModeCss)style.textContent=colorModeCss;
  const meta=document.querySelector('meta[name="theme-color"]');
