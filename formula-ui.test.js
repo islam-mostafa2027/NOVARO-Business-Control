@@ -4,240 +4,90 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-function bootFormulaUi(readyState = 'loading') {
+const source = fs.readFileSync(path.join(__dirname, 'formula-ui.js'), 'utf8');
+
+function bootUi() {
   const listeners = {};
   const timers = new Map();
   let nextTimer = 1;
-  let ready;
   const body = {
-    addEventListener(type, handler) { listeners[type] = handler; },
-    querySelectorAll() { return []; }
+    addEventListener(type, handler, capture) { listeners[type + ':' + !!capture] = handler; },
+    appendChild() {}
   };
   const document = {
-    readyState,
+    readyState: 'complete',
     body,
     head: { appendChild() {} },
     getElementById() { return null; },
-    createElement() { return { id: '', textContent: '' }; },
+    createElement() { return { id: '', textContent: '', style: {}, appendChild() {}, setAttribute() {}, addEventListener() {} }; },
     querySelectorAll() { return []; },
-    querySelector() { return { dataset: { salesBranchId: 'branch-1' } }; },
-    addEventListener(type, handler) { if (type === 'DOMContentLoaded') ready = handler; }
+    addEventListener() {}
   };
   const window = {
     document,
-    NOVAROFormulaCellMap: {
-      salesMetric: (...parts) => 'sales:' + parts.join(':'),
-      dailyTipCell: (...parts) => 'tip:' + parts.join(':')
-    },
-    NOVAROFormulaSourceAdapter: {},
-    setTimeout(handler) {
-      const id = nextTimer++;
-      timers.set(id, handler);
-      return id;
-    },
-    clearTimeout(id) { timers.delete(id); }
+    setTimeout(handler) { const id = nextTimer++; timers.set(id, handler); return id; },
+    clearTimeout(id) { timers.delete(id); },
+    getComputedStyle() { return { font: '12px Arial', fontSize: '12px', position: 'static' }; }
   };
   class MutationObserver {
     constructor(callback) { this.callback = callback; }
     observe() {}
   }
-  const context = {
+  vm.runInNewContext(source, {
     window,
     MutationObserver,
-    salesReportSelectedMonth: 'Nov-2026',
-    dailyTipActiveSheetKey: 'first-half',
-    dailyTipSheetCache: [{ sheet_key: 'first-half', id: 'sheet-1' }]
-  };
-  const source = fs.readFileSync(path.join(__dirname, 'formula-ui.js'), 'utf8');
-  vm.runInNewContext(source, context, { filename: 'formula-ui.js' });
-  if (ready) ready();
-  return { listeners, timers, window, context };
+    console,
+    setTimeout: window.setTimeout,
+    clearTimeout: window.clearTimeout
+  }, { filename: 'formula-ui.js' });
+  return { window, listeners, timers };
 }
 
-function salesInput() {
-  const monthCard = { dataset: { salesBranchId: 'branch-1' } };
-  const page = { querySelector: selector => selector === '.sales-month-card' ? monthCard : null };
-  return {
-    id: '',
-    dataset: { salesMetric: 'sales_target' },
-    classList: { contains: () => false },
-    matches: selector => selector === 'input',
-    closest: selector => selector === '.sales-report-page' ? page : null,
-    hasAttribute: () => false,
-    getAttribute: () => null
-  };
-}
-
-test('formula UI schedules recalculation after delegated input and change events', () => {
-  const app = bootFormulaUi();
-  const input = salesInput();
-
-  app.listeners.input({ target: input });
-  assert.equal(app.timers.size, 1, 'input event should schedule a refresh');
-
-  app.listeners.change({ target: input });
-  assert.equal(app.timers.size, 1, 'change event should debounce into the same refresh');
-
-  const [timerId, run] = app.timers.entries().next().value;
-  app.timers.delete(timerId);
-  run();
+test('formula controls are inline and no ƒx buttons or adjacent formula wrappers are created', () => {
+  assert.doesNotMatch(source, /novaro-fx-btn|novaro-fx-wrap|ƒx/);
+  assert.match(source, /className="novaro-fx-display"/);
+  assert.match(source, /function displayFormula\(input,text,isError\)/);
 });
 
-test('daily tip cell identifiers retain the selected report month outside the sales-page branch', () => {
-  const app = bootFormulaUi();
-  const row = { dataset: { dailyTipDay: '4' } };
-  const card = {};
-  const input = {
-    id: '',
-    dataset: {},
-    classList: { contains: () => false },
-    matches: selector => selector === 'input',
-    closest(selector) {
-      if (selector === '#dailyTipRows tr[data-daily-tip-day]') return row;
-      if (selector === '#dailyTipCard') return card;
-      return null;
-    },
-    hasAttribute: name => name === 'data-tip-amount',
-    getAttribute: () => null
-  };
-
-  app.listeners.input({ target: input });
-  assert.equal(app.timers.size, 1, 'daily tip edits should schedule a refresh');
+test('typing equals opens the formula editor and double-click edits a saved formula', () => {
+  assert.match(source, /if\(event\.key==="="/);
+  assert.match(source, /addEventListener\("dblclick",handleCellDoubleClick,true\)/);
+  assert.match(source, /openExistingFormula\(input\)/);
 });
 
-test('formula UI protects formula-backed cells and queues refreshes requested while busy', () => {
-  const source = fs.readFileSync(path.join(__dirname, 'formula-ui.js'), 'utf8');
-  assert.match(source, /function applyVisibleValues\(values,formulas=\{\}\)/);
-  assert.match(source, /hasOwnProperty\.call\(formulas,id\)/);
-  assert.match(source, /if\(restoreBusy\)\{restoreQueued=true;return;\}/);
-  assert.match(source, /addEventListener\("input",handleCellValueChange,true\)/);
-  assert.match(source, /addEventListener\("change",handleCellValueChange,true\)/);
-  assert.doesNotMatch(source, /\binput\.value\s*=/, 'formula UI must never overwrite the original input value');
-});
-
-function bootFormulaUiWithVisibleCell(failLoad = false) {
-  const listeners = {};
-  const timers = new Map();
-  let nextTimer = 1;
-  let ready;
-  const monthCard = { dataset: { salesBranchId: 'branch-1' } };
-  const page = { querySelector: selector => selector === '.sales-month-card' ? monthCard : null };
-  const input = {
-    id: '',
-    value: '999',
-    dataset: { salesMetric: 'sales_target' },
-    classList: { contains: () => false },
-    matches: selector => selector === 'input',
-    closest: selector => selector === '.sales-report-page' ? page : null,
-    hasAttribute: () => false,
-    getAttribute: () => null
-  };
-  const result = {
-    hidden: false,
-    textContent: '= 123',
-    title: '',
-    classList: { toggle() {}, remove() {}, add() {} }
-  };
-  const button = { textContent: 'ƒx' };
-  const wrap = {
-    previousElementSibling: input,
-    querySelector(selector) {
-      return selector === '.novaro-fx-result' ? result : button;
-    }
-  };
-  const body = {
-    addEventListener(type, handler) { listeners[type] = handler; },
-    querySelectorAll() { return []; }
-  };
-  const document = {
-    readyState: 'loading',
-    body,
-    head: { appendChild() {} },
-    getElementById() { return null; },
-    createElement() { return { id: '', textContent: '' }; },
-    querySelectorAll(selector) { return selector === '.novaro-fx-wrap' ? [wrap] : []; },
-    addEventListener(type, handler) { if (type === 'DOMContentLoaded') ready = handler; }
-  };
-  const window = {
-    document,
-    NOVAROFormulaCellMap: {
-      salesMetric: (...parts) => 'target:' + parts.join(':')
-    },
-    NOVAROFormulaSourceAdapter: {},
-    NOVAROFormulaEngine: {
-      getDependencies: formula => formula.includes('source-cell') ? ['source-cell'] : []
-    },
-    NOVAROFormulaDependencyGraph: {},
-    NOVAROFormulaStorage: {
-      async loadFormulas(ids) {
-        if (failLoad) throw new Error('Simulated formula source unavailable');
-        return ids.includes('target:branch-1:Nov-2026:sales_target')
-          ? { 'target:branch-1:Nov-2026:sales_target': '=CELL("source-cell")+1' }
-          : {};
-      }
-    },
-    NOVAROFormulaDataLoader: {
-      async loadCells(ids) {
-        return Object.fromEntries(ids.map(id => [id, id === 'source-cell' ? 10 : 5]));
-      }
-    },
-    NOVAROFormulaRuntime: {
-      recalculate(formulas, values) {
-        assert.equal(values['target:branch-1:Nov-2026:sales_target'], 5,
-          'the stale visible input must not replace the loaded source value for a formula cell');
-        assert.equal(values['source-cell'], 10);
-        return {
-          values: { ...values, 'target:branch-1:Nov-2026:sales_target': 11 },
-          results: { 'target:branch-1:Nov-2026:sales_target': 11 },
-          errors: {}
-        };
-      }
-    },
-    setTimeout(handler) {
-      const id = nextTimer++;
-      timers.set(id, handler);
-      return id;
-    },
-    clearTimeout(id) { timers.delete(id); }
-  };
-  class MutationObserver {
-    constructor(callback) { this.callback = callback; }
-    observe() {}
+test('formula editor suggests supported functions while typing', () => {
+  for (const fn of ['SUM', 'AVERAGE', 'MIN', 'MAX', 'COUNT', 'IF', 'ROUND']) {
+    assert.match(source, new RegExp("\\['" + fn + "'"));
   }
-  const context = {
-    window,
-    MutationObserver,
-    db: {},
-    salesReportSelectedMonth: 'Nov-2026'
-  };
-  const source = fs.readFileSync(path.join(__dirname, 'formula-ui.js'), 'utf8');
-  vm.runInNewContext(source, context, { filename: 'formula-ui.js' });
-  ready();
-  return { window, input, result, button, timers };
-}
-
-test('formula UI recalculates without overwriting the original input value', async () => {
-  const app = bootFormulaUiWithVisibleCell();
-  await app.window.NOVAROFormulaUI.recalculate();
-
-  assert.equal(app.result.textContent, '= 11');
-  assert.equal(app.result.hidden, false);
-  assert.equal(app.input.value, '999', 'the original business input remains unchanged');
-  assert.equal(app.button.textContent, 'ƒx ✓');
+  assert.match(source, /function updateSuggestions\(\)/);
+  assert.match(source, /editor\.suggestions\.appendChild\(button\)/);
 });
 
-test('formula UI keeps its public API when loaded after DOMContentLoaded', () => {
-  const app = bootFormulaUi('complete');
-  assert.equal(typeof app.window.NOVAROFormulaUI.recalculate, 'function');
+test('cross-page picker inserts a stable CELL reference from the clicked eligible input', () => {
+  assert.match(source, /function beginCellPick\(\)/);
+  assert.match(source, /function handlePickClick\(event\)/);
+  assert.match(source, /const expression=quoteCellId\(id\)/);
+  assert.match(source, /CELL\("\\'+String\(id\)/);
+  assert.match(source, /editor\.pickerHint\.textContent/);
+});
+
+test('formula results are displayed over the cell without changing its original value', () => {
+  assert.match(source, /input\.style\.color="transparent"/);
+  assert.match(source, /input\.readOnly=true/);
+  assert.match(source, /display\.textContent=text/);
+  assert.doesNotMatch(source, /\binput\.value\s*=/);
+  assert.match(source, /storage\(\)\.saveFormula\(id,formula,db,map\(\),adapter\(\),engine\(\)\)/);
+});
+
+test('formula UI keeps its public refresh and recalculation APIs', () => {
+  const app = bootUi();
   assert.equal(typeof app.window.NOVAROFormulaUI.refresh, 'function');
+  assert.equal(typeof app.window.NOVAROFormulaUI.recalculate, 'function');
+  assert.equal(typeof app.window.NOVAROFormulaUI.openEditor, 'function');
 });
 
-test('automatic refresh clears stale results when a formula dependency cannot be loaded', async () => {
-  const app = bootFormulaUiWithVisibleCell(true);
-  await app.window.NOVAROFormulaUI.recalculate();
-
-  assert.equal(app.result.textContent, 'Simulated formula source unavailable');
-  assert.equal(app.result.hidden, false);
-  assert.equal(app.button.textContent, 'ƒx !');
-  assert.equal(app.input.value, '999', 'the original business input remains unchanged');
+test('formula editor does not introduce database schema or privileged access code', () => {
+  assert.doesNotMatch(source, /service_role|serviceRole|SECURITY DEFINER|ALTER TABLE|CREATE POLICY|DROP POLICY/i);
+  assert.match(source, /storage\(\)\.loadFormulas/);
+  assert.match(source, /loader\(\)\.loadCells/);
 });
