@@ -8221,6 +8221,44 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #login.auth-shell .visual-mark {background:#2b493a!important;border-color:#527762!important;color:#e5f4eb!important}
 :root[data-novaro-mode="dark"] #login.auth-shell .auth-note {background:#26382f!important;color:#b8c9bf!important}
 /* Splash colors are owned by the early light/dark first-paint rules above. */
+/* Final header-only contrast fix. Kept last so earlier theme/button rules cannot override it. */
+html[data-novaro-mode="light"] body #app .app-header button#openDevices,
+html[data-novaro-mode="light"] body #app .app-header button#openSettings,
+html[data-novaro-mode="light"] body #app .app-header button#openAbout,
+html[data-novaro-mode="light"] body #app .app-header button#logout,
+html[data-novaro-mode="light"] body #app .app-header button#novaroAuditBell{
+ background:#e5f5ec!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+ border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header button#openDevices,
+html[data-novaro-mode="dark"] body #app .app-header button#openSettings,
+html[data-novaro-mode="dark"] body #app .app-header button#openAbout,
+html[data-novaro-mode="dark"] body #app .app-header button#logout,
+html[data-novaro-mode="dark"] body #app .app-header button#novaroAuditBell{
+ background:#244b3c!important;background-image:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
+ border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+}
+html[data-novaro-mode="light"] body #app .app-header button#openDevices *,
+html[data-novaro-mode="light"] body #app .app-header button#openSettings *,
+html[data-novaro-mode="light"] body #app .app-header button#openAbout *,
+html[data-novaro-mode="light"] body #app .app-header button#logout *,
+html[data-novaro-mode="light"] body #app .app-header button#novaroAuditBell svg{
+ color:#216b55!important;-webkit-text-fill-color:#216b55!important;stroke:#216b55!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header button#openDevices *,
+html[data-novaro-mode="dark"] body #app .app-header button#openSettings *,
+html[data-novaro-mode="dark"] body #app .app-header button#openAbout *,
+html[data-novaro-mode="dark"] body #app .app-header button#logout *,
+html[data-novaro-mode="dark"] body #app .app-header button#novaroAuditBell svg{
+ color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;
+}
+html[data-novaro-mode] body #app .app-header button#openDevices .header-icon-label,
+html[data-novaro-mode] body #app .app-header button#openSettings .header-icon-label,
+html[data-novaro-mode] body #app .app-header button#openAbout .header-icon-label,
+html[data-novaro-mode] body #app .app-header button#logout span{
+ display:block!important;visibility:visible!important;opacity:1!important;
+ font-size:10px!important;line-height:1.2!important;
+}
 
 
 /* NOVARO single source of truth: launch shell, Android viewport and logout theme. */
