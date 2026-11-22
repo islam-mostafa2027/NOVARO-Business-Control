@@ -3446,6 +3446,8 @@ document.addEventListener("click",async e=>{
    await loadSalesReportDayTips(Number(salesMonthCard.querySelector("#salesReportDay")?.value));
    await dailyTipLoad();
    await loadSalesReportDayTips(Number(salesMonthCard.querySelector("#salesReportDay")?.value));
+   // Source inputs are populated programmatically; refresh formulas after all month data is ready.
+   window.NOVAROFormulaUI?.refresh?.();
    if(status)status.textContent=language==="en"?"Month loaded.":"تم تحميل بيانات الشهر.";
   }catch(error){delete salesMonthCard.dataset.loadedMonth;if(status)status.textContent=(language==="en"?"Could not load: ":"تعذر تحميل البيانات: ")+(error.message||String(error));}
   finally{loadButton.disabled=false;}
