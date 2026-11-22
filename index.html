@@ -5697,7 +5697,6 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   #app .app-header,#app .tabs{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
 }
 </style>
-</style>
 
 
 <style id="novaro-stocktake-entry-card-v3">
@@ -7806,8 +7805,13 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-copy small{color:#b1cdbb!important}
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-arrow{color:#9bdab4!important}
 @media(prefers-reduced-motion:reduce){#app .sales-report-page .sales-branch-pill{transition:none!important}}
-<style id="novaro-operations-shortcuts-exact-branch-color-v2">
+/* Operations shortcut colors: exact Sales branch-pill identity. */
 /* Keep disabled Operations shortcuts fully vivid and exactly matched to the Sales branch selectors. */
+/* Override global disabled-button dimming while keeping shortcuts disabled. */
+#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill:disabled{
+  opacity:1!important;
+  filter:none!important;
+}
 #app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{
   border:1px solid #b9dfc8!important;
   background:linear-gradient(135deg,#f4fcf7,#e5f4eb)!important;
