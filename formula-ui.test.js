@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-function bootFormulaUi() {
+function bootFormulaUi(readyState = 'loading') {
   const listeners = {};
   const timers = new Map();
   let nextTimer = 1;
@@ -14,7 +14,7 @@ function bootFormulaUi() {
     querySelectorAll() { return []; }
   };
   const document = {
-    readyState: 'loading',
+    readyState,
     body,
     head: { appendChild() {} },
     getElementById() { return null; },
@@ -50,7 +50,7 @@ function bootFormulaUi() {
   };
   const source = fs.readFileSync(path.join(__dirname, 'formula-ui.js'), 'utf8');
   vm.runInNewContext(source, context, { filename: 'formula-ui.js' });
-  ready();
+  if (ready) ready();
   return { listeners, timers, window, context };
 }
 
@@ -112,6 +112,7 @@ test('formula UI protects formula-backed cells and queues refreshes requested wh
   assert.match(source, /if\(restoreBusy\)\{restoreQueued=true;return;\}/);
   assert.match(source, /addEventListener\("input",handleCellValueChange,true\)/);
   assert.match(source, /addEventListener\("change",handleCellValueChange,true\)/);
+  assert.doesNotMatch(source, /\\binput\\.value\\s*=/, 'formula UI must never overwrite the original input value');
 });
 
 function bootFormulaUiWithVisibleCell() {
@@ -222,4 +223,10 @@ test('formula UI recalculates without overwriting the original input value', asy
   assert.equal(app.result.hidden, false);
   assert.equal(app.input.value, '999', 'the original business input remains unchanged');
   assert.equal(app.button.textContent, 'ƒx ✓');
+});
+
+test('formula UI keeps its public API when loaded after DOMContentLoaded', () => {
+  const app = bootFormulaUi('complete');
+  assert.equal(typeof app.window.NOVAROFormulaUI.recalculate, 'function');
+  assert.equal(typeof app.window.NOVAROFormulaUI.refresh, 'function');
 });
