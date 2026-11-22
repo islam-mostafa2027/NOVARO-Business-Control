@@ -108,7 +108,7 @@
      const existing=await storage().loadFormulas([id],db,map(),adapter());
      const current=existing[id]||"";
      const formula=root.prompt("اكتب المعادلة باستخدام =، وللإشارة إلى خلية أخرى استخدم CELL(\"معرّف الخلية\"):",current);
-     if(formula===null)return;
+     if(formula===null){button.textContent=current?"ƒx ✓":"ƒx";return;}
      if(!formula.trim()){
       if(current){
        if(root.confirm("هل تريد حذف المعادلة المحفوظة؟"))await storage().removeFormula(id,db,map(),adapter());
@@ -195,6 +195,6 @@
   root.NOVAROFormulaUI=Object.freeze({refresh:()=>{decorate();scheduleRestore();},recalculate:restoreVisibleFormulas});
   root.__NOVAROFormulaUIObserver=observer;
  }
- if(root.document){if(root.document.readyState==="loading")root.document.addEventListener("DOMContentLoaded",start,{once:true});else start();}
  root.NOVAROFormulaUI=Object.freeze({refresh:decorate});
+ if(root.document){if(root.document.readyState==="loading")root.document.addEventListener("DOMContentLoaded",start,{once:true});else start();}
 })(typeof window!=="undefined"?window:globalThis);
