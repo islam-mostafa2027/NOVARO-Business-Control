@@ -655,3 +655,49 @@
 }
 
 /* Internal pages now inherit the same shared workspace, card, form, and responsive rules as the rest of NOVARO. */
+
+/* NOVARO dark appearance for the separately loaded Items workspace stylesheet. */
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment,
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment .items-page{
+ background:#19251f!important;color:#e5eee9!important;border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment :is(
+ .item-card,.items-toolbar,.items-group-tabs,.tablewrap,.items-empty,
+ .item-card-top,.item-card-category,.item-card-footer,.item-card-details,
+ .item-stock-row,.item-stock-branches,.item-meta-row,.item-card-body
+){
+ background:#202f28!important;background-image:none!important;
+ color:#e5eee9!important;border-color:#40564a!important;box-shadow:0 4px 14px #00000020!important;
+}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment :is(
+ h1,h2,h3,h4,p,strong,b,label,small,span,td,th,em,.item-stock-value,
+ .item-stock-branches,.item-low-stock,.item-card-title
+){color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment :is(
+ .item-card-title > strong,.item-card-title > .item-card-group,
+ .item-card-title > .item-card-code,.item-card-symbol .item-qr-label,
+ .item-card-group,.items-group-tab
+){
+ background:#2b4438!important;color:#bfe5cf!important;border-color:#527762!important;
+}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment :is(
+ .items-toolbar .branch-action-btn,.items-group-tab,.items-tool-primary,
+ button
+):not(.danger):not(.delete):not(.btn-danger){
+ background:#2b3d33!important;background-image:none!important;
+ color:#e5eee9!important;border-color:#527762!important;
+}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment :is(
+ input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea
+){background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important;color-scheme:dark}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment :is(input,textarea)::placeholder{color:#91a69a!important}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment :is(.tablewrap,table,thead,tbody,tfoot,th,td,tr){border-color:#40564a!important}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment th{background:#26382f!important;color:#cbd9d1!important}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment tbody tr,
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment tbody tr:nth-child(even){background:#202f28!important}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment tbody tr:hover{background:#2b4035!important}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment .item-card-picture{background:#26382f!important;border-color:#40564a!important;color:#bfe5cf!important}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment .item-card-qr-column .item-qrcode,
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment .item-qrcode{background:#fff!important;border-color:#dce9e2!important}
+:root[data-novaro-mode="dark"] #main.novaro-items-experiment .item-card-qr-column>.item-qr-label{background:#2b4438!important;color:#bfe5cf!important}
+
