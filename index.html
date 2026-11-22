@@ -6951,11 +6951,13 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  .app-layout .tabs#tabs>button[data-p="headcount"]>span:not(.nav-icon),
  .app-layout .tabs#tabs>button.nav-sales-report>span:not(.nav-icon){display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;text-align:center!important;text-align-last:center!important;direction:rtl!important;white-space:normal!important;overflow-wrap:normal!important;word-break:keep-all!important;margin-inline:auto!important}
  /* Keep the two headcount label words side by side, centered in its button. */
- /* Keep both two-word labels horizontal, centered, with clear spacing. */
- .app-layout .tabs#tabs>button[data-p="headcount"]>.nav-stacked-label,
- .app-layout .tabs#tabs>button.nav-sales-report>.nav-stacked-label{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:auto!important;max-width:100%!important;white-space:nowrap!important;text-align:center!important}
- .app-layout .tabs#tabs>button[data-p="headcount"]>.nav-stacked-label>span,
- .app-layout .tabs#tabs>button.nav-sales-report>.nav-stacked-label>span{display:inline!important;flex:none!important;width:auto!important;white-space:nowrap!important;text-align:center!important}
+ /* Force both labels into one centered line; explicit sibling margin creates the word space. */
+ .app-layout .tabs#tabs>button[data-p="headcount"]>span.nav-stacked-label:not(.nav-icon),
+ .app-layout .tabs#tabs>button.nav-sales-report>span.nav-stacked-label:not(.nav-icon){display:block!important;width:max-content!important;max-width:100%!important;margin-inline:auto!important;text-align:center!important;white-space:nowrap!important;direction:rtl!important}
+ .app-layout .tabs#tabs>button[data-p="headcount"]>span.nav-stacked-label:not(.nav-icon)>span,
+ .app-layout .tabs#tabs>button.nav-sales-report>span.nav-stacked-label:not(.nav-icon)>span{display:inline-block!important;flex:none!important;width:auto!important;margin:0!important;padding:0!important;white-space:nowrap!important;text-align:center!important}
+ .app-layout .tabs#tabs>button[data-p="headcount"]>span.nav-stacked-label:not(.nav-icon)>span+span,
+ .app-layout .tabs#tabs>button.nav-sales-report>span.nav-stacked-label:not(.nav-icon)>span+span{margin-inline-start:8px!important}
 }
 @media(min-width:761px){.nav-sales-report{cursor:default!important;opacity:.9}}
 </style>
