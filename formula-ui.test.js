@@ -68,7 +68,7 @@ test('cross-page picker inserts a stable CELL reference from the clicked eligibl
   assert.match(source, /function handlePickClick\(event\)/);
   assert.match(source, /const expression=quoteCellId\(id\)/);
   assert.match(source, /function quoteCellId\(id\)/);
-  assert.match(source, /return 'CELL\\("/);
+  assert.match(source, /return 'CELL\("/);
   assert.match(source, /editor\.pickerHint\.textContent/);
 });
 
