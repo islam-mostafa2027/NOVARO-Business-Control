@@ -2197,6 +2197,46 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 }
 </style>
 
+
+<style id="novaro-header-controls-mint-v1">
+/* Header shortcuts, appearance control and branch-message bell use the same mint identity. */
+#app .app-header .header-tools-stack .header-icon-row>button,
+#app .app-header .header-clock-panel>button,
+#app .app-header .header-clock-panel .notification-bell {
+  border:1px solid #b9dfcf!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  font-weight:700!important;
+  box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
+}
+#app .app-header .header-tools-stack .header-icon-row>button:hover,
+#app .app-header .header-clock-panel>button:hover,
+#app .app-header .header-clock-panel .notification-bell:hover {
+  background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
+  border-color:#91cdb3!important;
+  box-shadow:0 6px 18px rgba(34,112,83,.14)!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header .header-tools-stack .header-icon-row>button,
+:root[data-novaro-mode="dark"] #app .app-header .header-clock-panel>button,
+:root[data-novaro-mode="dark"] #app .app-header .header-clock-panel .notification-bell {
+  border-color:#548f79!important;
+  background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
+  color:#effff6!important;
+  -webkit-text-fill-color:#effff6!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.2)!important;
+}
+:root[data-novaro-mode="dark"] #app .app-header .header-tools-stack .header-icon-row>button:hover,
+:root[data-novaro-mode="dark"] #app .app-header .header-clock-panel>button:hover,
+:root[data-novaro-mode="dark"] #app .app-header .header-clock-panel .notification-bell:hover {
+  background:linear-gradient(145deg,#32745f 0%,#285d4d 100%)!important;
+  border-color:#70b596!important;
+}
+#app .app-header .header-icon-row>button svg,
+#app .app-header .header-clock-panel .notification-bell svg {color:inherit!important;stroke:currentColor!important}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
