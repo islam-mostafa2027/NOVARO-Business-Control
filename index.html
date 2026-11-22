@@ -7321,3 +7321,62 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   -webkit-text-fill-color:#20372f!important;
 }
 </style>
+
+<style id="novaro-dark-mode-final-coverage-v1">
+/* Final dark-mode coverage: neutralize hard-coded light surfaces without changing light mode. */
+:root[data-novaro-mode="dark"]{
+  --surface:#202f28;--surface-soft:#26382f;--surface-2:#293b33;
+  --border:#40564a;--line:#40564a;
+}
+:root[data-novaro-mode="dark"] body,
+:root[data-novaro-mode="dark"] #app,
+:root[data-novaro-mode="dark"] #app>.wrap{
+  background-color:#19251f!important;color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] #app :is(
+  [class*="card"],[class*="panel"],[class*="modal"],[class*="dialog"],
+  [class*="drawer"],[class*="popover"],[class*="dropdown"],[class*="picker"],
+  [class*="tile"],[class*="summary"],[class*="metric"],[class*="tablewrap"],
+  [class*="section-box"],[class*="detail-box"],[class*="info-box"],[class*="surface"]
+):not([class*="auth-visual"]):not([class*="logo"]):not([class*="barcode"]):not([class*="qrcode"]){
+  background-color:#202f28!important;background-image:none!important;
+  border-color:#40564a!important;color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] #app :is(
+  [class*="card"],[class*="panel"],[class*="modal"],[class*="dialog"],
+  [class*="drawer"],[class*="popover"],[class*="dropdown"],[class*="picker"],
+  [class*="tile"],[class*="summary"],[class*="metric"],[class*="tablewrap"],
+  [class*="section-box"],[class*="detail-box"],[class*="info-box"],[class*="surface"]
+):not([class*="auth-visual"]):not([class*="logo"]):not([class*="barcode"]):not([class*="qrcode"]):is(h1,h2,h3,h4,p,span,strong,b,label,small,em){
+  color:inherit!important;-webkit-text-fill-color:currentColor!important;
+}
+:root[data-novaro-mode="dark"] #app :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea){
+  background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important;color-scheme:dark;
+}
+:root[data-novaro-mode="dark"] #app :is(input,textarea)::placeholder{color:#91a69a!important;opacity:1!important}
+:root[data-novaro-mode="dark"] #app :is(table,thead,tbody,tfoot,th,td){border-color:#40564a!important}
+:root[data-novaro-mode="dark"] #app th{background:#26382f!important;color:#cbd9d1!important}
+:root[data-novaro-mode="dark"] #app tbody tr:nth-child(even){background:#22332b!important}
+:root[data-novaro-mode="dark"] #app tbody tr:hover{background:#2b4035!important}
+:root[data-novaro-mode="dark"] #app [style*="background:#fff"],
+:root[data-novaro-mode="dark"] #app [style*="background: #fff"],
+:root[data-novaro-mode="dark"] #app [style*="background:white"],
+:root[data-novaro-mode="dark"] #app [style*="background: white"],
+:root[data-novaro-mode="dark"] #app [style*="background-color:#fff"],
+:root[data-novaro-mode="dark"] #app [style*="background-color: #fff"],
+:root[data-novaro-mode="dark"] #app [style*="background-color:white"],
+:root[data-novaro-mode="dark"] #app [style*="background-color: white"]{
+  background:#202f28!important;background-image:none!important;color:#e5eee9!important;border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] :is(.modal,.modal-content,.dialog,.dialog-content,[role="dialog"],.dropdown-menu,.popover-content){
+  background:#202f28!important;background-image:none!important;color:#e5eee9!important;border-color:#40564a!important;
+}
+/* Daily Tip had a deliberately white heading that overrode the dark palette. */
+:root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-card>.sales-statistics-heading,
+:root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-card>.sales-statistics-heading .sales-monthly-analysis-title{
+  background:#202f28!important;background-color:#202f28!important;color:#e5eee9!important;-webkit-text-fill-color:#e5eee9!important;border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-table thead th{
+  background:#294b3e!important;color:#edf7f1!important;border-color:#426b58!important;
+}
+</style>
