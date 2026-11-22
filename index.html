@@ -4242,7 +4242,7 @@ if(page==="headcount"){
  const headcountBranches=(profile.role==="owner_admin"?allBranches:branches).filter(b=>!b.archived_at&&b.is_active);
  const selectedHeadcountBranch=headcountBranches.find(b=>b.id===headcountBranchId);
  if(!selectedHeadcountBranch){
-  const branchPills=headcountBranches.map(b=>'<button type="button" class="headcount-branch-pill" data-headcount-branch="'+b.id+'"><span class="headcount-branch-icon" aria-hidden="true">⌂</span><span>'+esc(branchLabel(b))+'</span><span class="headcount-branch-arrow">›</span></button>').join("");
+  const branchPills=headcountBranches.map(b=>'<button type="button" class="headcount-branch-pill" data-headcount-branch="'+b.id+'"><span class="headcount-branch-icon" aria-hidden="true">⌂</span><span>'+esc([nameOf(b),branchLocationOf(b)].filter(Boolean).join(" ")) +'</span><span class="headcount-branch-arrow">›</span></button>').join("");
   m.innerHTML='<section class="card headcount-page-card"><div class="headcount-page-heading"><span class="headcount-page-icon" aria-hidden="true">♙</span><div><h3>'+(language==="en"?"Headcount":"عدد العاملين")+'</h3><p class="muted">'+(language==="en"?"Select a branch to view its staffing levels.":"اختر الفرع لمتابعة أعداد العاملين به.")+'</p></div></div><div class="headcount-branch-grid">'+(branchPills||'<div class="empty">'+(language==="en"?"No branches are linked to this account.":"لا توجد فروع مرتبطة بهذا الحساب.")+'</div>')+'</div></section>';
  }else{
   const required=Math.max(0,Number(selectedHeadcountBranch.required_headcount||0));
