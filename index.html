@@ -3059,21 +3059,21 @@ function novaroApplyColorMode(p){
  :root[data-novaro-mode="dark"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell .notification-badge {background:#e65f72!important;color:#fff!important;-webkit-text-fill-color:#fff!important;stroke:none!important}
  `;
   colorModeCss += String.raw`
- /* Language toggle only: match neighboring buttons in every interaction state. */
- :root[data-novaro-mode="light"] #app .app-header .header-icon-row > button#langToggleApp,
- :root[data-novaro-mode="light"] #app .app-header .header-icon-row > button#langToggleApp:is(:hover,:focus,:focus-visible,:active) {
+ /* Header capsules: same lighting and interaction finish as the language control. */
+ :root[data-novaro-mode="light"] #app .app-header .header-icon-row > button:is(#openDevices,#openSettings,#openAbout,#langToggleApp,#logout),
+ :root[data-novaro-mode="light"] #app .app-header .header-icon-row > button:is(#openDevices,#openSettings,#openAbout,#langToggleApp,#logout):is(:hover,:focus,:focus-visible,:active) {
   background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;
   border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
   box-shadow:0 3px 10px rgba(33,107,85,.12)!important;filter:none!important;opacity:1!important;transform:none!important;
  }
- :root[data-novaro-mode="dark"] #app .app-header .header-icon-row > button#langToggleApp,
- :root[data-novaro-mode="dark"] #app .app-header .header-icon-row > button#langToggleApp:is(:hover,:focus,:focus-visible,:active) {
+ :root[data-novaro-mode="dark"] #app .app-header .header-icon-row > button:is(#openDevices,#openSettings,#openAbout,#langToggleApp,#logout),
+ :root[data-novaro-mode="dark"] #app .app-header .header-icon-row > button:is(#openDevices,#openSettings,#openAbout,#langToggleApp,#logout):is(:hover,:focus,:focus-visible,:active) {
   background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;
   border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
   box-shadow:0 3px 12px rgba(0,0,0,.28)!important;filter:none!important;opacity:1!important;transform:none!important;
  }
- :root[data-novaro-mode="light"] #app .app-header .header-icon-row > button#langToggleApp :is(svg,svg *,span),
- :root[data-novaro-mode="dark"] #app .app-header .header-icon-row > button#langToggleApp :is(svg,svg *,span) {
+ :root[data-novaro-mode="light"] #app .app-header .header-icon-row > button:is(#openDevices,#openSettings,#openAbout,#langToggleApp,#logout) :is(svg,svg *,span),
+ :root[data-novaro-mode="dark"] #app .app-header .header-icon-row > button:is(#openDevices,#openSettings,#openAbout,#langToggleApp,#logout) :is(svg,svg *,span) {
   opacity:1!important;visibility:visible!important;filter:none!important;
  }
  `;
