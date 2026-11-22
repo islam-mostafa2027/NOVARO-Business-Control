@@ -2157,6 +2157,57 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 :root[data-novaro-mode="dark"] #app .novaro-operations-shortcut .sales-branch-copy strong{color:#e6f5eb!important}
 :root[data-novaro-mode="dark"] #app .novaro-operations-shortcut .headcount-branch-arrow{color:#9bdab4!important}
 @media(max-width:600px){#app .novaro-operations-shortcuts-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}#app .novaro-operations-shortcut{min-height:66px!important;height:auto!important;padding:8px 7px!important}#app .novaro-operations-shortcut .sales-branch-copy strong{font-size:clamp(9px,2.5vw,10.5px)!important;line-height:1.22!important}}
+
+/* Final layout refinement: one full-width shortcut per row. */
+#app .novaro-operations-shortcuts-card .novaro-operations-shortcuts-grid{
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:10px!important;
+}
+#app .novaro-operations-shortcuts-card .novaro-operations-shortcut{
+  display:flex!important;
+  width:100%!important;
+  min-height:58px!important;
+  height:auto!important;
+  padding:11px 15px!important;
+  border-radius:14px!important;
+  background:linear-gradient(135deg,#dcefe3,#cbe5d5)!important;
+  border:1px solid #9fcdb0!important;
+  color:#204b3b!important;
+  box-shadow:0 3px 11px #286b4d18!important;
+}
+#app .novaro-operations-shortcuts-card .novaro-operations-shortcut .sales-branch-icon{
+  width:30px!important;height:30px!important;flex:none!important;
+  background:linear-gradient(145deg,#b9dfc8,#a8d4ba)!important;
+  color:#205f40!important;font-size:12px!important;
+}
+#app .novaro-operations-shortcuts-card .novaro-operations-shortcut .sales-branch-copy{
+  flex:1 1 auto!important;min-width:0!important;
+}
+#app .novaro-operations-shortcuts-card .novaro-operations-shortcut .sales-branch-copy strong{
+  font-size:13px!important;line-height:1.3!important;
+  letter-spacing:0!important;overflow-wrap:break-word!important;
+}
+#app .novaro-operations-shortcuts-card .novaro-operations-shortcut .headcount-branch-arrow{
+  color:#397b59!important;
+}
+:root[data-novaro-mode="dark"] #app .novaro-operations-shortcuts-card .novaro-operations-shortcut{
+  background:linear-gradient(135deg,#293f33,#23382d)!important;
+  border-color:#496e57!important;color:#e6f5eb!important;
+}
+:root[data-novaro-mode="dark"] #app .novaro-operations-shortcuts-card .novaro-operations-shortcut .sales-branch-icon{
+  background:linear-gradient(145deg,#355b47,#2d4d3d)!important;color:#b5e7c7!important;
+}
+:root[data-novaro-mode="dark"] #app .novaro-operations-shortcuts-card .novaro-operations-shortcut .sales-branch-copy strong{
+  color:#e6f5eb!important;
+}
+:root[data-novaro-mode="dark"] #app .novaro-operations-shortcuts-card .novaro-operations-shortcut .headcount-branch-arrow{
+  color:#a7dcb9!important;
+}
+@media(max-width:600px){
+  #app .novaro-operations-shortcuts-card .novaro-operations-shortcuts-grid{grid-template-columns:minmax(0,1fr)!important;gap:8px!important}
+  #app .novaro-operations-shortcuts-card .novaro-operations-shortcut{min-height:56px!important;padding:10px 12px!important}
+  #app .novaro-operations-shortcuts-card .novaro-operations-shortcut .sales-branch-copy strong{font-size:12px!important;line-height:1.3!important}
+}
 </style>
 
 <style id="novaro-global-mint-button-identity-v1">
