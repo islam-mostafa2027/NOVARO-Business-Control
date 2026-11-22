@@ -141,7 +141,7 @@
   const close=root.document.createElement("button");close.type="button";close.className="novaro-fx-close";close.textContent="×";close.setAttribute("aria-label","إغلاق");
   heading.append(title,close);
   const target=root.document.createElement("div");target.className="novaro-fx-target";
-  const textarea=root.document.createElement("textarea");textarea.className="novaro-fx-input";textarea.spellcheck=false;textarea.autocomplete="off";textarea.autocapitalize="off";textarea.setAttribute("inputmode","text");textarea.placeholder="اكتب المعادلة، مثال: =SUM(");
+  const textarea=root.document.createElement("textarea");textarea.className="novaro-fx-input";textarea.spellcheck=false;textarea.autocomplete="off";textarea.autocapitalize="off";textarea.setAttribute("inputmode","text");textarea.placeholder="اكتب المعادلة، مثال: =SUM(";
   const suggestions=root.document.createElement("div");suggestions.className="novaro-fx-suggestions";
   const hint=root.document.createElement("div");hint.className="novaro-fx-hint";hint.textContent="على الموبايل: اضغط مطولًا على الخلية لفتح محرر المعادلات ولوحة المفاتيح الكاملة. ابدأ بعلامة = واختر الدالة المقترحة. لاختيار خلية من أي صفحة اضغط «اختيار خلية» ثم انتقل للصفحة المطلوبة واضغط على الخلية.";
   const actions=root.document.createElement("div");actions.className="novaro-fx-actions";
