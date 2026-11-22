@@ -22,6 +22,8 @@ on:
       - "formula-ui.js"
       - "formula-ui.test.js"
       - "formula-reports.test.js"
+      - "formula-security.test.js"
+      - "supabase/migrations/20261122031609_harden_formula_cell_column_grants.sql"
       - "index.html"
       - ".github/workflows/formula-tests.yml"
   pull_request:
@@ -44,6 +46,8 @@ on:
       - "formula-ui.js"
       - "formula-ui.test.js"
       - "formula-reports.test.js"
+      - "formula-security.test.js"
+      - "supabase/migrations/20261122031609_harden_formula_cell_column_grants.sql"
       - "index.html"
       - ".github/workflows/formula-tests.yml"
 
@@ -56,4 +60,4 @@ jobs:
         with:
           node-version: 20
       - run: node --check formula-ui.js
-      - run: node --test formula-engine.test.js formula-cell-map.test.js formula-dependency-graph.test.js formula-runtime.test.js formula-source-adapter.test.js formula-data-loader.test.js formula-storage.test.js formula-system.test.js formula-ui.test.js formula-reports.test.js
+      - run: node --test formula-engine.test.js formula-cell-map.test.js formula-dependency-graph.test.js formula-runtime.test.js formula-source-adapter.test.js formula-data-loader.test.js formula-storage.test.js formula-system.test.js formula-ui.test.js formula-reports.test.js formula-security.test.js
