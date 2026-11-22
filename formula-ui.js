@@ -161,7 +161,18 @@
     cell.button.textContent=error?"ƒx !":"ƒx ✓";
     cell.result.title="نتيجة محسوبة للعرض فقط؛ القيمة الأصلية لم تتغير";
    }
-  }catch(error){console.warn("NOVARO formula refresh:",error);}
+  }catch(error){
+   console.warn("NOVARO formula refresh:",error);
+   // Never leave a previously calculated value visible after a failed refresh.
+   const message=error?.message||"تعذر تحديث المعادلة";
+   root.document.querySelectorAll(".novaro-fx-wrap").forEach(wrap=>{
+    const result=wrap.querySelector(".novaro-fx-result"),button=wrap.querySelector(".novaro-fx-btn");
+    if(!result)return;
+    result.textContent=message;result.hidden=false;result.classList.add("novaro-fx-error");
+    result.title="تعذر تحديث النتيجة؛ لم يتم استخدام نتيجة قديمة";
+    if(button)button.textContent="ƒx !";
+   });
+  }
   finally{
    restoreBusy=false;
    if(restoreQueued){restoreQueued=false;scheduleRestore();}
