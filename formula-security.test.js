@@ -9,10 +9,10 @@ const migration = fs.readFileSync(
 );
 
 test('formula storage removes broad insert and update grants', () => {
-  assert.match(migration, /revoke insert, update on table public\\.formula_cells from authenticated/i);
-  assert.match(migration, /grant insert \\(cell_id, formula\\)[\\s\\S]*?to authenticated/i);
-  assert.match(migration, /grant update \\(formula\\)[\\s\\S]*?to authenticated/i);
-  assert.doesNotMatch(migration, /grant all on table public\\.formula_cells/i);
+  assert.match(migration, /revoke insert, update on table public\.formula_cells from authenticated/i);
+  assert.match(migration, /grant insert \(cell_id, formula\)[\s\S]*?to authenticated/i);
+  assert.match(migration, /grant update \(formula\)[\s\S]*?to authenticated/i);
+  assert.doesNotMatch(migration, /grant all on table public\.formula_cells/i);
 });
 
 // Regression guard for the applied production grants migration.
