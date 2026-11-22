@@ -10,12 +10,16 @@
 <meta name="twitter:title" content="NOVARO Business Control">
 <meta name="twitter:description" content="منصة ذكية لإدارة ومراقبة أعمال المطاعم والفروع — المخزون والجرد والتشغيل.">
 <script id="novaro-early-appearance-bootstrap">(function(){try{var p=JSON.parse(localStorage.getItem("novaro-ui-preferences")||"{}");var dark=!!(p&&p.appearance==="dark");var themes={default:"#f4f8f6",ocean:"#f3f7fb",sage:"#f5f8f3",lavender:"#f7f5fa",sand:"#faf7f1",slate:"#f3f6f8"};var bg=dark?"#19251f":(themes[p.theme]||themes.default);var root=document.documentElement;root.setAttribute("data-novaro-mode",dark?"dark":"light");root.style.colorScheme=dark?"dark":"light";root.style.setProperty("--bg",bg);root.style.backgroundColor=bg;if(dark){root.style.setProperty("--ink","#e5eee9");root.style.setProperty("--muted","#a5b5ac");root.style.setProperty("--line","#35483e");root.style.setProperty("--mint","#293f35");root.style.setProperty("--deep","#102c25");root.style.setProperty("--accent","#9ed7bf");}var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",bg);}catch(e){document.documentElement.style.backgroundColor="#19251f";document.documentElement.style.setProperty("--bg","#19251f");}})();</script><style id="novaro-launch-first-paint">
-html[data-novaro-mode="dark"] body #splash{background:radial-gradient(circle at 50% 40%,#263f34 0%,#1d332a 52%,#14251f 100%)!important;background-color:#19251f!important;color:#effaf3!important}
-html[data-novaro-mode="dark"] body #splash :is(.splash-mark,.splash-word,.splash-caption,.splash-credit,.splash-credit strong){color:#effaf3!important;-webkit-text-fill-color:#effaf3!important}
-html[data-novaro-mode="light"] body #splash{background:linear-gradient(145deg,#f5f8fc 0%,#eaf0f6 58%,#dfe8f1 100%)!important;background-color:#eaf0f6!important;color:#203b55!important}
-html[data-novaro-mode="light"] body #splash :is(.splash-word,.splash-caption,.splash-credit,.splash-credit strong){color:#405f79!important;-webkit-text-fill-color:#405f79!important}
-html[data-novaro-mode="dark"] body #splash .splash-mark{background:linear-gradient(145deg,#365b45,#294735)!important;border-color:#527762!important}
-html[data-novaro-mode="light"] body #splash .splash-mark{background:linear-gradient(145deg,#fff,#eaf1f7)!important;border-color:#cbd8e4!important;color:#315f88!important}
+/* The outer startup screen keeps the agreed mint identity in both app modes. */
+html body #splash{background:radial-gradient(circle at 50% 38%,#e2f3e8 0%,#c5e5d0 48%,#9fceb0 100%)!important;background-color:#c5e5d0!important;color:#174b3e!important}
+html body #splash .splash-mark{background:linear-gradient(145deg,#f5fcf7 0%,#d5eddd 58%,#b7dfc5 100%)!important;border:1px solid #ffffffd9!important;color:#205d46!important}
+html body #splash .splash-word{color:#174b3e!important;-webkit-text-fill-color:#174b3e!important}
+html body #splash .splash-caption{color:#39775a!important;-webkit-text-fill-color:#39775a!important}
+html body #splash .splash-credit,html body #splash .splash-credit strong{color:#456f56!important;-webkit-text-fill-color:#456f56!important}
+html body #splash .splash-loader{background:#ffffffa8!important;box-shadow:0 1px 5px #286b4d12!important}
+html body #splash .splash-loader span{background:linear-gradient(90deg,#79bd91,#286b4d)!important}
+html body #splash .splash-orbit{border-color:#347b562b!important}
+html body #splash .splash-mark:after{background:linear-gradient(90deg,#5eaa7d,#286b4d)!important}
 </style><style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');:root{--g:#287d6b;--bg:#f3f7f5;--ink:#263a35;--muted:#71817c;--line:#e2ebe7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Tahoma,Arial}input,select{font:inherit}.wrap{max-width:1050px;margin:auto;padding:16px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:17px;margin:12px 0;box-shadow:0 5px 20px #173d3010}.brand{display:flex;align-items:center;gap:12px}.logo{background:var(--g);color:white;border-radius:13px;padding:12px;font-weight:800}.muted{color:var(--muted)}.hidden{display:none!important}.login{max-width:420px;margin:9vh auto}.field{margin:12px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:white}.tabs{display:flex;gap:8px;overflow:auto;padding:8px 0}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat b{display:block;font-size:26px;margin-top:5px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:500px}td,th{text-align:right;padding:11px;border-bottom:1px solid var(--line);font-size:14px}th{color:var(--muted)}.error{color:#b43f3f;white-space:pre-wrap}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.empty{padding:25px;text-align:center;color:var(--muted)}@media(max-width:600px){.wrap{padding:10px}.stats{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}}/* NOVARO refined interface */
 :root{--g:#287d6b;--bg:#f4f8f6;--ink:#243b34;--muted:#71827c;--line:#e1ebe6}body{font-family:Inter,system-ui,"Segoe UI",Tahoma,Arial,sans-serif;letter-spacing:.01em}.wrap{max-width:1180px;padding:20px}header.row{position:sticky;top:0;z-index:20;background:rgba(244,248,246,.94);backdrop-filter:blur(12px);padding:12px 14px;border:1px solid #e4eee9;border-radius:16px;margin:0 0 14px;box-shadow:0 8px 28px #173d300a}.logo{min-width:44px;min-height:44px;display:grid;place-items:center;box-shadow:0 5px 14px #287d6b25}.card{border-radius:18px;padding:20px;box-shadow:0 8px 28px #173d300c;transition:box-shadow .22s ease,transform .22s ease}.card:hover{box-shadow:0 12px 32px #173d3014}.tabs{gap:9px;padding:10px 2px 14px;scrollbar-width:thin}.field input,.field select,input,select{transition:border-color .18s ease,box-shadow .18s ease}.field input:focus,.field select:focus,input:focus,select:focus{outline:none;border-color:#72b4a1;box-shadow:0 0 0 3px #287d6b18}table{border-spacing:0}th{background:#f7faf8;font-weight:700}td,th{padding:13px 12px}tbody tr{transition:background .16s ease}tbody tr:hover{background:#f7fbf9}#main.page-enter{animation:novaroPageIn .28s cubic-bezier(.2,.75,.25,1) both}
@@ -8253,16 +8257,15 @@ body{padding-bottom:0!important}
  box-shadow:0 3px 10px #216b5518!important;
 }
 
-:root[data-novaro-mode="dark"] #splash{background:radial-gradient(circle at 50% 40%,#263f34 0%,#1d332a 52%,#14251f 100%)!important;background-color:#19251f!important;color:#effaf3!important}
-:root[data-novaro-mode="dark"] #splash .splash-mark{background:linear-gradient(145deg,#365b45,#294735)!important;border-color:#527762!important;color:#effaf3!important}
-:root[data-novaro-mode="dark"] #splash .splash-word,
-:root[data-novaro-mode="dark"] #splash .splash-caption,
-:root[data-novaro-mode="dark"] #splash .splash-credit,
-:root[data-novaro-mode="dark"] #splash .splash-credit strong{color:#effaf3!important;-webkit-text-fill-color:#effaf3!important}
-:root[data-novaro-mode="light"] #splash{background:linear-gradient(145deg,#f5f8fc 0%,#eaf0f6 58%,#dfe8f1 100%)!important;background-color:#eaf0f6!important;color:#203b55!important}
-:root[data-novaro-mode="light"] #splash .splash-mark{background:linear-gradient(145deg,#fff,#eaf1f7)!important;border-color:#cbd8e4!important;color:#315f88!important}
-:root[data-novaro-mode="light"] #splash .splash-word,
-:root[data-novaro-mode="light"] #splash .splash-caption,
-:root[data-novaro-mode="light"] #splash .splash-credit,
-:root[data-novaro-mode="light"] #splash .splash-credit strong{color:#405f79!important;-webkit-text-fill-color:#405f79!important}
+/* Outer splash stays mint regardless of the selected application theme. */
+/* One independent mint palette for the outer startup screen in light and dark modes. */
+html body #splash{background:radial-gradient(circle at 50% 38%,#e2f3e8 0%,#c5e5d0 48%,#9fceb0 100%)!important;background-color:#c5e5d0!important;color:#174b3e!important}
+html body #splash .splash-mark{background:linear-gradient(145deg,#f5fcf7 0%,#d5eddd 58%,#b7dfc5 100%)!important;border:1px solid #ffffffd9!important;color:#205d46!important;box-shadow:0 0 0 10px #ffffff55,0 18px 48px #286b4d30!important}
+html body #splash .splash-word{color:#174b3e!important;-webkit-text-fill-color:#174b3e!important;text-shadow:0 2px 12px #ffffff70!important}
+html body #splash .splash-caption{color:#39775a!important;-webkit-text-fill-color:#39775a!important}
+html body #splash .splash-credit,html body #splash .splash-credit strong{color:#456f56!important;-webkit-text-fill-color:#456f56!important}
+html body #splash .splash-loader{background:#ffffffa8!important;box-shadow:0 1px 5px #286b4d12!important}
+html body #splash .splash-loader span{background:linear-gradient(90deg,#79bd91,#286b4d)!important}
+html body #splash .splash-orbit{border-color:#347b562b!important}
+html body #splash .splash-mark:after{background:linear-gradient(90deg,#5eaa7d,#286b4d)!important}
 </style>
