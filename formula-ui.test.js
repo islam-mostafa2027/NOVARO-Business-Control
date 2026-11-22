@@ -92,3 +92,12 @@ test('formula editor does not introduce database schema or privileged access cod
   assert.match(source, /storage\(\)\.loadFormulas/);
   assert.match(source, /loader\(\)\.loadCells/);
 });
+
+test('mobile formula editing opens from a long press and uses the full text keyboard', () => {
+  assert.match(source, /textarea\.setAttribute\("inputmode","text"\)/);
+  assert.match(source, /function handleCellPointerDown\(event\)/);
+  assert.match(source, /longPressTimer=root\.setTimeout/);
+  assert.match(source, /openExistingFormula\(target\)/);
+  assert.match(source, /addEventListener\("pointerdown",handleCellPointerDown,true\)/);
+  assert.match(source, /addEventListener\("contextmenu",handleCellContextMenu,true\)/);
+});
