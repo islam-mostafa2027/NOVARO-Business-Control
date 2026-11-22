@@ -316,11 +316,11 @@ body{background:#f4f5fb;color:#2d354b}.logo{position:relative;isolation:isolate;
 <style id="novaro-button-system-clean-v1">
 /* NOVARO — one rebuilt button language. All legacy button appearance rules were removed. */
 :root{
- --nv-btn-primary:var(--g,#287d6b);
- --nv-btn-primary-deep:color-mix(in srgb,var(--g,#287d6b) 78%,#000);
- --nv-btn-soft-bg:#edf3f0;
- --nv-btn-soft-text:#315f70;
- --nv-btn-border:#d5e3dc;
+ --nv-btn-primary:#287d57;
+ --nv-btn-primary-deep:#1d6548;
+ --nv-btn-soft-bg:#e5f4eb;
+ --nv-btn-soft-text:#286447;
+ --nv-btn-border:#b9dfc8;
  --nv-btn-danger-bg:#fff0f0;
  --nv-btn-danger-text:#a33e3e;
  --nv-btn-radius:12px;
@@ -463,6 +463,13 @@ a.auth-back-link:hover{background:#e3eee8!important}
  #appLayout .tabs button,.app-layout .tabs button,.tabs button{font-size:10px!important}
  #reportContent .report-actions{gap:5px!important}
  #reportContent .report-actions button{height:42px!important;min-height:42px!important;max-height:42px!important;padding:4px 3px!important;font-size:10px!important}
+}
+
+/* Dark-mode mint palette */
+:root[data-novaro-mode="dark"]{
+ --nv-btn-primary:#438d68;--nv-btn-primary-deep:#286947;
+ --nv-btn-soft-bg:#263b31;--nv-btn-soft-text:#c7efd5;--nv-btn-border:#466c59;
+ --nv-btn-danger-bg:#432c2d;--nv-btn-danger-text:#ffb8b8;
 }
 </style>
 
@@ -7507,3 +7514,22 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  modeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-novaro-mode']});
 })();
 </script>
+<style id="novaro-sales-branch-mint-v2">
+#app .sales-report-page .sales-branch-pill{position:relative!important;isolation:isolate!important;overflow:hidden!important;min-height:76px!important;padding:13px 15px!important;gap:12px!important;border:1px solid #b9dfc8!important;border-radius:17px!important;background:linear-gradient(135deg,#f4fcf7,#e5f4eb)!important;color:#204b3b!important;box-shadow:0 5px 16px #286b4d12!important;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important}
+#app .sales-report-page .sales-branch-pill:before{content:"";position:absolute;inset-inline-start:0;top:12px;bottom:12px;width:3px;border-radius:8px;background:#68bd94;pointer-events:none}
+#app .sales-report-page .sales-branch-pill:hover{transform:translateY(-2px)!important;border-color:#86cbaa!important;box-shadow:0 9px 22px #286b4d1c!important}
+#app .sales-report-page .sales-branch-pill:active{transform:scale(.985)!important}
+#app .sales-report-page .sales-branch-pill:focus-visible{outline:3px solid #75c99e!important;outline-offset:3px!important}
+#app .sales-report-page .sales-branch-icon{width:39px!important;height:39px!important;border-radius:13px!important;background:linear-gradient(145deg,#d5f0e1,#c3e8d4)!important;color:#287451!important;box-shadow:inset 0 0 0 1px #a9d9bf!important}
+#app .sales-report-page .sales-branch-copy strong{color:#204b3b!important;font-size:14px!important;font-weight:800!important}
+#app .sales-report-page .sales-branch-copy small{color:#628071!important}
+#app .sales-report-page .sales-branch-arrow{color:#438b68!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill{border-color:#466c59!important;background:linear-gradient(135deg,#263b31,#20352b)!important;color:#e4f4e9!important;box-shadow:0 7px 20px #0003!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill:before{background:#82d6a8}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill:hover{border-color:#78bd96!important;box-shadow:0 10px 24px #0005!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-icon{background:linear-gradient(145deg,#355b47,#2d4d3d)!important;color:#a9e7c2!important;box-shadow:inset 0 0 0 1px #527e64!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-copy strong{color:#e6f5eb!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-copy small{color:#b1cdbb!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-arrow{color:#9bdab4!important}
+@media(prefers-reduced-motion:reduce){#app .sales-report-page .sales-branch-pill{transition:none!important}}
+</style>
