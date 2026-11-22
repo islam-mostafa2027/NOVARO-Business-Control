@@ -8108,21 +8108,22 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   color:#216b55!important;
   -webkit-text-fill-color:#216b55!important;
 }
-/* Explicitly keep the branch/report shortcuts on the same mint, including dark mode. */
-#app .sales-report-page .sales-branch-pill,
-#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{
+/* Highest-priority shared mint identity for the six branch actions and the Shift Report action.
+   Double #app specificity intentionally overrides the older branch-card green theme in both modes. */
+#app#app .sales-report-page button.sales-branch-pill,
+#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{
   background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
   background-color:#dff5e9!important;
-  border-color:#b9dfcf!important;
+  border:1px solid #b9dfcf!important;
   color:#216b55!important;
   -webkit-text-fill-color:#216b55!important;
   box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
 }
-:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill,
-:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{
+:root[data-novaro-mode="dark"] #app#app .sales-report-page button.sales-branch-pill,
+:root[data-novaro-mode="dark"] #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{
   background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
   background-color:#dff5e9!important;
-  border-color:#b9dfcf!important;
+  border:1px solid #b9dfcf!important;
   color:#216b55!important;
   -webkit-text-fill-color:#216b55!important;
   box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
