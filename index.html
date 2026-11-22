@@ -7380,3 +7380,33 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   background:#294b3e!important;color:#edf7f1!important;border-color:#426b58!important;
 }
 </style>
+
+<style id="novaro-dark-mode-body-inline-surface-fix-v2">
+/* Cover light inline surfaces outside #app too (AI overlays, pickers and dynamically mounted dialogs). */
+:root[data-novaro-mode="dark"] body [style*="background:#fff"],
+:root[data-novaro-mode="dark"] body [style*="background: #fff"],
+:root[data-novaro-mode="dark"] body [style*="background:white"],
+:root[data-novaro-mode="dark"] body [style*="background: white"],
+:root[data-novaro-mode="dark"] body [style*="background-color:#fff"],
+:root[data-novaro-mode="dark"] body [style*="background-color: #fff"],
+:root[data-novaro-mode="dark"] body [style*="background-color:white"],
+:root[data-novaro-mode="dark"] body [style*="background-color: white"]{
+ background:#202f28!important;background-color:#202f28!important;background-image:none!important;
+ color:#e5eee9!important;border-color:#40564a!important;
+}
+/* QR/barcode images remain on a white print-safe surface for scanning. */
+:root[data-novaro-mode="dark"] body :is(.item-qrcode,.item-barcode,[class*="qr-code"],[class*="barcode"]){
+ background:#f4f8f5!important;color:#20372f!important;border-color:#dce8e1!important;
+}
+/* Light-colored modal and overlay shells mounted directly under body. */
+:root[data-novaro-mode="dark"] body :is(
+ #novaroImageSource,#novaroScanner,#novaroItemDetails,
+ [role="dialog"],[aria-modal="true"],.modal,.modal-content,.dialog,.dialog-content,
+ .dropdown-menu,.popover-content,.sheet,.bottom-sheet,.toast
+):not([class*="print"]):not([id*="print"]){
+ background-color:#202f28!important;background-image:none!important;color:#e5eee9!important;border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] body :is([role="dialog"],[aria-modal="true"],.modal,.modal-content,.dialog,.dialog-content,.sheet,.bottom-sheet) :is(h1,h2,h3,h4,p,span,strong,b,label,small){
+ color:inherit!important;-webkit-text-fill-color:currentColor!important;
+}
+</style>
