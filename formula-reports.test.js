@@ -52,3 +52,10 @@ test('sales report print output uses the original input values', () => {
     /copy\.querySelectorAll\("input,textarea,select"\)\.forEach\(field=>\{const span=document\.createElement\("span"\);span\.className="print-sales-value";span\.textContent=field\.value\|\|"—";/
   );
 });
+
+test('formula refresh runs after sales month values and daily tip rows finish loading', () => {
+  assert.match(
+    html,
+    /await dailyTipLoad\\(\\);[\\s\\S]*?window\\.NOVAROFormulaUI\\?\\.refresh\\?\\.\\(\\);/
+  );
+});
