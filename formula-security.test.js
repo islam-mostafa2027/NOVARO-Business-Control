@@ -14,3 +14,5 @@ test('formula storage removes broad insert and update grants', () => {
   assert.match(migration, /grant update \\(formula\\)[\\s\\S]*?to authenticated/i);
   assert.doesNotMatch(migration, /grant all on table public\\.formula_cells/i);
 });
+
+// Regression guard for the applied production grants migration.
