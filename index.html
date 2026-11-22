@@ -2220,47 +2220,36 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 </style>
 
 
-<style id="novaro-header-mint-final-v2">
-/* Force mint styling on the four shortcuts beside language and the envelope button. */
-#app .app-header .header-icon-row>button#openDevices,
-#app .app-header .header-icon-row>button#openSettings,
+<style id="novaro-header-mint-final-v2">#app .app-header .header-icon-row>button#openSettings,
 #app .app-header .header-icon-row>button#openAbout,
-#app .app-header .notification-bell {
+#app .app-header .notification-bell{
   background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
   background-color:#e5f5ec!important;
   border:1px solid #b9dfcf!important;
   color:#216b55!important;
   -webkit-text-fill-color:#216b55!important;
   box-shadow:0 4px 14px rgba(34,112,83,.12)!important;
-}
-#app .app-header .header-icon-row>button#openDevices svg,
-#app .app-header .header-icon-row>button#openSettings svg,
+}#app .app-header .header-icon-row>button#openSettings svg,
 #app .app-header .header-icon-row>button#openAbout svg,
-#app .app-header .notification-bell svg {
+#app .app-header .notification-bell svg{
   color:inherit!important;stroke:currentColor!important;
-}
-#app .app-header .header-icon-row>button#openDevices:hover,
-#app .app-header .header-icon-row>button#openSettings:hover,
+}#app .app-header .header-icon-row>button#openSettings:hover,
 #app .app-header .header-icon-row>button#openAbout:hover,
-#app .app-header .notification-bell:hover {
+#app .app-header .notification-bell:hover{
   background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
   border-color:#91cdb3!important;
-}
-:root[data-novaro-mode="dark"] #app .app-header .header-icon-row>button#openDevices,
-:root[data-novaro-mode="dark"] #app .app-header .header-icon-row>button#openSettings,
+}:root[data-novaro-mode="dark"] #app .app-header .header-icon-row>button#openSettings,
 :root[data-novaro-mode="dark"] #app .app-header .header-icon-row>button#openAbout,
-:root[data-novaro-mode="dark"] #app .app-header .notification-bell {
+:root[data-novaro-mode="dark"] #app .app-header .notification-bell{
   background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
   background-color:#285f4e!important;
   border-color:#548f79!important;
   color:#effff6!important;
   -webkit-text-fill-color:#effff6!important;
   box-shadow:0 4px 14px rgba(0,0,0,.2)!important;
-}
-:root[data-novaro-mode="dark"] #app .app-header .header-icon-row>button#openDevices:hover,
-:root[data-novaro-mode="dark"] #app .app-header .header-icon-row>button#openSettings:hover,
+}:root[data-novaro-mode="dark"] #app .app-header .header-icon-row>button#openSettings:hover,
 :root[data-novaro-mode="dark"] #app .app-header .header-icon-row>button#openAbout:hover,
-:root[data-novaro-mode="dark"] #app .app-header .notification-bell:hover {
+:root[data-novaro-mode="dark"] #app .app-header .notification-bell:hover{
   background:linear-gradient(145deg,#32745f 0%,#285d4d 100%)!important;
   border-color:#70b596!important;
 }
@@ -2309,6 +2298,41 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 :root[data-novaro-mode="dark"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell svg,
 :root[data-novaro-mode="dark"] #app .app-header #novaroAuditBell.notification-bell svg{
  color:#effff5!important;stroke:#effff5!important;
+}
+</style>
+
+
+<style id="novaro-open-devices-theme">
+/* Device Management button: dedicated light/dark palette only. */
+html[data-novaro-mode="light"] body #app .app-header #openDevices {
+  background:#e5f5ec!important;
+  background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+  border:1px solid #b9dfcf!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+}
+html[data-novaro-mode="light"] body #app .app-header #openDevices svg,
+html[data-novaro-mode="light"] body #app .app-header #openDevices .header-icon-label {
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  stroke:#216b55!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header #openDevices {
+  background:#244b3c!important;
+  background-image:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
+  border:1px solid #548f79!important;
+  color:#effff6!important;
+  -webkit-text-fill-color:#effff6!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header #openDevices svg,
+html[data-novaro-mode="dark"] body #app .app-header #openDevices .header-icon-label {
+  color:#effff6!important;
+  -webkit-text-fill-color:#effff6!important;
+  stroke:#effff6!important;
+  opacity:1!important;
+  visibility:visible!important;
 }
 </style>
 
@@ -3000,10 +3024,30 @@ function novaroApplyColorMode(p){
  let style=document.getElementById("novaro-color-mode-style");
  if(!style){style=document.createElement("style");style.id="novaro-color-mode-style";document.head.appendChild(style);}
  let colorModeCss=":root[data-novaro-mode=\"dark\"]{color-scheme:dark;background-color:#19251f;--bg:#19251f;--ink:#e5eee9;--muted:#a5b5ac;--line:#35483e;--mint:#293f35;--deep:#102c25;--accent:#9ed7bf}\n:root[data-novaro-mode=\"dark\"] body{background-color:#19251f!important;background:radial-gradient(ellipse at 8% 0%,#263a30 0,transparent 34%),linear-gradient(180deg,#1b2922 0%,#19251f 100%)!important;color:#e5eee9!important}\n:root[data-novaro-mode=\"dark\"] #app,:root[data-novaro-mode=\"dark\"] #app>.wrap{background:transparent!important;color:#e5eee9!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header,:root[data-novaro-mode=\"dark\"] #app .tabs,:root[data-novaro-mode=\"dark\"] #app .card,:root[data-novaro-mode=\"dark\"] #app .branch-panel,:root[data-novaro-mode=\"dark\"] #app .branch-card,:root[data-novaro-mode=\"dark\"] #app .kpi-card,:root[data-novaro-mode=\"dark\"] #app .tablewrap,:root[data-novaro-mode=\"dark\"] #app .sound-picker-panel,:root[data-novaro-mode=\"dark\"] #app .dashboard-row,:root[data-novaro-mode=\"dark\"] #app .notification-toast{background:#202f28!important;background-image:none!important;border-color:#394d42!important;color:#e5eee9!important;box-shadow:0 8px 26px #00000020!important}\n:root[data-novaro-mode=\"dark\"] #app .tabs{background:#26372f!important}\n:root[data-novaro-mode=\"dark\"] #app .tabs button:not(.active){background:transparent!important;color:#c1d0c7!important}\n:root[data-novaro-mode=\"dark\"] #app .tabs button.active{color:#fff!important}\n:root[data-novaro-mode=\"dark\"] #app .muted,:root[data-novaro-mode=\"dark\"] #app label,:root[data-novaro-mode=\"dark\"] #app small,:root[data-novaro-mode=\"dark\"] #app th,:root[data-novaro-mode=\"dark\"] #app .field label{color:#a9b9b0!important}\n:root[data-novaro-mode=\"dark\"] #app h1,:root[data-novaro-mode=\"dark\"] #app h2,:root[data-novaro-mode=\"dark\"] #app h3,:root[data-novaro-mode=\"dark\"] #app h4,:root[data-novaro-mode=\"dark\"] #app p,:root[data-novaro-mode=\"dark\"] #app strong,:root[data-novaro-mode=\"dark\"] #app b,:root[data-novaro-mode=\"dark\"] #app td{color:#e3ece7}\n:root[data-novaro-mode=\"dark\"] #app input:not([type=\"range\"]),:root[data-novaro-mode=\"dark\"] #app select,:root[data-novaro-mode=\"dark\"] #app textarea{background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important;color-scheme:dark}\n:root[data-novaro-mode=\"dark\"] #app input::placeholder,:root[data-novaro-mode=\"dark\"] #app textarea::placeholder{color:#8fa398!important}\n:root[data-novaro-mode=\"dark\"] #app th{background:#26372f!important;border-color:#394d42!important}\n:root[data-novaro-mode=\"dark\"] #app td,:root[data-novaro-mode=\"dark\"] #app tr{border-color:#35483e!important}\n:root[data-novaro-mode=\"dark\"] #app tbody tr:hover{background:#293b32!important}\n:root[data-novaro-mode=\"dark\"] #app .stat-card:after{background:#2b4438!important}\n:root[data-novaro-mode=\"dark\"] #app .branch-symbol{background:#2a4538!important;color:#a8d9bf!important}\n:root[data-novaro-mode=\"dark\"] #app button.sound-choice.selected{background:#315b49!important;color:#fff!important}\n:root[data-novaro-mode=\"dark\"] #app .settings-swatches button{border-color:#d5e3dc!important}\n:root[data-novaro-mode=\"dark\"] .auth-panel,:root[data-novaro-mode=\"dark\"] .auth-panel .auth-note{background:#202f28!important;color:#e5eee9!important;border-color:#394d42!important}\n:root[data-novaro-mode=\"dark\"] .auth-form-wrap h2,:root[data-novaro-mode=\"dark\"] .auth-panel label{color:#e5eee9!important}\n:root[data-novaro-mode=\"dark\"] .auth-form-wrap .field input{background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important}\n:root[data-novaro-mode=\"dark\"] #novaro-ai-panel,:root[data-novaro-mode=\"dark\"] #novaro-ai-log{background:#202f28!important;color:#e5eee9!important;border-color:#394d42!important}\n:root[data-novaro-mode=\"dark\"] #novaro-ai-input{background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important}" + "\n/* App-wide dark-mode surface coverage: cards, capsules, panels, dialogs and controls. */\n:root[data-novaro-mode=\"dark\"]{\n --surface:#202f28!important;--surface-soft:#26382f!important;\n --surface-2:#293b33!important;--border:#40564a!important;\n --line:#40564a!important;--mint:#293f35!important;\n}\n:root[data-novaro-mode=\"dark\"] #app :is(\n [class*=\"capsule\"],[class*=\"pill\"],[class*=\"tile\"],[class*=\"metric\"],\n [class*=\"panel\"],[class*=\"card\"],[class*=\"summary\"],[class*=\"section\"],\n [class*=\"group-card\"],[class*=\"detail-card\"],[class*=\"info-box\"],\n [class*=\"modal\"],[class*=\"dialog\"],[class*=\"dropdown\"],[class*=\"popover\"],\n [class*=\"picker\"],[class*=\"well\"],[class*=\"surface\"],[class*=\"tablewrap\"]\n):not(.auth-visual):not(.logo):not(.nav-icon){\n background-color:#202f28!important;\n background-image:none!important;\n border-color:#40564a!important;\n color:#e5eee9!important;\n box-shadow:0 5px 18px #00000018!important;\n}\n:root[data-novaro-mode=\"dark\"] #app :is(\n [class*=\"capsule\"],[class*=\"pill\"],[class*=\"tile\"],[class*=\"metric\"],\n [class*=\"panel\"],[class*=\"card\"],[class*=\"summary\"],[class*=\"section\"],\n [class*=\"group-card\"],[class*=\"detail-card\"],[class*=\"info-box\"],\n [class*=\"modal\"],[class*=\"dialog\"],[class*=\"dropdown\"],[class*=\"popover\"],\n [class*=\"picker\"],[class*=\"well\"],[class*=\"surface\"]\n) :is(h1,h2,h3,h4,p,span,strong,b,label,small,em){\n color:inherit;\n -webkit-text-fill-color:currentColor;\n}\n:root[data-novaro-mode=\"dark\"] #app :is(\n input:not([type=\"checkbox\"]):not([type=\"radio\"]):not([type=\"range\"]),\n select,textarea\n){\n background:#18251f!important;color:#e5eee9!important;\n border-color:#40564a!important;color-scheme:dark;\n}\n:root[data-novaro-mode=\"dark\"] #app :is(\n input,textarea\n)::placeholder{color:#91a69a!important;opacity:1!important}\n:root[data-novaro-mode=\"dark\"] #app :is(\n table,thead,tbody,tfoot,th,td\n){border-color:#40564a!important}\n:root[data-novaro-mode=\"dark\"] #app :is(\n th,[class*=\"table-head\"],[class*=\"list-head\"],[class*=\"toolbar\"]\n){background:#26382f!important;color:#cbd9d1!important}\n:root[data-novaro-mode=\"dark\"] #app tbody tr:nth-child(even){\n background-color:#22332b!important}\n:root[data-novaro-mode=\"dark\"] #app tbody tr:hover{\n background-color:#2b4035!important}\n:root[data-novaro-mode=\"dark\"] #app [style*=\"background:#fff\"],\n:root[data-novaro-mode=\"dark\"] #app [style*=\"background: #fff\"],\n:root[data-novaro-mode=\"dark\"] #app [style*=\"background:white\"],\n:root[data-novaro-mode=\"dark\"] #app [style*=\"background: white\"],\n:root[data-novaro-mode=\"dark\"] #app [style*=\"background-color:#fff\"],\n:root[data-novaro-mode=\"dark\"] #app [style*=\"background-color: #fff\"],\n:root[data-novaro-mode=\"dark\"] #app [style*=\"background-color:white\"],\n:root[data-novaro-mode=\"dark\"] #app [style*=\"background-color: white\"]{\n background:#202f28!important;background-image:none!important;\n color:#e5eee9!important;border-color:#40564a!important;\n}\n:root[data-novaro-mode=\"dark\"] #app :is(\n .muted,.hint,.help-text,.field-hint,.empty,[class*=\"subtitle\"],[class*=\"description\"]\n){color:#a9b9b0!important}\n:root[data-novaro-mode=\"dark\"] #app :is(\n button.soft,button.secondary,button.ghost,[class*=\"secondary-button\"],\n [class*=\"outline-button\"],[class*=\"ghost-button\"]\n){\n background:#2b3d33!important;background-image:none!important;\n color:#dce9e1!important;border-color:#40564a!important;\n}\n:root[data-novaro-mode=\"dark\"] :is(\n .modal,.modal-content,.dialog,.dialog-content,[role=\"dialog\"],\n .dropdown-menu,.popover-content\n){background:#202f28!important;color:#e5eee9!important;border-color:#40564a!important}\n";
- colorModeCss += "\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openDevices,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openSettings,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openAbout,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell {background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;background-color:#285f4e!important;border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 4px 14px rgba(0,0,0,.2)!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openDevices svg,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openSettings svg,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openAbout svg,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell svg,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openDevices .header-icon-label,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openSettings .header-icon-label,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openAbout .header-icon-label {color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#logout.logout-control {background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 3px 12px #0005!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#logout.logout-control svg,:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#logout.logout-control span {color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important}";
+ colorModeCss += "\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openSettings,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openAbout,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell{background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;background-color:#285f4e!important;border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 4px 14px rgba(0,0,0,.2)!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openSettings svg,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openAbout svg,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell svg,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openSettings .header-icon-label,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#openAbout .header-icon-label{color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#logout.logout-control {background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 3px 12px #0005!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#logout.logout-control svg,:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row>button#logout.logout-control span {color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important}";
  
 
- colorModeCss += "\n/* Header controls: explicit readable colors in both modes. */\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openDevices,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #logout,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell {background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;box-shadow:0 4px 14px rgba(34,112,83,.12)!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openDevices,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #logout,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell {background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;background-color:#285f4e!important;border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 4px 14px rgba(0,0,0,.2)!important}\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openDevices .header-icon-label,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings .header-icon-label,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout .header-icon-label,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #logout span {display:block!important;visibility:visible!important;opacity:1!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openDevices .header-icon-label,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings .header-icon-label,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout .header-icon-label,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #logout span {display:block!important;visibility:visible!important;opacity:1!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important}\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openDevices svg,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings svg,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout svg,\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell svg {color:#216b55!important;stroke:#216b55!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openDevices svg,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings svg,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout svg,\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell svg {color:#effff6!important;stroke:#effff6!important}\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell .notification-badge {background:#e65f72!important;color:#fff!important;-webkit-text-fill-color:#fff!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell .notification-badge {background:#e65f72!important;color:#fff!important;-webkit-text-fill-color:#fff!important}\n/* Isolated theme treatment for Device Management only. */\n:root[data-novaro-mode=\"light\"] #app .app-header button#openDevices {background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header button#openDevices {background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;background-color:#285f4e!important;border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important}\n:root[data-novaro-mode=\"light\"] #app .app-header button#openDevices .header-icon-label,:root[data-novaro-mode=\"light\"] #app .app-header button#openDevices svg {display:block!important;visibility:visible!important;opacity:1!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;stroke:#216b55!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header button#openDevices .header-icon-label,:root[data-novaro-mode=\"dark\"] #app .app-header button#openDevices svg {display:block!important;visibility:visible!important;opacity:1!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important}";;
+ colorModeCss += "\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings,
+\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout,
+\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #logout,
+\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell{background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;box-shadow:0 4px 14px rgba(34,112,83,.12)!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #logout,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell{background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;background-color:#285f4e!important;border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 4px 14px rgba(0,0,0,.2)!important}\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings .header-icon-label,
+\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout .header-icon-label,
+\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #logout span{display:block!important;visibility:visible!important;opacity:1!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings .header-icon-label,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout .header-icon-label,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #logout span{display:block!important;visibility:visible!important;opacity:1!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important}\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings svg,
+\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout svg,
+\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell svg{color:#216b55!important;stroke:#216b55!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openSettings svg,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-icon-row > #openAbout svg,
+\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell svg{color:#effff6!important;stroke:#effff6!important}\n:root[data-novaro-mode=\"light\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell .notification-badge {background:#e65f72!important;color:#fff!important;-webkit-text-fill-color:#fff!important}\n:root[data-novaro-mode=\"dark\"] #app .app-header.novaro-header-column .header-clock-panel #novaroAuditBell .notification-badge {background:#e65f72!important;color:#fff!important;-webkit-text-fill-color:#fff!important}";;
  if(style.textContent!==colorModeCss)style.textContent=colorModeCss;
  const meta=document.querySelector('meta[name="theme-color"]');
  const nextThemeColor=mode==="dark"?"#19251f":(novaroThemeMap()[p.theme]||novaroThemeMap().default)[1];
@@ -8219,34 +8263,24 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #login.auth-shell .auth-subtitle {color:#b8c9bf!important}
 :root[data-novaro-mode="dark"] #login.auth-shell .mini-mark,
 :root[data-novaro-mode="dark"] #login.auth-shell .visual-mark {background:#2b493a!important;border-color:#527762!important;color:#e5f4eb!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-note {background:#26382f!important;color:#b8c9bf!important}
-/* Splash colors are owned by the early light/dark first-paint rules above. */
-/* Final header-only contrast fix. Kept last so earlier theme/button rules cannot override it. */
-html[data-novaro-mode="light"] body #app .app-header button#openDevices,
-html[data-novaro-mode="light"] body #app .app-header button#openSettings,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-note {background:#26382f!important;color:#b8c9bf!important}html[data-novaro-mode="light"] body #app .app-header button#openSettings,
 html[data-novaro-mode="light"] body #app .app-header button#openAbout,
 html[data-novaro-mode="light"] body #app .app-header button#logout,
 html[data-novaro-mode="light"] body #app .app-header button#novaroAuditBell{
  background:#e5f5ec!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
  border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header button#openDevices,
-html[data-novaro-mode="dark"] body #app .app-header button#openSettings,
+}html[data-novaro-mode="dark"] body #app .app-header button#openSettings,
 html[data-novaro-mode="dark"] body #app .app-header button#openAbout,
 html[data-novaro-mode="dark"] body #app .app-header button#logout,
 html[data-novaro-mode="dark"] body #app .app-header button#novaroAuditBell{
  background:#244b3c!important;background-image:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
  border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
-}
-html[data-novaro-mode="light"] body #app .app-header button#openDevices *,
-html[data-novaro-mode="light"] body #app .app-header button#openSettings *,
+}html[data-novaro-mode="light"] body #app .app-header button#openSettings *,
 html[data-novaro-mode="light"] body #app .app-header button#openAbout *,
 html[data-novaro-mode="light"] body #app .app-header button#logout *,
 html[data-novaro-mode="light"] body #app .app-header button#novaroAuditBell svg{
  color:#216b55!important;-webkit-text-fill-color:#216b55!important;stroke:#216b55!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header button#openDevices *,
-html[data-novaro-mode="dark"] body #app .app-header button#openSettings *,
+}html[data-novaro-mode="dark"] body #app .app-header button#openSettings *,
 html[data-novaro-mode="dark"] body #app .app-header button#openAbout *,
 html[data-novaro-mode="dark"] body #app .app-header button#logout *,
 html[data-novaro-mode="dark"] body #app .app-header button#novaroAuditBell svg{
