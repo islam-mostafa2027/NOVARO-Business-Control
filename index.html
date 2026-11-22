@@ -8,7 +8,8 @@
 <meta property="og:url" content="https://islam-mostafa2027.github.io/NOVARO-Business-Control/">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NOVARO Business Control">
-<meta name="twitter:description" content="منصة ذكية لإدارة ومراقبة أعمال المطاعم والفروع — المخزون والجرد والتشغيل."><style>
+<meta name="twitter:description" content="منصة ذكية لإدارة ومراقبة أعمال المطاعم والفروع — المخزون والجرد والتشغيل.">
+<script id="novaro-early-appearance-bootstrap">(function(){try{var p=JSON.parse(localStorage.getItem("novaro-ui-preferences")||"{}");var dark=p&&p.appearance==="dark";if(dark){document.documentElement.setAttribute("data-novaro-mode","dark");var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content","#19251f");}}catch(e){}})();</script><style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');:root{--g:#287d6b;--bg:#f3f7f5;--ink:#263a35;--muted:#71817c;--line:#e2ebe7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Tahoma,Arial}input,select{font:inherit}.wrap{max-width:1050px;margin:auto;padding:16px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:17px;margin:12px 0;box-shadow:0 5px 20px #173d3010}.brand{display:flex;align-items:center;gap:12px}.logo{background:var(--g);color:white;border-radius:13px;padding:12px;font-weight:800}.muted{color:var(--muted)}.hidden{display:none!important}.login{max-width:420px;margin:9vh auto}.field{margin:12px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:white}.tabs{display:flex;gap:8px;overflow:auto;padding:8px 0}.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat b{display:block;font-size:26px;margin-top:5px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:500px}td,th{text-align:right;padding:11px;border-bottom:1px solid var(--line);font-size:14px}th{color:var(--muted)}.error{color:#b43f3f;white-space:pre-wrap}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.empty{padding:25px;text-align:center;color:var(--muted)}@media(max-width:600px){.wrap{padding:10px}.stats{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}}/* NOVARO refined interface */
 :root{--g:#287d6b;--bg:#f4f8f6;--ink:#243b34;--muted:#71827c;--line:#e1ebe6}body{font-family:Inter,system-ui,"Segoe UI",Tahoma,Arial,sans-serif;letter-spacing:.01em}.wrap{max-width:1180px;padding:20px}header.row{position:sticky;top:0;z-index:20;background:rgba(244,248,246,.94);backdrop-filter:blur(12px);padding:12px 14px;border:1px solid #e4eee9;border-radius:16px;margin:0 0 14px;box-shadow:0 8px 28px #173d300a}.logo{min-width:44px;min-height:44px;display:grid;place-items:center;box-shadow:0 5px 14px #287d6b25}.card{border-radius:18px;padding:20px;box-shadow:0 8px 28px #173d300c;transition:box-shadow .22s ease,transform .22s ease}.card:hover{box-shadow:0 12px 32px #173d3014}.tabs{gap:9px;padding:10px 2px 14px;scrollbar-width:thin}.field input,.field select,input,select{transition:border-color .18s ease,box-shadow .18s ease}.field input:focus,.field select:focus,input:focus,select:focus{outline:none;border-color:#72b4a1;box-shadow:0 0 0 3px #287d6b18}table{border-spacing:0}th{background:#f7faf8;font-weight:700}td,th{padding:13px 12px}tbody tr{transition:background .16s ease}tbody tr:hover{background:#f7fbf9}#main.page-enter{animation:novaroPageIn .28s cubic-bezier(.2,.75,.25,1) both}
 @keyframes novaroPageIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
@@ -8173,4 +8174,72 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   color:#fff!important;
   -webkit-text-fill-color:#fff!important;
 }
+
+/* NOVARO complete dark-mode finishing pass: every interactive control and surface. */
+:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):not(.logout-control):not(#logout):not(#novaro-ai-launcher),
+:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):not(.logout-control):not(#logout):not(#novaro-ai-launcher),
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link {
+ background:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
+ background-color:#263e33!important;
+ background-image:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
+ border-color:#527762!important;
+ color:#e5f4eb!important;
+ -webkit-text-fill-color:#e5f4eb!important;
+ box-shadow:0 4px 14px #00000030!important;
+}
+:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):not(.logout-control):not(#logout):not(#novaro-ai-launcher):hover,
+:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):not(.logout-control):not(#logout):not(#novaro-ai-launcher):hover,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover {
+ background:linear-gradient(145deg,#3b604c 0%,#304e3e 100%)!important;
+ background-image:linear-gradient(145deg,#3b604c 0%,#304e3e 100%)!important;
+ border-color:#75a98a!important;color:#f4fff8!important;-webkit-text-fill-color:#f4fff8!important;
+}
+:root[data-novaro-mode="dark"] #app#app .sales-report-page button.sales-branch-pill,
+:root[data-novaro-mode="dark"] #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill {
+ background:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
+ background-color:#263e33!important;
+ border:1px solid #527762!important;
+ color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important;
+ box-shadow:0 4px 14px #00000030!important;
+}
+:root[data-novaro-mode="dark"] #app :is(button,input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+ color-scheme:dark;
+}
+:root[data-novaro-mode="dark"] #app :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+:root[data-novaro-mode="dark"] #login.auth-shell input:not([type="checkbox"]):not([type="radio"]) {
+ background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important;
+ -webkit-text-fill-color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] #app input::placeholder,
+:root[data-novaro-mode="dark"] #app textarea::placeholder,
+:root[data-novaro-mode="dark"] #login.auth-shell input::placeholder {color:#91a69a!important;-webkit-text-fill-color:#91a69a!important;opacity:1!important}
+:root[data-novaro-mode="dark"] #app :is(button.danger,button.delete,button.btn-danger,button.delete-btn,button.branch-delete-btn,.danger,.delete,.btn-danger) {
+ background:#482d30!important;border-color:#815055!important;color:#ffdadd!important;-webkit-text-fill-color:#ffdadd!important;
+}
+:root[data-novaro-mode="dark"] #app :is(.app-header .header-icon-button,.app-header .language-toggle-capsule,.app-header .logout-control,.app-header #logout) {
+ background:#2b3d33!important;border-color:#496858!important;color:#dce9e1!important;-webkit-text-fill-color:#dce9e1!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-panel,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-note {
+ background:#202f28!important;color:#e5eee9!important;border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual {
+ background:linear-gradient(145deg,#263f34 0%,#1d332a 58%,#172820 100%)!important;
+ color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual :is(.visual-brand,.visual-copy h1,.visual-copy p,.visual-foot,.eyebrow),
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-mini-brand,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-form-wrap h2,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-subtitle,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-panel label {color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual .visual-copy h1 em {color:#a9d9bf!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual .visual-copy p,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-mini-brand small,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-subtitle {color:#b8c9bf!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .mini-mark,
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-mark {background:#2b493a!important;border-color:#527762!important;color:#e5f4eb!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-note {background:#26382f!important;color:#b8c9bf!important}
+:root[data-novaro-mode="dark"] #splash {background:radial-gradient(circle at 50% 40%,#263f34 0%,#1d332a 52%,#14251d 100%)!important;color:#effaf3!important}
 </style>
