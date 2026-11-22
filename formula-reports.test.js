@@ -20,7 +20,7 @@ test('all five inline application scripts remain syntactically valid', () => {
 test('saved sales snapshots remove formula controls before storing HTML', () => {
   assert.match(
     html,
-    /const clone=snapshotRoot\.cloneNode\(true\);[\s\S]*?clone\.querySelectorAll\("\.novaro-fx-wrap"\)\.forEach\(node=>node\.remove\(\)\);/
+    /const clone=snapshotRoot\.cloneNode\(true\);[\s\S]*?clone\.querySelectorAll\("\.novaro-fx-wrap,\.novaro-fx-display"\)\.forEach\(node=>node\.remove\(\)\);/
   );
   assert.match(html, /snapshot_html:clone\.outerHTML/);
 });
@@ -28,14 +28,14 @@ test('saved sales snapshots remove formula controls before storing HTML', () => 
 test('saved snapshot metadata excludes formula buttons and result text', () => {
   assert.match(
     html,
-    /const cleanCell=cell\.cloneNode\(true\);[\s\S]*?cleanCell\.querySelectorAll\("\.novaro-fx-wrap"\)\.forEach\(node=>node\.remove\(\)\);[\s\S]*?text:cleanCell\.innerText\.trim\(\)/
+    /const cleanCell=cell\.cloneNode\(true\);[\s\S]*?cleanCell\.querySelectorAll\("\.novaro-fx-wrap,\.novaro-fx-display"\)\.forEach\(node=>node\.remove\(\)\);[\s\S]*?text:cleanCell\.innerText\.trim\(\)/
   );
 });
 
 test('sales report print copy removes formula controls before printing', () => {
   assert.match(
     html,
-    /const copy=report\.cloneNode\(true\);[\s\S]*?copy\.querySelectorAll\("\.novaro-fx-wrap"\)\.forEach\(node=>node\.remove\(\)\);/
+    /const copy=report\.cloneNode\(true\);[\s\S]*?copy\.querySelectorAll\("\.novaro-fx-wrap,\.novaro-fx-display"\)\.forEach\(node=>node\.remove\(\)\);/
   );
 });
 
