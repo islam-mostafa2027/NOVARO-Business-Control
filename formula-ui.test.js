@@ -136,7 +136,7 @@ function bootFormulaUiWithVisibleCell(failLoad = false) {
     hidden: false,
     textContent: '= 123',
     title: '',
-    classList: { toggle() {}, remove() {} }
+    classList: { toggle() {}, remove() {}, add() {} }
   };
   const button = { textContent: 'ƒx' };
   const wrap = {
