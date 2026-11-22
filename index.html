@@ -7550,3 +7550,82 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
   display:none!important;
 }
 </style>
+
+
+<style id="novaro-headcount-branch-mint-match-operations-v1">
+/* Match the two Headcount branch selectors to the Operations branch-card identity. */
+#app .headcount-page-card .headcount-branch-pill{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  min-height:76px!important;
+  padding:13px 15px!important;
+  gap:12px!important;
+  border:1px solid #b9dfc8!important;
+  border-radius:17px!important;
+  background:linear-gradient(135deg,#f4fcf7,#e5f4eb)!important;
+  color:#204b3b!important;
+  box-shadow:0 5px 16px #286b4d12!important;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important;
+}
+#app .headcount-page-card .headcount-branch-pill:before{
+  content:"";
+  position:absolute;
+  inset-inline-start:0;
+  top:12px;
+  bottom:12px;
+  width:3px;
+  border-radius:8px;
+  background:#68bd94;
+  pointer-events:none;
+}
+#app .headcount-page-card .headcount-branch-pill:hover{
+  transform:translateY(-2px)!important;
+  border-color:#86cbaa!important;
+  box-shadow:0 9px 22px #286b4d1c!important;
+}
+#app .headcount-page-card .headcount-branch-pill:active{transform:scale(.985)!important}
+#app .headcount-page-card .headcount-branch-pill:focus-visible{
+  outline:3px solid #75c99e!important;
+  outline-offset:3px!important;
+}
+#app .headcount-page-card .headcount-branch-icon{
+  width:39px!important;
+  height:39px!important;
+  border-radius:13px!important;
+  background:linear-gradient(145deg,#d5f0e1,#c3e8d4)!important;
+  color:#287451!important;
+  box-shadow:inset 0 0 0 1px #a9d9bf!important;
+}
+#app .headcount-page-card .headcount-branch-arrow{color:#438b68!important}
+:root[data-novaro-mode="dark"] #app .headcount-page-card .headcount-branch-pill{
+  border-color:#466c59!important;
+  background:linear-gradient(135deg,#263b31,#20352b)!important;
+  color:#e4f4e9!important;
+  box-shadow:0 7px 20px #0003!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-page-card .headcount-branch-pill:before{background:#82d6a8}
+:root[data-novaro-mode="dark"] #app .headcount-page-card .headcount-branch-pill:hover{
+  border-color:#78bd96!important;
+  box-shadow:0 10px 24px #0005!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-page-card .headcount-branch-icon{
+  background:linear-gradient(145deg,#355b47,#2d4d3d)!important;
+  color:#a9e7c2!important;
+  box-shadow:inset 0 0 0 1px #527e64!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-page-card .headcount-branch-arrow{color:#9bdab4!important}
+@media(max-width:600px){
+  #app .headcount-page-card .headcount-branch-pill{
+    min-height:64px!important;
+    padding:7px!important;
+    gap:6px!important;
+  }
+  #app .headcount-page-card .headcount-branch-icon{
+    width:24px!important;height:24px!important;font-size:13px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #app .headcount-page-card .headcount-branch-pill{transition:none!important}
+}
+</style>
