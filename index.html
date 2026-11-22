@@ -8430,21 +8430,24 @@ html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header
 }
 
 
-/* Language toggle: flat, muted finish matching adjacent header buttons. */
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp:is(:hover,:focus,:focus-visible,:active) {
-  background:#e7f0eb!important;
+/* Language button: use the exact shared soft-button palette and neutralize the generic focused/selected glow. */
+html[data-novaro-mode] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
+html[data-novaro-mode] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp:hover,
+html[data-novaro-mode] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp:focus,
+html[data-novaro-mode] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp:focus-visible,
+html[data-novaro-mode] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp:active,
+html[data-novaro-mode] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp.selected,
+html[data-novaro-mode] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp.active,
+html[data-novaro-mode] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp[aria-pressed="true"] {
+  background:var(--nv-btn-soft-bg)!important;
+  background-color:var(--nv-btn-soft-bg)!important;
   background-image:none!important;
-  border:1px solid #b9cfc3!important;
+  color:var(--nv-btn-soft-text)!important;
+  -webkit-text-fill-color:var(--nv-btn-soft-text)!important;
+  border:1px solid var(--nv-btn-border)!important;
   box-shadow:none!important;
+  outline:none!important;
   filter:none!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp:is(:hover,:focus,:focus-visible,:active) {
-  background:#203b2e!important;
-  background-image:none!important;
-  border:1px solid #496858!important;
-  box-shadow:none!important;
-  filter:none!important;
+  transform:none!important;
 }
 </style>
