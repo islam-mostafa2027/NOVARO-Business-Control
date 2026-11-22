@@ -3530,7 +3530,11 @@ document.addEventListener("click",async e=>{
    const upperMetrics=Array.from(snapshotRoot.querySelectorAll(".sales-month-card [data-sales-metric]")).map(field=>({key:field.dataset.salesMetric,value:field.value??""}));
    const table=snapshotRoot.querySelector(".sales-statistics-table");
    const tableHeaders=Array.from(table.querySelectorAll("thead th")).map(cell=>cell.innerText.trim());
-   const tableRows=Array.from(table.querySelectorAll("tbody tr,tfoot tr")).map(row=>Array.from(row.cells).map(cell=>({text:cell.innerText.trim(),values:Array.from(cell.querySelectorAll("input")).map(field=>field.value??"")})));
+   const tableRows=Array.from(table.querySelectorAll("tbody tr,tfoot tr")).map(row=>Array.from(row.cells).map(cell=>{
+     const cleanCell=cell.cloneNode(true);
+     cleanCell.querySelectorAll(".novaro-fx-wrap").forEach(node=>node.remove());
+     return {text:cleanCell.innerText.trim(),values:Array.from(cell.querySelectorAll("input")).map(field=>field.value??"")};
+    }));
    const snapshotData={version:1,branchId:branch.id,branchName:nameOf(branch),branchAddress:branchLocationOf(branch),reportMonth:month,reportDate,savedAt:now.toISOString(),language,upperCardMetrics:upperMetrics,tableHeaders,tableRows};
    const saved=await db.from("sales_report_page_snapshots").insert({branch_id:branch.id,branch_name:nameOf(branch),report_month:month,report_date:reportDate,snapshot_html:clone.outerHTML,snapshot_data:snapshotData,created_by:user.id}).select("id").single();
    if(saved.error)throw saved.error;
