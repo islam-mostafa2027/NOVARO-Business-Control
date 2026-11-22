@@ -3017,7 +3017,7 @@ function novaroApplyColorMode(p){
  const headerChildSelectors=headerActions.map(id=>'#app .app-header .header-tools-stack .header-icon-row > button#'+id+' :is(svg,svg *,span,.header-icon-label)').join(',');
  const bellSelector='#app .app-header .header-clock-panel #novaroAuditBell';
  const bellChildSelector=bellSelector+' svg,'+bellSelector+' svg *';
- colorModeCss += '\\n'+modePrefix+headerButtonSelectors+','+modePrefix+bellSelector+
+ colorModeCss += '\n'+modePrefix+headerButtonSelectors+','+modePrefix+bellSelector+
    '{background:'+headerBg+'!important;background-color:'+(headerMode==='dark'?'#294638':'#e5f5ec')+'!important;border:1px solid '+headerBorder+'!important;color:'+headerText+'!important;-webkit-text-fill-color:'+headerText+'!important;box-shadow:0 3px 12px '+(headerMode==='dark'?'rgba(0,0,0,.28)':'rgba(33,107,85,.12)')+'!important}\\n'+
    modePrefix+headerChildSelectors+','+modePrefix+bellChildSelector+
    '{color:'+headerText+'!important;-webkit-text-fill-color:'+headerText+'!important;stroke:'+headerText+'!important;opacity:1!important;visibility:visible!important}\\n'+
