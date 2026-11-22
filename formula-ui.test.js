@@ -115,7 +115,7 @@ test('formula UI protects formula-backed cells and queues refreshes requested wh
   assert.doesNotMatch(source, /\binput\.value\s*=/, 'formula UI must never overwrite the original input value');
 });
 
-function bootFormulaUiWithVisibleCell() {
+function bootFormulaUiWithVisibleCell(failLoad = false) {
   const listeners = {};
   const timers = new Map();
   let nextTimer = 1;
@@ -133,8 +133,8 @@ function bootFormulaUiWithVisibleCell() {
     getAttribute: () => null
   };
   const result = {
-    hidden: true,
-    textContent: '',
+    hidden: false,
+    textContent: '= 123',
     title: '',
     classList: { toggle() {}, remove() {} }
   };
@@ -170,6 +170,7 @@ function bootFormulaUiWithVisibleCell() {
     NOVAROFormulaDependencyGraph: {},
     NOVAROFormulaStorage: {
       async loadFormulas(ids) {
+        if (failLoad) throw new Error('Simulated formula source unavailable');
         return ids.includes('target:branch-1:Nov-2026:sales_target')
           ? { 'target:branch-1:Nov-2026:sales_target': '=CELL("source-cell")+1' }
           : {};
@@ -229,4 +230,14 @@ test('formula UI keeps its public API when loaded after DOMContentLoaded', () =>
   const app = bootFormulaUi('complete');
   assert.equal(typeof app.window.NOVAROFormulaUI.recalculate, 'function');
   assert.equal(typeof app.window.NOVAROFormulaUI.refresh, 'function');
+});
+
+test('automatic refresh clears stale results when a formula dependency cannot be loaded', async () => {
+  const app = bootFormulaUiWithVisibleCell(true);
+  await app.window.NOVAROFormulaUI.recalculate();
+
+  assert.equal(app.result.textContent, 'Simulated formula source unavailable');
+  assert.equal(app.result.hidden, false);
+  assert.equal(app.button.textContent, 'ƒx !');
+  assert.equal(app.input.value, '999', 'the original business input remains unchanged');
 });
