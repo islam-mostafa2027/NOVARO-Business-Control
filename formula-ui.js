@@ -108,6 +108,7 @@
   if(root.document.getElementById("novaroFormulaEditorStyle"))return;
   const style=root.document.createElement("style");style.id="novaroFormulaEditorStyle";
   style.textContent=
+   ".novaro-fx-modal[hidden],.novaro-fx-picker-hint[hidden],.novaro-fx-suggestions[hidden]{display:none!important}" +
    ".novaro-fx-display{position:absolute;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;pointer-events:none;z-index:3;padding:0 4px;box-sizing:border-box;direction:ltr;unicode-bidi:plaintext;font-weight:700;color:var(--text,#24364b);background:transparent;font-variant-numeric:tabular-nums}" +
    ".novaro-fx-display.is-error{color:#b42318;font-size:10px;white-space:normal;line-height:1.15}" +
    ".novaro-fx-modal{position:fixed;inset:0;z-index:12050;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(10,18,15,.58);backdrop-filter:blur(3px)}" +
