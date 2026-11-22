@@ -2831,7 +2831,7 @@ function applyLanguage(){
  if(logoutLabel)logoutLabel.textContent=language==="en"?"Sign out":"خروج";
  const reportTab=document.querySelector('[data-p="reports"]');
  const reportLabel=reportTab?.querySelector(".report-nav-label");
- if(reportLabel)reportLabel.innerHTML=language==="en"?"<span>Stocktake</span><span>Report</span>":"<span>تقرير</span><span>الجرد</span>";
+ if(reportLabel)reportLabel.textContent=language==="en"?"Stocktake Report":"تقرير الجرد";
  const headcountNavLabel=document.getElementById("headcountNavLabel");
  if(headcountNavLabel)headcountNavLabel.innerHTML=language==="en"?"<span>Headcount</span>":"<span>عدد</span><span>العاملين</span>";
  const salesReportNavLabel=document.getElementById("salesReportNavLabel");
@@ -8410,54 +8410,4 @@ html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header
   stroke:#216b55!important;
 }
 
-
-/* Final mobile navigation and header control contrast corrections */
-#tabs button[data-p="reports"] .report-nav-label,
-#tabs button[data-p="branches"] > span:not(.nav-icon){
- display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
- width:100%!important;max-width:100%!important;min-width:0!important;
- white-space:normal!important;overflow:visible!important;text-overflow:clip!important;
- overflow-wrap:anywhere!important;word-break:normal!important;text-align:center!important;
- line-height:1.12!important;font-size:clamp(9px,2.8vw,12px)!important;font-weight:750!important;
-}
-#tabs button[data-p="reports"] .report-nav-label span{display:block!important;max-width:100%!important;white-space:normal!important}
-#tabs button[data-p="reports"],#tabs button[data-p="branches"]{min-width:0!important;overflow:hidden!important}
-:root[data-novaro-mode="dark"] #app .app-header .header-tools-stack .header-icon-row > #langToggleApp,
-:root[data-novaro-mode="dark"] #app .app-header .header-tools-stack .header-icon-row > #langToggleApp:hover,
-:root[data-novaro-mode="dark"] #app .app-header .header-tools-stack .header-icon-row > #langToggleApp:focus{
- background:#294638!important;background-image:none!important;background-color:#294638!important;
- border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
- box-shadow:0 3px 12px rgba(0,0,0,.22)!important;filter:none!important;opacity:1!important;
-}
-:root[data-novaro-mode="dark"] #app .app-header .header-tools-stack .header-icon-row > #langToggleApp :is(svg,span){
- color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;
-}
-:root[data-novaro-mode="light"] #app .app-header .header-tools-stack .header-icon-row > #langToggleApp,
-:root[data-novaro-mode="light"] #app .app-header .header-tools-stack .header-icon-row > #langToggleApp:hover,
-:root[data-novaro-mode="light"] #app .app-header .header-tools-stack .header-icon-row > #langToggleApp:focus{
- background:#294638!important;background-image:none!important;background-color:#294638!important;
- border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
- box-shadow:0 3px 10px rgba(0,0,0,.12)!important;filter:none!important;opacity:1!important;
-}
-:root[data-novaro-mode="light"] #app .app-header .header-tools-stack .header-icon-row > #langToggleApp :is(svg,span){
- color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;
-}
-:root[data-novaro-mode="dark"] #app .app-header .header-clock-panel #novaroAuditBell{
- background:#294638!important;background-image:none!important;background-color:#294638!important;
- border:1px solid #5b9278!important;border-radius:12px!important;color:#c9f0dc!important;
- -webkit-text-fill-color:#c9f0dc!important;box-shadow:0 3px 12px rgba(0,0,0,.28)!important;
-}
-:root[data-novaro-mode="dark"] #app .app-header .header-clock-panel #novaroAuditBell svg{
- display:block!important;visibility:visible!important;opacity:1!important;
- stroke:#c9f0dc!important;color:#c9f0dc!important;fill:none!important;
-}
-:root[data-novaro-mode="light"] #app .app-header .header-clock-panel #novaroAuditBell{
- background:#294638!important;background-image:none!important;background-color:#294638!important;
- border:1px solid #5b9278!important;border-radius:12px!important;color:#effff6!important;
- -webkit-text-fill-color:#effff6!important;box-shadow:0 3px 10px rgba(0,0,0,.12)!important;
-}
-:root[data-novaro-mode="light"] #app .app-header .header-clock-panel #novaroAuditBell svg{
- display:block!important;visibility:visible!important;opacity:1!important;
- stroke:#effff6!important;color:#effff6!important;fill:none!important;
-}
 </style>
