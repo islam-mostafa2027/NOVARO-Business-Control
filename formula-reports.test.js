@@ -56,6 +56,6 @@ test('sales report print output uses the original input values', () => {
 test('formula refresh runs after sales month values and daily tip rows finish loading', () => {
   assert.match(
     html,
-    /await dailyTipLoad\\(\\);[\\s\\S]*?window\\.NOVAROFormulaUI\\?\\.refresh\\?\\.\\(\\);/
+    /await dailyTipLoad\(\);[\s\S]*?window\.NOVAROFormulaUI\?\.refresh\?\.\(\);/
   );
 });
