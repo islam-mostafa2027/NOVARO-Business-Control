@@ -7533,3 +7533,20 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-arrow{color:#9bdab4!important}
 @media(prefers-reduced-motion:reduce){#app .sales-report-page .sales-branch-pill{transition:none!important}}
 </style>
+
+
+<style id="novaro-daily-tip-heading-cleanup-v1">
+/* Remove only the thin divider under the Daily Tip title and its month label. */
+#app .sales-report-page .daily-tip-card > .sales-statistics-heading{
+  border-bottom:0!important;
+  box-shadow:none!important;
+}
+#app .sales-report-page .daily-tip-card > .sales-statistics-heading::before,
+#app .sales-report-page .daily-tip-card > .sales-statistics-heading::after{
+  display:none!important;
+  content:none!important;
+}
+#app .sales-report-page .daily-tip-card .daily-tip-toolbar{
+  display:none!important;
+}
+</style>
