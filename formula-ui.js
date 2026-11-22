@@ -141,9 +141,9 @@
   const close=root.document.createElement("button");close.type="button";close.className="novaro-fx-close";close.textContent="×";close.setAttribute("aria-label","إغلاق");
   heading.append(title,close);
   const target=root.document.createElement("div");target.className="novaro-fx-target";
-  const textarea=root.document.createElement("textarea");textarea.className="novaro-fx-input";textarea.spellcheck=false;textarea.autocomplete="off";textarea.autocapitalize="off";textarea.placeholder="اكتب المعادلة، مثال: =SUM(";
+  const textarea=root.document.createElement("textarea");textarea.className="novaro-fx-input";textarea.spellcheck=false;textarea.autocomplete="off";textarea.autocapitalize="off";textarea.setAttribute("inputmode","text");textarea.placeholder="اكتب المعادلة، مثال: =SUM(");
   const suggestions=root.document.createElement("div");suggestions.className="novaro-fx-suggestions";
-  const hint=root.document.createElement("div");hint.className="novaro-fx-hint";hint.textContent="ابدأ بعلامة =، واختر الدالة المقترحة. لاختيار خلية من أي صفحة اضغط «اختيار خلية» ثم انتقل للصفحة المطلوبة واضغط على الخلية.";
+  const hint=root.document.createElement("div");hint.className="novaro-fx-hint";hint.textContent="على الموبايل: اضغط مطولًا على الخلية لفتح محرر المعادلات ولوحة المفاتيح الكاملة. ابدأ بعلامة = واختر الدالة المقترحة. لاختيار خلية من أي صفحة اضغط «اختيار خلية» ثم انتقل للصفحة المطلوبة واضغط على الخلية.";
   const actions=root.document.createElement("div");actions.className="novaro-fx-actions";
   const pick=root.document.createElement("button");pick.type="button";pick.className="novaro-fx-action";pick.textContent="اختيار خلية";
   const cancel=root.document.createElement("button");cancel.type="button";cancel.className="novaro-fx-action";cancel.textContent="إلغاء";
@@ -247,6 +247,31 @@
   if(event.key==="F2"){
    event.preventDefault();event.stopPropagation();openExistingFormula(input);
   }
+ }
+ let longPressTimer=null,longPressInput=null,longPressStart=null;
+ function clearCellLongPress(){
+  if(longPressTimer!==null)root.clearTimeout(longPressTimer);
+  longPressTimer=null;longPressInput=null;longPressStart=null;
+ }
+ function handleCellPointerDown(event){
+  if(event.pointerType!=="touch"&&event.pointerType!=="pen")return;
+  const input=event.target?.closest?.("input");if(!input)return;
+  let id=null;try{id=idFor(input);}catch(_){return;}if(!id)return;
+  clearCellLongPress();longPressInput=input;longPressStart={x:event.clientX,y:event.clientY};
+  longPressTimer=root.setTimeout(()=>{
+   const target=longPressInput;if(!target)return;
+   longPressTimer=null;target.blur();openExistingFormula(target);
+  },650);
+ }
+ function handleCellPointerMove(event){
+  if(longPressTimer===null||!longPressStart)return;
+  if(Math.abs(event.clientX-longPressStart.x)>12||Math.abs(event.clientY-longPressStart.y)>12)clearCellLongPress();
+ }
+ function handleCellPointerEnd(){clearCellLongPress();}
+ function handleCellContextMenu(event){
+  const input=event.target?.closest?.("input");if(!input)return;
+  let id=null;try{id=idFor(input);}catch(_){return;}if(!id)return;
+  event.preventDefault();clearCellLongPress();input.blur();openExistingFormula(input);
  }
  function handleCellDoubleClick(event){
   const input=event.target?.closest?.("input");if(!input)return;
@@ -357,6 +382,11 @@
   ensureStyle();
   root.document.body.addEventListener("keydown",handleCellKeydown,true);
   root.document.body.addEventListener("dblclick",handleCellDoubleClick,true);
+  root.document.body.addEventListener("pointerdown",handleCellPointerDown,true);
+  root.document.body.addEventListener("pointerup",handleCellPointerEnd,true);
+  root.document.body.addEventListener("pointercancel",handleCellPointerEnd,true);
+  root.document.body.addEventListener("pointermove",handleCellPointerMove,true);
+  root.document.body.addEventListener("contextmenu",handleCellContextMenu,true);
   root.document.body.addEventListener("click",handlePickClick,true);
   root.document.body.addEventListener("keydown",handlePickerKey,true);
   root.document.body.addEventListener("input",handleCellValueChange,true);
