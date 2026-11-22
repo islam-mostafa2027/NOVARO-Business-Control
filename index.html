@@ -7474,32 +7474,36 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </style>
 <script id="novaro-dark-mode-runtime-surface-scan-v1">
 (function(){
- const dark=()=>document.documentElement.getAttribute('data-novaro-mode')==='dark';
- const skip=/logo|chart|graph|barcode|qr.?code|image|photo|avatar|status|badge|chip|pill|success|warning|danger|error|print/i;
- const surface=/card|panel|modal|dialog|drawer|popover|dropdown|picker|tile|surface|box|table|section|summary|metric|item|stock|row|toolbar|menu|sheet/i;
+ const isDark=()=>document.documentElement.getAttribute('data-novaro-mode')==='dark';
+ const skip=/logo|chart|graph|barcode|qr.?code|image|photo|avatar|status|badge|chip|pill|success|warning|danger|error|print|progress|meter/i;
+ const nearWhite=(color)=>{const m=String(color||'').match(/rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)(?:\\s*,\\s*([\\d.]+))?\\s*\\)/i); if(!m)return false; return +m[1]>238&&+m[2]>238&&+m[3]>238&&(m[4]===undefined||+m[4]>.65);};
  function scan(root){
-  if(!dark())return;
+  if(!isDark())return;
   const nodes=[];
   if(root&&root.nodeType===1)nodes.push(root);
   if(root&&root.querySelectorAll)nodes.push(...root.querySelectorAll('*'));
-  else nodes.push(...document.querySelectorAll('body *'));
+  else if(!root)nodes.push(...document.querySelectorAll('body *'));
   for(const el of nodes){
    if(!el||!el.classList||skip.test(String(el.className||'')))continue;
-   const cls=String(el.className||'');
-   const inline=el.getAttribute('style')||'';
-   if(!surface.test(cls)&&!(/background(?:-color)?\s*:\s*(?:#fff(?:fff)?|white|rgb\(\s*255)/i.test(inline)))continue;
    try{
-    const bg=getComputedStyle(el).backgroundColor;
-    const m=bg.match(/rgba?\((\d+)[,\s]+(\d+)[,\s]+(\d+)/i);
-    if(!m)continue;
-    const r=+m[1],g=+m[2],b=+m[3];
-    if(r>235&&g>235&&b>235){el.classList.add('novaro-dark-surface-force');}
-   }catch(_){}
+    const cs=getComputedStyle(el);
+    if(nearWhite(cs.backgroundColor))el.classList.add('novaro-dark-surface-force');
+   }catch(e){}
   }
  }
- function start(){scan();new MutationObserver(m=>{for(const x of m)if(x.type==='childList')for(const n of x.addedNodes)scan(n);else if(x.type==='attributes')scan(x.target)}).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['style','class']});}
+ function scanAdded(node){if(node&&node.nodeType===1)scan(node);}
+ function start(){
+  scan();
+  const observer=new MutationObserver(records=>{
+   for(const rec of records){
+    if(rec.type==='childList')rec.addedNodes.forEach(scanAdded);
+    else if(rec.type==='attributes')scan(rec.target);
+   }
+  });
+  observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['style','class']});
+ }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
- const rootObserver=new MutationObserver(()=>{if(dark())scan();});
- rootObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-novaro-mode']});
+ const modeObserver=new MutationObserver(()=>{if(isDark())scan();});
+ modeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-novaro-mode']});
 })();
 </script>
