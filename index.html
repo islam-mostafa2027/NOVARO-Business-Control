@@ -2832,6 +2832,10 @@ function applyLanguage(){
  const reportTab=document.querySelector('[data-p="reports"]');
  const reportLabel=reportTab?.querySelector(".report-nav-label");
  if(reportLabel)reportLabel.textContent=language==="en"?"Stocktake Report":"تقرير الجرد";
+ const branchesTab=document.querySelector('[data-p="branches"]');
+ const branchesLabel=branchesTab?.querySelector("span:not(.nav-icon)");
+ if(branchesLabel)branchesLabel.textContent=language==="en"?"Branches":"إدارة الفروع";
+ if(reportLabel)reportLabel.textContent=language==="en"?"Stock Reports":"تقرير الجرد";
  const headcountNavLabel=document.getElementById("headcountNavLabel");
  if(headcountNavLabel)headcountNavLabel.innerHTML=language==="en"?"<span>Headcount</span>":"<span>عدد</span><span>العاملين</span>";
  const salesReportNavLabel=document.getElementById("salesReportNavLabel");
