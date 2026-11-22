@@ -60,7 +60,7 @@ test('dependency graph rejects circular formula references', () => {
 test('invalid formulas fail safely without executing arbitrary code', () => {
   assert.throws(() => engine.evaluate('=1/0', {getCell(){return 0;}}), /القسمة على صفر/);
   assert.throws(() => engine.evaluate('=UNKNOWN(1)', {getCell(){return 0;}}), /غير مدعومة/);
-  assert.throws(() => engine.getDependencies('=1+2'), /تبدأ بعلامة/);
+  assert.throws(() => engine.getDependencies('1+2'), /تبدأ بعلامة/);
 });
 
 test('formula storage validates, saves, loads and removes without touching source tables', async () => {
