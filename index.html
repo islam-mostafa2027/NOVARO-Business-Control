@@ -2158,6 +2158,45 @@ body[dir="ltr"] #app .sales-report-page .saved-sales-day-selector-card .saved-sa
 :root[data-novaro-mode="dark"] #app .novaro-operations-shortcut .headcount-branch-arrow{color:#9bdab4!important}
 @media(max-width:600px){#app .novaro-operations-shortcuts-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}#app .novaro-operations-shortcut{min-height:60px!important;padding:7px!important}}
 </style>
+
+<style id="novaro-global-mint-button-identity-v1">
+/* Unify app action buttons with the light mint branch-selector button design. */
+#app button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher),
+#appLayout button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher) {
+  border:1px solid #b9dfcf!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  font-weight:700!important;
+  box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+}
+#app button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):hover,
+#appLayout button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):hover {
+  background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
+  border-color:#91cdb3!important;
+  box-shadow:0 6px 18px rgba(34,112,83,.14)!important;
+}
+#app button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):active,
+#appLayout button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):active {
+  transform:translateY(1px)!important;
+}
+:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher),
+:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher) {
+  border-color:#548f79!important;
+  background:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
+  color:#effff6!important;
+  -webkit-text-fill-color:#effff6!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.2)!important;
+}
+:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):hover,
+:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.nav-icon-button):not(.icon-button):not(.header-icon-button):not(.danger):not(.delete):not(.btn-danger):not(.logout-control):not(#novaro-ai-launcher):hover {
+  background:linear-gradient(145deg,#32745f 0%,#285d4d 100%)!important;
+  border-color:#70b596!important;
+}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
