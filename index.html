@@ -3161,14 +3161,26 @@ async function novaroTranslateHeadcountInputs(root){
 function novaroEnsureBrowserHistory(){
  if(window.__novaroHistoryReady)return;
  window.__novaroHistoryReady=true;
- try{history.replaceState({novaroApp:true,kind:"root"},"",location.href);history.pushState({novaroApp:true,kind:"root"},"",location.href)}catch(error){console.warn("NOVARO browser history initialization failed:",error)}
+ try{history.replaceState({novaroApp:true,kind:"root",page:"home"},"",location.href);history.pushState({novaroApp:true,kind:"root",page:"home"},"",location.href)}catch(error){console.warn("NOVARO browser history initialization failed:",error)}
 }
 function novaroStopItemFormCameraRecovery(){if(window.__novaroItemFormCameraAbort){window.__novaroItemFormCameraAbort.abort();window.__novaroItemFormCameraAbort=null;}document.getElementById("novaroImageEditor")?.remove();document.getElementById("novaroImageSource")?.remove();}
 function novaroNavigate(next){if(page==="items"&&next!=="items")novaroStopItemFormCameraRecovery();if(page==="settings"&&next!=="settings")novaroSettingsDraft=null;if(next==="settings"&&page!=="settings")novaroSettingsDraft={...getNovaroPrefs(),language};if(page!==next){novaroPageHistory.push(page);try{history.pushState({novaroApp:true,kind:"page",page:next},"",location.href)}catch(error){console.warn("NOVARO page history update failed:",error)}page=next;}render();}
-function novaroGoBack(fromPopState=false){
+function novaroGoBack(fromPopState=false,poppedState=null){
  if(!fromPopState&&window.__novaroHistoryReady&&history.state?.novaroApp){history.back();return;}
  const main=$("main");
  if(main&&main.querySelector("#save")){novaroStopItemFormCameraRecovery();render();return;}
+ // When browser history identifies a different previous app page, honor that exact
+ // destination before handling nested views inside the current page.
+ const historyTarget=fromPopState&&poppedState?.novaroApp&&typeof poppedState.page==="string"?poppedState.page:null;
+ if(historyTarget&&historyTarget!==page){
+  const targetIndex=novaroPageHistory.lastIndexOf(historyTarget);
+  if(targetIndex>=0)novaroPageHistory.splice(targetIndex);
+  page=historyTarget;
+  if(page!=="sales"){salesReportBranchId="";salesReportSelectedMonth="";salesReportSelectedDay=0;shiftReportsPage=false;salesSavedReportsOpen=false;}
+  if(page!=="headcount")headcountBranchId="";
+  if(page!=="counts"){window.__novaroStocktakeSubView=null;window.__stocktakeView=null;}
+  render();return;
+ }
  if(window.__novaroStocktakeSubView==="category"){window.__novaroStocktakeSubView="categories";renderStocktakeCategories();return;}
  if(window.__novaroStocktakeSubView==="categories"){window.__novaroStocktakeSubView=null;window.__stocktakeView=null;sessions();return;}
  // Sales report has its own nested steps: report -> month picker -> branch list.
@@ -3176,9 +3188,9 @@ function novaroGoBack(fromPopState=false){
  if(page==="sales"&&salesReportBranchId){salesReportBranchId="";salesReportSelectedMonth="";render();return;}
  if(novaroPageHistory.length){page=novaroPageHistory.pop();render();return;}
  if(page!=="home"){page="home";render();return;}
- if(fromPopState&&window.__novaroHistoryReady){try{history.pushState({novaroApp:true,kind:"root"},"",location.href)}catch(error){console.warn("NOVARO root history restore failed:",error)}}
+ if(fromPopState&&window.__novaroHistoryReady){try{history.pushState({novaroApp:true,kind:"root",page:"home"},"",location.href)}catch(error){console.warn("NOVARO root history restore failed:",error)}}
 }
-if(!window.__novaroPopstateInstalled){window.__novaroPopstateInstalled=true;window.addEventListener("popstate",()=>{if(!window.__novaroHistoryReady)return;novaroGoBack(true)})}
+if(!window.__novaroPopstateInstalled){window.__novaroPopstateInstalled=true;window.addEventListener("popstate",event=>{if(!window.__novaroHistoryReady)return;novaroGoBack(true,event.state)})}
 function novaroBackButton(){
  const main=$("main");if(!main)return;
  let bar=document.getElementById("novaroPageBackbar");
