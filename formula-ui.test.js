@@ -112,7 +112,7 @@ test('formula UI protects formula-backed cells and queues refreshes requested wh
   assert.match(source, /if\(restoreBusy\)\{restoreQueued=true;return;\}/);
   assert.match(source, /addEventListener\("input",handleCellValueChange,true\)/);
   assert.match(source, /addEventListener\("change",handleCellValueChange,true\)/);
-  assert.doesNotMatch(source, /\\binput\\.value\\s*=/, 'formula UI must never overwrite the original input value');
+  assert.doesNotMatch(source, /\binput\.value\s*=/, 'formula UI must never overwrite the original input value');
 });
 
 function bootFormulaUiWithVisibleCell() {
