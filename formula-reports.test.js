@@ -45,3 +45,10 @@ test('Excel export reads the original input value rather than formula overlay te
     /const field=cell\.querySelector\("input,textarea,select"\),raw=\(field\?field\.value:cell\.innerText\)/
   );
 });
+
+test('sales report print output uses the original input values', () => {
+  assert.match(
+    html,
+    /copy\\.querySelectorAll\\("input,textarea,select"\\)\\.forEach\\(field=>\\{const span=document\\.createElement\\("span"\\);span\\.className="print-sales-value";span\\.textContent=field\\.value\\|\\|"—";/
+  );
+});
