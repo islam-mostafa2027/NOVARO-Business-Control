@@ -306,7 +306,7 @@
    for(const id of active){
     const input=cells.get(id);if(!input)continue;
     const error=calculated.errors[id],value=calculated.results[id];
-    const text=error||("= "+Number(value).toLocaleString("en-US",{maximumFractionDigits:4}));
+    const text=error||Number(value).toLocaleString("en-US",{maximumFractionDigits:4});
     displayFormula(input,text,!!error);
    }
   }catch(error){
