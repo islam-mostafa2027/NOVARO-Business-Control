@@ -168,7 +168,7 @@
   ui.target.textContent=label||"الخلية المحددة";
   ui.textarea.value=initialText||"=";ui.modal.hidden=false;ui.modal.style.display="flex";
   ui.pickerHint.hidden=true;pickingCell=false;
-  updateSuggestions();root.setTimeout(()=>ui.textarea.focus(),0);
+  updateSuggestions();ui.textarea.focus();
  }
  function closeEditor(){
   if(!editor)return;
@@ -229,12 +229,18 @@
   const label=input.closest(".field,.sales-metric,.sales-statistics-cell,td")?.querySelector("label,th")?.textContent?.trim();
   return label||input.getAttribute("aria-label")||input.id||"خلية رقمية";
  }
- async function openExistingFormula(input){
+ async function openExistingFormula(input,focusFromGesture=false){
   const id=idFor(input);if(!id)return;
+  const label=inputLabel(input);
+  // Open and focus synchronously inside the trusted context-menu gesture.
+  // Waiting for Supabase before focusing can make Android suppress the keyboard.
+  if(focusFromGesture)openEditor(id,"=",label);
   try{
    const existing=await storage().loadFormulas([id],db,map(),adapter());
-   openEditor(id,existing[id]||"=",inputLabel(input));
-  }catch(error){console.warn("NOVARO formula editor:",error);alert(error?.message||"تعذر فتح محرر المعادلات");}
+   if(focusFromGesture&&formulaTargetId===id){
+    editor.textarea.value=existing[id]||"=";updateSuggestions();editor.textarea.focus();
+   }else if(!focusFromGesture)openEditor(id,existing[id]||"=",label);
+  }catch(error){console.warn("NOVARO formula editor:",error);if(focusFromGesture&&formulaTargetId===id){editor.hint.textContent=error?.message||"تعذر تحميل المعادلة المحفوظة";}else alert(error?.message||"تعذر فتح محرر المعادلات");}
  }
  function handleCellKeydown(event){
   const input=event.target;
@@ -271,7 +277,7 @@
  function handleCellContextMenu(event){
   const input=event.target?.closest?.("input");if(!input)return;
   let id=null;try{id=idFor(input);}catch(_){return;}if(!id)return;
-  event.preventDefault();clearCellLongPress();input.blur();openExistingFormula(input);
+  event.preventDefault();event.stopPropagation();clearCellLongPress();input.blur();openExistingFormula(input,true);
  }
  function handleCellDoubleClick(event){
   const input=event.target?.closest?.("input");if(!input)return;
