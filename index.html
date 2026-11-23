@@ -8504,3 +8504,20 @@ html[data-novaro-mode="light"] body #app button#novaroAuditBell.novaro-notificat
 html[data-novaro-mode="dark"] body #app button#novaroAuditBell.novaro-notification-switch svg,
 html[data-novaro-mode="dark"] body #app button#novaroAuditBell.novaro-notification-switch svg * {color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important}
 </style>
+
+<style id="novaro-branch-reports-dark-mode-fix-v1">
+/* Dark-mode only fix for the six Branch Reports shortcuts. */
+:root[data-novaro-mode="dark"] #app .novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill {
+ background:linear-gradient(145deg,#293b33,#20352c)!important;
+ background-color:#293b33!important;
+ color:#e5eee9!important;
+ border-color:#40564a!important;
+ box-shadow:0 4px 14px rgba(0,0,0,.22)!important;
+}
+:root[data-novaro-mode="dark"] #app .novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill :is(.sales-branch-copy,strong,.sales-branch-arrow) {
+ color:#e5eee9!important;-webkit-text-fill-color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] #app .novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill .sales-branch-icon {
+ background:#355344!important;color:#bfe6d1!important;border-color:#496958!important;-webkit-text-fill-color:#bfe6d1!important;
+}
+</style>
