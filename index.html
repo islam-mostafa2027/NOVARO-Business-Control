@@ -3529,7 +3529,7 @@ Object.assign(translations,{
  "إضافة صنف":"Add item","حذف صنف":"Remove item","حذف صنف من المخزون":"Remove an item from inventory",
  "اختار القسم، وبعدها حدد الصنف اللي عايز تشيله. هيتأرشف الصنف وتفضل كل سجلاته القديمة محفوظة.":"Choose a section, then select the item to archive. Its previous records will be preserved.",
  "إغلاق":"Close","القسم":"Section","كل الأقسام":"All sections","ابحث باسم الصنف أو الكود":"Search item name or code",
- "مفيش أصناف نشطة في القسم ده.":"No active items in this section.","حذف":"Remove",
+ "مفيش أصناف نشطة في القسم ده.":"No active items in this section.","إزالة الصنف":"Remove","تأكيد أرشفة الصنف":"Archive item",
  "حذف الأصناف متاح لمالك النظام فقط.":"Only the system owner can remove items.",
  "هيختفي من الأصناف النشطة، مع الاحتفاظ بحركات المخزون وسجلات الجرد.":"It will disappear from active inventory while stock movements and stocktake history are preserved.",
  "جارٍ أرشفة الصنف...":"Archiving item...",
@@ -5173,6 +5173,7 @@ function printStocktakeReport(targetWindow,reportData){
 #app .items-page .items-toolbar{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;align-items:stretch!important}
 #app .items-page .items-toolbar>.branch-action-btn{box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:48px!important;height:48px!important;max-height:48px!important;margin:0!important;padding:8px 10px!important;justify-content:center!important;white-space:normal!important;text-align:center!important;font-size:12px!important;line-height:1.25!important}
 #app .items-page .items-toolbar>.items-item-actions{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;min-width:0!important}
+#app .items-page .items-toolbar>.items-item-actions:not(:has(.novaro-item-remove-trigger)){grid-template-columns:1fr!important}
 #app .items-page .items-toolbar>.items-item-actions>button{box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:48px!important;height:48px!important;max-height:48px!important;margin:0!important;padding:8px 10px!important;justify-content:center!important;white-space:normal!important;text-align:center!important;font-size:12px!important;line-height:1.25!important}
 #app .items-page .items-toolbar .items-tool-icon{font-size:15px!important;line-height:1!important}
 .novaro-item-archive-overlay{position:fixed!important;inset:0!important;z-index:100000!important;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(12,25,20,.58)}
@@ -5863,7 +5864,7 @@ function openItemArchiveManager(){
   }).sort((a,b)=>String(nameOf(a)).localeCompare(String(nameOf(b)),language==="en"?"en":"ar"));
   rows.innerHTML=list.length?list.map(item=>{
    const category=cats.find(c=>c.id===item.category_id);
-   return '<article class="novaro-item-archive-row"><div class="novaro-item-archive-copy"><strong>'+esc(nameOf(item))+'</strong><small>'+esc(categoryName(category))+(item.item_code?" · "+esc(item.item_code):"")+'</small></div><button type="button" class="soft novaro-item-archive-remove" data-archive-item="'+esc(item.id)+'">'+t("حذف")+'</button></article>';
+   return '<article class="novaro-item-archive-row"><div class="novaro-item-archive-copy"><strong>'+esc(nameOf(item))+'</strong><small>'+esc(categoryName(category))+(item.item_code?" · "+esc(item.item_code):"")+'</small></div><button type="button" class="soft novaro-item-archive-remove" data-archive-item="'+esc(item.id)+'">'+t("إزالة الصنف")+'</button></article>';
   }).join(""):'<div class="novaro-item-archive-empty">'+t("مفيش أصناف نشطة في القسم ده.")+'</div>';
  };
  groupSelect.onchange=paint;search.oninput=paint;
@@ -5871,7 +5872,7 @@ function openItemArchiveManager(){
   const button=event.target.closest("[data-archive-item]");if(!button)return;
   if(profile?.role!=="owner_admin")return alert(t("حذف الأصناف متاح لمالك النظام فقط."));
   const id=button.dataset.archiveItem,item=items.find(x=>String(x.id)===String(id));if(!item)return;
-  const prompt=language==="en"?'Archive "'+nameOf(item)+'"? '+t("هيختفي من الأصناف النشطة، مع الاحتفاظ بحركات المخزون وسجلات الجرد."):'تأكيد أرشفة الصنف "'+nameOf(item)+'"؟ '+t("هيختفي من الأصناف النشطة، مع الاحتفاظ بحركات المخزون وسجلات الجرد.");
+  const prompt=t("تأكيد أرشفة الصنف")+' "'+nameOf(item)+'"? '+t("هيختفي من الأصناف النشطة، مع الاحتفاظ بحركات المخزون وسجلات الجرد.");
   if(!confirm(prompt))return;
   button.disabled=true;status.textContent=t("جارٍ أرشفة الصنف...");
   try{
