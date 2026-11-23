@@ -4565,21 +4565,33 @@ function showStocktakeCategory(groupKey){
 function novaroShiftReportStore(){try{return JSON.parse(localStorage.getItem("novaro-shift-report:"+salesReportBranchId)||"{}")||{};}catch(_){return {};}}
 function novaroShiftReportMarkup(en,branch){
  const shiftReportStyle=`<style id="novaro-shift-report-v1">
-#app .shift-report-page .shift-report-table-wrap{overflow-x:auto}
-#app .shift-report-page .shift-report-table{width:100%;min-width:470px;border-collapse:collapse;table-layout:fixed;font-size:12px}
-#app .shift-report-page .shift-report-table th,#app .shift-report-page .shift-report-table td{padding:7px 5px;border-bottom:1px solid var(--line);text-align:center}
-#app .shift-report-page .shift-report-table thead th,#app .shift-report-page .shift-report-table tbody th{background:var(--accent-soft,#e6f1eb);color:var(--text);font-weight:800}
-#app .shift-report-page .shift-report-table tbody th{text-align:start}
-#app .shift-report-page .shift-report-table td{background:#fff}
-#app .shift-report-page .shift-report-table input{width:100%;height:34px;min-width:0;padding:4px;border:1px solid #dce6df;border-radius:6px;background:#fff;color:#20352b;text-align:center}
-#app .shift-report-page .shift-report-table input[readonly]{background:#f0f4f1;color:#53645b}
-#app .shift-report-page .shift-report-unavailable{background:#dce9e1!important;color:#708278}
-#app .shift-report-page .shift-report-tabs,#app .shift-report-page .shift-report-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-#app .shift-report-page .shift-report-tab.active{background:var(--nv-btn-primary,var(--g))!important;color:#fff!important}
+#app .shift-report-page .shift-report-table-wrap{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:9px}
+#app .shift-report-page .shift-report-table{width:100%;min-width:490px;border-collapse:separate;border-spacing:2px;table-layout:fixed;font-size:13px}
+#app .shift-report-page .shift-report-table th,#app .shift-report-page .shift-report-table td{padding:8px 5px;border:1px solid var(--line);border-radius:5px;text-align:center;vertical-align:middle}
+#app .shift-report-page .shift-report-table thead th,#app .shift-report-page .shift-report-table tbody th{background:var(--surface,#f8fbf9);color:var(--text);font-weight:800;text-align:center}
+#app .shift-report-page .shift-report-table thead th:not(:first-child){background:#293b33;color:#f2f6f3;border-color:#40564b}
+#app .shift-report-page .shift-report-table tbody th{font-size:13px;min-height:42px}
+#app .shift-report-page .shift-report-table td{background:var(--card,#fff)}
+#app .shift-report-page .shift-report-table input{display:block;width:100%;height:40px;min-width:0;box-sizing:border-box;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--surface,#fff);color:var(--text);text-align:center;font-size:13px}
+#app .shift-report-page .shift-report-table input[readonly]{background:var(--surface-2,#edf2ee);color:var(--muted,#53645b);font-weight:700}
+#app .shift-report-page .shift-report-unavailable{background:var(--surface-2,#dce9e1)!important;color:var(--muted,#708278)}
+#app .shift-report-page .shift-report-tabs{display:flex;align-items:center;gap:5px;overflow-x:auto;padding:7px 2px 4px;direction:ltr;margin:0}
+#app .shift-report-page .shift-report-tab{flex:0 0 auto;max-width:150px;padding:7px 12px;border:1px solid var(--line);border-radius:8px 8px 0 0;background:var(--surface,#f8fbf9);color:var(--text);font-size:11px;font-weight:700;white-space:nowrap}
+#app .shift-report-page .shift-report-tab.active{background:var(--card,#fff)!important;border-bottom:2px solid #32866a!important;color:var(--text)!important}
+#app .shift-report-page .shift-report-sheet-control{flex:0 0 auto;min-height:32px;padding:6px 11px!important;border:1px solid var(--line)!important;border-radius:8px!important;background:var(--surface,#f8fbf9)!important;color:var(--text)!important;font-size:11px!important;font-weight:700!important;white-space:nowrap}
+#app .shift-report-page .shift-report-table tfoot td{padding:5px 7px;background:var(--surface-2,#edf3ef);border:1px solid var(--line);text-align:start}
+#app .shift-report-page .shift-report-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 #app .shift-report-page .shift-report-actions button{flex:1;min-width:100px}
 #app .shift-report-page .shift-report-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
 #app .shift-report-page #shiftReportDateSelect{max-width:150px;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text)}
-:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-table th{background:#294638;color:#effff6}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-table th{background:#293b33;color:#e5eee9;border-color:#40564b}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-table td{background:#202f28;border-color:#40564b}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-table input{background:#263b31;color:#effff6;border-color:#52715f}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-table input[readonly]{background:#344b3e;color:#d5e8dc}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-unavailable{background:#344b3e!important;color:#d5e8dc!important}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-table tfoot td{background:#293b33;border-color:#40564b}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-tab,:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-sheet-control{background:#263b31!important;color:#effff6!important;border-color:#52715f!important}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-tab.active{background:#344b3e!important;border-bottom-color:#79bd91!important}
 @media(max-width:520px){#app .shift-report-page .shift-report-actions{display:grid;grid-template-columns:1fr}}
 </style>`;
 
@@ -4593,7 +4605,7 @@ function novaroShiftReportMarkup(en,branch){
  const rows=keys.map((key,i)=>'<tr><th>'+labels[i]+'</th>'+periods.map((p,j)=>i>=12&&j>0?"":'<td><input type="number" inputmode="decimal" step="any" data-shift-field="'+key+'_'+p+'" value="'+esc(String(values[key+"_"+p]??""))+'" '+(["delivery","guest_avg"].includes(key)||p==="pm"?"readonly":"")+'></td>').join("")+(i>=12?'<td class="shift-report-unavailable" colspan="2">—</td>':"")+'</tr>').join("");
  const tabs=dates.map(d=>'<button type="button" class="soft shift-report-tab'+(d===shiftReportDate?' active':'')+'" data-shift-date="'+d+'">'+d+'</button>').join("");
  const options=dates.map(d=>'<option value="'+d+'" '+(d===shiftReportDate?'selected':'')+'>'+d+'</option>').join("");
- return shiftReportStyle+'<section class="card headcount-page-card sales-report-page shift-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="shiftReportTableBack">← '+(en?"Back":"رجوع")+'</button><div><h3>'+esc(nameOf(branch))+'</h3><p class="muted">'+esc(branchLocationOf(branch)||"")+'</p></div></div><div class="sales-month-card"><div class="shift-report-heading"><h3>'+(en?"Shift Report":"تقرير الوردية")+'</h3></div><div class="shift-report-table-wrap"><table class="shift-report-table"><thead><tr><th><select id="shiftReportDateSelect" aria-label="'+(en?"Report date":"تاريخ التقرير")+'">'+options+'</select></th><th>AM</th><th>ALL DAY</th><th>PM</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="shift-report-tabs">'+tabs+'<button type="button" class="soft" id="shiftReportAddSheet">+ '+(en?"Add Sheet":"إضافة ورقة")+'</button><button type="button" class="soft" id="shiftReportDeleteSheet">'+(en?"Delete ×":"حذف ×")+'</button></div></div><div class="sales-month-card shift-report-actions-card"><div class="shift-report-actions"><button type="button" class="soft" id="shiftReportSave">'+(en?"Save":"حفظ")+'</button><button type="button" class="soft" id="shiftReportPrint">'+(en?"Print / PDF":"طباعة PDF")+'</button><button type="button" class="soft" id="shiftReportExcel">'+(en?"Export Excel":"تصدير Excel")+'</button></div><p id="shiftReportStatus" class="muted" aria-live="polite"></p></div></section>';
+ return shiftReportStyle+'<section class="card headcount-page-card sales-report-page shift-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="shiftReportTableBack">← '+(en?"Back":"رجوع")+'</button><div><h3>'+esc(nameOf(branch))+'</h3><p class="muted">'+esc(branchLocationOf(branch)||"")+'</p></div></div><div class="sales-month-card"><div class="shift-report-heading"><h3>'+(en?"Shift Report":"تقرير الوردية")+'</h3></div><div class="shift-report-table-wrap"><table class="shift-report-table"><thead><tr><th><select id="shiftReportDateSelect" aria-label="'+(en?"Report date":"تاريخ التقرير")+'">'+options+'</select></th><th>AM</th><th>ALL DAY</th><th>PM</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="4"><div class="shift-report-tabs">'+tabs+'<button type="button" class="soft shift-report-sheet-control" id="shiftReportAddSheet">+ '+(en?"Add Sheet":"إضافة ورقة")+'</button><button type="button" class="soft shift-report-sheet-control" id="shiftReportDeleteSheet">'+(en?"Delete ×":"حذف ×")+'</button></div></td></tr></tfoot></table></div></div><div class="sales-month-card shift-report-actions-card"><div class="shift-report-actions"><button type="button" class="soft" id="shiftReportSave">'+(en?"Save":"حفظ")+'</button><button type="button" class="soft" id="shiftReportPrint">'+(en?"Print / PDF":"طباعة PDF")+'</button><button type="button" class="soft" id="shiftReportExcel">'+(en?"Export Excel":"تصدير Excel")+'</button></div><p id="shiftReportStatus" class="muted" aria-live="polite"></p></div></section>';
 }
 function novaroShiftReportCapture(root){const store=novaroShiftReportStore(),values={};root?.querySelectorAll("[data-shift-field]").forEach(x=>values[x.dataset.shiftField]=x.value);if(shiftReportDate)store[shiftReportDate]=values;localStorage.setItem("novaro-shift-report:"+salesReportBranchId,JSON.stringify(store));return store;}
 function novaroShiftReportRecalc(root){
