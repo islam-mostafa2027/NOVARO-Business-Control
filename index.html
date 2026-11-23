@@ -3156,10 +3156,24 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
 #app .hc-add-row{border-top:1px solid var(--line);padding-top:12px;margin-top:12px!important}
 @media(max-width:600px){#app .hc-role-total{margin-top:9px;padding:8px 10px}#app .hc-role-total span{font-size:11px}#app .hc-role-total strong{font-size:17px}#app .hc-add-row{padding-top:10px;margin-top:10px!important}}
 </style>
-<style id="novaro-headcount-role-column-alignment-v1">
-/* Center each column title within the exact grid cell used by its inputs. */
-#app .hc-role-head{padding-inline:0!important}
+<style id="novaro-headcount-role-column-alignment-v2">
+/* Header and every role row share identical tracks, gutters and inline padding.
+   Keep the actions column fixed so its varying button content cannot shift the two data columns. */
+#app .hc-role-head,#app .hc-role-row{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) 125px 112px!important;
+ column-gap:8px!important;
+ padding-inline:8px!important;
+ box-sizing:border-box!important;
+}
 #app .hc-role-head span{display:block;width:100%;min-width:0;text-align:center;justify-self:stretch}
+@media(max-width:600px){
+ #app .hc-role-head,#app .hc-role-row{
+  grid-template-columns:minmax(0,1fr) 76px 100px!important;
+  column-gap:5px!important;
+  padding-inline:8px!important;
+ }
+}
 </style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
