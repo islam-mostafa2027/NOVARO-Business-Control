@@ -4057,13 +4057,18 @@ document.addEventListener("click",async e=>{
     const h=sheet.addRow(header);headerRowNumber=headerRowNumber||h.number;h.height=38;
     h.eachCell(cell=>{cell.font={name:"Arial",bold:true,color:{argb:"FFFFFFFF"},size:9};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF287D6B"}};cell.alignment={horizontal:"center",vertical:"middle",wrapText:true};cell.border={top:{style:"thin",color:{argb:"FF1D5C4B"}},bottom:{style:"medium",color:{argb:"FF1D5C4B"}},left:{style:"thin",color:{argb:"FFFFFFFF"}},right:{style:"thin",color:{argb:"FFFFFFFF"}}};});
     Array.from(table.rows).slice(1).forEach((tr,rowIndex)=>{
-     const values=Array.from(tr.cells).map((cell,colIndex)=>{
+     const values=[],mergeRanges=[];let excelColumn=1;
+     Array.from(tr.cells).forEach(cell=>{
       const field=cell.querySelector("input,textarea,select"),raw=(field?field.value:cell.innerText).trim().replace(/\\s+/g," ");
-      if(colIndex>=2&&raw&&/^-?\\d[\\d,]*(?:\\.\\d+)?$/.test(raw))return Number(raw.replace(/,/g,""));
-      return raw||"—";
+      const value=excelColumn>1&&raw&&/^-?\\d[\\d,]*(?:\\.\\d+)?$/.test(raw)?Number(raw.replace(/,/g,"")):(raw||"—");
+      values.push(value);
+      const span=Math.max(1,Number(cell.colSpan)||1);
+      if(span>1){mergeRanges.push([excelColumn,excelColumn+span-1]);for(let extra=1;extra<span;extra++)values.push(null);}
+      excelColumn+=span;
      });
      const row=sheet.addRow(values);row.height=20;
-     row.eachCell((cell,col)=>{cell.font={name:"Arial",size:9,color:{argb:"FF263A32"},bold:/total|إجمالي/i.test(String(cell.value??""))};cell.alignment={horizontal:"center",vertical:"middle",wrapText:true};cell.border={bottom:{style:"hair",color:{argb:"FFD7E1DB"}},left:{style:"hair",color:{argb:"FFE2EAE5"}},right:{style:"hair",color:{argb:"FFE2EAE5"}}};if(rowIndex%2===1)cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF3F8F5"}};if(typeof cell.value==="number")cell.numFmt="#,##0.00;[Red](#,##0.00);-";});
+     mergeRanges.forEach(([start,end])=>sheet.mergeCells(row.number,start,row.number,end));
+     row.eachCell(cell=>{const col=cell.col;cell.font={name:"Arial",size:9,color:{argb:"FF263A32"},bold:/total|إجمالي/i.test(String(cell.value??""))};cell.alignment={horizontal:"center",vertical:"middle",wrapText:true};cell.border={bottom:{style:"hair",color:{argb:"FFD7E1DB"}},left:{style:"hair",color:{argb:"FFE2EAE5"}},right:{style:"hair",color:{argb:"FFE2EAE5"}}};if(rowIndex%2===1)cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF3F8F5"}};if(typeof cell.value==="number")cell.numFmt="#,##0.00;[Red](#,##0.00);-";});
      if(values.some(v=>/total|إجمالي/i.test(String(v))))row.eachCell(cell=>{cell.font={bold:true,color:{argb:"FF174C3C"}};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFE2F0E8"}};});
     });
     if(tableIndex===0){const firstHeaderRow=sheet.getRow(headerRowNumber);firstHeaderRow.commit?.();}
