@@ -4829,7 +4829,7 @@ if(page==="branches"&&profile.role==="owner_admin"){
   const actions=card.querySelector(".branch-card-actions-four");if(!actions||actions.querySelector(".branch-manage-accounts-btn"))return;
   const buttons=[...actions.querySelectorAll("button")],archiveButton=buttons.find(x=>x.getAttribute("onclick")?.includes("deleteBranch"));
   actions.innerHTML="";
-  const branchIdMatch=archiveButton?.getAttribute("onclick")?.match(/deleteBranch\(&quot;([^&]+)&quot;\)/);
+  const branchIdMatch=archiveButton?.getAttribute("onclick")?.match(/deleteBranch\("([^"]+)"\)/);
   const branchIdValue=branchIdMatch?.[1]||buttons.map(x=>x.getAttribute("onclick")||"").join(" ").match(/(?:manageBranchAccount|editBranchManagerAccount)\(&quot;([^&]+)&quot;\)/)?.[1];
   if(branchIdValue){
    const manage=document.createElement("button");manage.type="button";manage.className="soft branch-action-btn branch-manage-accounts-btn";manage.textContent=en?"Manage accounts":"إدارة الحسابات";manage.onclick=()=>openBranchAccountsPanel(branchIdValue);actions.appendChild(manage);
