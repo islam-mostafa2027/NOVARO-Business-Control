@@ -2415,6 +2415,667 @@ html[data-novaro-mode="dark"] body #app .app-header .header-icon-row > button#op
 @media(max-width:700px){#app .branches-page .branch-card-actions-owner{gap:8px;padding-top:13px}#app .branches-page .branch-card-actions-owner .branch-action-btn{min-height:44px;padding:9px 7px;font-size:12px;border-radius:11px}}
 @media(min-width:701px){#app .branches-page .branches-grid{align-items:stretch}#app .branches-page .branch-card{height:100%}}
 </style>
+
+<style id="novaro-sales-branch-mint-v2">
+#app .sales-report-page .sales-branch-pill,
+#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{position:relative!important;isolation:isolate!important;overflow:hidden!important;min-height:76px!important;padding:13px 15px!important;gap:12px!important;border:1px solid #b9dfc8!important;border-radius:17px!important;background:linear-gradient(135deg,#f4fcf7,#e5f4eb)!important;color:#204b3b!important;box-shadow:0 5px 16px #286b4d12!important;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important}
+#app .sales-report-page .sales-branch-pill:before,
+#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:before{content:"";position:absolute;inset-inline-start:0;top:12px;bottom:12px;width:3px;border-radius:8px;background:#68bd94;pointer-events:none}
+#app .sales-report-page .sales-branch-pill:hover,
+#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:hover{transform:translateY(-2px)!important;border-color:#86cbaa!important;box-shadow:0 9px 22px #286b4d1c!important}
+#app .sales-report-page .sales-branch-pill:active,
+#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:active{transform:scale(.985)!important}
+#app .sales-report-page .sales-branch-pill:focus-visible,
+#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:focus-visible{outline:3px solid #75c99e!important;outline-offset:3px!important}
+#app .sales-report-page .sales-branch-icon,
+#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-icon{width:39px!important;height:39px!important;border-radius:13px!important;background:linear-gradient(145deg,#d5f0e1,#c3e8d4)!important;color:#287451!important;box-shadow:inset 0 0 0 1px #a9d9bf!important}
+#app .sales-report-page .sales-branch-copy strong,
+#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy strong{color:#204b3b!important;font-size:14px!important;font-weight:800!important}
+#app .sales-report-page .sales-branch-copy small,
+#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy small{color:#628071!important}
+#app .sales-report-page .sales-branch-arrow,
+#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-arrow{color:#438b68!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill,
+:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{border-color:#466c59!important;background:linear-gradient(135deg,#263b31,#20352b)!important;color:#e4f4e9!important;box-shadow:0 7px 20px #0003!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill:before,
+:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:before{background:#82d6a8}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill:hover,
+:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:hover{border-color:#78bd96!important;box-shadow:0 10px 24px #0005!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-icon,
+:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-icon{background:linear-gradient(145deg,#355b47,#2d4d3d)!important;color:#a9e7c2!important;box-shadow:inset 0 0 0 1px #527e64!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-copy strong,
+:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy strong{color:#e6f5eb!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-copy small,
+:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy small{color:#b1cdbb!important}
+:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-arrow,
+:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-arrow{color:#9bdab4!important}
+@media(prefers-reduced-motion:reduce){#app .sales-report-page .sales-branch-pill,
+#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{transition:none!important}}
+/* Operations buttons inherit the exact same .sales-branch-pill rules as the branch buttons above. */
+#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill:disabled{
+  opacity:1!important;
+  filter:none!important;
+  -webkit-text-fill-color:inherit!important;
+}
+</style>
+
+
+<style id="novaro-daily-tip-heading-cleanup-v1">
+/* Remove only the thin divider under the Daily Tip title and its month label. */
+#app .sales-report-page .daily-tip-card > .sales-statistics-heading{
+  border-bottom:0!important;
+  box-shadow:none!important;
+}
+#app .sales-report-page .daily-tip-card > .sales-statistics-heading::before,
+#app .sales-report-page .daily-tip-card > .sales-statistics-heading::after{
+  display:none!important;
+  content:none!important;
+}
+#app .sales-report-page .daily-tip-card .daily-tip-toolbar{
+  display:none!important;
+}
+</style>
+
+
+<style id="novaro-headcount-branch-mint-match-operations-v1">
+/* Match the two Headcount branch selectors to the Operations branch-card identity. */
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  min-height:76px!important;
+  padding:13px 15px!important;
+  gap:12px!important;
+  border:1px solid #b9dfc8!important;
+  border-radius:17px!important;
+  background:linear-gradient(135deg,#f4fcf7,#e5f4eb)!important;
+  color:#204b3b!important;
+  box-shadow:0 5px 16px #286b4d12!important;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important;
+}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:before{
+  content:"";
+  position:absolute;
+  inset-inline-start:0;
+  top:12px;
+  bottom:12px;
+  width:3px;
+  border-radius:8px;
+  background:#68bd94;
+  pointer-events:none;
+}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:hover{
+  transform:translateY(-2px)!important;
+  border-color:#86cbaa!important;
+  box-shadow:0 9px 22px #286b4d1c!important;
+}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:active{transform:scale(.985)!important}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:focus-visible{
+  outline:3px solid #75c99e!important;
+  outline-offset:3px!important;
+}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-icon{
+  width:39px!important;
+  height:39px!important;
+  border-radius:13px!important;
+  background:linear-gradient(145deg,#d5f0e1,#c3e8d4)!important;
+  color:#287451!important;
+  box-shadow:inset 0 0 0 1px #a9d9bf!important;
+}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-arrow{color:#438b68!important}
+:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill{
+  border-color:#466c59!important;
+  background:linear-gradient(135deg,#263b31,#20352b)!important;
+  color:#e4f4e9!important;
+  box-shadow:0 7px 20px #0003!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:before{background:#82d6a8}
+:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:hover{
+  border-color:#78bd96!important;
+  box-shadow:0 10px 24px #0005!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-icon{
+  background:linear-gradient(145deg,#355b47,#2d4d3d)!important;
+  color:#a9e7c2!important;
+  box-shadow:inset 0 0 0 1px #527e64!important;
+}
+:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-arrow{color:#9bdab4!important}
+@media(max-width:600px){
+  /* Keep Headcount branch buttons identical in size to Operations on mobile too. */
+  #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill{
+    min-height:76px!important;
+    padding:13px 15px!important;
+    gap:12px!important;
+  }
+  #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-icon{
+    width:39px!important;height:39px!important;font-size:inherit!important;
+  }
+}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy strong{color:#204b3b!important;font-size:14px!important;font-weight:800!important;line-height:1.45;overflow-wrap:anywhere}
+#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy small{color:#628071!important;font-size:11px!important;font-weight:500!important;line-height:1.5;overflow-wrap:anywhere}
+:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy strong{color:#e6f5eb!important}
+:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy small{color:#b1cdbb!important}
+@media(prefers-reduced-motion:reduce){
+  #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill{transition:none!important}
+}
+</style>
+
+
+<style id="novaro-login-actions-light-mint-v1">
+/* Match the three visible login actions to the light mint welcome panel. */
+#login.auth-shell #loginView .auth-submit,
+#login.auth-shell #loginView .forgot-password-link{
+  background:linear-gradient(135deg,#effaf3 0%,#e2f4e9 54%,#d6eee0 100%)!important;
+  background-color:#e2f4e9!important;
+  color:#174b3e!important;
+  -webkit-text-fill-color:#174b3e!important;
+  border:1px solid #c8e6d4!important;
+  box-shadow:0 5px 16px #236e5d12!important;
+}
+#login.auth-shell #loginView .auth-submit:hover,
+#login.auth-shell #loginView .forgot-password-link:hover{
+  background:linear-gradient(135deg,#e2f4e9 0%,#d6eee0 100%)!important;
+  border-color:#9fd2b5!important;
+  box-shadow:0 8px 20px #236e5d1c!important;
+}
+#login.auth-shell #loginView .auth-submit span{color:inherit!important}
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link{
+  background:linear-gradient(135deg,#294638 0%,#243d31 100%)!important;
+  background-color:#294638!important;
+  color:#e6f5eb!important;
+  -webkit-text-fill-color:#e6f5eb!important;
+  border-color:#527b63!important;
+  box-shadow:0 6px 18px #0003!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover{
+  background:linear-gradient(135deg,#315542 0%,#294638 100%)!important;
+  border-color:#78bd96!important;
+}
+</style>
+
+<style id="novaro-auth-welcome-deeper-mint-v3">
+/* A slightly deeper mint for the welcome panel, keeping the login palette coherent. */
+#login.auth-shell .auth-visual{
+ background:linear-gradient(145deg,#dff3e7 0%,#ccebd9 54%,#bfe3ce 100%)!important;
+ color:#174b3e!important;
+ border:1px solid #b4dcc3!important;
+ box-shadow:0 28px 80px #236e5d20!important;
+}
+#login.auth-shell .visual-grid{
+ opacity:.24!important;
+ background-image:linear-gradient(#286b5015 1px,transparent 1px),linear-gradient(90deg,#286b5015 1px,transparent 1px)!important;
+}
+#login.auth-shell .visual-glow.glow-a{background:radial-gradient(circle,#91d2a988,transparent 70%)!important}
+#login.auth-shell .visual-glow.glow-b{background:radial-gradient(circle,#a9dfba99,transparent 70%)!important}
+#login.auth-shell .visual-mark{
+ border-color:#82bf9a88!important;
+ background:linear-gradient(145deg,#f7fff9e8,#ccebd9dd)!important;
+ color:#24684f!important;
+ box-shadow:0 8px 22px #286b4d18!important;
+}
+#login.auth-shell .visual-brand{color:#245b45!important}
+#login.auth-shell .eyebrow{color:#397d5d!important}
+#login.auth-shell .visual-copy h1{color:#174b3e!important}
+#login.auth-shell .visual-copy h1 em{color:#347b56!important}
+#login.auth-shell .visual-copy p{color:#456e58!important}
+#login.auth-shell .visual-foot{color:#4c795e!important}
+#login.auth-shell .visual-foot i{background:#65aa80!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual{
+ background:linear-gradient(145deg,#294b39 0%,#254534 54%,#203d2f 100%)!important;
+ color:#e6f5eb!important;
+ border-color:#456d53!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-brand,
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-copy h1{color:#e6f5eb!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-copy h1 em{color:#a5d9b5!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .eyebrow,
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-copy p,
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-foot{color:#c0dfc9!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-mark{
+ background:linear-gradient(145deg,#365d45,#294b39)!important;
+ border-color:#668d70!important;color:#e6f5eb!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-foot i{background:#8bc69a!important}
+</style>
+
+
+
+
+
+
+<style id="novaro-operations-shortcuts-final-fix-v1">
+/* Keep Operations shortcuts compact; all colors come from the shared sales-branch-pill rules. */
+#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{
+  box-sizing:border-box!important;
+  min-height:58px!important;
+  height:auto!important;
+  padding:11px 15px!important;
+  gap:12px!important;
+  opacity:1!important;
+  filter:none!important;
+}
+#app#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-icon{
+  width:30px!important;height:30px!important;flex:none!important;border-radius:10px!important;
+}
+#app#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy strong{
+  font-size:13px!important;line-height:1.3!important;font-weight:800!important;
+}
+@media(max-width:600px){
+  #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{min-height:56px!important;padding:10px 12px!important}
+  #app#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy strong{font-size:12px!important;line-height:1.3!important}
+}
+</style>
+
+<style id="novaro-operations-shortcuts-button-identity-v3">
+/* Preserve the half-card width only. Button colors are inherited from the shared sales-branch-pill theme. */
+#app .novaro-operations-shortcut:disabled{opacity:1!important}
+#app .sales-report-page button.novaro-operations-shortcut[style*="max-width:50%"]{
+ width:50%!important;max-width:50%!important;min-width:0!important;flex:0 0 50%!important;
+}
+</style>
+
+
+<style id="novaro-unified-mint-buttons-except-bottom-nav-v1">
+/* One light-mint identity for every ordinary action button. Keep the bottom navigation untouched and preserve destructive-action colors. */
+#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
+#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
+#login.auth-shell #loginView .auth-submit,
+#login.auth-shell #loginView .forgot-password-link{
+  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+  background-color:#dff5e9!important;
+  border-color:#b9dfcf!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
+}
+#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
+#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
+#login.auth-shell #loginView .auth-submit:hover,
+#login.auth-shell #loginView .forgot-password-link:hover{
+  background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
+  background-color:#cceedd!important;
+  border-color:#91cdb3!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  box-shadow:0 6px 18px rgba(34,112,83,.14)!important;
+}
+#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):active,
+#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):active{
+  background:linear-gradient(145deg,#dff5e9 0%,#cceedd 100%)!important;
+  background-color:#cceedd!important;
+}
+:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
+:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link{
+  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+  background-color:#dff5e9!important;
+  border-color:#b9dfcf!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
+}
+:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
+:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover{
+  background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
+  background-color:#cceedd!important;
+  border-color:#91cdb3!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+}
+/* Highest-priority shared mint identity for the six branch actions and the Shift Report action.
+   Double #app specificity intentionally overrides the older branch-card green theme in both modes. */
+#app#app .sales-report-page button.sales-branch-pill,
+#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{
+  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+  background-color:#dff5e9!important;
+  border:1px solid #b9dfcf!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
+}
+:root[data-novaro-mode="dark"] #app#app .sales-report-page button.sales-branch-pill,
+:root[data-novaro-mode="dark"] #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{
+  background:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
+  background-color:#263e33!important;
+  border:1px solid #527762!important;
+  color:#e5f4eb!important;
+  -webkit-text-fill-color:#e5f4eb!important;
+  box-shadow:0 4px 14px #00000030!important;
+}
+
+/* The bottom navigation is the one intentional exception: retain its green active state. */
+#app #tabs button,
+#appLayout #tabs button{
+  background:var(--nv-btn-soft-bg)!important;
+  background-image:none!important;
+  color:var(--nv-btn-soft-text)!important;
+  -webkit-text-fill-color:var(--nv-btn-soft-text)!important;
+  border-color:var(--nv-btn-border)!important;
+}
+#app #tabs button.active,
+#appLayout #tabs button.active{
+  background:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;
+  background-image:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  border-color:var(--nv-btn-primary)!important;
+}
+:root[data-novaro-mode="dark"] #app #tabs button:not(.active),
+:root[data-novaro-mode="dark"] #appLayout #tabs button:not(.active){
+  background:transparent!important;
+  background-image:none!important;
+  color:#c8d8cf!important;
+  -webkit-text-fill-color:#c8d8cf!important;
+}
+:root[data-novaro-mode="dark"] #app #tabs button.active,
+:root[data-novaro-mode="dark"] #appLayout #tabs button.active{
+  background:linear-gradient(145deg,#287d6b,#1d5c4d)!important;
+  background-image:linear-gradient(145deg,#287d6b,#1d5c4d)!important;
+  border-color:#55a58a!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link {
+ background:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
+ background-color:#263e33!important;
+ background-image:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
+ border-color:#527762!important;
+ color:#e5f4eb!important;
+ -webkit-text-fill-color:#e5f4eb!important;
+ box-shadow:0 4px 14px #00000030!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
+:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover {
+ background:linear-gradient(145deg,#3b604c 0%,#304e3e 100%)!important;
+ background-image:linear-gradient(145deg,#3b604c 0%,#304e3e 100%)!important;
+ border-color:#75a98a!important;color:#f4fff8!important;-webkit-text-fill-color:#f4fff8!important;
+}
+:root[data-novaro-mode="dark"] #app#app .sales-report-page button.sales-branch-pill,
+:root[data-novaro-mode="dark"] #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill {
+ background:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
+ background-color:#263e33!important;
+ border:1px solid #527762!important;
+ color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important;
+ box-shadow:0 4px 14px #00000030!important;
+}
+:root[data-novaro-mode="dark"] #app :is(button,input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+ color-scheme:dark;
+}
+:root[data-novaro-mode="dark"] #app :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+:root[data-novaro-mode="dark"] #login.auth-shell input:not([type="checkbox"]):not([type="radio"]) {
+ background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important;
+ -webkit-text-fill-color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] #app input::placeholder,
+:root[data-novaro-mode="dark"] #app textarea::placeholder,
+:root[data-novaro-mode="dark"] #login.auth-shell input::placeholder {color:#91a69a!important;-webkit-text-fill-color:#91a69a!important;opacity:1!important}
+:root[data-novaro-mode="dark"] #app :is(button.danger,button.delete,button.btn-danger,button.delete-btn,button.branch-delete-btn,.danger,.delete,.btn-danger) {
+ background:#482d30!important;border-color:#815055!important;color:#ffdadd!important;-webkit-text-fill-color:#ffdadd!important;
+}
+:root[data-novaro-mode="dark"] #app :is(.app-header .header-icon-button,.app-header .language-toggle-capsule) {
+ background:#2b3d33!important;border-color:#496858!important;color:#dce9e1!important;-webkit-text-fill-color:#dce9e1!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-panel,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-note {
+ background:#202f28!important;color:#e5eee9!important;border-color:#40564a!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual {
+ background:linear-gradient(145deg,#263f34 0%,#1d332a 58%,#172820 100%)!important;
+ color:#e5eee9!important;
+}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual :is(.visual-brand,.visual-copy h1,.visual-copy p,.visual-foot,.eyebrow),
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-mini-brand,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-form-wrap h2,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-subtitle,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-panel label {color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual .visual-copy h1 em {color:#a9d9bf!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual .visual-copy p,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-mini-brand small,
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-subtitle {color:#b8c9bf!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .mini-mark,
+:root[data-novaro-mode="dark"] #login.auth-shell .visual-mark {background:#2b493a!important;border-color:#527762!important;color:#e5f4eb!important}
+:root[data-novaro-mode="dark"] #login.auth-shell .auth-note {background:#26382f!important;color:#b8c9bf!important}
+html[data-novaro-mode="light"] body #app .app-header button#openSettings,
+html[data-novaro-mode="light"] body #app .app-header button#openAbout,
+html[data-novaro-mode="light"] body #app .app-header button#logout,
+html[data-novaro-mode="light"] body #app .app-header button#novaroAuditBell{
+ background:#e5f5ec!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+ border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header button#openSettings,
+html[data-novaro-mode="dark"] body #app .app-header button#openAbout,
+html[data-novaro-mode="dark"] body #app .app-header button#logout,
+html[data-novaro-mode="dark"] body #app .app-header button#novaroAuditBell{
+ background:#244b3c!important;background-image:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
+ border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+}
+html[data-novaro-mode="light"] body #app .app-header button#openSettings *,
+html[data-novaro-mode="light"] body #app .app-header button#openAbout *,
+html[data-novaro-mode="light"] body #app .app-header button#logout *,
+html[data-novaro-mode="light"] body #app .app-header button#novaroAuditBell svg{
+ color:#216b55!important;-webkit-text-fill-color:#216b55!important;stroke:#216b55!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header button#openSettings *,
+html[data-novaro-mode="dark"] body #app .app-header button#openAbout *,
+html[data-novaro-mode="dark"] body #app .app-header button#logout *,
+html[data-novaro-mode="dark"] body #app .app-header button#novaroAuditBell svg{
+ color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;
+}
+html[data-novaro-mode] body #app .app-header button#openSettings .header-icon-label,
+html[data-novaro-mode] body #app .app-header button#openAbout .header-icon-label,
+html[data-novaro-mode] body #app .app-header button#logout span{
+ display:block!important;visibility:visible!important;opacity:1!important;
+ font-size:10px!important;line-height:1.2!important;
+}
+
+
+/* NOVARO single source of truth: launch shell, Android viewport and logout theme. */
+html,body{width:100%;min-height:100%;margin:0;overflow-x:hidden;background:var(--bg,#f4f8f6)}
+html{overscroll-behavior-y:auto}
+body{padding-bottom:0!important}
+#splash{position:fixed!important;inset:0!important;width:auto!important;height:auto!important;min-height:0!important;box-sizing:border-box!important;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)!important}
+@media(max-width:600px){
+ #app>.wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))!important}
+ #app .tabs{bottom:calc(10px + env(safe-area-inset-bottom,0px))!important}
+}
+:root[data-novaro-mode="light"]{color-scheme:light}
+:root[data-novaro-mode="dark"]{color-scheme:dark!important;background-color:#19251f!important}
+:root[data-novaro-mode="dark"] body,
+:root[data-novaro-mode="dark"] #login,
+:root[data-novaro-mode="dark"] #app,
+:root[data-novaro-mode="dark"] #appLayout{background-color:#19251f!important;color:#e5eee9!important}
+
+/* Logout button palette — rebuilt cleanly for both appearance modes. */
+:root[data-novaro-mode="light"] #app button#logout.logout-control,
+:root[data-novaro-mode="light"] button#logout.logout-control{
+ background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;
+ border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
+ box-shadow:0 3px 10px #216b5518!important;
+}
+:root[data-novaro-mode="light"] #app button#logout.logout-control :is(svg,span){color:inherit!important;-webkit-text-fill-color:currentColor!important;stroke:currentColor!important}
+:root[data-novaro-mode="dark"] #app button#logout.logout-control,
+:root[data-novaro-mode="dark"] button#logout.logout-control{
+ background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;
+ border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+ box-shadow:0 3px 12px #0005!important;
+}
+:root[data-novaro-mode="dark"] #app button#logout.logout-control:hover,
+:root[data-novaro-mode="dark"] #app button#logout.logout-control:focus-visible{
+ background:linear-gradient(145deg,#345b47 0%,#294638 100%)!important;background-color:#345b47!important;
+ border-color:#75a98a!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
+}
+:root[data-novaro-mode="dark"] #app button#logout.logout-control :is(svg,span){color:inherit!important;-webkit-text-fill-color:currentColor!important;stroke:currentColor!important}
+
+/* Outer splash uses mint in light mode and the agreed deep green in dark mode. */
+html body #splash{background:radial-gradient(circle at 50% 38%,#e2f3e8 0%,#c5e5d0 48%,#9fceb0 100%)!important;background-color:#c5e5d0!important;color:#174b3e!important}
+html body #splash .splash-mark{background:linear-gradient(145deg,#f5fcf7 0%,#d5eddd 58%,#b7dfc5 100%)!important;border:1px solid #ffffffd9!important;color:#205d46!important;box-shadow:0 0 0 10px #ffffff55,0 18px 48px #286b4d30!important}
+html body #splash .splash-word{color:#174b3e!important;-webkit-text-fill-color:#174b3e!important;text-shadow:0 2px 12px #ffffff70!important}
+html body #splash .splash-caption{color:#39775a!important;-webkit-text-fill-color:#39775a!important}
+html body #splash .splash-credit,html body #splash .splash-credit strong{color:#456f56!important;-webkit-text-fill-color:#456f56!important}
+html body #splash .splash-loader{background:#ffffffa8!important;box-shadow:0 1px 5px #286b4d12!important}
+html body #splash .splash-loader span{background:linear-gradient(90deg,#79bd91,#286b4d)!important}
+html body #splash .splash-orbit{border-color:#347b562b!important}
+html body #splash .splash-mark:after{background:linear-gradient(90deg,#5eaa7d,#286b4d)!important}
+:root[data-novaro-mode="dark"] body #splash{background:radial-gradient(circle at 50% 38%,#2d806b 0%,#174b3e 48%,#10372e 100%)!important;background-color:#174b3e!important;color:#fff!important}
+:root[data-novaro-mode="dark"] body #splash .splash-mark{background:linear-gradient(145deg,#ffffff25,#ffffff0b)!important;border:1px solid #c4ead36b!important;color:#fff!important;box-shadow:0 0 0 10px #ffffff09,0 16px 42px #061c1740!important}
+:root[data-novaro-mode="dark"] body #splash .splash-word{color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important}
+:root[data-novaro-mode="dark"] body #splash .splash-caption{color:#c9e5d7!important;-webkit-text-fill-color:#c9e5d7!important}
+:root[data-novaro-mode="dark"] body #splash .splash-credit,:root[data-novaro-mode="dark"] body #splash .splash-credit strong{color:#d9eee3!important;-webkit-text-fill-color:#d9eee3!important}
+:root[data-novaro-mode="dark"] body #splash .splash-loader{background:#ffffff30!important;box-shadow:none!important}
+:root[data-novaro-mode="dark"] body #splash .splash-loader span{background:#b6e4ce!important}
+:root[data-novaro-mode="dark"] body #splash .splash-orbit{border-color:#d7f4e52a!important}
+:root[data-novaro-mode="dark"] body #splash .splash-mark:after{background:linear-gradient(90deg,#b6e4ce,#5eaa7d)!important}
+
+
+/* Targeted appearance fix: the five header capsules only. */
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices,
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings,
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout,
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#logout {
+  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
+  background-color:#dff5e9!important;
+  border:1px solid #b9dfcf!important;
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  box-shadow:0 3px 10px rgba(33,107,85,.12)!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices,
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings,
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout,
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#logout {
+  background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;
+  background-color:#294638!important;
+  border:1px solid #5b9278!important;
+  color:#effff6!important;
+  -webkit-text-fill-color:#effff6!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.28)!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices :is(svg,span),
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings :is(svg,span),
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout :is(svg,span),
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp :is(svg,span),
+html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#logout :is(svg,span) {
+  color:#effff6!important;
+  -webkit-text-fill-color:#effff6!important;
+  stroke:#effff6!important;
+}
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices :is(svg,span),
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings :is(svg,span),
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout :is(svg,span),
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp :is(svg,span),
+html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#logout :is(svg,span) {
+  color:#216b55!important;
+  -webkit-text-fill-color:#216b55!important;
+  stroke:#216b55!important;
+}
+
+
+
+/* Final hard override: give the four neighboring header buttons the exact same finish as Language. */
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openDevices.soft,
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openSettings.soft,
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openAbout.soft,
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#logout.soft,
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openDevices.soft:is(:hover,:focus,:focus-visible,:active),
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openSettings.soft:is(:hover,:focus,:focus-visible,:active),
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openAbout.soft:is(:hover,:focus,:focus-visible,:active),
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#logout.soft:is(:hover,:focus,:focus-visible,:active) {
+ background:#e5f5ec!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;
+ border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
+ box-shadow:0 3px 10px rgba(33,107,85,.12)!important;filter:none!important;opacity:1!important;transform:none!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openDevices.soft,
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openSettings.soft,
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openAbout.soft,
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#logout.soft,
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openDevices.soft:is(:hover,:focus,:focus-visible,:active),
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openSettings.soft:is(:hover,:focus,:focus-visible,:active),
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openAbout.soft:is(:hover,:focus,:focus-visible,:active),
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#logout.soft:is(:hover,:focus,:focus-visible,:active) {
+ background:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;
+ border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+ box-shadow:0 3px 12px rgba(0,0,0,.28)!important;filter:none!important;opacity:1!important;transform:none!important;
+}
+
+</style>
+
+<style id="novaro-notification-switch-isolated-v1">
+/* Independent notification button skin; preserve its existing size, badge and behavior. */
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.novaro-notification-switch,
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.novaro-notification-switch:is(:hover,:focus,:focus-visible,:active) {
+ background:#e5f5ec!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;
+ border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
+ box-shadow:0 3px 10px rgba(33,107,85,.12)!important;filter:none!important;opacity:1!important;transform:none!important;
+}
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.novaro-notification-switch,
+html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.novaro-notification-switch:is(:hover,:focus,:focus-visible,:active) {
+ background:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;
+ border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+ box-shadow:0 3px 12px rgba(0,0,0,.28)!important;filter:none!important;opacity:1!important;transform:none!important;
+}
+html[data-novaro-mode="light"] body #app button#novaroAuditBell.novaro-notification-switch svg,
+html[data-novaro-mode="light"] body #app button#novaroAuditBell.novaro-notification-switch svg * {color:#216b55!important;-webkit-text-fill-color:#216b55!important;stroke:#216b55!important}
+html[data-novaro-mode="dark"] body #app button#novaroAuditBell.novaro-notification-switch svg,
+html[data-novaro-mode="dark"] body #app button#novaroAuditBell.novaro-notification-switch svg * {color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important}
+</style>
+
+
+
+
+<style id="novaro-branch-reports-visibility-and-shift-darkmode-fix-v1">
+/* Targeted fixes from the dark-mode screenshot: disabled report labels, active Operations tab glow, and Shift Report action. */
+:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item:disabled,
+:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item[aria-disabled="true"]{opacity:1!important;filter:none!important;color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important}
+:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-text strong,
+:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-text strong{opacity:1!important;color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important;text-shadow:none!important}
+:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-number,
+:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-number{opacity:1!important;color:#a9e7c2!important;-webkit-text-fill-color:#a9e7c2!important}
+:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-chevron,
+:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-chevron{opacity:1!important;color:#a9e7c2!important;-webkit-text-fill-color:#a9e7c2!important}
+/* Reduce the active Operations Reports navigation glow while keeping it visibly active. */
+:root[data-novaro-mode="dark"] #app #tabs button.active,
+:root[data-novaro-mode="dark"] #appLayout #tabs button.active{background:linear-gradient(145deg,#236b5b,#1b5044)!important;background-image:linear-gradient(145deg,#236b5b,#1b5044)!important;border-color:#4d9279!important;box-shadow:0 3px 10px rgba(0,0,0,.22)!important;filter:none!important}
+/* Dark palette specifically for the inner Shift Report action button. */
+:root[data-novaro-mode="dark"] #app#app .sales-report-page:has(.sales-report-icon) button.sales-branch-pill.novaro-operations-shortcut{background:linear-gradient(145deg,#294638,#203b2e)!important;background-color:#294638!important;border-color:#5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 3px 12px rgba(0,0,0,.28)!important}
+:root[data-novaro-mode="dark"] #app#app .sales-report-page:has(.sales-report-icon) button.sales-branch-pill.novaro-operations-shortcut :is(span,strong,svg){color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;opacity:1!important}
+</style>
+
+<style id="novaro-shift-report-inner-button-darkmode-final-v2">
+/* Scope only the Shift Report action inside the Shift Reports page card. */
+:root[data-novaro-mode="dark"] #app#app #main .sales-report-page.sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut {
+ background:#294638!important;background-color:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;
+ border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
+ opacity:1!important;filter:none!important;box-shadow:0 3px 12px rgba(0,0,0,.28)!important;
+}
+:root[data-novaro-mode="dark"] #app#app #main .sales-report-page.sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut :is(span,strong,svg) {
+ color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;opacity:1!important;filter:none!important;
+}
+</style>
+
+<style id="novaro-darkmode-disabled-branch-reports-and-shift-button-correction-v3">
+/* Disabled branch report capsules: counter the global disabled opacity only for these six report items. */
+:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item:disabled,
+:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item[aria-disabled="true"]{opacity:1!important;filter:none!important;background:#20352b!important;background-image:linear-gradient(135deg,#263b31,#20352b)!important;border-color:#466c59!important;color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important;box-shadow:0 7px 20px #0003!important}
+:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-text,
+:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-text,
+:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-text strong,
+:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-text strong{opacity:1!important;color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important}
+/* Correct the earlier selector: sales-month-card is a child wrapper, not a class on sales-report-page. */
+:root[data-novaro-mode="dark"] #app#app #main .sales-report-page .sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut,
+:root[data-novaro-mode="dark"] #app#app .sales-report-page .sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut{background:#294638!important;background-color:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;opacity:1!important;filter:none!important;box-shadow:0 3px 12px rgba(0,0,0,.28)!important}
+:root[data-novaro-mode="dark"] #app#app #main .sales-report-page .sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut :is(span,strong,svg),
+:root[data-novaro-mode="dark"] #app#app .sales-report-page .sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut :is(span,strong,svg){color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;opacity:1!important;filter:none!important}
+</style>
+
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
@@ -8135,662 +8796,5 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  modeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-novaro-mode']});
 })();
 </script>
-<style id="novaro-sales-branch-mint-v2">
-#app .sales-report-page .sales-branch-pill,
-#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{position:relative!important;isolation:isolate!important;overflow:hidden!important;min-height:76px!important;padding:13px 15px!important;gap:12px!important;border:1px solid #b9dfc8!important;border-radius:17px!important;background:linear-gradient(135deg,#f4fcf7,#e5f4eb)!important;color:#204b3b!important;box-shadow:0 5px 16px #286b4d12!important;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important}
-#app .sales-report-page .sales-branch-pill:before,
-#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:before{content:"";position:absolute;inset-inline-start:0;top:12px;bottom:12px;width:3px;border-radius:8px;background:#68bd94;pointer-events:none}
-#app .sales-report-page .sales-branch-pill:hover,
-#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:hover{transform:translateY(-2px)!important;border-color:#86cbaa!important;box-shadow:0 9px 22px #286b4d1c!important}
-#app .sales-report-page .sales-branch-pill:active,
-#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:active{transform:scale(.985)!important}
-#app .sales-report-page .sales-branch-pill:focus-visible,
-#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:focus-visible{outline:3px solid #75c99e!important;outline-offset:3px!important}
-#app .sales-report-page .sales-branch-icon,
-#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-icon{width:39px!important;height:39px!important;border-radius:13px!important;background:linear-gradient(145deg,#d5f0e1,#c3e8d4)!important;color:#287451!important;box-shadow:inset 0 0 0 1px #a9d9bf!important}
-#app .sales-report-page .sales-branch-copy strong,
-#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy strong{color:#204b3b!important;font-size:14px!important;font-weight:800!important}
-#app .sales-report-page .sales-branch-copy small,
-#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy small{color:#628071!important}
-#app .sales-report-page .sales-branch-arrow,
-#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-arrow{color:#438b68!important}
-:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill,
-:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{border-color:#466c59!important;background:linear-gradient(135deg,#263b31,#20352b)!important;color:#e4f4e9!important;box-shadow:0 7px 20px #0003!important}
-:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill:before,
-:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:before{background:#82d6a8}
-:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-pill:hover,
-:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill:hover{border-color:#78bd96!important;box-shadow:0 10px 24px #0005!important}
-:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-icon,
-:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-icon{background:linear-gradient(145deg,#355b47,#2d4d3d)!important;color:#a9e7c2!important;box-shadow:inset 0 0 0 1px #527e64!important}
-:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-copy strong,
-:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy strong{color:#e6f5eb!important}
-:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-copy small,
-:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy small{color:#b1cdbb!important}
-:root[data-novaro-mode="dark"] #app .sales-report-page .sales-branch-arrow,
-:root[data-novaro-mode="dark"] #app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-arrow{color:#9bdab4!important}
-@media(prefers-reduced-motion:reduce){#app .sales-report-page .sales-branch-pill,
-#app .sales-report-page.novaro-operations-shortcuts-card .novaro-operations-shortcut.sales-branch-pill{transition:none!important}}
-/* Operations buttons inherit the exact same .sales-branch-pill rules as the branch buttons above. */
-#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill:disabled{
-  opacity:1!important;
-  filter:none!important;
-  -webkit-text-fill-color:inherit!important;
-}
-</style>
-
-
-<style id="novaro-daily-tip-heading-cleanup-v1">
-/* Remove only the thin divider under the Daily Tip title and its month label. */
-#app .sales-report-page .daily-tip-card > .sales-statistics-heading{
-  border-bottom:0!important;
-  box-shadow:none!important;
-}
-#app .sales-report-page .daily-tip-card > .sales-statistics-heading::before,
-#app .sales-report-page .daily-tip-card > .sales-statistics-heading::after{
-  display:none!important;
-  content:none!important;
-}
-#app .sales-report-page .daily-tip-card .daily-tip-toolbar{
-  display:none!important;
-}
-</style>
-
-
-<style id="novaro-headcount-branch-mint-match-operations-v1">
-/* Match the two Headcount branch selectors to the Operations branch-card identity. */
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill{
-  position:relative!important;
-  isolation:isolate!important;
-  overflow:hidden!important;
-  min-height:76px!important;
-  padding:13px 15px!important;
-  gap:12px!important;
-  border:1px solid #b9dfc8!important;
-  border-radius:17px!important;
-  background:linear-gradient(135deg,#f4fcf7,#e5f4eb)!important;
-  color:#204b3b!important;
-  box-shadow:0 5px 16px #286b4d12!important;
-  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important;
-}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:before{
-  content:"";
-  position:absolute;
-  inset-inline-start:0;
-  top:12px;
-  bottom:12px;
-  width:3px;
-  border-radius:8px;
-  background:#68bd94;
-  pointer-events:none;
-}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:hover{
-  transform:translateY(-2px)!important;
-  border-color:#86cbaa!important;
-  box-shadow:0 9px 22px #286b4d1c!important;
-}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:active{transform:scale(.985)!important}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:focus-visible{
-  outline:3px solid #75c99e!important;
-  outline-offset:3px!important;
-}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-icon{
-  width:39px!important;
-  height:39px!important;
-  border-radius:13px!important;
-  background:linear-gradient(145deg,#d5f0e1,#c3e8d4)!important;
-  color:#287451!important;
-  box-shadow:inset 0 0 0 1px #a9d9bf!important;
-}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-arrow{color:#438b68!important}
-:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill{
-  border-color:#466c59!important;
-  background:linear-gradient(135deg,#263b31,#20352b)!important;
-  color:#e4f4e9!important;
-  box-shadow:0 7px 20px #0003!important;
-}
-:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:before{background:#82d6a8}
-:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill:hover{
-  border-color:#78bd96!important;
-  box-shadow:0 10px 24px #0005!important;
-}
-:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-icon{
-  background:linear-gradient(145deg,#355b47,#2d4d3d)!important;
-  color:#a9e7c2!important;
-  box-shadow:inset 0 0 0 1px #527e64!important;
-}
-:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-arrow{color:#9bdab4!important}
-@media(max-width:600px){
-  /* Keep Headcount branch buttons identical in size to Operations on mobile too. */
-  #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill{
-    min-height:76px!important;
-    padding:13px 15px!important;
-    gap:12px!important;
-  }
-  #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-icon{
-    width:39px!important;height:39px!important;font-size:inherit!important;
-  }
-}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy strong{color:#204b3b!important;font-size:14px!important;font-weight:800!important;line-height:1.45;overflow-wrap:anywhere}
-#app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy small{color:#628071!important;font-size:11px!important;font-weight:500!important;line-height:1.5;overflow-wrap:anywhere}
-:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy strong{color:#e6f5eb!important}
-:root[data-novaro-mode="dark"] #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-copy small{color:#b1cdbb!important}
-@media(prefers-reduced-motion:reduce){
-  #app .headcount-page-card:not(.novaro-operations-shortcuts-card) .headcount-branch-pill{transition:none!important}
-}
-</style>
-
-
-<style id="novaro-login-actions-light-mint-v1">
-/* Match the three visible login actions to the light mint welcome panel. */
-#login.auth-shell #loginView .auth-submit,
-#login.auth-shell #loginView .forgot-password-link{
-  background:linear-gradient(135deg,#effaf3 0%,#e2f4e9 54%,#d6eee0 100%)!important;
-  background-color:#e2f4e9!important;
-  color:#174b3e!important;
-  -webkit-text-fill-color:#174b3e!important;
-  border:1px solid #c8e6d4!important;
-  box-shadow:0 5px 16px #236e5d12!important;
-}
-#login.auth-shell #loginView .auth-submit:hover,
-#login.auth-shell #loginView .forgot-password-link:hover{
-  background:linear-gradient(135deg,#e2f4e9 0%,#d6eee0 100%)!important;
-  border-color:#9fd2b5!important;
-  box-shadow:0 8px 20px #236e5d1c!important;
-}
-#login.auth-shell #loginView .auth-submit span{color:inherit!important}
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link{
-  background:linear-gradient(135deg,#294638 0%,#243d31 100%)!important;
-  background-color:#294638!important;
-  color:#e6f5eb!important;
-  -webkit-text-fill-color:#e6f5eb!important;
-  border-color:#527b63!important;
-  box-shadow:0 6px 18px #0003!important;
-}
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover{
-  background:linear-gradient(135deg,#315542 0%,#294638 100%)!important;
-  border-color:#78bd96!important;
-}
-</style>
-
-<style id="novaro-auth-welcome-deeper-mint-v3">
-/* A slightly deeper mint for the welcome panel, keeping the login palette coherent. */
-#login.auth-shell .auth-visual{
- background:linear-gradient(145deg,#dff3e7 0%,#ccebd9 54%,#bfe3ce 100%)!important;
- color:#174b3e!important;
- border:1px solid #b4dcc3!important;
- box-shadow:0 28px 80px #236e5d20!important;
-}
-#login.auth-shell .visual-grid{
- opacity:.24!important;
- background-image:linear-gradient(#286b5015 1px,transparent 1px),linear-gradient(90deg,#286b5015 1px,transparent 1px)!important;
-}
-#login.auth-shell .visual-glow.glow-a{background:radial-gradient(circle,#91d2a988,transparent 70%)!important}
-#login.auth-shell .visual-glow.glow-b{background:radial-gradient(circle,#a9dfba99,transparent 70%)!important}
-#login.auth-shell .visual-mark{
- border-color:#82bf9a88!important;
- background:linear-gradient(145deg,#f7fff9e8,#ccebd9dd)!important;
- color:#24684f!important;
- box-shadow:0 8px 22px #286b4d18!important;
-}
-#login.auth-shell .visual-brand{color:#245b45!important}
-#login.auth-shell .eyebrow{color:#397d5d!important}
-#login.auth-shell .visual-copy h1{color:#174b3e!important}
-#login.auth-shell .visual-copy h1 em{color:#347b56!important}
-#login.auth-shell .visual-copy p{color:#456e58!important}
-#login.auth-shell .visual-foot{color:#4c795e!important}
-#login.auth-shell .visual-foot i{background:#65aa80!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual{
- background:linear-gradient(145deg,#294b39 0%,#254534 54%,#203d2f 100%)!important;
- color:#e6f5eb!important;
- border-color:#456d53!important;
-}
-:root[data-novaro-mode="dark"] #login.auth-shell .visual-brand,
-:root[data-novaro-mode="dark"] #login.auth-shell .visual-copy h1{color:#e6f5eb!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .visual-copy h1 em{color:#a5d9b5!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .eyebrow,
-:root[data-novaro-mode="dark"] #login.auth-shell .visual-copy p,
-:root[data-novaro-mode="dark"] #login.auth-shell .visual-foot{color:#c0dfc9!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .visual-mark{
- background:linear-gradient(145deg,#365d45,#294b39)!important;
- border-color:#668d70!important;color:#e6f5eb!important;
-}
-:root[data-novaro-mode="dark"] #login.auth-shell .visual-foot i{background:#8bc69a!important}
-</style>
-
-
-
-
-
-
-<style id="novaro-operations-shortcuts-final-fix-v1">
-/* Keep Operations shortcuts compact; all colors come from the shared sales-branch-pill rules. */
-#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{
-  box-sizing:border-box!important;
-  min-height:58px!important;
-  height:auto!important;
-  padding:11px 15px!important;
-  gap:12px!important;
-  opacity:1!important;
-  filter:none!important;
-}
-#app#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-icon{
-  width:30px!important;height:30px!important;flex:none!important;border-radius:10px!important;
-}
-#app#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy strong{
-  font-size:13px!important;line-height:1.3!important;font-weight:800!important;
-}
-@media(max-width:600px){
-  #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{min-height:56px!important;padding:10px 12px!important}
-  #app#app .sales-report-page.novaro-operations-shortcuts-card .sales-branch-copy strong{font-size:12px!important;line-height:1.3!important}
-}
-</style>
-
-<style id="novaro-operations-shortcuts-button-identity-v3">
-/* Preserve the half-card width only. Button colors are inherited from the shared sales-branch-pill theme. */
-#app .novaro-operations-shortcut:disabled{opacity:1!important}
-#app .sales-report-page button.novaro-operations-shortcut[style*="max-width:50%"]{
- width:50%!important;max-width:50%!important;min-width:0!important;flex:0 0 50%!important;
-}
-</style>
-
-
-<style id="novaro-unified-mint-buttons-except-bottom-nav-v1">
-/* One light-mint identity for every ordinary action button. Keep the bottom navigation untouched and preserve destructive-action colors. */
-#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
-#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
-#login.auth-shell #loginView .auth-submit,
-#login.auth-shell #loginView .forgot-password-link{
-  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
-  background-color:#dff5e9!important;
-  border-color:#b9dfcf!important;
-  color:#216b55!important;
-  -webkit-text-fill-color:#216b55!important;
-  box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
-}
-#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
-#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
-#login.auth-shell #loginView .auth-submit:hover,
-#login.auth-shell #loginView .forgot-password-link:hover{
-  background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
-  background-color:#cceedd!important;
-  border-color:#91cdb3!important;
-  color:#216b55!important;
-  -webkit-text-fill-color:#216b55!important;
-  box-shadow:0 6px 18px rgba(34,112,83,.14)!important;
-}
-#app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):active,
-#appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):active{
-  background:linear-gradient(145deg,#dff5e9 0%,#cceedd 100%)!important;
-  background-color:#cceedd!important;
-}
-:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
-:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn),
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link{
-  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
-  background-color:#dff5e9!important;
-  border-color:#b9dfcf!important;
-  color:#216b55!important;
-  -webkit-text-fill-color:#216b55!important;
-  box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
-}
-:root[data-novaro-mode="dark"] #app button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
-:root[data-novaro-mode="dark"] #appLayout button:not(#tabs button):not(.danger):not(.delete):not(.btn-danger):not(.delete-btn):not(.branch-delete-btn):hover,
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover{
-  background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;
-  background-color:#cceedd!important;
-  border-color:#91cdb3!important;
-  color:#216b55!important;
-  -webkit-text-fill-color:#216b55!important;
-}
-/* Highest-priority shared mint identity for the six branch actions and the Shift Report action.
-   Double #app specificity intentionally overrides the older branch-card green theme in both modes. */
-#app#app .sales-report-page button.sales-branch-pill,
-#app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{
-  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
-  background-color:#dff5e9!important;
-  border:1px solid #b9dfcf!important;
-  color:#216b55!important;
-  -webkit-text-fill-color:#216b55!important;
-  box-shadow:0 4px 14px rgba(34,112,83,.09)!important;
-}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page button.sales-branch-pill,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill{
-  background:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
-  background-color:#263e33!important;
-  border:1px solid #527762!important;
-  color:#e5f4eb!important;
-  -webkit-text-fill-color:#e5f4eb!important;
-  box-shadow:0 4px 14px #00000030!important;
-}
-
-/* The bottom navigation is the one intentional exception: retain its green active state. */
-#app #tabs button,
-#appLayout #tabs button{
-  background:var(--nv-btn-soft-bg)!important;
-  background-image:none!important;
-  color:var(--nv-btn-soft-text)!important;
-  -webkit-text-fill-color:var(--nv-btn-soft-text)!important;
-  border-color:var(--nv-btn-border)!important;
-}
-#app #tabs button.active,
-#appLayout #tabs button.active{
-  background:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;
-  background-image:linear-gradient(110deg,var(--nv-btn-primary),var(--nv-btn-primary-deep))!important;
-  color:#fff!important;
-  -webkit-text-fill-color:#fff!important;
-  border-color:var(--nv-btn-primary)!important;
-}
-:root[data-novaro-mode="dark"] #app #tabs button:not(.active),
-:root[data-novaro-mode="dark"] #appLayout #tabs button:not(.active){
-  background:transparent!important;
-  background-image:none!important;
-  color:#c8d8cf!important;
-  -webkit-text-fill-color:#c8d8cf!important;
-}
-:root[data-novaro-mode="dark"] #app #tabs button.active,
-:root[data-novaro-mode="dark"] #appLayout #tabs button.active{
-  background:linear-gradient(145deg,#287d6b,#1d5c4d)!important;
-  background-image:linear-gradient(145deg,#287d6b,#1d5c4d)!important;
-  border-color:#55a58a!important;
-  color:#fff!important;
-  -webkit-text-fill-color:#fff!important;
-}
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit,
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link {
- background:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
- background-color:#263e33!important;
- background-image:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
- border-color:#527762!important;
- color:#e5f4eb!important;
- -webkit-text-fill-color:#e5f4eb!important;
- box-shadow:0 4px 14px #00000030!important;
-}
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .auth-submit:hover,
-:root[data-novaro-mode="dark"] #login.auth-shell #loginView .forgot-password-link:hover {
- background:linear-gradient(145deg,#3b604c 0%,#304e3e 100%)!important;
- background-image:linear-gradient(145deg,#3b604c 0%,#304e3e 100%)!important;
- border-color:#75a98a!important;color:#f4fff8!important;-webkit-text-fill-color:#f4fff8!important;
-}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page button.sales-branch-pill,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page.novaro-operations-shortcuts-card button.novaro-operations-shortcut.sales-branch-pill {
- background:linear-gradient(145deg,#304b3d 0%,#263e33 100%)!important;
- background-color:#263e33!important;
- border:1px solid #527762!important;
- color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important;
- box-shadow:0 4px 14px #00000030!important;
-}
-:root[data-novaro-mode="dark"] #app :is(button,input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
- color-scheme:dark;
-}
-:root[data-novaro-mode="dark"] #app :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
-:root[data-novaro-mode="dark"] #login.auth-shell input:not([type="checkbox"]):not([type="radio"]) {
- background:#18251f!important;color:#e5eee9!important;border-color:#40564a!important;
- -webkit-text-fill-color:#e5eee9!important;
-}
-:root[data-novaro-mode="dark"] #app input::placeholder,
-:root[data-novaro-mode="dark"] #app textarea::placeholder,
-:root[data-novaro-mode="dark"] #login.auth-shell input::placeholder {color:#91a69a!important;-webkit-text-fill-color:#91a69a!important;opacity:1!important}
-:root[data-novaro-mode="dark"] #app :is(button.danger,button.delete,button.btn-danger,button.delete-btn,button.branch-delete-btn,.danger,.delete,.btn-danger) {
- background:#482d30!important;border-color:#815055!important;color:#ffdadd!important;-webkit-text-fill-color:#ffdadd!important;
-}
-:root[data-novaro-mode="dark"] #app :is(.app-header .header-icon-button,.app-header .language-toggle-capsule) {
- background:#2b3d33!important;border-color:#496858!important;color:#dce9e1!important;-webkit-text-fill-color:#dce9e1!important;
-}
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-panel,
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-note {
- background:#202f28!important;color:#e5eee9!important;border-color:#40564a!important;
-}
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual {
- background:linear-gradient(145deg,#263f34 0%,#1d332a 58%,#172820 100%)!important;
- color:#e5eee9!important;
-}
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual :is(.visual-brand,.visual-copy h1,.visual-copy p,.visual-foot,.eyebrow),
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-mini-brand,
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-form-wrap h2,
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-subtitle,
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-panel label {color:#e5eee9!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual .visual-copy h1 em {color:#a9d9bf!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-visual .visual-copy p,
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-mini-brand small,
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-subtitle {color:#b8c9bf!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .mini-mark,
-:root[data-novaro-mode="dark"] #login.auth-shell .visual-mark {background:#2b493a!important;border-color:#527762!important;color:#e5f4eb!important}
-:root[data-novaro-mode="dark"] #login.auth-shell .auth-note {background:#26382f!important;color:#b8c9bf!important}
-html[data-novaro-mode="light"] body #app .app-header button#openSettings,
-html[data-novaro-mode="light"] body #app .app-header button#openAbout,
-html[data-novaro-mode="light"] body #app .app-header button#logout,
-html[data-novaro-mode="light"] body #app .app-header button#novaroAuditBell{
- background:#e5f5ec!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
- border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header button#openSettings,
-html[data-novaro-mode="dark"] body #app .app-header button#openAbout,
-html[data-novaro-mode="dark"] body #app .app-header button#logout,
-html[data-novaro-mode="dark"] body #app .app-header button#novaroAuditBell{
- background:#244b3c!important;background-image:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;
- border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
-}
-html[data-novaro-mode="light"] body #app .app-header button#openSettings *,
-html[data-novaro-mode="light"] body #app .app-header button#openAbout *,
-html[data-novaro-mode="light"] body #app .app-header button#logout *,
-html[data-novaro-mode="light"] body #app .app-header button#novaroAuditBell svg{
- color:#216b55!important;-webkit-text-fill-color:#216b55!important;stroke:#216b55!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header button#openSettings *,
-html[data-novaro-mode="dark"] body #app .app-header button#openAbout *,
-html[data-novaro-mode="dark"] body #app .app-header button#logout *,
-html[data-novaro-mode="dark"] body #app .app-header button#novaroAuditBell svg{
- color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;
-}
-html[data-novaro-mode] body #app .app-header button#openSettings .header-icon-label,
-html[data-novaro-mode] body #app .app-header button#openAbout .header-icon-label,
-html[data-novaro-mode] body #app .app-header button#logout span{
- display:block!important;visibility:visible!important;opacity:1!important;
- font-size:10px!important;line-height:1.2!important;
-}
-
-
-/* NOVARO single source of truth: launch shell, Android viewport and logout theme. */
-html,body{width:100%;min-height:100%;margin:0;overflow-x:hidden;background:var(--bg,#f4f8f6)}
-html{overscroll-behavior-y:auto}
-body{padding-bottom:0!important}
-#splash{position:fixed!important;inset:0!important;width:auto!important;height:auto!important;min-height:0!important;box-sizing:border-box!important;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)!important}
-@media(max-width:600px){
- #app>.wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))!important}
- #app .tabs{bottom:calc(10px + env(safe-area-inset-bottom,0px))!important}
-}
-:root[data-novaro-mode="light"]{color-scheme:light}
-:root[data-novaro-mode="dark"]{color-scheme:dark!important;background-color:#19251f!important}
-:root[data-novaro-mode="dark"] body,
-:root[data-novaro-mode="dark"] #login,
-:root[data-novaro-mode="dark"] #app,
-:root[data-novaro-mode="dark"] #appLayout{background-color:#19251f!important;color:#e5eee9!important}
-
-/* Logout button palette — rebuilt cleanly for both appearance modes. */
-:root[data-novaro-mode="light"] #app button#logout.logout-control,
-:root[data-novaro-mode="light"] button#logout.logout-control{
- background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;
- border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
- box-shadow:0 3px 10px #216b5518!important;
-}
-:root[data-novaro-mode="light"] #app button#logout.logout-control :is(svg,span){color:inherit!important;-webkit-text-fill-color:currentColor!important;stroke:currentColor!important}
-:root[data-novaro-mode="dark"] #app button#logout.logout-control,
-:root[data-novaro-mode="dark"] button#logout.logout-control{
- background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;
- border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
- box-shadow:0 3px 12px #0005!important;
-}
-:root[data-novaro-mode="dark"] #app button#logout.logout-control:hover,
-:root[data-novaro-mode="dark"] #app button#logout.logout-control:focus-visible{
- background:linear-gradient(145deg,#345b47 0%,#294638 100%)!important;background-color:#345b47!important;
- border-color:#75a98a!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
-}
-:root[data-novaro-mode="dark"] #app button#logout.logout-control :is(svg,span){color:inherit!important;-webkit-text-fill-color:currentColor!important;stroke:currentColor!important}
-
-/* Outer splash uses mint in light mode and the agreed deep green in dark mode. */
-html body #splash{background:radial-gradient(circle at 50% 38%,#e2f3e8 0%,#c5e5d0 48%,#9fceb0 100%)!important;background-color:#c5e5d0!important;color:#174b3e!important}
-html body #splash .splash-mark{background:linear-gradient(145deg,#f5fcf7 0%,#d5eddd 58%,#b7dfc5 100%)!important;border:1px solid #ffffffd9!important;color:#205d46!important;box-shadow:0 0 0 10px #ffffff55,0 18px 48px #286b4d30!important}
-html body #splash .splash-word{color:#174b3e!important;-webkit-text-fill-color:#174b3e!important;text-shadow:0 2px 12px #ffffff70!important}
-html body #splash .splash-caption{color:#39775a!important;-webkit-text-fill-color:#39775a!important}
-html body #splash .splash-credit,html body #splash .splash-credit strong{color:#456f56!important;-webkit-text-fill-color:#456f56!important}
-html body #splash .splash-loader{background:#ffffffa8!important;box-shadow:0 1px 5px #286b4d12!important}
-html body #splash .splash-loader span{background:linear-gradient(90deg,#79bd91,#286b4d)!important}
-html body #splash .splash-orbit{border-color:#347b562b!important}
-html body #splash .splash-mark:after{background:linear-gradient(90deg,#5eaa7d,#286b4d)!important}
-:root[data-novaro-mode="dark"] body #splash{background:radial-gradient(circle at 50% 38%,#2d806b 0%,#174b3e 48%,#10372e 100%)!important;background-color:#174b3e!important;color:#fff!important}
-:root[data-novaro-mode="dark"] body #splash .splash-mark{background:linear-gradient(145deg,#ffffff25,#ffffff0b)!important;border:1px solid #c4ead36b!important;color:#fff!important;box-shadow:0 0 0 10px #ffffff09,0 16px 42px #061c1740!important}
-:root[data-novaro-mode="dark"] body #splash .splash-word{color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important}
-:root[data-novaro-mode="dark"] body #splash .splash-caption{color:#c9e5d7!important;-webkit-text-fill-color:#c9e5d7!important}
-:root[data-novaro-mode="dark"] body #splash .splash-credit,:root[data-novaro-mode="dark"] body #splash .splash-credit strong{color:#d9eee3!important;-webkit-text-fill-color:#d9eee3!important}
-:root[data-novaro-mode="dark"] body #splash .splash-loader{background:#ffffff30!important;box-shadow:none!important}
-:root[data-novaro-mode="dark"] body #splash .splash-loader span{background:#b6e4ce!important}
-:root[data-novaro-mode="dark"] body #splash .splash-orbit{border-color:#d7f4e52a!important}
-:root[data-novaro-mode="dark"] body #splash .splash-mark:after{background:linear-gradient(90deg,#b6e4ce,#5eaa7d)!important}
-
-
-/* Targeted appearance fix: the five header capsules only. */
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices,
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings,
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout,
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#logout {
-  background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;
-  background-color:#dff5e9!important;
-  border:1px solid #b9dfcf!important;
-  color:#216b55!important;
-  -webkit-text-fill-color:#216b55!important;
-  box-shadow:0 3px 10px rgba(33,107,85,.12)!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices,
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings,
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout,
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp,
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#logout {
-  background:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;
-  background-color:#294638!important;
-  border:1px solid #5b9278!important;
-  color:#effff6!important;
-  -webkit-text-fill-color:#effff6!important;
-  box-shadow:0 3px 12px rgba(0,0,0,.28)!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices :is(svg,span),
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings :is(svg,span),
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout :is(svg,span),
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp :is(svg,span),
-html[data-novaro-mode="dark"] body #app .app-header .header-tools-stack .header-icon-row > button#logout :is(svg,span) {
-  color:#effff6!important;
-  -webkit-text-fill-color:#effff6!important;
-  stroke:#effff6!important;
-}
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openDevices :is(svg,span),
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openSettings :is(svg,span),
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#openAbout :is(svg,span),
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#langToggleApp :is(svg,span),
-html[data-novaro-mode="light"] body #app .app-header .header-tools-stack .header-icon-row > button#logout :is(svg,span) {
-  color:#216b55!important;
-  -webkit-text-fill-color:#216b55!important;
-  stroke:#216b55!important;
-}
-
-
-
-/* Final hard override: give the four neighboring header buttons the exact same finish as Language. */
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openDevices.soft,
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openSettings.soft,
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openAbout.soft,
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#logout.soft,
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openDevices.soft:is(:hover,:focus,:focus-visible,:active),
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openSettings.soft:is(:hover,:focus,:focus-visible,:active),
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openAbout.soft:is(:hover,:focus,:focus-visible,:active),
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#logout.soft:is(:hover,:focus,:focus-visible,:active) {
- background:#e5f5ec!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;
- border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
- box-shadow:0 3px 10px rgba(33,107,85,.12)!important;filter:none!important;opacity:1!important;transform:none!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openDevices.soft,
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openSettings.soft,
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openAbout.soft,
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#logout.soft,
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openDevices.soft:is(:hover,:focus,:focus-visible,:active),
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openSettings.soft:is(:hover,:focus,:focus-visible,:active),
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#openAbout.soft:is(:hover,:focus,:focus-visible,:active),
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button#logout.soft:is(:hover,:focus,:focus-visible,:active) {
- background:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;
- border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
- box-shadow:0 3px 12px rgba(0,0,0,.28)!important;filter:none!important;opacity:1!important;transform:none!important;
-}
-
-</style>
-
-<style id="novaro-notification-switch-isolated-v1">
-/* Independent notification button skin; preserve its existing size, badge and behavior. */
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.novaro-notification-switch,
-html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.novaro-notification-switch:is(:hover,:focus,:focus-visible,:active) {
- background:#e5f5ec!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#e5f5ec!important;
- border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;
- box-shadow:0 3px 10px rgba(33,107,85,.12)!important;filter:none!important;opacity:1!important;transform:none!important;
-}
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.novaro-notification-switch,
-html[data-novaro-mode="dark"] body #app .app-header.novaro-header-column .header-clock-panel .notification-wrap > button#novaroAuditBell.novaro-notification-switch:is(:hover,:focus,:focus-visible,:active) {
- background:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;background-color:#294638!important;
- border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
- box-shadow:0 3px 12px rgba(0,0,0,.28)!important;filter:none!important;opacity:1!important;transform:none!important;
-}
-html[data-novaro-mode="light"] body #app button#novaroAuditBell.novaro-notification-switch svg,
-html[data-novaro-mode="light"] body #app button#novaroAuditBell.novaro-notification-switch svg * {color:#216b55!important;-webkit-text-fill-color:#216b55!important;stroke:#216b55!important}
-html[data-novaro-mode="dark"] body #app button#novaroAuditBell.novaro-notification-switch svg,
-html[data-novaro-mode="dark"] body #app button#novaroAuditBell.novaro-notification-switch svg * {color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important}
-</style>
-
-
-
-
-<style id="novaro-branch-reports-visibility-and-shift-darkmode-fix-v1">
-/* Targeted fixes from the dark-mode screenshot: disabled report labels, active Operations tab glow, and Shift Report action. */
-:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item:disabled,
-:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item[aria-disabled="true"]{opacity:1!important;filter:none!important;color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important}
-:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-text strong,
-:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-text strong{opacity:1!important;color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important;text-shadow:none!important}
-:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-number,
-:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-number{opacity:1!important;color:#a9e7c2!important;-webkit-text-fill-color:#a9e7c2!important}
-:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-chevron,
-:root[data-novaro-mode="dark"] #app#app .novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-chevron{opacity:1!important;color:#a9e7c2!important;-webkit-text-fill-color:#a9e7c2!important}
-/* Reduce the active Operations Reports navigation glow while keeping it visibly active. */
-:root[data-novaro-mode="dark"] #app #tabs button.active,
-:root[data-novaro-mode="dark"] #appLayout #tabs button.active{background:linear-gradient(145deg,#236b5b,#1b5044)!important;background-image:linear-gradient(145deg,#236b5b,#1b5044)!important;border-color:#4d9279!important;box-shadow:0 3px 10px rgba(0,0,0,.22)!important;filter:none!important}
-/* Dark palette specifically for the inner Shift Report action button. */
-:root[data-novaro-mode="dark"] #app#app .sales-report-page:has(.sales-report-icon) button.sales-branch-pill.novaro-operations-shortcut{background:linear-gradient(145deg,#294638,#203b2e)!important;background-color:#294638!important;border-color:#5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;box-shadow:0 3px 12px rgba(0,0,0,.28)!important}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page:has(.sales-report-icon) button.sales-branch-pill.novaro-operations-shortcut :is(span,strong,svg){color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;opacity:1!important}
-</style>
-
-<style id="novaro-shift-report-inner-button-darkmode-final-v2">
-/* Scope only the Shift Report action inside the Shift Reports page card. */
-:root[data-novaro-mode="dark"] #app#app #main .sales-report-page.sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut {
- background:#294638!important;background-color:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;
- border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;
- opacity:1!important;filter:none!important;box-shadow:0 3px 12px rgba(0,0,0,.28)!important;
-}
-:root[data-novaro-mode="dark"] #app#app #main .sales-report-page.sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut :is(span,strong,svg) {
- color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;opacity:1!important;filter:none!important;
-}
-</style>
-
-<style id="novaro-darkmode-disabled-branch-reports-and-shift-button-correction-v3">
-/* Disabled branch report capsules: counter the global disabled opacity only for these six report items. */
-:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item:disabled,
-:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item[aria-disabled="true"]{opacity:1!important;filter:none!important;background:#20352b!important;background-image:linear-gradient(135deg,#263b31,#20352b)!important;border-color:#466c59!important;color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important;box-shadow:0 7px 20px #0003!important}
-:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-text,
-:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-text,
-:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item:disabled .novaro-branch-reports-rebuilt-text strong,
-:root[data-novaro-mode="dark"] #app#app button.novaro-branch-reports-rebuilt-item[aria-disabled="true"] .novaro-branch-reports-rebuilt-text strong{opacity:1!important;color:#e5f4eb!important;-webkit-text-fill-color:#e5f4eb!important}
-/* Correct the earlier selector: sales-month-card is a child wrapper, not a class on sales-report-page. */
-:root[data-novaro-mode="dark"] #app#app #main .sales-report-page .sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut{background:#294638!important;background-color:#294638!important;background-image:linear-gradient(145deg,#294638 0%,#203b2e 100%)!important;border:1px solid #5b9278!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;opacity:1!important;filter:none!important;box-shadow:0 3px 12px rgba(0,0,0,.28)!important}
-:root[data-novaro-mode="dark"] #app#app #main .sales-report-page .sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut :is(span,strong,svg),
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .sales-month-card button.headcount-branch-pill.sales-branch-pill.novaro-operations-shortcut :is(span,strong,svg){color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;opacity:1!important;filter:none!important}
-</style>
+</body>
+</html>
