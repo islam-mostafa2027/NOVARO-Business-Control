@@ -4989,7 +4989,7 @@ document.addEventListener("click",async e=>{
  const headcountSectionToggle=e.target.closest("[data-hc-section-toggle]");
  if(headcountSectionToggle){
   const selected=headcountSectionToggle.dataset.hcSectionToggle;
-  const root=headcountSectionToggle.closest(".headcount-page-card");
+  const root=headcountSectionToggle.closest(".hc-section-switcher")?.parentElement;
   root?.querySelectorAll("[data-hc-section-toggle]").forEach(button=>{const active=button===headcountSectionToggle;button.classList.toggle("is-active",active);button.setAttribute("aria-expanded",active?"true":"false");});
   root?.querySelectorAll("[data-hc-section-panel]").forEach(panel=>{panel.hidden=panel.dataset.hcSectionPanel!==selected;});
   return;
