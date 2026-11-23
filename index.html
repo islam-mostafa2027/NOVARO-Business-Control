@@ -3273,6 +3273,12 @@ const translations={"إدارة ومراقبة الأعمال":"SMART BUSINESS C
 "أكمل اسم الجلسة والشهر والسنة":"Complete the session name, month and year"
 ,"الدخول بالبصمة أو مفتاح الجهاز":"Sign in with passkey","استخدم البصمة أو Face ID أو PIN قفل الجهاز حسب إمكانياته.":"Use your fingerprint, Face ID, or your device PIN, depending on what your device supports.","الحسابات تُفعّل من خلال مالك النظام. إذا كان لديك حساب فرع، استخدم بيانات الدخول المخصصة لفرعك.":"Accounts are activated by the System Owner. If you have a branch account, use your branch-specific login credentials."};
 Object.assign(translations,{
+  "حذف تقرير المبيعات المحفوظ متاح للمالك فقط.": "Only the owner can delete a saved sales report.",
+  "هل تريد حذف تقرير المبيعات المحفوظ لهذا اليوم؟ لا يمكن التراجع عن الحذف.": "Delete the saved sales report for this day? This action cannot be undone.",
+  "جارٍ الحذف...": "Deleting...",
+  "تم حذف التقرير المحفوظ.": "Saved report deleted.",
+  "تعذر حذف التقرير: ": "Could not delete report: ",
+  "حذف التقرير": "Delete Report",
   "آخر عملية جرد": "Latest stocktake",
   "ابدأ جلسة جرد لعرض بيانات المخزون هنا.": "Start a stocktake session to view inventory data here.",
   "إخفاء التصنيف؟ سيتم الاحتفاظ بسجلات الجرد القديمة.": "Hide this category? Previous stocktake records will be preserved.",
@@ -4490,19 +4496,19 @@ document.addEventListener("click",async e=>{
  if(salesMonthCard&&e.target.closest("#deleteSavedSalesDay")){
   const branchId=salesMonthCard.dataset.salesBranchId,month=salesReportSelectedMonth,day=Number(salesSavedReportsDay),status=$("savedSalesReportStatus"),button=e.target.closest("#deleteSavedSalesDay");
   if(!branchId||!month||!day)return;
-  if(profile?.role!=="owner_admin"){if(status){status.hidden=false;status.textContent=language==="en"?"Only the owner can delete a saved sales report.":"حذف تقرير المبيعات المحفوظ متاح للمالك فقط.";}return;}
-  const confirmed=window.confirm(language==="en"?"Delete the saved sales report for this day? This action cannot be undone.":"هل تريد حذف تقرير المبيعات المحفوظ لهذا اليوم؟ لا يمكن التراجع عن الحذف.");
+  if(profile?.role!=="owner_admin"){if(status){status.hidden=false;status.textContent=translateText("حذف تقرير المبيعات المحفوظ متاح للمالك فقط.");}return;}
+  const confirmed=window.confirm(translateText("هل تريد حذف تقرير المبيعات المحفوظ لهذا اليوم؟ لا يمكن التراجع عن الحذف."));
   if(!confirmed)return;
-  button.disabled=true;button.textContent=language==="en"?"Deleting...":"جارٍ الحذف...";
+  button.disabled=true;button.textContent=translateText("جارٍ الحذف...");
   try{
    const result=await db.from("sales_report_daily_entries").delete().eq("branch_id",branchId).eq("report_month",month).eq("report_day",day);
    if(result.error)throw result.error;
    salesMonthCard.hidden=true;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{input.value="";});
    button.hidden=true;
-   if(status){status.hidden=false;status.textContent=language==="en"?"Saved report deleted.":"تم حذف التقرير المحفوظ.";}
+   if(status){status.hidden=false;status.textContent=translateText("تم حذف التقرير المحفوظ.");}
   }catch(error){
-   if(status){status.hidden=false;status.textContent=(language==="en"?"Could not delete report: ":"تعذر حذف التقرير: ")+(error.message||String(error));}
-   button.textContent=language==="en"?"Delete Report":"حذف التقرير";
+   if(status){status.hidden=false;status.textContent=translateText("تعذر حذف التقرير: ")+(error.message||String(error));}
+   button.textContent=translateText("حذف التقرير");
   }finally{button.disabled=false;}
   return;
  }
@@ -4512,7 +4518,7 @@ document.addEventListener("click",async e=>{
   try{
    const result=await db.from("sales_report_daily_entries").select("sales_target,daily_sales_target,month_to_date_sales,yesterday_sales,yesterday_tip,month_to_date_tip").eq("branch_id",branch.id).eq("report_month",month).eq("report_day",day).maybeSingle();
    if(result.error)throw result.error;
-   if(result.data){salesMonthCard.hidden=false;const deleteButton=$("deleteSavedSalesDay");if(deleteButton){deleteButton.hidden=profile?.role!=="owner_admin";deleteButton.textContent=language==="en"?"Delete Report":"حذف التقرير";}salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{const value=result.data[input.dataset.savedSalesMetric];input.value=value===null||value===undefined?"":formatStatisticsNumber(statisticsNumber(value));});if(status)status.hidden=true;}
+   if(result.data){salesMonthCard.hidden=false;const deleteButton=$("deleteSavedSalesDay");if(deleteButton){deleteButton.hidden=profile?.role!=="owner_admin";deleteButton.textContent=translateText("حذف التقرير");}salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{const value=result.data[input.dataset.savedSalesMetric];input.value=value===null||value===undefined?"":formatStatisticsNumber(statisticsNumber(value));});if(status)status.hidden=true;}
    else{salesMonthCard.hidden=true;const deleteButton=$("deleteSavedSalesDay");if(deleteButton)deleteButton.hidden=true;salesMonthCard.querySelectorAll("[data-saved-sales-metric]").forEach(input=>{input.value="";});if(status){status.hidden=false;status.textContent=language==="en"?"No data for this day.":"لا توجد بيانات لهذا اليوم.";}}
   }catch(error){if(status){status.hidden=false;status.textContent=(language==="en"?"Could not load: ":"تعذر تحميل التقرير: ")+(error.message||String(error));}salesMonthCard.hidden=true;}
   finally{button.disabled=false;}
