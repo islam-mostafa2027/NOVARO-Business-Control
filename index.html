@@ -4611,9 +4611,7 @@ document.addEventListener("pointerdown",event=>{
   try{input.showPicker?.();}catch(_){}
  },600);
 });
-["pointerup","pointercancel","pointerleave"].forEach(type=>document.addEventListener(type,event=>{
- if(novaroShiftTabHoldTarget&&!event.target.closest?.(".shift-report-tab")){clearTimeout(novaroShiftTabHoldTimer);novaroShiftTabHoldTimer=null;novaroShiftTabHoldTarget=null;}
-}));
+["pointerup","pointercancel"].forEach(type=>document.addEventListener(type,()=>{clearTimeout(novaroShiftTabHoldTimer);novaroShiftTabHoldTimer=null;novaroShiftTabHoldTarget=null;}));
 document.addEventListener("keydown",event=>{
  const input=event.target.closest?.("[data-shift-date-edit]");
  if(!input)return;
