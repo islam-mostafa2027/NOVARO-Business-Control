@@ -2314,6 +2314,51 @@ html[data-novaro-mode="light"] body #app .app-header .header-icon-row > button#o
 html[data-novaro-mode="dark"] body #app .app-header .header-icon-row > button#openDevices{background:#244b3c!important;background-image:linear-gradient(145deg,#285f4e 0%,#204d40 100%)!important;border:1px solid #548f79!important;color:#effff6!important;-webkit-text-fill-color:#effff6!important;}
 html[data-novaro-mode="dark"] body #app .app-header .header-icon-row > button#openDevices svg,html[data-novaro-mode="dark"] body #app .app-header .header-icon-row > button#openDevices .header-icon-label{color:#effff6!important;-webkit-text-fill-color:#effff6!important;stroke:#effff6!important;opacity:1!important;visibility:visible!important;}
 </style>
+
+<style id="novaro-branches-balanced-theme-v1">
+/* Branch cards: balanced spacing, consistent button sizing, and native light/dark surfaces. */
+#app .branches-page{min-width:0}
+#app .branches-page-head{gap:12px;align-items:center}
+#app .branches-grid{align-items:stretch;gap:14px}
+#app .branch-card{display:flex;flex-direction:column;min-width:0;gap:0;padding:15px;border-radius:15px}
+#app .branch-card-head{min-height:44px;gap:10px}
+#app .branch-card-name{min-width:0}
+#app .branch-card-name strong{line-height:1.35}
+#app .branch-credentials-card{min-width:0;margin-top:11px;padding:12px;border-radius:12px;background:var(--card,#fff);border:1px solid var(--line,#e0ebe5);color:var(--ink,#24352d)}
+#app .branch-credentials-card.manager{background:color-mix(in srgb,var(--g,#287d57) 5%,var(--card,#fff));border-color:var(--line,#e0ebe5)}
+#app .branch-credentials-card h4{margin:0 0 9px;color:var(--ink,#24352d);font-size:12px;font-weight:750;line-height:1.4}
+#app .branch-credential-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px}
+#app .branch-credential-field{min-width:0;gap:3px}
+#app .branch-credential-field small{font-size:10px;line-height:1.35;color:var(--muted,#78877f)}
+#app .branch-credential-field span{font-size:12px;line-height:1.45;color:var(--ink,#24352d);overflow-wrap:anywhere}
+#app .branch-card-actions-four,#app .branch-card-actions-two{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:9px!important;width:100%!important;margin-top:13px!important;padding:2px 0 3px!important;align-items:stretch!important}
+#app .branch-card-actions .branch-action-btn{box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;width:100%!important;min-width:0!important;max-width:none!important;min-height:46px!important;height:auto!important;max-height:none!important;margin:0!important;padding:8px 9px!important;border-radius:10px!important;text-align:center!important;text-wrap:balance;white-space:normal!important;line-height:1.3!important;font-family:inherit!important;font-size:clamp(10px,1.7vw,12px)!important;font-weight:650!important}
+#app .branch-card-actions .branch-action-btn>span{flex:0 0 auto;line-height:1}
+#app .branch-card-actions .branch-delete-btn{border-color:#c86b6b!important}
+#app .branch-card-actions .branch-delete-btn:hover{filter:brightness(.97)}
+:root[data-novaro-mode="dark"] #app .branch-card{background:#202f28!important;border-color:#40564a!important;color:#e5eee9!important;box-shadow:0 5px 18px #0003!important}
+:root[data-novaro-mode="dark"] #app .branch-card-name strong,
+:root[data-novaro-mode="dark"] #app .branch-card-info span,
+:root[data-novaro-mode="dark"] #app .branch-credentials-card h4,
+:root[data-novaro-mode="dark"] #app .branch-credential-field span{color:#e5eee9!important}
+:root[data-novaro-mode="dark"] #app .branch-card-name small,
+:root[data-novaro-mode="dark"] #app .branch-card-info small,
+:root[data-novaro-mode="dark"] #app .branch-credential-field small{color:#a9bbb0!important}
+:root[data-novaro-mode="dark"] #app .branch-credentials-card,
+:root[data-novaro-mode="dark"] #app .branch-credentials-card.manager{background:#263a30!important;border-color:#405b4b!important}
+:root[data-novaro-mode="dark"] #app .branch-card-actions .branch-action-btn{box-shadow:0 2px 7px #0003!important}
+@media(max-width:700px){
+ #app .branches-page{padding:12px!important}
+ #app .branches-grid{grid-template-columns:minmax(0,1fr)!important;gap:11px!important}
+ #app .branch-card{padding:13px!important}
+ #app .branch-card-actions-four,#app .branch-card-actions-two{gap:8px!important}
+ #app .branch-card-actions .branch-action-btn{min-height:46px!important;padding:8px 6px!important;font-size:11px!important}
+ #app .branch-credential-grid{gap:8px 10px}
+}
+@media(min-width:701px) and (max-width:1050px){
+ #app .branches-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
