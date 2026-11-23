@@ -8765,7 +8765,7 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 (function(){
  const isDark=()=>document.documentElement.getAttribute('data-novaro-mode')==='dark';
  const skip=/logo|chart|graph|barcode|qr.?code|image|photo|avatar|status|badge|chip|pill|success|warning|danger|error|print|progress|meter/i;
- const nearWhite=(color)=>{const m=String(color||'').match(/rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)(?:\\s*,\\s*([\\d.]+))?\\s*\\)/i); if(!m)return false; return +m[1]>238&&+m[2]>238&&+m[3]>238&&(m[4]===undefined||+m[4]>.65);};
+ const nearWhite=(color)=>{const m=String(color||'').match(/rgba?\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)(?:\\s*,\\s*([\\d.]+))?\\s*\\)/i); if(!m)return false; return +m[1]>238&&+m[2]>238&&+m[3]>238&&(m[4]===undefined||+m[4]>.65);};
  function scan(root){
   if(!isDark())return;
   const nodes=[];
