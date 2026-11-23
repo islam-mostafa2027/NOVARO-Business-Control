@@ -5215,8 +5215,8 @@ function manageBranchManagerAccount(id){
  const b=allBranches.find(x=>x.id===id);if(!b)return;
  const en=language==="en",hasAccount=!!b.branch_manager_user_id;
  const help=en
-  ?(hasAccount?"To replace this account, enter a new email and password. The previous manager login will be disabled. Passwords are stored securely and cannot be displayed.":"Create a separate manager login. It will have manager permissions for this branch only.")
-  :(hasAccount?"لاستبدال الحساب الحالي، اكتب إيميلًا جديدًا وكلمة مرور جديدة. سيتم إيقاف دخول المدير السابق. كلمات المرور محفوظة بأمان ولا يمكن عرضها.":"أنشئ حساب دخول مستقل لمدير الفرع، بصلاحيات إدارة هذا الفرع فقط.");
+  ?(hasAccount?"A new, separate manager account will be created and assigned to this branch. The previous manager account will be disabled and its sessions revoked. The branch login account and branch data will remain unchanged.":"Create a separate manager login. It will have manager permissions for this branch only.")
+  :(hasAccount?"سيتم إنشاء حساب مدير جديد ومستقل وربطه بالفرع، ثم إيقاف حساب المدير السابق وإلغاء جلساته. حساب دخول الفرع وبياناته لن يتأثرا.":"أنشئ حساب دخول مستقل لمدير الفرع، بصلاحيات إدارة هذا الفرع فقط.");
  form(en?"Branch manager login":"حساب دخول مدير الفرع",
   '<p class="muted">'+esc(nameOf(b))+'</p>'+
   inp(en?"Manager name (Arabic)":"اسم مدير الفرع بالعربية","managerAccountName","required")+inp(en?"Manager name (English)":"اسم مدير الفرع بالإنجليزية","managerAccountNameEn","required")+
@@ -5231,24 +5231,9 @@ function manageBranchManagerAccount(id){
    const created=await db.functions.invoke("admin-create-user",{body:{email,password,display_name,display_name_en,role:"branch_manager",branch_id:id}});
    if(created.error)throw created.error;if(created.data?.error)throw Error(created.data.error);
    const newUserId=created.data?.user_id;if(!newUserId)throw Error(en?"The manager account was created but its ID was not returned.":"تم إنشاء الحساب لكن لم يصل معرّف المستخدم.");
-   const updated=await db.from("branches").update({branch_manager_email:email,branch_manager_user_id:newUserId}).eq("id",id);
-   if(updated.error){
-    await db.from("branch_members").update({is_active:false}).eq("branch_id",id).eq("user_id",newUserId);
-    await db.from("profiles").update({is_active:false,updated_at:new Date().toISOString()}).eq("id",newUserId);
-    throw updated.error;
-   }
-   const oldUserId=b.branch_manager_user_id;
-   if(oldUserId&&oldUserId!==newUserId){
-    const disabled=await db.from("branch_members").update({is_active:false}).eq("branch_id",id).eq("user_id",oldUserId);
-    if(disabled.error){
-     await db.from("branches").update({branch_manager_email:b.branch_manager_email,branch_manager_user_id:oldUserId}).eq("id",id);
-     await db.from("branch_members").update({is_active:false}).eq("branch_id",id).eq("user_id",newUserId);
-     await db.from("profiles").update({is_active:false,updated_at:new Date().toISOString()}).eq("id",newUserId);
-     throw disabled.error;
-    }
-    const oldProfile=await db.from("profiles").update({is_active:false,updated_at:new Date().toISOString()}).eq("id",oldUserId);
-    if(oldProfile.error)console.warn("Previous manager profile could not be deactivated; branch membership is already disabled.",oldProfile.error.message);
-   }
+   const assigned=await db.functions.invoke("manage-branch-manager",{body:{action:"replace",branch_id:id,new_user_id:newUserId,email}});
+   if(assigned.error)throw assigned.error;if(assigned.data?.error)throw Error(assigned.data.error);
+   if(!assigned.data?.success)throw Error(en?"Manager replacement could not be confirmed.":"لم يتم تأكيد استبدال مدير الفرع.");
   },en?"Save manager account":"حفظ حساب المدير");
  $("managerAccountName").value=b.branch_account_name||b.branch_manager_name||"";
  $("managerAccountEmail").value="";
