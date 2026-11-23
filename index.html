@@ -4567,7 +4567,7 @@ function showStocktakeCategory(groupKey){
 }
 
 function novaroShiftReportStore(){try{return JSON.parse(localStorage.getItem("novaro-shift-report:"+salesReportBranchId)||"{}")||{};}catch(_){return {};}}
-function novaroShiftReportDisplayDate(iso,includeYear=false){const parts=String(iso||"").match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);if(!parts)return String(iso||"");const monthNames=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];return Number(parts[3])+" "+monthNames[Number(parts[2])-1]+(includeYear?" "+parts[1]:"");}
+function novaroShiftReportDisplayDate(iso,includeYear=false){const parts=String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!parts)return String(iso||"");const monthNames=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];return Number(parts[3])+" "+monthNames[Number(parts[2])-1]+(includeYear?" "+parts[1]:"");}
 function novaroShiftReportMarkup(en,branch){
  const shiftReportStyle=`<style id="novaro-shift-report-v1">
 #app .shift-report-page .shift-report-table-wrap{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:9px}
