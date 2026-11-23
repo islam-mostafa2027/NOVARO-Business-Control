@@ -9068,5 +9068,22 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
  #app .hc-section-switcher-buttons .hc-section-switch .hc-switch-icon{width:23px!important;height:23px!important;flex-basis:23px!important}
  #app .hc-section-switcher-buttons .hc-section-switch .hc-section-label{font-size:11.5px!important}
 }
+/* Remove any inherited dark chip/highlight behind the button caption only. */
+#app .hc-section-switcher-buttons .hc-section-switch > .hc-section-label,
+#app .hc-section-switcher-buttons .hc-section-switch > .hc-section-label::before,
+#app .hc-section-switcher-buttons .hc-section-switch > .hc-section-label::after{
+ background:transparent!important;
+ background-color:transparent!important;
+ background-image:none!important;
+ box-shadow:none!important;
+ border:0!important;
+ outline:0!important;
+ filter:none!important;
+ text-shadow:none!important;
+}
+#app .hc-section-switcher-buttons .hc-section-switch > .hc-section-label::selection{
+ background:transparent!important;color:inherit!important;
+}
+
 </style></body>
 </html>
