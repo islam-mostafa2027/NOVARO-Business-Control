@@ -4752,7 +4752,7 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("#savedSalesReportsBack")){salesSavedReportsOpen=false;salesSavedReportsDaySelected=false;render();return;}
  const archiveReportToggle=e.target.closest(".novaro-sales-report-archive-placeholder");
  if(archiveReportToggle){salesArchiveSelectionOpen=!salesArchiveSelectionOpen;salesArchiveSelectedKeys=[];render();return;}
- const archiveClose=e.target.closest("[data-archive-close],[data-archive-cancel]");
+ const archiveClose=e.target.closest("[data-archive-cancel]");
  if(archiveClose){salesArchiveSelectionOpen=false;salesArchiveSelectedKeys=[];render();return;}
  const archiveReportCheckbox=e.target.closest("[data-archive-report-key]");
  if(archiveReportCheckbox){const key=archiveReportCheckbox.dataset.archiveReportKey;salesArchiveSelectedKeys=archiveReportCheckbox.checked?[...new Set([...salesArchiveSelectedKeys,key])]:salesArchiveSelectedKeys.filter(x=>x!==key);return;}
