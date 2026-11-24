@@ -4378,9 +4378,7 @@ async function loadBranchCommunicationMetrics(){
   if(status)status.textContent="";
  }catch(error){if(status)status.textContent=(language==="en"?"Could not load saved values: ":"تعذر تحميل البيانات المحفوظة: ")+(error.message||String(error));}
 }
-document.addEventListener("click",async e=>{
- const button=e.target.closest("#saveCommunicationMetrics");
- if(!button)return;
+async function saveCommunicationBookPage(button){
  const branch=salesReportBranches().find(item=>item.id===salesReportBranchId);
  const status=document.getElementById("communicationMetricsStatus");
  const fields=["sales_target","daily_sales_target","month_to_date_sales","yesterday_sales","yesterday_tip","month_to_date_tip"];
@@ -4395,13 +4393,19 @@ document.addEventListener("click",async e=>{
   payload[key]=value;
  }
  button.disabled=true;
- showStatus(language==="en"?"Saving the six values...":"جارٍ حفظ بيانات الخانات الستة...");
+ showStatus(language==="en"?"Saving page data...":"جارٍ حفظ بيانات الصفحة...");
  try{
+  // Page-level save entry point: add future Communication Book table saves here.
   const result=await db.from("branch_communication_metrics").upsert(payload,{onConflict:"branch_id"});
   if(result.error)throw result.error;
-  showStatus(language==="en"?"The six values were saved successfully.":"تم حفظ بيانات الخانات الستة بنجاح.");
+  showStatus(language==="en"?"Page data saved successfully.":"تم حفظ بيانات الصفحة بنجاح.");
  }catch(error){showStatus((language==="en"?"Could not save: ":"تعذر الحفظ: ")+(error.message||String(error)));}
  finally{button.disabled=false;}
+}
+document.addEventListener("click",async e=>{
+ const button=e.target.closest("#saveCommunicationMetrics");
+ if(!button)return;
+ await saveCommunicationBookPage(button);
 });
 
 function bindMoneyFieldFormatting(){
