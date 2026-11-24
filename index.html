@@ -5632,7 +5632,7 @@ if(page==="sales"){
    const movedCards=document.createElement("div");movedCards.className="branch-statistics-moved-cards";
    if(statisticsCard)movedCards.appendChild(statisticsCard);if(actionsCard)movedCards.appendChild(actionsCard);if(snapshotStatus)movedCards.appendChild(snapshotStatus);
    categoryCard.appendChild(movedCards);reportRoot.prepend(categoryCard);
-   reportRoot.querySelector(".sales-date-selector-card")?.remove();reportRoot.querySelector(".sales-month-card")?.remove();
+   const dateSelector=reportRoot.querySelector(".sales-date-selector-card"),monthCard=reportRoot.querySelector(".sales-month-card");if(dateSelector)dateSelector.hidden=true;if(monthCard)monthCard.hidden=true;
    const dailyTipCard=reportRoot.querySelector(".daily-tip-card");if(dailyTipCard)dailyTipCard.hidden=true;
   }else if(reportRoot){
    reportRoot.querySelector(".sales-statistics-card:not(.daily-tip-card)")?.remove();reportRoot.querySelector(".sales-export-card")?.remove();reportRoot.querySelector("#salesSnapshotStatus")?.remove();
