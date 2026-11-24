@@ -9751,45 +9751,7 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 }
 </style>
 
-<script id="novaro-global-temporary-empty-state-v1">
-(()=>{
- if(window.__novaroGlobalEmptyStateObserver)return;
- const timers=new WeakMap();
- const isEmptyDataMessage=el=>{
-  if(!el||!el.matches?.(".empty,.novaro-category-empty"))return false;
-  const value=(el.textContent||"").replace(/\s+/g," ").trim();
-  return /^(?:no data\b|no items\b|no employees\b|no job titles\b|no stocktake\b|no archived\b|no low-stock\b|no previous stocktake\b|لا توجد|لا يوجد|لم تتم إضافة|لم يتم إضافة)/i.test(value);
- };
- const schedule=el=>{
-  if(!isEmptyDataMessage(el)||timers.has(el))return;
-  const original=(el.textContent||"").replace(/\s+/g," ").trim();
-  el.classList.add("novaro-empty-temporary");
-  const timer=setTimeout(()=>{
-   if(!el.isConnected||(el.textContent||"").replace(/\s+/g," ").trim()!==original)return;
-   el.classList.add("novaro-empty-dismissed");
-   setTimeout(()=>{
-    if(!el.isConnected)return;
-    const reportCard=el.closest(".novaro-branch-report-empty-state");
-    if(reportCard)reportCard.remove();else el.remove();
-   },240);
-  },3000);
-  timers.set(el,timer);
- };
- const scan=root=>{
-  if(root.nodeType!==1&&root.nodeType!==9)return;
-  if(root.nodeType===1)schedule(root);
-  root.querySelectorAll?.(".empty,.novaro-category-empty").forEach(schedule);
- };
- scan(document);
- window.__novaroGlobalEmptyStateObserver=new MutationObserver(records=>{
-  for(const record of records){
-   record.addedNodes.forEach(node=>{if(node.nodeType===1)scan(node);});
-   if(record.type==="characterData")scan(record.target.parentElement);
-  }
- });
- window.__novaroGlobalEmptyStateObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
-})();
-</script>
+
 
 </body>
 </html>
