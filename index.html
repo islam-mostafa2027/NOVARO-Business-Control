@@ -4621,7 +4621,7 @@ async function statisticsSheetsLoad(branchId,month){
 async function statisticsSaveActive(){
  const pageRoot=document.querySelector(".sales-report-page"),monthCard=pageRoot?.querySelector(".sales-month-card"),table=pageRoot?.querySelector(".sales-statistics-card:not(.daily-tip-card) .sales-statistics-table");
  const branchId=monthCard?.dataset.salesBranchId,month=salesStatisticsSelectedMonth||salesReportSelectedMonth;
- if(!branchId||!table||monthCard.dataset.loadedMonth!==month)throw new Error(language==="en"?"Wait until this month finishes loading.":"استنى لحد ما تحميل الشهر يكتمل.");
+ if(!branchId||!table||monthCard.dataset.loadedMonth!==salesReportSelectedMonth)throw new Error(language==="en"?"Wait until the report finishes loading.":"استنى لحد ما تحميل التقرير يكتمل.");
  const columns={dinein_tickets:"[data-stat-tickets='dinein']",dinein_sales:"[data-stat-sales='dinein']",takeaway_tickets:"[data-stat-tickets='takeaway']",takeaway_sales:"[data-stat-sales='takeaway']",delivery_tickets:"[data-stat-tickets='delivery']",delivery_sales:"[data-stat-sales='delivery']",catering_tickets:"[data-stat-tickets='catering']",catering_sales:"[data-stat-sales='catering']",daily_target:"[data-stat-target]"};
  const rows=Array.from(table.querySelectorAll("tbody tr")),payload=[],invalid=[];
  rows.forEach((row,index)=>{
@@ -4961,7 +4961,7 @@ document.addEventListener("click",async e=>{
      cleanCell
      return {text:cleanCell.innerText.trim(),values:Array.from(cell.querySelectorAll("input")).map(field=>field.value??"")};
     }));
-   const snapshotData={version:1,branchId:branch.id,branchName:nameOf(branch),branchAddress:branchLocationOf(branch),reportMonth:month,reportDate,savedAt:now.toISOString(),language,upperCardMetrics:upperMetrics,tableHeaders,tableRows};
+   const snapshotData={version:1,branchId:branch.id,branchName:nameOf(branch),branchAddress:branchLocationOf(branch),reportMonth:month,statisticsMonth:salesStatisticsSelectedMonth||month,reportDate,savedAt:now.toISOString(),language,upperCardMetrics:upperMetrics,tableHeaders,tableRows};
    const saved=await db.from("sales_report_page_snapshots").insert({branch_id:branch.id,branch_name:nameOf(branch),report_month:month,report_date:reportDate,snapshot_html:clone.outerHTML,snapshot_data:snapshotData,created_by:user.id}).select("id").single();
    if(saved.error)throw saved.error;
    if(status)status.textContent=language==="en"?"The full Statistics page was saved successfully.":"تم حفظ صفحة الإحصائيات بالكامل بنجاح.";
@@ -5062,7 +5062,7 @@ document.addEventListener("click",async e=>{
   if(!report)return;
   if(typeof ExcelJS==="undefined"){alert(language==="en"?"Excel export library is unavailable. Please try again.":"مكتبة إنشاء ملف Excel غير متاحة حاليًا. حاول مرة أخرى.");return;}
   const button=exportButton,branchId=savedView?.dataset.savedBranchId||salesReportBranchId,branch=salesReportBranches().find(b=>b.id===branchId);
-  const en=language==="en",isShiftReport=report.classList.contains("shift-report-page"),branchName=branch?nameOf(branch):(report.querySelector(".sales-month-heading")?.innerText.trim()||""),monthLabel=isShiftReport?(report.querySelector("#shiftReportActiveDate")?.dataset.shiftReportDate||""):(report.querySelector(".sales-date-field .sales-date-value")?.innerText.trim()||salesReportSelectedMonth||""),dateParts=Array.from(report.querySelectorAll(".sales-date-field .sales-date-value")).map(x=>x.innerText.trim());
+  const en=language==="en",isShiftReport=report.classList.contains("shift-report-page"),branchName=branch?nameOf(branch):(report.querySelector(".sales-month-heading")?.innerText.trim()||""),monthLabel=isShiftReport?(report.querySelector("#shiftReportActiveDate")?.dataset.shiftReportDate||""):(savedView?(report.querySelector(".sales-date-field .sales-date-value")?.innerText.trim()||salesReportSelectedMonth||""):statisticsMonthLabel(salesStatisticsSelectedMonth||salesReportSelectedMonth)),dateParts=isShiftReport||savedView?Array.from(report.querySelectorAll(".sales-date-field .sales-date-value")).map(x=>x.innerText.trim()):[monthLabel];
   button.disabled=true;
   try{
    const workbook=new ExcelJS.Workbook();
