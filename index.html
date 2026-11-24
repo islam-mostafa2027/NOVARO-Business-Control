@@ -9516,6 +9516,22 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   border:0!important;
 }
 </style>
+
+<style id="novaro-shift-header-neutral-border-v1">
+/* Keep the shift-report header grid, but remove its green frame/focus treatment. */
+#app .shift-report-page .shift-report-table thead th{
+  border-color:var(--line)!important;
+  outline:none!important;
+  box-shadow:none!important;
+}
+#app .shift-report-page .shift-report-table thead th:focus,
+#app .shift-report-page .shift-report-table thead th:focus-visible,
+#app .shift-report-page .shift-report-table thead th:active{
+  border-color:var(--line)!important;
+  outline:none!important;
+  box-shadow:none!important;
+}
+</style>
 </body>
 </html>
 
