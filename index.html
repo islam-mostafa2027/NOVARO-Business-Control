@@ -9505,6 +9505,17 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   white-space:nowrap!important;overflow-wrap:normal!important;
 }
 </style>
+
+<style id="novaro-statistics-input-focus-cleanup">
+/* Remove the green focus frame from editable cells only; keep table cell borders intact. */
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tbody .sales-stat-cell-input:focus,
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tbody .sales-stat-cell-input:focus-visible,
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tbody .sales-stat-cell-input:active{
+  outline:none!important;
+  box-shadow:none!important;
+  border:0!important;
+}
+</style>
 </body>
 </html>
 
