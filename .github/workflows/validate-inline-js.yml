@@ -1,0 +1,21 @@
+name: Validate NOVARO inline JavaScript
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "scripts/check-inline-js.mjs"
+      - ".github/workflows/validate-inline-js.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate inline JavaScript
+        run: node scripts/check-inline-js.mjs
