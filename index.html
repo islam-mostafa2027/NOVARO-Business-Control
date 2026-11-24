@@ -4104,7 +4104,7 @@ function startNotificationStream(){
  .subscribe();
 }
 
-let user,profile,branches=[],allBranches=[],archivedBranches=[],items=[],cats=[],categoryGroups=[],balances={},branchId,page="home",headcountBranchId="",salesReportBranchId="",salesReportSelectedMonth="",salesReportSelectedDay=0,shiftReportsPage=false,branchReportsLogbookPage=false,branchReportsStatisticsOpen=false,salesSavedReportsOpen=false,salesSavedReportsDay=1,salesSavedReportsDaySelected=false,shiftReportTableOpen=false,shiftReportDate="",novaroShiftReportTableZoom=1,novaroHeadcountEmployeeTableZoom=1,novaroSalesStatisticsTableZoom=1,novaroDailyTipTableZoom=1,headcountRoles=[],headcountEmployees=[];
+let user,profile,branches=[],allBranches=[],archivedBranches=[],items=[],cats=[],categoryGroups=[],balances={},branchId,page="home",headcountBranchId="",salesReportBranchId="",salesReportSelectedMonth="",salesReportSelectedDay=0,shiftReportsPage=false,branchReportsLogbookPage=false,branchReportsStatisticsOpen=false,salesSavedReportsOpen=false,salesSavedReportsDay=1,salesSavedReportsDaySelected=false,shiftReportTableOpen=false,shiftReportDate="",novaroShiftReportTableZoom=1,novaroHeadcountEmployeeTableZoom=1,novaroSalesStatisticsTableZoom=1,novaroDailyTipTableZoom=1,statisticsSheetCache=[],statisticsSheetBusy=false,headcountRoles=[],headcountEmployees=[];
 const novaroPageHistory=[];
 function canManageHeadcount(){return profile?.role==="owner_admin"||profile?.role==="branch_manager"}
 function normalizeNovaroJobTitle(value){return String(value||"").normalize("NFKC").replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").trim().toLocaleLowerCase().split(/\s+/).map(word=>word.startsWith("ال")&&word.length>2?word.slice(2):word).map(word=>word==="مطعم"?"فرع":word).join("");}
@@ -4579,6 +4579,68 @@ async function dailyTipSaveActive(){
  if(status)status.textContent=language==="en"?"Daily Tip saved.":"تم حفظ الإكراميات اليومية.";
 }
 
+/* Independent month sheets for the Statistics table. */
+function statisticsMonthParts(value){
+ const parts=String(value||"").match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\\d{4})$/);
+ if(!parts)return null;
+ const monthIndex=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(parts[1]);
+ return {monthIndex,year:Number(parts[2]),days:new Date(Number(parts[2]),monthIndex+1,0).getDate()};
+}
+function statisticsMonthLabel(value){
+ const info=statisticsMonthParts(value);if(!info)return value;
+ return new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{month:language==="en"?"short":"long",year:"numeric"}).format(new Date(info.year,info.monthIndex,1));
+}
+function statisticsSortSheets(){
+ statisticsSheetCache.sort((a,b)=>{
+  const aa=statisticsMonthParts(a.report_month),bb=statisticsMonthParts(b.report_month);
+  return aa&&bb?(aa.year-bb.year||aa.monthIndex-bb.monthIndex):String(a.report_month).localeCompare(String(b.report_month));
+ });
+}
+function statisticsSheetsRender(){
+ const tabs=document.querySelector("#salesStatisticsSheetTabs");if(!tabs)return;
+ statisticsSortSheets();
+ tabs.innerHTML=statisticsSheetCache.map(sheet=>{
+  const active=sheet.report_month===salesReportSelectedMonth;
+  return '<span class="statistics-sheet-pill"><button type="button" role="tab" aria-selected="'+(active?"true":"false")+'" class="statistics-sheet-tab'+(active?" is-active":"")+'" data-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'">'+dailyTipEscape(statisticsMonthLabel(sheet.report_month))+'</button>'+(profile?.role==="owner_admin"?'<button type="button" class="statistics-sheet-delete" data-delete-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</button>':"")+'</span>';
+ }).join("")+'<button type="button" class="statistics-sheet-add-inline" id="statisticsAddSheetInline" aria-label="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'" title="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'">＋</button>';
+}
+async function statisticsSheetsLoad(branchId,month){
+ if(!branchId||!statisticsMonthParts(month))return;
+ let result=await db.from("sales_report_statistics_sheets").select("id,branch_id,report_month,created_by,created_at").eq("branch_id",branchId).order("report_month");
+ if(result.error)throw result.error;
+ statisticsSheetCache=result.data||[];
+ if(!statisticsSheetCache.some(sheet=>sheet.report_month===month)){
+  const created=await db.from("sales_report_statistics_sheets").upsert({branch_id:branchId,report_month:month,created_by:user.id},{onConflict:"branch_id,report_month",ignoreDuplicates:true});
+  if(created.error)throw created.error;
+  result=await db.from("sales_report_statistics_sheets").select("id,branch_id,report_month,created_by,created_at").eq("branch_id",branchId).order("report_month");
+  if(result.error)throw result.error;
+  statisticsSheetCache=result.data||[];
+ }
+ statisticsSheetsRender();
+}
+async function statisticsSaveActive(){
+ const pageRoot=document.querySelector(".sales-report-page"),monthCard=pageRoot?.querySelector(".sales-month-card"),table=pageRoot?.querySelector(".sales-statistics-card:not(.daily-tip-card) .sales-statistics-table");
+ const branchId=monthCard?.dataset.salesBranchId,month=salesReportSelectedMonth;
+ if(!branchId||!table||monthCard.dataset.loadedMonth!==month)throw new Error(language==="en"?"Wait until this month finishes loading.":"استنى لحد ما تحميل الشهر يكتمل.");
+ const columns={dinein_tickets:"[data-stat-tickets='dinein']",dinein_sales:"[data-stat-sales='dinein']",takeaway_tickets:"[data-stat-tickets='takeaway']",takeaway_sales:"[data-stat-sales='takeaway']",delivery_tickets:"[data-stat-tickets='delivery']",delivery_sales:"[data-stat-sales='delivery']",catering_tickets:"[data-stat-tickets='catering']",catering_sales:"[data-stat-sales='catering']",daily_target:"[data-stat-target]"};
+ const rows=Array.from(table.querySelectorAll("tbody tr")),payload=[],invalid=[];
+ rows.forEach((row,index)=>{
+  const record={branch_id:branchId,report_month:month,report_day:index+1,created_by:user.id,updated_by:user.id,updated_at:new Date().toISOString()};
+  Object.entries(columns).forEach(([key,selector])=>{
+   const raw=String(row.querySelector(selector)?.value??"").trim();
+   if(raw===""){record[key]=null;return;}
+   const value=statisticsNumber(raw);
+   if(!Number.isFinite(value)||value<0)invalid.push(row.querySelector(selector));else record[key]=value;
+  });
+  payload.push(record);
+ });
+ if(invalid.length){invalid[0]?.focus();throw new Error(language==="en"?"Check invalid or negative values in the Statistics table.":"راجع القيم غير الصحيحة أو السالبة في جدول الإحصائيات.");}
+ const saved=await db.from("sales_report_statistics_entries").upsert(payload,{onConflict:"branch_id,report_month,report_day"});
+ if(saved.error)throw saved.error;
+ const trimmed=await db.from("sales_report_statistics_entries").delete().eq("branch_id",branchId).eq("report_month",month).gt("report_day",rows.length);
+ if(trimmed.error)throw trimmed.error;
+}
+
 
 document.addEventListener("input",e=>{
  const field=e.target.closest("#dailyTipRows [data-tip-amount],#dailyTipRows [data-dinein-sales]");
@@ -4663,6 +4725,72 @@ document.addEventListener("click",async e=>{
   return;
  }
 
+
+ const statisticsDelete=e.target.closest("#salesStatisticsSheetTabs [data-delete-statistics-sheet-month]");
+ if(statisticsDelete){
+  e.preventDefault();e.stopPropagation();
+  if(profile?.role!=="owner_admin")return;
+  const month=statisticsDelete.dataset.deleteStatisticsSheetMonth,selected=statisticsSheetCache.find(sheet=>sheet.report_month===month),status=document.querySelector("#salesStatisticsStatus"),monthCard=document.querySelector(".sales-month-card");
+  if(!selected)return;
+  if(statisticsSheetCache.length<=1){if(status)status.textContent=language==="en"?"At least one Statistics sheet must remain.":"لازم يفضل فيه شيت إحصائيات واحد على الأقل.";return;}
+  if(!window.confirm(language==="en"?'Delete the '+statisticsMonthLabel(month)+' Statistics sheet and all its Statistics entries?':'هل تريد حذف شيت الإحصائيات '+statisticsMonthLabel(month)+' وكل بيانات الإحصائيات المسجلة بداخله؟'))return;
+  statisticsDelete.disabled=true;
+  try{
+   const branchId=monthCard?.dataset.salesBranchId;
+   if(!branchId)throw new Error(language==="en"?"Branch context is missing.":"بيانات الفرع غير متاحة.");
+   const removedEntries=await db.from("sales_report_statistics_entries").delete().eq("branch_id",branchId).eq("report_month",month);
+   if(removedEntries.error)throw removedEntries.error;
+   const removedSheet=await db.from("sales_report_statistics_sheets").delete().eq("id",selected.id);
+   if(removedSheet.error)throw removedSheet.error;
+   statisticsSheetCache=statisticsSheetCache.filter(sheet=>sheet.id!==selected.id);
+   if(month===salesReportSelectedMonth){
+    const fallback=statisticsSheetCache[0];
+    if(fallback){salesReportSelectedMonth=fallback.report_month;salesReportSelectedDay=0;render();return;}
+   }
+   statisticsSheetsRender();
+   if(status)status.textContent=language==="en"?"Statistics sheet deleted.":"تم حذف شيت الإحصائيات.";
+  }catch(error){if(status)status.textContent=(language==="en"?"Could not delete Statistics sheet: ":"تعذر حذف شيت الإحصائيات: ")+(error.message||String(error));}
+  return;
+ }
+ const statisticsTab=e.target.closest("#salesStatisticsSheetTabs [data-statistics-sheet-month]");
+ if(statisticsTab){
+  const nextMonth=statisticsTab.dataset.statisticsSheetMonth;
+  if(nextMonth!==salesReportSelectedMonth){
+   if(statisticsSheetBusy)return;
+   statisticsSheetBusy=true;
+   document.querySelectorAll("#salesStatisticsSheetTabs button").forEach(button=>button.disabled=true);
+   try{
+    await statisticsSaveActive();
+    salesReportSelectedMonth=nextMonth;salesReportSelectedDay=0;render();
+   }catch(error){
+    const status=document.querySelector("#salesStatisticsStatus");
+    if(status)status.textContent=(language==="en"?"Could not switch Statistics sheet: ":"تعذر الانتقال لشيت الإحصائيات: ")+(error.message||String(error));
+    statisticsSheetsRender();
+   }finally{statisticsSheetBusy=false;}
+  }
+  return;
+ }
+ const statisticsAdd=e.target.closest("#statisticsAddSheetInline");
+ if(statisticsAdd){
+  if(statisticsSheetBusy)return;
+  const current=statisticsMonthParts(salesReportSelectedMonth),monthCard=document.querySelector(".sales-month-card"),status=document.querySelector("#salesStatisticsStatus");
+  if(!current||!monthCard)return;
+  statisticsSheetBusy=true;statisticsAdd.disabled=true;
+  try{
+   await statisticsSaveActive();
+   const nextDate=new Date(current.year,current.monthIndex+1,1),nextMonth=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][nextDate.getMonth()]+"-"+nextDate.getFullYear();
+   let nextSheet=statisticsSheetCache.find(sheet=>sheet.report_month===nextMonth);
+   if(!nextSheet){
+    const inserted=await db.from("sales_report_statistics_sheets").insert({branch_id:monthCard.dataset.salesBranchId,report_month:nextMonth,created_by:user.id}).select("id,branch_id,report_month,created_by,created_at").single();
+    if(inserted.error)throw inserted.error;
+    nextSheet=inserted.data;statisticsSheetCache.push(nextSheet);
+   }
+   statisticsSortSheets();salesReportSelectedMonth=nextMonth;salesReportSelectedDay=0;render();
+  }catch(error){if(status)status.textContent=(language==="en"?"Could not add the next month sheet: ":"تعذرت إضافة شيت الشهر التالي: ")+(error.message||String(error));}
+  finally{statisticsSheetBusy=false;}
+  return;
+ }
+
  const dailyTipDelete=e.target.closest("#dailyTipSheetTabs [data-delete-daily-tip-sheet]");
  if(dailyTipDelete){
   e.preventDefault();e.stopPropagation();
@@ -4726,6 +4854,7 @@ document.addEventListener("click",async e=>{
   if(!branch||!monthPattern.test(month||"")){if(status)status.textContent=language==="en"?"Choose a valid month first.":"اختار شهر صحيح الأول.";return;}
   const loadButton=e.target.closest("#loadSalesMonth");loadButton.disabled=true;if(status)status.textContent=language==="en"?"Loading...":"جارٍ التحميل...";
   try{
+   await statisticsSheetsLoad(branch.id,month);
    const [reportResult,targetResult,statisticsResult]=await Promise.all([
     db.from("sales_report_months").select("daily_sales_target,month_to_date_sales,yesterday_sales,yesterday_tip,month_to_date_tip").eq("branch_id",branch.id).eq("report_month",month).maybeSingle(),
     db.from("sales_report_targets").select("sales_target").eq("branch_id",branch.id).eq("report_month",month).maybeSingle(),
@@ -5019,7 +5148,7 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("[data-open-shift-reports]")){shiftReportTableOpen=false;shiftReportsPage=true;render();return;}
  if(e.target.closest("#shiftReportsBack")){shiftReportTableOpen=false;shiftReportsPage=false;render();return;}
  const salesBranchButton=e.target.closest("[data-sales-branch]");
- if(salesBranchButton){salesReportBranchId=salesBranchButton.dataset.salesBranch;salesReportSelectedMonth="";salesReportSelectedDay=0;shiftReportTableOpen=false;shiftReportsPage=false;render();return;}
+ if(salesBranchButton){statisticsSheetCache=[];salesReportBranchId=salesBranchButton.dataset.salesBranch;salesReportSelectedMonth="";salesReportSelectedDay=0;shiftReportTableOpen=false;shiftReportsPage=false;render();return;}
  if(e.target.closest("#salesReportBack")){salesReportBranchId="";salesReportSelectedMonth="";salesReportSelectedDay=0;shiftReportTableOpen=false;shiftReportsPage=false;render();return;}
  if(e.target.closest("#salesReportMonthBack")){salesSavedReportsOpen=false;salesReportSelectedMonth="";salesReportSelectedDay=0;render();return;}
  const headcountSectionToggle=e.target.closest("[data-hc-section-toggle]");
@@ -5645,7 +5774,7 @@ if(page==="sales"){
   const selectedReportDayLabel=salesReportSelectedDay?salesReportDayDigits(salesReportSelectedDay):(en?"Choose day":"اختر اليوم");
   const selectedReportWeekday=salesReportSelectedDay?salesReportWeekdayName(salesReportSelectedDay):"";
   const metric=(key,label,editable)=>'<div class="sales-metric"><label for="salesMetric_'+key+'">'+label+'</label><div class="sales-metric-input-wrap"><input id="salesMetric_'+key+'" data-sales-metric="'+key+'" type="text" inputmode="decimal" '+(editable?'':'readonly aria-readonly="true" tabindex="-1"')+' placeholder="—"><span class="sales-metric-currency" aria-hidden="true">'+(en?"EGP":"ج.م")+'</span></div></div>';
-  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportMonthBack">← '+(en?"Choose another month":"اختيار شهر آخر")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-date-selector-card" dir="ltr"><div class="sales-date-field"><span class="sales-date-label">'+(en?"Day":"اليوم")+'</span><div class="sales-date-day-picker"><button type="button" id="salesReportDayToggle" class="sales-report-day-toggle" aria-expanded="false" aria-controls="salesReportDayPanel"><span class="sales-report-day-number" data-day-value>'+selectedReportDayLabel+'</span><span class="sales-report-day-weekday" data-day-weekday>'+selectedReportWeekday+'</span><span aria-hidden="true">⌄</span></button><div id="salesReportDayPanel" class="sales-report-day-panel" hidden>'+salesReportDayButtons+'</div></div></div><div class="sales-date-field"><span class="sales-date-label">'+(en?"Month":"الشهر")+'</span><strong class="sales-date-value">'+esc(monthName)+'</strong></div><div class="sales-date-field"><span class="sales-date-label">'+(en?"Year":"السنة")+'</span><strong class="sales-date-value">'+esc(displayYear)+'</strong></div></div><div class="sales-month-card" data-sales-branch-id="'+esc(selectedSalesBranch.id)+'"><input type="hidden" id="salesReportDay" value="'+(salesReportSelectedDay||"")+'"><div class="sales-metrics-grid">'+metric("sales_target",en?"Sales Target":"مستهدف المبيعات",managerCanEdit)+metric("daily_sales_target",en?"Daily Sales Target":"المستهدف اليومي للمبيعات",false)+metric("month_to_date_sales",en?"Month To Date Sales":"مبيعات الشهر حتى تاريخه",false)+metric("yesterday_sales",en?"Yesterday Sales":"مبيعات أمس",false)+metric("yesterday_tip",en?"Yesterday Tip":"إكرامية أمس",false)+metric("month_to_date_tip",en?"Month To Date Tip":"إكرامية الشهر حتى تاريخه",false)+'</div><div class="sales-month-actions"><button type="button" class="primary" id="saveSalesMonth">'+(en?"Save Data":"حفظ البيانات")+'</button><span id="salesMonthStatus" role="status" aria-live="polite"></span></div><button type="button" id="loadSalesMonth" style="display:none!important" aria-hidden="true" tabindex="-1">Load</button></div><div class="sales-statistics-card"><div class="sales-statistics-heading"><h3 class="sales-monthly-analysis-title">'+(en?"Statistics":"الإحصائيات")+'</h3><div class="sales-statistics-actions"><span class="sales-statistics-zoom-controls"><button type="button" data-sales-statistics-zoom="-1" aria-label="'+(en?"Decrease statistics table size":"تصغير جدول الإحصائيات")+'" title="'+(en?"Decrease statistics table size":"تصغير جدول الإحصائيات")+'">−</button><button type="button" data-sales-statistics-zoom="1" aria-label="'+(en?"Increase statistics table size":"تكبير جدول الإحصائيات")+'" title="'+(en?"Increase statistics table size":"تكبير جدول الإحصائيات")+'">+</button></span><span id="salesStatisticsStatus" role="status" aria-live="polite"></span></div></div><div class="sales-statistics-table-wrap" dir="ltr"><table class="sales-statistics-table"><thead><tr>'+[[en?"Date":"التاريخ"],[en?"Day":"اليوم"],[en?"Dine-in Tickets":"عدد فواتير داخل المطعم"],[en?"Dine-in Sales":"مبيعات داخل المطعم"],[en?"Dine-in Average":"متوسط داخل المطعم"],[en?"T.W. Tickets":"عدد فواتير التيك أواي"],[en?"T.W. Sales":"مبيعات التيك أواي"],[en?"T.W. Average":"متوسط التيك أواي"],[en?"Delivery Tickets":"عدد فواتير التوصيل"],[en?"Delivery Sales":"مبيعات التوصيل"],[en?"Delivery Average":"متوسط التوصيل"],[en?"Catering Tickets":"عدد فواتير الكاترينج"],[en?"Catering Sales":"مبيعات الكاترينج"],[en?"Catering Average":"متوسط الكاترينج"],[en?"Total Tickets":"إجمالي الفواتير"],[en?"Total Sales":"إجمالي المبيعات"],[en?"Daily Target":"المستهدف اليومي"],[en?"ACH %":"نسبة تحقيق المستهدف"]].map(label=>'<th scope="col">'+label+'</th>').join("")+'</tr></thead><tbody>'+Array.from({length:salesReportDayCount},(_,i)=>{const day=i+1,statisticsDateLabel=new Intl.DateTimeFormat(en?"en-GB":"ar-EG",{day:"numeric",month:en?"short":"long",year:"numeric"}).format(new Date(Number(year),monthIndex,day));const isWeekend=[4,5,6].includes(new Date(Number(year),monthIndex,day).getDay());return '<tr><td'+(isWeekend?' class="sales-weekend-cell"':'')+'>'+statisticsDateLabel+'</td><td'+(isWeekend?' class="sales-weekend-cell"':'')+'>'+salesReportWeekdayName(day)+'</td>'+Array.from({length:16},(_,i)=>{const groups={0:["tickets","dinein"],1:["sales","dinein"],2:["average","dinein"],3:["tickets","takeaway"],4:["sales","takeaway"],5:["average","takeaway"],6:["tickets","delivery"],7:["sales","delivery"],8:["average","delivery"],9:["tickets","catering"],10:["sales","catering"],11:["average","catering"]};const config=groups[i],weekendClass=isWeekend&&(i===13||i===14)?' class="sales-weekend-cell"':'';if(!config){const dailyFields={12:["total-tickets","tickets"],13:["total-sales","sales"],14:["target","target"],15:["ach","ach"]};const field=dailyFields[i];if(field){const [name,kind]=field;return '<td'+weekendClass+'>'+(kind==="target"?'<div class="sales-stat-money-wrap"><input type="text" inputmode="decimal" autocomplete="off" data-stat-target class="sales-stat-cell-input" aria-label="'+(en?"Daily Target":"المستهدف اليومي")+'"><span class="sales-stat-currency">'+(en?"EGP":"ج.م")+'</span></div>':'<div class="sales-stat-money-wrap"><input readonly data-stat-'+name+' class="sales-stat-cell-input" aria-label="'+name+'">'+(kind==="sales"?'<span class="sales-stat-currency">'+(en?"EGP":"ج.م")+'</span>':kind==="ach"?'<span class="sales-stat-currency">%</span>':'')+'</div>')+'</td>';}return '<td'+weekendClass+'></td>';}const [kind,group]=config;return '<td'+weekendClass+'><div class="sales-stat-money-wrap"><input '+(kind==="average"?'readonly aria-readonly="true" inputmode="none" tabindex="-1" autocomplete="off" data-stat-average="'+group+'"':'type="text" inputmode="decimal" autocomplete="off" data-stat-'+kind+'="'+group+'" oninput="window.syncStatisticsAverages(this.closest(\'tr\'))" onchange="window.syncStatisticsAverages(this.closest(\'tr\'))"')+' class="sales-stat-cell-input" aria-label="'+group+' '+kind+'">'+(kind==="tickets"?'':'<span class="sales-stat-currency">'+(en?"EGP":"ج.م")+'</span>')+'</div></td>';}).join("")+'</tr>';}).join("")+'</tbody><tfoot><tr class="sales-statistics-total-row"><td colspan="2">'+(en?"Total":"الإجمالي")+'</td>'+['dinein-tickets','dinein-sales','dinein-average','takeaway-tickets','takeaway-sales','takeaway-average','delivery-tickets','delivery-sales','delivery-average','catering-tickets','catering-sales','catering-average','total-tickets','total-sales','target','ach'].map((key,i)=>'<td>'+(key.includes("sales")||key.includes("average")||key==="target"?'<div class="sales-stat-money-wrap">':'')+'<span data-stat-total="'+key+'">—</span>'+(key.includes("sales")||key.includes("average")||key==="target"?'<span class="sales-stat-currency">'+(en?"EGP":"ج.م")+'</span>':key==="ach"?'<span class="sales-stat-currency">%</span>':'')+(key.includes("sales")||key.includes("average")||key==="target"?'':'')+'</td>').join("")+'</tr></tfoot></table></div></div><section class="sales-statistics-card daily-tip-card" id="dailyTipCard"><div class="sales-statistics-heading"><h3 class="sales-monthly-analysis-title">'+(en?"Daily Tip":"الإكرامية اليومية")+'</h3><div class="sales-statistics-actions"><span class="sales-statistics-zoom-controls"><button type="button" data-daily-tip-zoom="-1" aria-label="'+(en?"Decrease daily tip table size":"تصغير جدول الإكرامية اليومية")+'" title="'+(en?"Decrease daily tip table size":"تصغير جدول الإكرامية اليومية")+'">−</button><button type="button" data-daily-tip-zoom="1" aria-label="'+(en?"Increase daily tip table size":"تكبير جدول الإكرامية اليومية")+'" title="'+(en?"Increase daily tip table size":"تكبير جدول الإكرامية اليومية")+'">+</button></span></div></div><div class="daily-tip-toolbar"><span class="daily-tip-month-label" id="dailyTipMonthLabel"></span></div><div class="daily-tip-table-wrap"><table class="sales-statistics-table daily-tip-table" dir="ltr"><thead><tr><th>'+(en?"Date":"التاريخ")+'</th><th>'+(en?"Tip Amount":"قيمة الإكرامية")+'</th><th>'+(en?"Dine-in Sales":"مبيعات الصالة")+'</th><th>%</th></tr></thead><tbody id="dailyTipRows"><tr><td colspan="4">جارٍ تحميل البيانات...</td></tr></tbody></table></div><div class="daily-tip-sheet-tabs" id="dailyTipSheetTabs" role="tablist" aria-label="Daily Tip sheets"></div><div class="daily-tip-sheet-editor" id="dailyTipSheetEditor"></div><div class="daily-tip-status" id="dailyTipStatus" role="status" aria-live="polite"></div></section><div class="sales-export-card"><button type="button" class="sales-export-pill" id="printSalesReport">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button><button type="button" class="sales-export-pill" id="exportSalesExcel">'+(en?"Export to Excel":"تصدير إلى Excel")+'</button><button type="button" class="sales-export-pill" id="saveSalesReportSnapshot">'+(en?"Save & Transfer":"حفظ وترحيل")+'</button><button type="button" class="sales-export-pill" id="openSavedSalesSnapshots">'+(en?"Saved Statistics":"الإحصائيات المحفوظة")+'</button></div><div id="salesSnapshotStatus" class="sales-snapshot-status" role="status" aria-live="polite"></div></section>'; 
+  m.innerHTML='<section class="card headcount-page-card sales-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="salesReportMonthBack">← '+(en?"Choose another month":"اختيار شهر آخر")+'</button><div><h3>'+esc(nameOf(selectedSalesBranch))+'</h3><p class="muted sales-selected-location">'+esc(branchLocationOf(selectedSalesBranch)||(en?"Location not added":"لم يتم إضافة العنوان"))+'</p></div></div><div class="sales-date-selector-card" dir="ltr"><div class="sales-date-field"><span class="sales-date-label">'+(en?"Day":"اليوم")+'</span><div class="sales-date-day-picker"><button type="button" id="salesReportDayToggle" class="sales-report-day-toggle" aria-expanded="false" aria-controls="salesReportDayPanel"><span class="sales-report-day-number" data-day-value>'+selectedReportDayLabel+'</span><span class="sales-report-day-weekday" data-day-weekday>'+selectedReportWeekday+'</span><span aria-hidden="true">⌄</span></button><div id="salesReportDayPanel" class="sales-report-day-panel" hidden>'+salesReportDayButtons+'</div></div></div><div class="sales-date-field"><span class="sales-date-label">'+(en?"Month":"الشهر")+'</span><strong class="sales-date-value">'+esc(monthName)+'</strong></div><div class="sales-date-field"><span class="sales-date-label">'+(en?"Year":"السنة")+'</span><strong class="sales-date-value">'+esc(displayYear)+'</strong></div></div><div class="sales-month-card" data-sales-branch-id="'+esc(selectedSalesBranch.id)+'"><input type="hidden" id="salesReportDay" value="'+(salesReportSelectedDay||"")+'"><div class="sales-metrics-grid">'+metric("sales_target",en?"Sales Target":"مستهدف المبيعات",managerCanEdit)+metric("daily_sales_target",en?"Daily Sales Target":"المستهدف اليومي للمبيعات",false)+metric("month_to_date_sales",en?"Month To Date Sales":"مبيعات الشهر حتى تاريخه",false)+metric("yesterday_sales",en?"Yesterday Sales":"مبيعات أمس",false)+metric("yesterday_tip",en?"Yesterday Tip":"إكرامية أمس",false)+metric("month_to_date_tip",en?"Month To Date Tip":"إكرامية الشهر حتى تاريخه",false)+'</div><div class="sales-month-actions"><button type="button" class="primary" id="saveSalesMonth">'+(en?"Save Data":"حفظ البيانات")+'</button><span id="salesMonthStatus" role="status" aria-live="polite"></span></div><button type="button" id="loadSalesMonth" style="display:none!important" aria-hidden="true" tabindex="-1">Load</button></div><div class="sales-statistics-card"><div class="sales-statistics-heading"><h3 class="sales-monthly-analysis-title">'+(en?"Statistics":"الإحصائيات")+'</h3><div class="sales-statistics-actions"><span class="sales-statistics-zoom-controls"><button type="button" data-sales-statistics-zoom="-1" aria-label="'+(en?"Decrease statistics table size":"تصغير جدول الإحصائيات")+'" title="'+(en?"Decrease statistics table size":"تصغير جدول الإحصائيات")+'">−</button><button type="button" data-sales-statistics-zoom="1" aria-label="'+(en?"Increase statistics table size":"تكبير جدول الإحصائيات")+'" title="'+(en?"Increase statistics table size":"تكبير جدول الإحصائيات")+'">+</button></span><span id="salesStatisticsStatus" role="status" aria-live="polite"></span></div></div><div class="sales-statistics-table-wrap" dir="ltr"><table class="sales-statistics-table"><thead><tr>'+[[en?"Date":"التاريخ"],[en?"Day":"اليوم"],[en?"Dine-in Tickets":"عدد فواتير داخل المطعم"],[en?"Dine-in Sales":"مبيعات داخل المطعم"],[en?"Dine-in Average":"متوسط داخل المطعم"],[en?"T.W. Tickets":"عدد فواتير التيك أواي"],[en?"T.W. Sales":"مبيعات التيك أواي"],[en?"T.W. Average":"متوسط التيك أواي"],[en?"Delivery Tickets":"عدد فواتير التوصيل"],[en?"Delivery Sales":"مبيعات التوصيل"],[en?"Delivery Average":"متوسط التوصيل"],[en?"Catering Tickets":"عدد فواتير الكاترينج"],[en?"Catering Sales":"مبيعات الكاترينج"],[en?"Catering Average":"متوسط الكاترينج"],[en?"Total Tickets":"إجمالي الفواتير"],[en?"Total Sales":"إجمالي المبيعات"],[en?"Daily Target":"المستهدف اليومي"],[en?"ACH %":"نسبة تحقيق المستهدف"]].map(label=>'<th scope="col">'+label+'</th>').join("")+'</tr></thead><tbody>'+Array.from({length:salesReportDayCount},(_,i)=>{const day=i+1,statisticsDateLabel=new Intl.DateTimeFormat(en?"en-GB":"ar-EG",{day:"numeric",month:en?"short":"long",year:"numeric"}).format(new Date(Number(year),monthIndex,day));const isWeekend=[4,5,6].includes(new Date(Number(year),monthIndex,day).getDay());return '<tr><td'+(isWeekend?' class="sales-weekend-cell"':'')+'>'+statisticsDateLabel+'</td><td'+(isWeekend?' class="sales-weekend-cell"':'')+'>'+salesReportWeekdayName(day)+'</td>'+Array.from({length:16},(_,i)=>{const groups={0:["tickets","dinein"],1:["sales","dinein"],2:["average","dinein"],3:["tickets","takeaway"],4:["sales","takeaway"],5:["average","takeaway"],6:["tickets","delivery"],7:["sales","delivery"],8:["average","delivery"],9:["tickets","catering"],10:["sales","catering"],11:["average","catering"]};const config=groups[i],weekendClass=isWeekend&&(i===13||i===14)?' class="sales-weekend-cell"':'';if(!config){const dailyFields={12:["total-tickets","tickets"],13:["total-sales","sales"],14:["target","target"],15:["ach","ach"]};const field=dailyFields[i];if(field){const [name,kind]=field;return '<td'+weekendClass+'>'+(kind==="target"?'<div class="sales-stat-money-wrap"><input type="text" inputmode="decimal" autocomplete="off" data-stat-target class="sales-stat-cell-input" aria-label="'+(en?"Daily Target":"المستهدف اليومي")+'"><span class="sales-stat-currency">'+(en?"EGP":"ج.م")+'</span></div>':'<div class="sales-stat-money-wrap"><input readonly data-stat-'+name+' class="sales-stat-cell-input" aria-label="'+name+'">'+(kind==="sales"?'<span class="sales-stat-currency">'+(en?"EGP":"ج.م")+'</span>':kind==="ach"?'<span class="sales-stat-currency">%</span>':'')+'</div>')+'</td>';}return '<td'+weekendClass+'></td>';}const [kind,group]=config;return '<td'+weekendClass+'><div class="sales-stat-money-wrap"><input '+(kind==="average"?'readonly aria-readonly="true" inputmode="none" tabindex="-1" autocomplete="off" data-stat-average="'+group+'"':'type="text" inputmode="decimal" autocomplete="off" data-stat-'+kind+'="'+group+'" oninput="window.syncStatisticsAverages(this.closest(\'tr\'))" onchange="window.syncStatisticsAverages(this.closest(\'tr\'))"')+' class="sales-stat-cell-input" aria-label="'+group+' '+kind+'">'+(kind==="tickets"?'':'<span class="sales-stat-currency">'+(en?"EGP":"ج.م")+'</span>')+'</div></td>';}).join("")+'</tr>';}).join("")+'</tbody><tfoot><tr class="sales-statistics-total-row"><td colspan="2">'+(en?"Total":"الإجمالي")+'</td>'+['dinein-tickets','dinein-sales','dinein-average','takeaway-tickets','takeaway-sales','takeaway-average','delivery-tickets','delivery-sales','delivery-average','catering-tickets','catering-sales','catering-average','total-tickets','total-sales','target','ach'].map((key,i)=>'<td>'+(key.includes("sales")||key.includes("average")||key==="target"?'<div class="sales-stat-money-wrap">':'')+'<span data-stat-total="'+key+'">—</span>'+(key.includes("sales")||key.includes("average")||key==="target"?'<span class="sales-stat-currency">'+(en?"EGP":"ج.م")+'</span>':key==="ach"?'<span class="sales-stat-currency">%</span>':'')+(key.includes("sales")||key.includes("average")||key==="target"?'':'')+'</td>').join("")+'</tr></tfoot></table></div><div class="statistics-sheet-tabs" id="salesStatisticsSheetTabs" role="tablist" aria-label="'+(en?"Statistics month sheets":"شيتات الإحصائيات")+'"></div></div><section class="sales-statistics-card daily-tip-card" id="dailyTipCard"><div class="sales-statistics-heading"><h3 class="sales-monthly-analysis-title">'+(en?"Daily Tip":"الإكرامية اليومية")+'</h3><div class="sales-statistics-actions"><span class="sales-statistics-zoom-controls"><button type="button" data-daily-tip-zoom="-1" aria-label="'+(en?"Decrease daily tip table size":"تصغير جدول الإكرامية اليومية")+'" title="'+(en?"Decrease daily tip table size":"تصغير جدول الإكرامية اليومية")+'">−</button><button type="button" data-daily-tip-zoom="1" aria-label="'+(en?"Increase daily tip table size":"تكبير جدول الإكرامية اليومية")+'" title="'+(en?"Increase daily tip table size":"تكبير جدول الإكرامية اليومية")+'">+</button></span></div></div><div class="daily-tip-toolbar"><span class="daily-tip-month-label" id="dailyTipMonthLabel"></span></div><div class="daily-tip-table-wrap"><table class="sales-statistics-table daily-tip-table" dir="ltr"><thead><tr><th>'+(en?"Date":"التاريخ")+'</th><th>'+(en?"Tip Amount":"قيمة الإكرامية")+'</th><th>'+(en?"Dine-in Sales":"مبيعات الصالة")+'</th><th>%</th></tr></thead><tbody id="dailyTipRows"><tr><td colspan="4">جارٍ تحميل البيانات...</td></tr></tbody></table></div><div class="daily-tip-sheet-tabs" id="dailyTipSheetTabs" role="tablist" aria-label="Daily Tip sheets"></div><div class="daily-tip-sheet-editor" id="dailyTipSheetEditor"></div><div class="daily-tip-status" id="dailyTipStatus" role="status" aria-live="polite"></div></section><div class="sales-export-card"><button type="button" class="sales-export-pill" id="printSalesReport">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button><button type="button" class="sales-export-pill" id="exportSalesExcel">'+(en?"Export to Excel":"تصدير إلى Excel")+'</button><button type="button" class="sales-export-pill" id="saveSalesReportSnapshot">'+(en?"Save & Transfer":"حفظ وترحيل")+'</button><button type="button" class="sales-export-pill" id="openSavedSalesSnapshots">'+(en?"Saved Statistics":"الإحصائيات المحفوظة")+'</button></div><div id="salesSnapshotStatus" class="sales-snapshot-status" role="status" aria-live="polite"></div></section>'; 
   const reportRoot=m.querySelector(".sales-report-page");
   if(branchReportsLogbookPage&&branchReportsStatisticsOpen&&reportRoot){
    const statisticsCard=reportRoot.querySelector(".sales-statistics-card:not(.daily-tip-card)"),actionsCard=reportRoot.querySelector(".sales-export-card"),snapshotStatus=reportRoot.querySelector("#salesSnapshotStatus");
@@ -7336,6 +7465,17 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 :root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-table th{background:#293b33!important;color:#e5eee9!important}
 :root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-sheet-tab.is-active{background:#202f28}
 @media(max-width:600px){#app .sales-report-page .daily-tip-card{padding:7px!important}#app .sales-report-page .daily-tip-table{min-width:390px!important}#app .sales-report-page .daily-tip-toolbar{gap:5px}}
+</style>
+
+<style id="novaro-statistics-month-sheets-v1">
+#app .sales-report-page .statistics-sheet-tabs{display:flex;align-items:center;gap:5px;overflow-x:auto;padding:9px 2px 5px;direction:ltr;border-top:1px solid var(--line);margin-top:8px}
+#app .sales-report-page .statistics-sheet-pill{display:inline-flex;align-items:center;flex:0 0 auto;gap:2px}
+#app .sales-report-page .statistics-sheet-tab{flex:0 0 auto;max-width:180px;min-height:32px;padding:7px 12px;border:1px solid var(--line);border-radius:8px 8px 0 0;background:var(--surface,#f8fbf9);color:var(--text,var(--ink));font-size:11px;font-weight:700;white-space:nowrap}
+#app .sales-report-page .statistics-sheet-tab.is-active{background:var(--card,#fff);border-bottom:2px solid #32866a;color:var(--text,var(--ink))}
+#app .sales-report-page .statistics-sheet-delete{width:21px;height:24px;flex:none;border:0;border-radius:6px;background:transparent;color:var(--muted);font-size:15px;line-height:1}
+#app .sales-report-page .statistics-sheet-delete:hover{background:rgba(190,65,65,.1);color:#bd4545}
+#app .sales-report-page .statistics-sheet-add-inline{width:32px;height:32px;flex:none;border:1px dashed var(--line);border-radius:8px;background:var(--surface,#f8fbf9);color:var(--text,var(--ink));font-size:17px;font-weight:700}
+:root[data-novaro-mode="dark"] #app .sales-report-page .statistics-sheet-tab.is-active{background:#202f28}
 </style>
 
 <style id="novaro-theme-regression-fix-v1">
