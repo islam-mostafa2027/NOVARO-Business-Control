@@ -3178,6 +3178,28 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
  }
 }
 </style>
+<style id="novaro-header-actions-light-focus-fix-v1">
+/* Keep header tools in their normal light appearance after touch/click. */
+:root:not([data-novaro-mode="dark"]) .app-header #openSettings:focus,
+:root:not([data-novaro-mode="dark"]) .app-header #openSettings:active,
+:root:not([data-novaro-mode="dark"]) .app-header #openAbout:focus,
+:root:not([data-novaro-mode="dark"]) .app-header #openAbout:active,
+:root:not([data-novaro-mode="dark"]) .app-header #langToggleApp:focus,
+:root:not([data-novaro-mode="dark"]) .app-header #langToggleApp:active,
+:root:not([data-novaro-mode="dark"]) .app-header #logout:focus,
+:root:not([data-novaro-mode="dark"]) .app-header #logout:active{
+ background:var(--nv-btn-soft-bg)!important;
+ background-image:none!important;
+ color:var(--nv-btn-soft-text)!important;
+ -webkit-text-fill-color:var(--nv-btn-soft-text)!important;
+ border-color:var(--nv-btn-border)!important;
+ box-shadow:none!important;
+}
+:root:not([data-novaro-mode="dark"]) .app-header #openSettings:focus svg,
+:root:not([data-novaro-mode="dark"]) .app-header #openAbout:focus svg,
+:root:not([data-novaro-mode="dark"]) .app-header #langToggleApp:focus svg,
+:root:not([data-novaro-mode="dark"]) .app-header #logout:focus svg{color:var(--nv-btn-soft-text)!important;stroke:currentColor!important}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
