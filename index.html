@@ -5212,11 +5212,11 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("[data-shift-date]")){novaroShiftReportCapture(e.target.closest(".shift-report-page"));shiftReportDate=e.target.closest("[data-shift-date]").dataset.shiftDate;render();return;}
  if(e.target.closest("#shiftReportAddSheet")){const store=novaroShiftReportCapture(e.target.closest(".shift-report-page")),d=new Date((shiftReportDate||new Date().toISOString().slice(0,10))+"T12:00:00");d.setDate(d.getDate()+1);let next=d.toISOString().slice(0,10);while(store[next]){d.setDate(d.getDate()+1);next=d.toISOString().slice(0,10);}store[next]={};localStorage.setItem("novaro-shift-report:"+salesReportBranchId,JSON.stringify(store));shiftReportDate=next;render();return;}
  if(e.target.closest("#shiftReportDeleteSheet")){const store=novaroShiftReportStore();if(!confirm(language==="en"?"Delete this date sheet?":"هل تريد حذف ورقة هذا التاريخ؟"))return;delete store[shiftReportDate];localStorage.setItem("novaro-shift-report:"+salesReportBranchId,JSON.stringify(store));shiftReportDate=Object.keys(store).sort().pop()||"";render();return;}
- if(e.target.closest("#shiftReportSave")){const root=e.target.closest(".shift-report-page");try{novaroShiftReportCapture(root);const status=root?.querySelector("#shiftReportStatus");if(status)status.textContent=language==="en"?"Saved on this device.":"تم حفظ التقرير على هذا الجهاز.";}catch(_){alert(language==="en"?"Could not save report.":"تعذر حفظ التقرير.");}return;}
+ if(e.target.closest("#shiftReportSave")){const root=e.target.closest(".shift-report-page"),button=e.target.closest("#shiftReportSave");try{novaroShiftReportCapture(root);if(button)button.disabled=true;const result=await novaroShiftReportSaveToDatabase();const status=root?.querySelector("#shiftReportStatus");if(status)status.textContent=language==="en"?"Saved securely to the database ("+result.count+" date sheets).":"تم حفظ التقرير في قاعدة البيانات بنجاح ("+result.count+" ورقة بتاريخ).";}catch(error){console.error("NOVARO shift report save failed:",error);const status=root?.querySelector("#shiftReportStatus");if(status)status.textContent=language==="en"?"Database save failed. The local copy is still محفوظ.":"فشل الحفظ في قاعدة البيانات. النسخة المحلية ما زالت محفوظة.";alert(language==="en"?"Database save failed. Your local copy was preserved.":"فشل الحفظ في قاعدة البيانات. تم الحفاظ على النسخة المحلية.");}finally{if(button)button.disabled=false;}return;}
  if(e.target.closest("[data-open-branch-report-categories]")){branchReportsLogbookPage=true;render();return;}
  if(e.target.closest("[data-open-branch-report-statistics]")){branchReportsStatisticsOpen=true;const now=new Date();salesReportSelectedMonth=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][now.getMonth()]+"-"+now.getFullYear();salesStatisticsSelectedMonth=salesReportSelectedMonth;salesReportSelectedDay=0;render();return;}
  if(e.target.closest("#branchReportsLogbookBack")){branchReportsLogbookPage=false;branchReportsStatisticsOpen=false;salesStatisticsSelectedMonth="";statisticsSheetCache=[];render();return;}
- if(e.target.closest("[data-open-shift-reports]")){shiftReportTableOpen=false;shiftReportsPage=true;render();return;}
+ if(e.target.closest("[data-open-shift-reports]")){shiftReportTableOpen=false;shiftReportsPage=true;render();try{await novaroShiftReportLoadFromDatabase();render();}catch(error){console.error("NOVARO shift report load failed:",error);alert(language==="en"?"Could not load shift reports from the database. Your device copy was kept.":"تعذر تحميل تقارير الوردية من قاعدة البيانات. النسخة المحفوظة على الجهاز ما زالت موجودة.");}return;}
  if(e.target.closest("#shiftReportsBack")){shiftReportTableOpen=false;shiftReportsPage=false;render();return;}
  const salesBranchButton=e.target.closest("[data-sales-branch]");
  if(salesBranchButton){statisticsSheetCache=[];salesStatisticsSelectedMonth="";salesReportBranchId=salesBranchButton.dataset.salesBranch;salesReportSelectedMonth="";salesReportSelectedDay=0;salesHistoryMonthPickerOpen=false;shiftReportTableOpen=false;shiftReportsPage=false;render();return;}
@@ -5697,6 +5697,23 @@ function showStocktakeCategory(groupKey){
 }
 
 function novaroShiftReportStore(){try{return JSON.parse(localStorage.getItem("novaro-shift-report:"+salesReportBranchId)||"{}")||{};}catch(_){return {};}}
+async function novaroShiftReportLoadFromDatabase(){
+ if(!salesReportBranchId||!user?.id)return {ok:false,error:Error("Missing branch or user")};
+ const {data,error}=await db.from("branch_shift_report_entries").select("report_date,report_values").eq("branch_id",salesReportBranchId).order("report_date");
+ if(error)throw error;
+ const local=novaroShiftReportStore(),merged={...local};
+ (data||[]).forEach(row=>{if(row.report_date&&row.report_values&&typeof row.report_values==="object")merged[row.report_date]=row.report_values;});
+ localStorage.setItem("novaro-shift-report:"+salesReportBranchId,JSON.stringify(merged));
+ return {ok:true,count:(data||[]).length};
+}
+async function novaroShiftReportSaveToDatabase(){
+ if(!salesReportBranchId||!user?.id)throw Error(language==="en"?"Select a branch first.":"اختر الفرع أولاً.");
+ const store=novaroShiftReportStore(),rows=Object.entries(store).filter(([date,values])=>/^\\d{4}-\\d{2}-\\d{2}$/.test(date)&&values&&typeof values==="object"&&!Array.isArray(values)).map(([date,values])=>({branch_id:salesReportBranchId,report_date:date,report_values:values,created_by:user.id,updated_by:user.id}));
+ if(!rows.length)return {count:0};
+ const {error}=await db.from("branch_shift_report_entries").upsert(rows,{onConflict:"branch_id,report_date"});
+ if(error)throw error;
+ return {count:rows.length};
+}
 function novaroShiftReportDisplayDate(iso,includeYear=false){const parts=String(iso||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!parts)return String(iso||"");const monthIndex=Number(parts[2])-1;const monthNames=language==="ar"?["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"]:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];const day=language==="ar"?String(parts[3]).replace(/\\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[Number(d)]):String(parts[3]),year=language==="ar"?String(parts[1]).replace(/\\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[Number(d)]):String(parts[1]);return '<span class="shift-report-date-label" dir="ltr" style="display:inline-flex;direction:ltr;unicode-bidi:isolate;align-items:center;gap:4px"><span>'+day+'</span><span>'+monthNames[monthIndex]+'</span>'+(includeYear?'<span>'+year+'</span>':"")+'</span>';}
 function novaroShiftReportMarkup(en,branch){
  const shiftReportStyle=`<style id="novaro-shift-report-v1">
