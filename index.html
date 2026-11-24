@@ -4751,7 +4751,7 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("[data-toggle-sales-history-months]")){salesHistoryMonthPickerOpen=!salesHistoryMonthPickerOpen;if(salesHistoryMonthPickerOpen){try{await novaroShiftReportLoadArchives();}catch(error){console.error("NOVARO report archive list failed:",error);alert(language==="en"?"Could not load archived reports.":"تعذر تحميل أرشيف التقارير.");}}render();return;}
  const archiveBranchReports=e.target.closest(".novaro-sales-report-archive-placeholder");
  if(archiveBranchReports){
-  const branchId=salesReportBranchId,now=new Date(),monthKey=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][now.getMonth()]+"-"+now.getFullYear(),monthLabel=reportMonthLabel(monthKey);
+  const branchId=salesReportBranchId,now=new Date(),monthKey=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][now.getMonth()]+"-"+now.getFullYear(),monthLabel=new Intl.DateTimeFormat(language==="en"?"en":"ar-EG",{month:"long",year:"numeric"}).format(new Date(now.getFullYear(),now.getMonth(),1));
   if(!branchId){alert(language==="en"?"Select a branch first.":"اختر الفرع أولاً.");return;}
   const confirmed=window.confirm(language==="en"?"Archive all five branch report sections and their data for "+monthLabel+"?":"هل تريد أرشفة أقسام تقارير الفرع الخمسة بكل محتوياتها وبياناتها لشهر "+monthLabel+"؟");
   if(!confirmed)return;
