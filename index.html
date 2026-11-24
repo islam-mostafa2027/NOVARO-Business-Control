@@ -4704,12 +4704,13 @@ document.addEventListener("click",async e=>{
  const button=e.target.closest("#saveStatisticsSheet");
  if(!button)return;
  const status=document.querySelector("#salesStatisticsStatus");
- if(!statisticsCanEditSheets()){if(status)status.textContent=language==="en"?"You do not have permission to save this Statistics sheet.":"ليس لديك صلاحية حفظ شيت الإحصائيات.";return;}
+ const showTemporaryStatus=message=>{if(!status)return;clearTimeout(status._novaroHideTimer);status.textContent=message;status._novaroHideTimer=setTimeout(()=>{if(status.textContent===message)status.textContent="";},3000);};
+ if(!statisticsCanEditSheets()){showTemporaryStatus(language==="en"?"You do not have permission to save this Statistics sheet.":"ليس لديك صلاحية حفظ شيت الإحصائيات.");return;}
  if(button.disabled)return;
  button.disabled=true;button.setAttribute("aria-busy","true");
- if(status)status.textContent=language==="en"?"Saving Statistics sheet...":"جارٍ حفظ شيت الإحصائيات...";
- try{await statisticsSaveActive();if(status)status.textContent=language==="en"?"Statistics sheet saved successfully.":"تم حفظ بيانات شيت الإحصائيات بنجاح.";}
- catch(error){if(status)status.textContent=(language==="en"?"Could not save Statistics sheet: ":"تعذر حفظ شيت الإحصائيات: ")+(error.message||String(error));}
+ if(status){clearTimeout(status._novaroHideTimer);status.textContent=language==="en"?"Saving Statistics sheet...":"جارٍ حفظ شيت الإحصائيات...";}
+ try{await statisticsSaveActive();showTemporaryStatus(language==="en"?"Statistics sheet saved successfully.":"تم حفظ بيانات شيت الإحصائيات بنجاح.");}
+ catch(error){showTemporaryStatus((language==="en"?"Could not save Statistics sheet: ":"تعذر حفظ شيت الإحصائيات: ")+(error.message||String(error)));}
  finally{button.disabled=false;button.removeAttribute("aria-busy");}
 });
 document.addEventListener("contextmenu",e=>{
