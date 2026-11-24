@@ -4581,7 +4581,7 @@ async function dailyTipSaveActive(){
 
 /* Independent month sheets for the Statistics table. */
 function statisticsMonthParts(value){
- const parts=String(value||"").match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\\d{4})$/);
+ const parts=String(value||"").match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d{4})$/);
  if(!parts)return null;
  const monthIndex=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(parts[1]);
  return {monthIndex,year:Number(parts[2]),days:new Date(Number(parts[2]),monthIndex+1,0).getDate()};
@@ -4930,6 +4930,7 @@ document.addEventListener("click",async e=>{
    clone.querySelector(".sales-snapshot-modal")?.remove();
    clone.querySelector(".sales-month-actions")?.remove();
    clone.querySelector(".sales-statistics-actions")?.remove();
+   clone.querySelector(".statistics-sheet-tabs")?.remove();
    clone.querySelector(".headcount-back")?.remove();
    clone.querySelectorAll(".sales-report-day-panel").forEach(node=>node.remove());
    const sourceFields=Array.from(snapshotRoot.querySelectorAll("input,textarea,select")),clonedFields=Array.from(clone.querySelectorAll("input,textarea,select"));
@@ -5039,6 +5040,7 @@ document.addEventListener("click",async e=>{
   copy.querySelector(".sales-export-card")?.remove();
   copy.querySelector(".sales-month-actions")?.remove();
   copy.querySelector(".sales-statistics-actions")?.remove();
+  copy.querySelector(".statistics-sheet-tabs")?.remove();
   copy.querySelectorAll(".sales-report-day-panel").forEach(node=>node.remove());
   copy.querySelectorAll(".sales-report-day-toggle").forEach(node=>{const span=document.createElement("span");span.className="sales-report-day-toggle";span.textContent=node.innerText.trim();node.replaceWith(span);});
   copy.querySelectorAll("input,textarea,select").forEach(field=>{const span=document.createElement("span");span.className="print-sales-value";span.textContent=field.value||"—";field.replaceWith(span);});
