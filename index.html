@@ -9468,14 +9468,27 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app #dailyTipCard table.daily-tip-table tfoot td{
   height:34px!important;min-height:34px!important;padding:5px 3px!important;
 }
-#app .sales-report-page .sales-statistics-table:not(.daily-tip-table) thead th{
-  padding-top:8px!important;padding-bottom:8px!important;line-height:1.2!important;
+/* Match the daily-tip sheet proportions in the main Statistics table. */
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) thead th{
+  box-sizing:border-box!important;height:42px!important;min-height:42px!important;
+  padding:8px 5px!important;line-height:1.2!important;vertical-align:middle!important;
 }
-#app .sales-report-page .sales-statistics-table:not(.daily-tip-table) tbody td{
-  padding-top:3px!important;padding-bottom:3px!important;
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tbody tr,
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tbody td{
+  box-sizing:border-box!important;height:29px!important;min-height:29px!important;
+  padding:2px 3px!important;vertical-align:middle!important;
 }
-#app .sales-report-page .sales-statistics-table:not(.daily-tip-table) tfoot td{
-  padding-top:5px!important;padding-bottom:5px!important;
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tbody .sales-stat-cell-input{
+  box-sizing:border-box!important;height:25px!important;min-height:25px!important;
+  max-height:25px!important;padding:2px 3px!important;line-height:1.1!important;
+}
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tbody .sales-stat-money-wrap{
+  min-height:25px!important;align-items:center!important;
+}
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tfoot tr,
+#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tfoot td{
+  box-sizing:border-box!important;height:34px!important;min-height:34px!important;
+  padding:5px 3px!important;vertical-align:middle!important;
 }
 #app .shift-report-page .shift-report-table thead th{padding-top:10px!important;padding-bottom:10px!important;}
 #app .shift-report-page .shift-report-table tbody td,
