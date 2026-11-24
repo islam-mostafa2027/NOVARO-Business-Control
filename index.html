@@ -9750,6 +9750,47 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   padding:2px 7px!important;line-height:1!important;
 }
 </style>
+
+<script id="novaro-global-temporary-empty-state-v1">
+(()=>{
+ if(window.__novaroGlobalEmptyStateObserver)return;
+ const timers=new WeakMap();
+ const isEmptyDataMessage=el=>{
+  if(!el||!el.matches?.(".empty,.novaro-category-empty"))return false;
+  const value=(el.textContent||"").replace(/\\s+/g," ").trim();
+  return /^(?:no data\\b|no items\\b|no employees\\b|no job titles\\b|no stocktake\\b|no archived\\b|no low-stock\\b|no previous stocktake\\b|لا توجد|لا يوجد|لم تتم إضافة|لم يتم إضافة)/i.test(value);
+ };
+ const schedule=el=>{
+  if(!isEmptyDataMessage(el)||timers.has(el))return;
+  const original=(el.textContent||"").replace(/\\s+/g," ").trim();
+  el.classList.add("novaro-empty-temporary");
+  const timer=setTimeout(()=>{
+   if(!el.isConnected||(el.textContent||"").replace(/\\s+/g," ").trim()!==original)return;
+   el.classList.add("novaro-empty-dismissed");
+   setTimeout(()=>{
+    if(!el.isConnected)return;
+    const reportCard=el.closest(".novaro-branch-report-empty-state");
+    if(reportCard)reportCard.remove();else el.remove();
+   },240);
+  },3000);
+  timers.set(el,timer);
+ };
+ const scan=root=>{
+  if(root.nodeType!==1&&root.nodeType!==9)return;
+  if(root.nodeType===1)schedule(root);
+  root.querySelectorAll?.(".empty,.novaro-category-empty").forEach(schedule);
+ };
+ scan(document);
+ window.__novaroGlobalEmptyStateObserver=new MutationObserver(records=>{
+  for(const record of records){
+   record.addedNodes.forEach(node=>{if(node.nodeType===1)scan(node);});
+   if(record.type==="characterData")scan(record.target.parentElement);
+  }
+ });
+ window.__novaroGlobalEmptyStateObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
+})();
+</script>
+
 </body>
 </html>
 
@@ -9762,4 +9803,33 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app #dailyTipCard table.daily-tip-table th:nth-child(2),#app #dailyTipCard table.daily-tip-table td:nth-child(2){width:88px!important;min-width:88px!important;max-width:88px!important}
 #app #dailyTipCard table.daily-tip-table th:nth-child(3),#app #dailyTipCard table.daily-tip-table td:nth-child(3){width:100px!important;min-width:100px!important;max-width:100px!important}
 #app #dailyTipCard table.daily-tip-table th:nth-child(4),#app #dailyTipCard table.daily-tip-table td:nth-child(4){width:66px!important;min-width:66px!important;max-width:66px!important}
+</style>
+
+
+<style id="novaro-global-empty-state-and-button-height-v1">
+/* Keep branch tool/report buttons at the same 58px minimum height on every screen. */
+#app .sales-report-page .novaro-branch-tools-card>.novaro-branch-reports-rebuilt-item,
+#app .novaro-branch-reports-rebuilt-list>.novaro-branch-reports-rebuilt-item{
+  min-height:58px!important;
+  height:auto!important;
+  padding:11px 15px!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:600px){
+  #app .sales-report-page .novaro-branch-tools-card>.novaro-branch-reports-rebuilt-item,
+  #app .novaro-branch-reports-rebuilt-list>.novaro-branch-reports-rebuilt-item{
+    min-height:58px!important;
+    height:auto!important;
+    padding:11px 15px!important;
+  }
+}
+/* Temporary empty-data feedback: fade away after three seconds. */
+.novaro-empty-temporary{
+  transition:opacity .22s ease, transform .22s ease!important;
+}
+.novaro-empty-temporary.novaro-empty-dismissed{
+  opacity:0!important;
+  transform:translateY(-3px)!important;
+  pointer-events:none!important;
+}
 </style>
