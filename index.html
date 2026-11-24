@@ -4749,6 +4749,17 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("#openSavedSalesReports")){salesSavedReportsOpen=true;salesSavedReportsDay=1;salesSavedReportsDaySelected=false;render();return;}
  if(e.target.closest("#savedSalesReportsBack")){salesSavedReportsOpen=false;salesSavedReportsDaySelected=false;render();return;}
  if(e.target.closest("[data-toggle-sales-history-months]")){salesHistoryMonthPickerOpen=!salesHistoryMonthPickerOpen;if(salesHistoryMonthPickerOpen){try{await novaroShiftReportLoadArchives();}catch(error){console.error("NOVARO report archive list failed:",error);alert(language==="en"?"Could not load archived reports.":"تعذر تحميل أرشيف التقارير.");}}render();return;}
+ const archiveBranchReports=e.target.closest(".novaro-sales-report-archive-placeholder");
+ if(archiveBranchReports){
+  const branchId=salesReportBranchId,now=new Date(),monthKey=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][now.getMonth()]+"-"+now.getFullYear(),monthLabel=reportMonthLabel(monthKey);
+  if(!branchId){alert(language==="en"?"Select a branch first.":"اختر الفرع أولاً.");return;}
+  const confirmed=window.confirm(language==="en"?"Archive all five branch report sections and their data for "+monthLabel+"?":"هل تريد أرشفة أقسام تقارير الفرع الخمسة بكل محتوياتها وبياناتها لشهر "+monthLabel+"؟");
+  if(!confirmed)return;
+  archiveBranchReports.disabled=true;
+  try{const result=await db.rpc("archive_branch_monthly_reports",{p_branch_id:branchId,p_report_month:monthKey});if(result.error)throw result.error;await novaroShiftReportLoadArchives();render();alert(language==="en"?"The five report sections were archived successfully for "+monthLabel+".":"تمت أرشفة أقسام التقارير الخمسة بنجاح لشهر "+monthLabel+".");}
+  catch(error){alert((language==="en"?"Could not archive the reports: ":"تعذرت أرشفة التقارير: ")+(error.message||String(error)));archiveBranchReports.disabled=false;}
+  return;
+ }
  const restoreMonthlyArchive=e.target.closest("[data-restore-month-archive]");
  if(restoreMonthlyArchive){const archiveId=restoreMonthlyArchive.dataset.restoreMonthArchive,archive=(window.__novaroMonthlyReportArchives||[]).find(a=>a.id===archiveId);if(!archive)return;const label=archive.report_month;const confirmed=confirm(language==="en"?"Restore all archived reports for "+label+"? Existing live reports block restoration.":"استرجاع كل التقارير المؤرشفة لشهر "+label+"؟ لو فيه تقارير حالية للشهر ده، الاسترجاع هيتوقف.");if(!confirmed)return;restoreMonthlyArchive.disabled=true;try{const result=await db.rpc("restore_branch_monthly_reports",{p_archive_id:archiveId});if(result.error)throw result.error;await novaroShiftReportLoadArchives();render();alert(language==="en"?"Monthly reports restored successfully.":"تم استرجاع تقارير الشهر بنجاح.");}catch(error){alert((language==="en"?"Could not restore archive: ":"تعذر استرجاع الأرشيف: ")+(error.message||String(error)));restoreMonthlyArchive.disabled=false;}return;}
  const deleteMonthlyArchive=e.target.closest("[data-delete-month-archive]");
