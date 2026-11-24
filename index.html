@@ -9156,63 +9156,27 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .sales-report-page .daily-tip-card .sales-statistics-zoom-controls button:hover{background:var(--surface,#fff);filter:none}
 </style>
 
-<style id="novaro-clock-card-neutral-pressed-final-v2">
-/* Header clock card: never turn its shortcut buttons dark green on touch/focus in Light Mode. */
-html[data-novaro-mode="light"] body #app .app-header .header-clock-panel .header-tools-stack .header-icon-row > button:focus,
-html[data-novaro-mode="light"] body #app .app-header .header-clock-panel .header-tools-stack .header-icon-row > button:active,
-html[data-novaro-mode="light"] body #app .app-header .header-clock-panel .header-tools-stack .header-icon-row > button:focus-visible{
- background:#f1f4f2!important;
- background-color:#f1f4f2!important;
- background-image:none!important;
- color:#294238!important;
- -webkit-text-fill-color:#294238!important;
- border-color:#cbd8d0!important;
- box-shadow:none!important;
- filter:none!important;
-}
-html[data-novaro-mode="light"] body #app .app-header .header-clock-panel .header-tools-stack .header-icon-row > button:focus *,
-html[data-novaro-mode="light"] body #app .app-header .header-clock-panel .header-tools-stack .header-icon-row > button:active *,
-html[data-novaro-mode="light"] body #app .app-header .header-clock-panel .header-tools-stack .header-icon-row > button:focus-visible *{
- color:#294238!important;
- -webkit-text-fill-color:#294238!important;
- stroke:#294238!important;
- fill:currentColor!important;
- text-shadow:none!important;
-}
-</style>
-
-<style id="novaro-header-shortcuts-match-bottom-nav-v1">
-/* Match the five top shortcuts to the readable, inactive bottom-navigation buttons in Light Mode. */
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button,
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button:hover,
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button:active,
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button:focus,
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button:focus-visible {
-  background:#e5f4eb!important;
-  background-image:none!important;
-  background-color:#e5f4eb!important;
-  color:#286447!important;
-  -webkit-text-fill-color:#286447!important;
-  border:1px solid #b9dfc8!important;
-  box-shadow:none!important;
+<style id="novaro-header-shortcuts-white-pressed-v2">
+/* In Light Mode, pressed/focused header shortcuts use the green button state with white foreground. */
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button:is(#openDevices,#openSettings,#openAbout,#langToggleApp,#logout):is(:active,:focus,:focus-visible) {
+  background:#287d57!important;
+  background-image:linear-gradient(145deg,#287d57 0%,#1d6548 100%)!important;
+  background-color:#287d57!important;
+  border-color:#1d6548!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  box-shadow:0 3px 10px rgba(29,101,72,.22)!important;
   filter:none!important;
   opacity:1!important;
 }
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button > *,
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button svg,
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button .header-icon-label,
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button span {
-  color:#286447!important;
-  -webkit-text-fill-color:#286447!important;
-  stroke:#286447!important;
+html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .header-clock-panel .header-actions .header-tools-stack .header-icon-row > button:is(#openDevices,#openSettings,#openAbout,#langToggleApp,#logout):is(:active,:focus,:focus-visible) :is(svg,svg *,span,.header-icon-label) {
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  stroke:#fff!important;
   fill:none!important;
   opacity:1!important;
   visibility:visible!important;
   text-shadow:none!important;
-}
-html[data-novaro-mode="light"] body #app .app-header .header-actions .header-tools-stack .header-icon-row > button svg * {
-  stroke:currentColor!important;
-  fill:none!important;
 }
 </style>
 
