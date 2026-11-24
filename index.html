@@ -4704,6 +4704,7 @@ document.addEventListener("click",async e=>{
  const button=e.target.closest("#saveStatisticsSheet");
  if(!button)return;
  const status=document.querySelector("#salesStatisticsStatus");
+ if(!statisticsCanEditSheets()){if(status)status.textContent=language==="en"?"You do not have permission to save this Statistics sheet.":"ليس لديك صلاحية حفظ شيت الإحصائيات.";return;}
  if(button.disabled)return;
  button.disabled=true;button.setAttribute("aria-busy","true");
  if(status)status.textContent=language==="en"?"Saving Statistics sheet...":"جارٍ حفظ شيت الإحصائيات...";
