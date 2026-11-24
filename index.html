@@ -4763,7 +4763,7 @@ document.addEventListener("click",async e=>{
   const names=keys.map(k=>labels[k]).join(language==="en"?", ":"، ");
   if(!confirm(language==="en"?"Continue to archive these reports?\n"+names:"هل تريد متابعة أرشفة التقارير التالية؟\n"+names))return;
   try{await novaroShiftReportLoadArchives();}catch(error){alert((language==="en"?"Could not load archive months: ":"تعذر تحميل شهور الأرشيف: ")+(error.message||String(error)));return;}
-  salesArchivePendingKeys=keys;salesArchiveSelectionOpen=false;salesHistoryMonthPickerOpen=true;render();return;
+  salesArchivePendingKeys=keys;salesArchiveSelectionOpen=false;salesHistoryMonthPickerOpen=true;render();requestAnimationFrame(()=>document.querySelector(".novaro-history-month-picker")?.scrollIntoView({behavior:"smooth",block:"center"}));return;
  }
  const archiveTargetMonth=e.target.closest(".novaro-history-month-picker [data-sales-entry-month]");
  if(archiveTargetMonth&&salesArchivePendingKeys.length){
