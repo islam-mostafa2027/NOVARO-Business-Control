@@ -5742,7 +5742,7 @@ function novaroShiftReportMarkup(en,branch){
  const labels=en?["Net Sales","Dine In","Take Away","Delivery","Catering","Tips","Total Guests","Guest Avg","Total CHK","AVG CHK","Pastry","Bakery","Breakfast Net Sales","Breakfast Guest AVG"]:["صافي المبيعات","داخل المطعم","تيك أواي","التوصيل","الكاترينج","الإكراميات","إجمالي الضيوف","متوسط الضيف","إجمالي الفواتير","متوسط الفاتورة","حلويات","مخبوزات","صافي مبيعات الإفطار","متوسط ضيف الإفطار"];
  const keys=["net_sales","dine_in","take_away","delivery","catering","tips","total_guests","guest_avg","total_chk","avg_chk","pastry","bakery","breakfast_net_sales","breakfast_guest_avg"];
  const periods=["am","all_day","pm"];
- const rows=keys.map((key,i)=>'<tr><th>'+labels[i]+'</th>'+periods.map((p,j)=>i>=12&&j>0?"":'<td><input type="number" inputmode="decimal" step="any" data-shift-field="'+key+'_'+p+'" value="'+esc(String(values[key+"_"+p]??""))+'" '+(["delivery","guest_avg"].includes(key)||p==="pm"?"readonly":"")+'></td>').join("")+(i>=12?'<td class="shift-report-unavailable" colspan="2">—</td>':"")+'</tr>').join("");
+ const rows=keys.map((key,i)=>'<tr class="'+(["total_guests","total_chk"].includes(key)?"shift-report-total-row":"")+'"><th>'+labels[i]+'</th>'+periods.map((p,j)=>i>=12&&j>0?"":'<td><input type="number" inputmode="decimal" step="any" data-shift-field="'+key+'_'+p+'" value="'+esc(String(values[key+"_"+p]??""))+'" '+(["delivery","guest_avg"].includes(key)||p==="pm"?"readonly":"")+'></td>').join("")+(i>=12?'<td class="shift-report-unavailable" colspan="2">—</td>':"")+'</tr>').join("");
  const tabs=dates.map(d=>'<button type="button" class="soft shift-report-tab'+(d===shiftReportDate?' active':'')+'" data-shift-date="'+d+'">'+novaroShiftReportDisplayDate(d,true)+'</button>').join("");
  return shiftReportStyle+'<section class="card headcount-page-card sales-report-page shift-report-page"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="shiftReportTableBack">← '+(en?"Back":"رجوع")+'</button><div><h3>'+esc(nameOf(branch))+'</h3><p class="muted">'+esc(branchLocationOf(branch)||"")+'</p></div></div><div class="sales-month-card"><div class="shift-report-heading"><h3>'+(en?"Shift Report":"تقرير الوردية")+'</h3><div class="shift-report-zoom-controls"><button type="button" data-shift-report-zoom="-1" aria-label="'+(en?"Decrease table size":"تصغير الجدول")+'" title="'+(en?"Decrease table size":"تصغير الجدول")+'">−</button><button type="button" data-shift-report-zoom="1" aria-label="'+(en?"Increase table size":"تكبير الجدول")+'" title="'+(en?"Increase table size":"تكبير الجدول")+'">+</button></div></div><div class="shift-report-table-wrap"><table class="shift-report-table"><thead><tr><th><span id="shiftReportActiveDate" data-shift-report-date="'+shiftReportDate+'" aria-label="'+(en?"Active report date":"تاريخ التقرير النشط")+'">'+novaroShiftReportDisplayDate(shiftReportDate)+'</span></th><th>AM</th><th>ALL DAY</th><th>PM</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="4"><div class="shift-report-tabs">'+dates.map(d=>'<span class="shift-report-sheet-pill"><button type="button" class="shift-report-tab'+(d===shiftReportDate?' active':'')+'" data-shift-date="'+d+'">'+novaroShiftReportDisplayDate(d,true)+'</button><button type="button" class="shift-report-sheet-delete" data-shift-delete-date="'+d+'" aria-label="'+(en?"Delete sheet":"حذف الورقة")+'" title="'+(en?"Delete sheet":"حذف الورقة")+'">×</button></span>').join("")+'<button type="button" class="shift-report-sheet-add" id="shiftReportAddSheet" aria-label="'+(en?"Add sheet":"إضافة ورقة")+'" title="'+(en?"Add sheet":"إضافة ورقة")+'">＋</button></div></td></tr></tfoot></table></div></div><div class="sales-month-card shift-report-actions-card"><div class="shift-report-actions"><button type="button" class="soft" id="shiftReportSave">'+(en?"Save":"حفظ")+'</button><button type="button" class="soft" id="shiftReportPrint">'+(en?"Print / PDF":"طباعة PDF")+'</button><button type="button" class="soft" id="shiftReportExcel">'+(en?"Export Excel":"تصدير Excel")+'</button></div><p id="shiftReportStatus" class="muted" aria-live="polite"></p></div></section>';
 }
@@ -9530,6 +9530,38 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   border-color:var(--line)!important;
   outline:none!important;
   box-shadow:none!important;
+}
+</style>
+
+<style id="novaro-shift-report-table-proportions-v1">
+/* Compact shift report table while keeping its total rows easy to scan. */
+#app .shift-report-page .shift-report-table thead tr,
+#app .shift-report-page .shift-report-table thead th{
+  box-sizing:border-box!important;height:42px!important;min-height:42px!important;
+  padding:5px 5px!important;vertical-align:middle!important;
+}
+#app .shift-report-page .shift-report-table tbody tr,
+#app .shift-report-page .shift-report-table tbody th,
+#app .shift-report-page .shift-report-table tbody td{
+  box-sizing:border-box!important;height:29px!important;min-height:29px!important;
+  padding:2px 4px!important;vertical-align:middle!important;
+}
+#app .shift-report-page .shift-report-table tbody input{
+  box-sizing:border-box!important;width:100%!important;height:25px!important;
+  min-height:25px!important;max-height:25px!important;padding:1px 4px!important;
+  line-height:1.1!important;
+}
+#app .shift-report-page .shift-report-table tbody tr.shift-report-total-row th,
+#app .shift-report-page .shift-report-table tbody tr.shift-report-total-row td{
+  background:var(--surface-2,#edf3ef)!important;font-weight:800!important;
+  border-color:var(--primary,#668b78)!important;
+}
+#app .shift-report-page .shift-report-table tbody tr.shift-report-total-row input{
+  font-weight:800!important;
+}
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-table tbody tr.shift-report-total-row th,
+:root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-table tbody tr.shift-report-total-row td{
+  background:#344b3e!important;border-color:#668b78!important;color:#f0f7f2!important;
 }
 </style>
 </body>
