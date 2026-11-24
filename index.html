@@ -9495,6 +9495,15 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .shift-report-page .shift-report-table tbody th{padding-top:5px!important;padding-bottom:5px!important;}
 #app .shift-report-page .shift-report-table tbody input{height:34px!important;}
 </style>
+
+<style id="novaro-statistics-date-column-width-v1">
+/* Keep the full localized date on one line so it cannot stretch statistics rows. */
+#app .sales-report-page .sales-statistics-table th:first-child,
+#app .sales-report-page .sales-statistics-table td:first-child{
+  width:126px!important;min-width:126px!important;max-width:126px!important;
+  white-space:nowrap!important;overflow-wrap:normal!important;
+}
+</style>
 </body>
 </html>
 
