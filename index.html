@@ -4105,6 +4105,8 @@ function startNotificationStream(){
 }
 
 let user,profile,branches=[],allBranches=[],archivedBranches=[],items=[],cats=[],categoryGroups=[],balances={},branchId,page="home",headcountBranchId="",salesReportBranchId="",salesReportSelectedMonth="",salesReportSelectedDay=0,shiftReportsPage=false,branchReportsLogbookPage=false,branchReportsStatisticsOpen=false,salesSavedReportsOpen=false,salesHistoryMonthPickerOpen=false,salesArchiveSelectionOpen=false,salesArchiveSelectedKeys=[],salesArchivePendingKeys=[],salesSavedReportsDay=1,salesSavedReportsDaySelected=false,shiftReportTableOpen=false,shiftReportDate="",shiftReportArchiveView=null,shiftReportArchives=[],novaroShiftReportTableZoom=1,novaroHeadcountEmployeeTableZoom=1,novaroSalesStatisticsTableZoom=1,novaroDailyTipTableZoom=1,salesStatisticsSelectedMonth="",statisticsSheetCache=[],statisticsSheetBusy=false,headcountRoles=[],headcountEmployees=[];
+// Capture the archive button before other delegated click handlers can swallow the event.
+document.addEventListener("click",e=>{const button=e.target.closest?.(".novaro-sales-report-archive-placeholder");if(!button)return;e.preventDefault();e.stopImmediatePropagation();salesArchiveSelectionOpen=!salesArchiveSelectionOpen;salesArchiveSelectedKeys=[];render();},true);
 const novaroPageHistory=[];
 function canManageHeadcount(){return profile?.role==="owner_admin"||profile?.role==="branch_manager"}
 function normalizeNovaroJobTitle(value){return String(value||"").normalize("NFKC").replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").trim().toLocaleLowerCase().split(/\s+/).map(word=>word.startsWith("ال")&&word.length>2?word.slice(2):word).map(word=>word==="مطعم"?"فرع":word).join("");}
