@@ -9569,6 +9569,65 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   line-height:1.1!important;
 }
 </style>
+
+<style id="novaro-zoom-controls-final-fix">
+/* Final override: two clearly separated, truly circular compact zoom buttons. */
+#app .shift-report-page .shift-report-heading .shift-report-zoom-controls,
+#app .sales-report-page .sales-statistics-heading .sales-statistics-zoom-controls,
+#app .hc-employee-zoom-controls{
+  display:inline-grid!important;
+  grid-template-columns:22px 22px!important;
+  grid-auto-rows:auto!important;
+  align-items:center!important;
+  justify-items:center!important;
+  justify-content:center!important;
+  column-gap:7px!important;
+  row-gap:3px!important;
+  width:max-content!important;
+  min-width:0!important;
+  flex:0 0 auto!important;
+  direction:ltr!important;
+  white-space:nowrap!important;
+  vertical-align:middle!important;
+}
+#app .shift-report-page .shift-report-heading .shift-report-zoom-controls .novaro-zoom-caption,
+#app .sales-report-page .sales-statistics-heading .sales-statistics-zoom-controls .novaro-zoom-caption,
+#app .hc-employee-zoom-controls .novaro-zoom-caption{
+  display:block!important;
+  grid-column:1/-1!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:700!important;
+  margin:0 0 1px!important;
+}
+#app .shift-report-page .shift-report-heading .shift-report-zoom-controls button,
+#app .sales-report-page .sales-statistics-heading .sales-statistics-zoom-controls button,
+#app .hc-employee-zoom-controls button{
+  display:flex!important;
+  box-sizing:border-box!important;
+  width:22px!important;
+  min-width:22px!important;
+  max-width:22px!important;
+  height:22px!important;
+  min-height:22px!important;
+  max-height:22px!important;
+  aspect-ratio:1/1!important;
+  flex:0 0 22px!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  margin:0!important;
+  border:1px solid var(--line,#cbd5cf)!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-weight:800!important;
+}
+#app .shift-report-page .shift-report-heading .shift-report-zoom-controls button:hover,
+#app .sales-report-page .sales-statistics-heading .sales-statistics-zoom-controls button:hover,
+#app .hc-employee-zoom-controls button:hover{filter:none!important}
+</style>
 </body>
 </html>
 
