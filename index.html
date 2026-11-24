@@ -4600,6 +4600,41 @@ function statisticsCanEditSheets(){
  const branchId=document.querySelector(".sales-month-card")?.dataset.salesBranchId,branch=salesReportBranches().find(item=>item.id===branchId);
  return profile?.role==="owner_admin"||(profile?.role==="branch_manager"&&(branch?.branch_manager_user_id===user?.id||branch?.branch_login_user_id===user?.id));
 }
+async function statisticsRenameSheet(oldMonth){
+ if(!statisticsCanEditSheets()||statisticsSheetBusy)return;
+ const selected=statisticsSheetCache.find(sheet=>sheet.report_month===oldMonth),monthCard=document.querySelector(".sales-month-card"),status=document.querySelector("#salesStatisticsStatus");
+ if(!selected||!monthCard)return;
+ const names=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+ const aliases=[["jan","january","يناير"],["feb","february","فبراير"],["mar","march","مارس"],["apr","april","أبريل","ابريل"],["may","مايو"],["jun","june","يونيو"],["jul","july","يوليو"],["aug","august","أغسطس","اغسطس"],["sep","sept","september","سبتمبر"],["oct","october","أكتوبر","اكتوبر"],["nov","november","نوفمبر"],["dec","december","ديسمبر"]];
+ const entered=window.prompt(language==="en"?"Edit month and year (example: Nov-2026):":"عدّل الشهر والسنة (مثال: نوفمبر 2026):",statisticsMonthLabel(oldMonth));
+ if(entered===null)return;
+ const match=entered.trim().match(/^(.+?)[\\s-]+(\\d{4})$/);
+ if(!match){if(status)status.textContent=language==="en"?"Enter the month and a four-digit year.":"اكتب اسم الشهر والسنة بشكل صحيح.";return;}
+ const token=match[1].trim().toLocaleLowerCase(),year=Number(match[2]),monthIndex=aliases.findIndex(list=>list.some(name=>name.toLocaleLowerCase()===token));
+ if(monthIndex<0||year<2000||year>2100){if(status)status.textContent=language==="en"?"Enter a valid month and year.":"اكتب شهر وسنة صحيحين.";return;}
+ const nextMonth=names[monthIndex]+"-"+year;
+ if(nextMonth===oldMonth)return;
+ if(statisticsSheetCache.some(sheet=>sheet.report_month===nextMonth)){if(status)status.textContent=language==="en"?"A sheet already exists for that month and year.":"فيه شيت موجود بالفعل للشهر والسنة دول.";return;}
+ statisticsSheetBusy=true;
+ try{
+  if(oldMonth===(salesStatisticsSelectedMonth||salesReportSelectedMonth))await statisticsSaveActive();
+  const branchId=monthCard.dataset.salesBranchId;
+  const moved=await db.from("sales_report_statistics_entries").update({report_month:nextMonth}).eq("branch_id",branchId).eq("report_month",oldMonth);
+  if(moved.error)throw moved.error;
+  const renamed=await db.from("sales_report_statistics_sheets").update({report_month:nextMonth}).eq("id",selected.id);
+  if(renamed.error){
+   await db.from("sales_report_statistics_entries").update({report_month:oldMonth}).eq("branch_id",branchId).eq("report_month",nextMonth);
+   throw renamed.error;
+  }
+  statisticsSheetCache=statisticsSheetCache.map(sheet=>sheet.id===selected.id?{...sheet,report_month:nextMonth}:sheet);
+  if(salesStatisticsSelectedMonth===oldMonth)salesStatisticsSelectedMonth=nextMonth;
+  if(salesReportSelectedMonth===oldMonth)salesReportSelectedMonth=nextMonth;
+  statisticsSortSheets();statisticsSheetsRender();
+  if(status)status.textContent=language==="en"?"Statistics sheet renamed.":"تم تعديل اسم شيت الإحصائيات.";
+  if(oldMonth===(salesStatisticsSelectedMonth||salesReportSelectedMonth))render();
+ }catch(error){if(status)status.textContent=(language==="en"?"Could not rename Statistics sheet: ":"تعذر تعديل شيت الإحصائيات: ")+(error.message||String(error));}
+ finally{statisticsSheetBusy=false;}
+}
 function statisticsSheetsRender(){
  const tabs=document.querySelector("#salesStatisticsSheetTabs");if(!tabs)return;
  statisticsSortSheets();
@@ -4663,6 +4698,16 @@ document.addEventListener("change",async e=>{
  finally{dailyTipBusy=false;}
 });
 
+document.addEventListener("contextmenu",e=>{
+ const tab=e.target.closest("#salesStatisticsSheetTabs [data-statistics-sheet-month]");
+ if(!tab||!statisticsCanEditSheets())return;
+ e.preventDefault();statisticsRenameSheet(tab.dataset.statisticsSheetMonth);
+});
+document.addEventListener("dblclick",e=>{
+ const tab=e.target.closest("#salesStatisticsSheetTabs [data-statistics-sheet-month]");
+ if(!tab||!statisticsCanEditSheets())return;
+ e.preventDefault();statisticsRenameSheet(tab.dataset.statisticsSheetMonth);
+});
 document.addEventListener("click",async e=>{
  if(novaroShiftTabHoldTriggered&&e.target.closest?.(".shift-report-tab[data-shift-date]")){novaroShiftTabHoldTriggered=false;e.preventDefault();e.stopImmediatePropagation();return;}
  const auditBell=e.target.closest("#novaroAuditBell");
