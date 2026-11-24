@@ -9497,10 +9497,11 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 </style>
 
 <style id="novaro-statistics-date-column-width-v1">
-/* Keep the full localized date on one line so it cannot stretch statistics rows. */
+/* Fit the date column to its longest localized date, without excess side space. */
 #app .sales-report-page .sales-statistics-table th:first-child,
 #app .sales-report-page .sales-statistics-table td:first-child{
-  width:126px!important;min-width:126px!important;max-width:126px!important;
+  width:max-content!important;min-width:max-content!important;max-width:max-content!important;
+  padding-left:5px!important;padding-right:5px!important;
   white-space:nowrap!important;overflow-wrap:normal!important;
 }
 </style>
