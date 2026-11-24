@@ -9837,19 +9837,19 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 })();
 </script>
 
-<style id="novaro-targeted-branch-button-height-v1">
-/* Keep only the two branch tools and six branch report buttons at 54px. */
-#app .sales-report-page .novaro-branch-tools-card>.novaro-branch-reports-rebuilt-item,
-#app .novaro-branch-reports-rebuilt-list>.novaro-branch-reports-rebuilt-item{
+<style id="novaro-targeted-branch-button-height-v2">
+/* Force the two branch tools and six report buttons to the same exact 54px outer height. */
+#app#app #main .sales-report-page .novaro-branch-tools-card>button.novaro-branch-reports-rebuilt-item,
+#app#app #main .novaro-branch-reports-rebuilt-list>button.novaro-branch-reports-rebuilt-item{
   box-sizing:border-box!important;
   height:54px!important;
   min-height:54px!important;
   max-height:54px!important;
+  padding-top:0!important;
+  padding-bottom:0!important;
 }
-/* Keep the two outer branch choices stacked, but restore their original sizing. */
-#app .sales-branch-grid{
-  grid-template-columns:minmax(0,1fr)!important;
-}
+/* Keep the two outer branch choices stacked and at their original height. */
+#app .sales-branch-grid{grid-template-columns:minmax(0,1fr)!important}
 #app .sales-branch-grid>.sales-branch-pill{
   width:100%!important;
   height:auto!important;
