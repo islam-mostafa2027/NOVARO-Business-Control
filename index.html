@@ -5211,13 +5211,13 @@ document.addEventListener("click",async e=>{
    let headerRowNumber=sheet.rowCount+1;
    tables.forEach((table,tableIndex)=>{
     if(tableIndex>0)sheet.addRow([]);
-    const header=Array.from(table.rows[0]?.cells||[]).map(cell=>cell.innerText.trim().replace(/\\s+/g," "));
+    const header=Array.from(table.rows[0]?.cells||[]).map(cell=>cell.innerText.trim().replace(/\s+/g," "));
     const h=sheet.addRow(header);headerRowNumber=headerRowNumber||h.number;h.height=38;
     h.eachCell(cell=>{cell.font={name:"Arial",bold:true,color:{argb:"FFFFFFFF"},size:9};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF287D6B"}};cell.alignment={horizontal:"center",vertical:"middle",wrapText:true};cell.border={top:{style:"thin",color:{argb:"FF1D5C4B"}},bottom:{style:"medium",color:{argb:"FF1D5C4B"}},left:{style:"thin",color:{argb:"FFFFFFFF"}},right:{style:"thin",color:{argb:"FFFFFFFF"}}};});
     Array.from(table.rows).slice(1).forEach((tr,rowIndex)=>{
      const values=[],mergeRanges=[];let excelColumn=1;
      Array.from(tr.cells).forEach(cell=>{
-      const field=cell.querySelector("input,textarea,select"),raw=(field?field.value:cell.innerText).trim().replace(/\\s+/g," ");
+      const field=cell.querySelector("input,textarea,select"),raw=(field?field.value:cell.innerText).trim().replace(/\s+/g," ");
       const value=excelColumn>1&&raw&&/^-?\\d[\\d,]*(?:\\.\\d+)?$/.test(raw)?Number(raw.replace(/,/g,"")):(raw||"—");
       values.push(value);
       const span=Math.max(1,Number(cell.colSpan)||1);
@@ -9757,15 +9757,15 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
  const timers=new WeakMap();
  const isEmptyDataMessage=el=>{
   if(!el||!el.matches?.(".empty,.novaro-category-empty"))return false;
-  const value=(el.textContent||"").replace(/\\s+/g," ").trim();
-  return /^(?:no data\\b|no items\\b|no employees\\b|no job titles\\b|no stocktake\\b|no archived\\b|no low-stock\\b|no previous stocktake\\b|لا توجد|لا يوجد|لم تتم إضافة|لم يتم إضافة)/i.test(value);
+  const value=(el.textContent||"").replace(/\s+/g," ").trim();
+  return /^(?:no data\b|no items\b|no employees\b|no job titles\b|no stocktake\b|no archived\b|no low-stock\b|no previous stocktake\b|لا توجد|لا يوجد|لم تتم إضافة|لم يتم إضافة)/i.test(value);
  };
  const schedule=el=>{
   if(!isEmptyDataMessage(el)||timers.has(el))return;
-  const original=(el.textContent||"").replace(/\\s+/g," ").trim();
+  const original=(el.textContent||"").replace(/\s+/g," ").trim();
   el.classList.add("novaro-empty-temporary");
   const timer=setTimeout(()=>{
-   if(!el.isConnected||(el.textContent||"").replace(/\\s+/g," ").trim()!==original)return;
+   if(!el.isConnected||(el.textContent||"").replace(/\s+/g," ").trim()!==original)return;
    el.classList.add("novaro-empty-dismissed");
    setTimeout(()=>{
     if(!el.isConnected)return;
