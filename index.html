@@ -4973,7 +4973,9 @@ document.addEventListener("click",async e=>{
  }
  if(e.target.closest("[data-open-shift-report-table]")){shiftReportTableOpen=true;render();return;}
  if(e.target.closest("#shiftReportTableBack")){shiftReportTableOpen=false;render();return;}
-  const shiftZoomButton=e.target.closest("[data-shift-report-zoom]");\n if(shiftZoomButton){const step=Number(shiftZoomButton.dataset.shiftReportZoom);novaroShiftReportTableZoom=Math.max(.65,Math.min(1.6,Number((novaroShiftReportTableZoom+step*.1).toFixed(2))));const table=shiftZoomButton.closest(".shift-report-page")?.querySelector(".shift-report-table");if(table)table.style.zoom=String(novaroShiftReportTableZoom);return;}\n  if(e.target.closest("[data-shift-date-edit]"))return;
+  const shiftZoomButton=e.target.closest("[data-shift-report-zoom]");
+ if(shiftZoomButton){const step=Number(shiftZoomButton.dataset.shiftReportZoom);novaroShiftReportTableZoom=Math.max(.65,Math.min(1.6,Number((novaroShiftReportTableZoom+step*.1).toFixed(2))));const table=shiftZoomButton.closest(".shift-report-page")?.querySelector(".shift-report-table");if(table)table.style.zoom=String(novaroShiftReportTableZoom);return;}
+  if(e.target.closest("[data-shift-date-edit]"))return;
  const deleteShiftDate=e.target.closest("[data-shift-delete-date]");
  if(deleteShiftDate){const date=deleteShiftDate.dataset.shiftDeleteDate,store=novaroShiftReportCapture(e.target.closest(".shift-report-page"));if(!confirm(language==="en"?"Delete this date sheet?":"هل تريد حذف ورقة هذا التاريخ؟"))return;delete store[date];localStorage.setItem("novaro-shift-report:"+salesReportBranchId,JSON.stringify(store));if(shiftReportDate===date)shiftReportDate=Object.keys(store).sort().pop()||"";render();return;}
  if(e.target.closest("[data-shift-date]")){novaroShiftReportCapture(e.target.closest(".shift-report-page"));shiftReportDate=e.target.closest("[data-shift-date]").dataset.shiftDate;render();return;}
