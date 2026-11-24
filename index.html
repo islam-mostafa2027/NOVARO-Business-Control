@@ -5733,6 +5733,14 @@ function novaroShiftReportMarkup(en,branch){
 :root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-sheet-delete{background:rgba(255,255,255,.12)!important;color:#effff6!important;border-color:#75a991!important}
 :root[data-novaro-mode="dark"] #app .shift-report-page .shift-report-sheet-add{background:linear-gradient(145deg,#2d806b,#175b49)!important;color:#fff!important;border-color:#75a991!important}
 @media(max-width:520px){#app .shift-report-page .shift-report-actions{display:grid;grid-template-columns:1fr}}
+
+/* Compact date tabs with the delete mark inline, not as a separate button. */
+#app .shift-report-page .shift-report-tabs{gap:5px!important;padding:3px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#app .shift-report-page .shift-report-sheet-pill{display:inline-flex!important;align-items:center!important;gap:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#app .shift-report-page .shift-report-tab{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;height:25px!important;min-height:25px!important;padding:2px 7px!important;line-height:1!important;border-radius:7px!important}
+#app .shift-report-page .shift-report-sheet-delete{display:inline!important;flex:none!important;width:auto!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:inherit!important;font-size:13px!important;font-weight:900!important;line-height:1!important;box-shadow:none!important;cursor:pointer!important}
+#app .shift-report-page .shift-report-tab.active .shift-report-sheet-delete{color:#fff!important}
+#app .shift-report-page .shift-report-sheet-delete:hover{background:transparent!important;color:#ffb5b5!important;border:0!important}
 </style>`;
 
  const store=novaroShiftReportStore(),today=new Date().toISOString().slice(0,10),dates=Object.keys(store).sort();
