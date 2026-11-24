@@ -4413,6 +4413,7 @@ document.addEventListener("click",async e=>{
  await saveCommunicationBookPage(button);
 });
 
+document.addEventListener("input",e=>{const field=e.target.closest?.("[data-communication-sheet-field]");if(!field)return;const activeSheet=branchCommunicationPages[branchCommunicationActivePage];if(activeSheet){activeSheet.values=activeSheet.values||{};activeSheet.values[field.dataset.communicationSheetField]=field.value;}},true);
 function bindMoneyFieldFormatting(){
  const selector='.sales-report-page [data-sales-metric],.sales-report-page [data-saved-sales-metric],.sales-report-page [data-communication-metric],.sales-report-page .sales-monthly-analysis-field:nth-child(-n+4) input';
  document.addEventListener("focusin",e=>{const field=e.target.closest&&e.target.closest(selector);if(field)field.value=String(field.value??"").replace(/,/g,"");},true);
