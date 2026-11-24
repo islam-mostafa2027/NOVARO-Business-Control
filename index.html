@@ -4991,13 +4991,6 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("#shiftReportAddSheet")){const store=novaroShiftReportCapture(e.target.closest(".shift-report-page")),d=new Date((shiftReportDate||new Date().toISOString().slice(0,10))+"T12:00:00");d.setDate(d.getDate()+1);let next=d.toISOString().slice(0,10);while(store[next]){d.setDate(d.getDate()+1);next=d.toISOString().slice(0,10);}store[next]={};localStorage.setItem("novaro-shift-report:"+salesReportBranchId,JSON.stringify(store));shiftReportDate=next;render();return;}
  if(e.target.closest("#shiftReportDeleteSheet")){const store=novaroShiftReportStore();if(!confirm(language==="en"?"Delete this date sheet?":"هل تريد حذف ورقة هذا التاريخ؟"))return;delete store[shiftReportDate];localStorage.setItem("novaro-shift-report:"+salesReportBranchId,JSON.stringify(store));shiftReportDate=Object.keys(store).sort().pop()||"";render();return;}
  if(e.target.closest("#shiftReportSave")){const root=e.target.closest(".shift-report-page");try{novaroShiftReportCapture(root);const status=root?.querySelector("#shiftReportStatus");if(status)status.textContent=language==="en"?"Saved on this device.":"تم حفظ التقرير على هذا الجهاز.";}catch(_){alert(language==="en"?"Could not save report.":"تعذر حفظ التقرير.");}return;}
- const branchReportSubmenuToggle=e.target.closest("[data-toggle-branch-report-submenu]");
- if(branchReportSubmenuToggle){
-  const submenu=branchReportSubmenuToggle.parentElement?.querySelector(".novaro-branch-reports-submenu");
-  const expanded=branchReportSubmenuToggle.getAttribute("aria-expanded")==="true";
-  if(submenu){submenu.hidden=expanded;branchReportSubmenuToggle.setAttribute("aria-expanded",expanded?"false":"true");}
-  return;
- }
  if(e.target.closest("[data-open-branch-report-categories]")){branchReportsLogbookPage=true;render();return;}
  if(e.target.closest("#branchReportsLogbookBack")){branchReportsLogbookPage=false;render();return;}
  if(e.target.closest("[data-open-shift-reports]")){shiftReportTableOpen=false;shiftReportsPage=true;render();return;}
