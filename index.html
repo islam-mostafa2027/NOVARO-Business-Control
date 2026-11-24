@@ -4596,13 +4596,17 @@ function statisticsSortSheets(){
   return aa&&bb?(aa.year-bb.year||aa.monthIndex-bb.monthIndex):String(a.report_month).localeCompare(String(b.report_month));
  });
 }
+function statisticsCanEditSheets(){
+ const branchId=document.querySelector(".sales-month-card")?.dataset.salesBranchId,branch=salesReportBranches().find(item=>item.id===branchId);
+ return profile?.role==="owner_admin"||(profile?.role==="branch_manager"&&(branch?.branch_manager_user_id===user?.id||branch?.branch_login_user_id===user?.id));
+}
 function statisticsSheetsRender(){
  const tabs=document.querySelector("#salesStatisticsSheetTabs");if(!tabs)return;
  statisticsSortSheets();
  tabs.innerHTML=statisticsSheetCache.map(sheet=>{
   const active=sheet.report_month===(salesStatisticsSelectedMonth||salesReportSelectedMonth);
   return '<span class="statistics-sheet-pill"><button type="button" role="tab" aria-selected="'+(active?"true":"false")+'" class="statistics-sheet-tab'+(active?" is-active":"")+'" data-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'">'+dailyTipEscape(statisticsMonthLabel(sheet.report_month))+'</button>'+(profile?.role==="owner_admin"?'<button type="button" class="statistics-sheet-delete" data-delete-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</button>':"")+'</span>';
- }).join("")+'<button type="button" class="statistics-sheet-add-inline" id="statisticsAddSheetInline" aria-label="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'" title="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'">＋</button>';
+ }).join("")+(statisticsCanEditSheets()?'<button type="button" class="statistics-sheet-add-inline" id="statisticsAddSheetInline" aria-label="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'" title="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'">＋</button>':"");
 }
 async function statisticsSheetsLoad(branchId,month){
  if(!branchId||!statisticsMonthParts(month))return;
@@ -4610,6 +4614,7 @@ async function statisticsSheetsLoad(branchId,month){
  if(result.error)throw result.error;
  statisticsSheetCache=result.data||[];
  if(!statisticsSheetCache.some(sheet=>sheet.report_month===month)){
+  if(!statisticsCanEditSheets()){statisticsSheetCache.push({id:null,branch_id:branchId,report_month:month});statisticsSheetsRender();return;}
   const created=await db.from("sales_report_statistics_sheets").upsert({branch_id:branchId,report_month:month,created_by:user.id},{onConflict:"branch_id,report_month",ignoreDuplicates:true});
   if(created.error)throw created.error;
   result=await db.from("sales_report_statistics_sheets").select("id,branch_id,report_month,created_by,created_at").eq("branch_id",branchId).order("report_month");
@@ -4760,7 +4765,7 @@ document.addEventListener("click",async e=>{
    statisticsSheetBusy=true;
    document.querySelectorAll("#salesStatisticsSheetTabs button").forEach(button=>button.disabled=true);
    try{
-    await statisticsSaveActive();
+    if(statisticsCanEditSheets())await statisticsSaveActive();
     salesStatisticsSelectedMonth=nextMonth;render();
    }catch(error){
     const status=document.querySelector("#salesStatisticsStatus");
@@ -4772,7 +4777,7 @@ document.addEventListener("click",async e=>{
  }
  const statisticsAdd=e.target.closest("#statisticsAddSheetInline");
  if(statisticsAdd){
-  if(statisticsSheetBusy)return;
+  if(!statisticsCanEditSheets()||statisticsSheetBusy)return;
   const current=statisticsMonthParts(salesStatisticsSelectedMonth||salesReportSelectedMonth),monthCard=document.querySelector(".sales-month-card"),status=document.querySelector("#salesStatisticsStatus");
   if(!current||!monthCard)return;
   statisticsSheetBusy=true;statisticsAdd.disabled=true;
