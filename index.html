@@ -5211,13 +5211,13 @@ document.addEventListener("click",async e=>{
    let headerRowNumber=sheet.rowCount+1;
    tables.forEach((table,tableIndex)=>{
     if(tableIndex>0)sheet.addRow([]);
-    const header=Array.from(table.rows[0]?.cells||[]).map(cell=>cell.innerText.trim().replace(/\s+/g," "));
+    const header=Array.from(table.rows[0]?.cells||[]).map(cell=>cell.innerText.trim().replace(/\\s+/g," "));
     const h=sheet.addRow(header);headerRowNumber=headerRowNumber||h.number;h.height=38;
     h.eachCell(cell=>{cell.font={name:"Arial",bold:true,color:{argb:"FFFFFFFF"},size:9};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF287D6B"}};cell.alignment={horizontal:"center",vertical:"middle",wrapText:true};cell.border={top:{style:"thin",color:{argb:"FF1D5C4B"}},bottom:{style:"medium",color:{argb:"FF1D5C4B"}},left:{style:"thin",color:{argb:"FFFFFFFF"}},right:{style:"thin",color:{argb:"FFFFFFFF"}}};});
     Array.from(table.rows).slice(1).forEach((tr,rowIndex)=>{
      const values=[],mergeRanges=[];let excelColumn=1;
      Array.from(tr.cells).forEach(cell=>{
-      const field=cell.querySelector("input,textarea,select"),raw=(field?field.value:cell.innerText).trim().replace(/\s+/g," ");
+      const field=cell.querySelector("input,textarea,select"),raw=(field?field.value:cell.innerText).trim().replace(/\\s+/g," ");
       const value=excelColumn>1&&raw&&/^-?\\d[\\d,]*(?:\\.\\d+)?$/.test(raw)?Number(raw.replace(/,/g,"")):(raw||"—");
       values.push(value);
       const span=Math.max(1,Number(cell.colSpan)||1);
