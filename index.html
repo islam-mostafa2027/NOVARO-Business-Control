@@ -9974,3 +9974,55 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app#app #dailyTipCard table.daily-tip-table th:nth-child(4),#app#app #dailyTipCard table.daily-tip-table td:nth-child(4){width:20%!important;min-width:0!important;max-width:none!important}
 #app#app #dailyTipCard table.daily-tip-table .daily-tip-input{box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:100%!important;padding:4px 1px!important;font-size:9px!important;text-align:center!important}
 </style>
+
+<style id="novaro-daily-tip-card-fit-and-remove-zoom-v2">
+/* Daily Tip: keep the complete table inside its card and remove its zoom UI. */
+#app#app .sales-report-page #dailyTipCard .sales-statistics-zoom-controls{
+  display:none!important;
+}
+#app#app .sales-report-page #dailyTipCard .daily-tip-table-wrap{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:hidden!important;
+}
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table{
+  box-sizing:border-box!important;
+  display:table!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  table-layout:fixed!important;
+  font-size:9px!important;
+}
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table th,
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table td{
+  box-sizing:border-box!important;
+  min-width:0!important;
+  padding:4px 2px!important;
+  overflow-wrap:anywhere!important;
+}
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table th:first-child,
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table td:first-child{width:22%!important;white-space:nowrap!important}
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table th:nth-child(2),
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table td:nth-child(2){width:26%!important}
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table th:nth-child(3),
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table td:nth-child(3){width:32%!important}
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table th:nth-child(4),
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table td:nth-child(4){width:20%!important}
+#app#app .sales-report-page #dailyTipCard table.daily-tip-table .daily-tip-input{
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  padding:3px 1px!important;
+  font-size:9px!important;
+}
+@media(max-width:420px){
+  #app#app .sales-report-page #dailyTipCard table.daily-tip-table{font-size:8.5px!important}
+  #app#app .sales-report-page #dailyTipCard table.daily-tip-table th,
+  #app#app .sales-report-page #dailyTipCard table.daily-tip-table td{padding-inline:1px!important}
+  #app#app .sales-report-page #dailyTipCard table.daily-tip-table .daily-tip-input{font-size:8.5px!important}
+}
+</style>
