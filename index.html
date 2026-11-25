@@ -5733,6 +5733,16 @@ function printStocktakeReport(targetWindow,reportData){
 #app .sales-report-page #dailyTipCard #dailyTipStatus:empty{display:none!important}
 #app .sales-report-page #dailyTipCard .daily-tip-sheet-editor:empty{display:none!important;margin:0!important;padding:0!important}
 </style>
+
+<style id="novaro-daily-tip-total-typography-v1">
+/* Give the total label and every total value one balanced, readable typography. */
+#app#app #dailyTipCard table.daily-tip-table tfoot tr.daily-tip-total-row td{
+ font-size:11px!important;
+ font-weight:600!important;
+ line-height:1.25!important;
+ vertical-align:middle!important;
+}
+</style>
 </head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div>'+report+'</body></html>';
 
   w.document.open();w.document.write(html);w.document.close();
