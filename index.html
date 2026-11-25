@@ -10456,8 +10456,8 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   }
 }
 </style>
-<style id="novaro-communication-horizontal-lines-full-width-v1">
-/* Extend every horizontal separator in the communication sheet to both card edges. */
+<style id="novaro-communication-horizontal-lines-full-width-v2">
+/* Let the allocation separators span the full combined AM/PM width. */
 #app .novaro-communication-sheet .novaro-duty-cards,
 #app .novaro-communication-sheet .novaro-allocation-cards{
   box-sizing:border-box!important;
@@ -10471,17 +10471,25 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 }
 #app .novaro-communication-sheet .novaro-allocation-labels,
 #app .novaro-communication-sheet .novaro-allocation-rows{
-  padding-inline:0!important;
+  box-sizing:border-box!important;
+  width:calc(100% + 16px)!important;
+  margin-inline:-8px!important;
+  padding-inline:8px!important;
 }
 #app .novaro-communication-sheet .novaro-allocation-row{
   box-sizing:border-box!important;
   width:100%!important;
+  margin-inline:0!important;
   padding-inline:0!important;
 }
 #app .novaro-communication-sheet .novaro-allocation-labels{
   border-bottom:1px solid var(--line)!important;
 }
-#app .novaro-communication-sheet .novaro-allocation-row{
-  border-bottom:1px solid color-mix(in srgb,var(--line) 78%,transparent)!important;
+#app .novaro-communication-sheet .novaro-allocation-row:last-child{
+  border-bottom:0!important;
+}
+/* Keep exactly one bottom rule for the complete allocation section. */
+#app .novaro-communication-sheet .novaro-allocation-cards{
+  border-bottom:1px solid var(--line)!important;
 }
 </style>
