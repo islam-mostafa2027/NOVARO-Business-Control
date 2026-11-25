@@ -4600,7 +4600,7 @@ document.addEventListener("click",event=>{
    const green="FF205B49",mint="FFE7F1EB",line="FFCBD9D0",white="FFFFFFFF",soft="FFF7FAF8",ink="FF24332C";
    const border={top:{style:"thin",color:{argb:line}},left:{style:"thin",color:{argb:line}},bottom:{style:"thin",color:{argb:line}},right:{style:"thin",color:{argb:line}}};
    const paint=(cell,{fill,font,alignment}={})=>{cell.border=border;cell.alignment={vertical:"middle",horizontal:"center",wrapText:true,...alignment};if(fill)cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:fill}};if(font)cell.font={name:"Arial",size:10,color:{argb:ink},...font};};
-   const merged=(row,from,to,value,style={})=>{sheet.mergeCells(row,from,row,to);const cell=sheet.getCell(row,from);cell.value=value;paint(cell,style);for(let c=from+1;c<=to;c++)paint(sheet.getCell(row,c),style);return cell;};
+   const merged=(row,from,to,value,style={})=>{if(from!==to)sheet.mergeCells(row,from,row,to);const cell=sheet.getCell(row,from);cell.value=value;paint(cell,style);for(let c=from+1;c<=to;c++)paint(sheet.getCell(row,c),style);return cell;};
    merged(1,1,8,en?"NOVARO BUSINESS CONTROL — COMMUNICATION BOOK":"NOVARO BUSINESS CONTROL — دفتر التواصل",{fill:green,font:{size:16,bold:true,color:{argb:white}}});sheet.getRow(1).height=32;
    merged(2,1,4,(en?"Day: ":"اليوم: ")+(day||"—"),{fill:mint,font:{bold:true,color:{argb:green}}});
    merged(2,5,8,(en?"Date: ":"التاريخ: ")+(date||"—"),{fill:mint,font:{bold:true,color:{argb:green}}});sheet.getRow(2).height=25;
