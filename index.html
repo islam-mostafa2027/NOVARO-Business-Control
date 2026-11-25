@@ -11376,8 +11376,8 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 </style>
 
 
-<style id="novaro-communication-duty-heading-connected-divider-v2">
-/* Target the live Communication Book markup classes (not the legacy novaro-duty-card classes). */
+<style id="novaro-communication-duty-heading-connected-divider-v3">
+/* Connect both duty headings at the center, and add the missing bottom rule beneath the final metrics row. */
 #app .novaro-communication-page .novaro-communication-duty-grid > .novaro-communication-duty-card:first-child{
   border-inline-end:1px solid var(--line)!important;
 }
@@ -11388,6 +11388,9 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   box-sizing:border-box!important;
   width:100%!important;
   border-top:1px solid var(--line)!important;
+}
+#app .headcount-page-card.sales-report-page:has(.novaro-communication-header)>.sales-month-card.saved-sales-report-card.novaro-communication-summary .sales-metrics-grid{
+  border-bottom:1px solid var(--line)!important;
 }
 </style>
 
