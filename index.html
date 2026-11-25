@@ -11476,3 +11476,29 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .hc-employee-head,#app .hc-employee-row{grid-template-columns:minmax(105px,.85fr) minmax(140px,1.25fr) minmax(125px,1fr) minmax(86px,auto)!important;min-width:500px!important}
 #app .hc-add-employee button#addHeadcountEmployee{grid-column:1/-1!important;justify-self:stretch!important;width:100%!important;min-width:100%!important;max-width:100%!important;display:flex!important;align-items:center!important;justify-content:center!important}
 </style>
+
+
+<style id="novaro-headcount-employee-register-centered-v2">
+/* Fixed three-column employee register: no zoom slider or horizontal scrolling. */
+#app .hc-employee-zoom-controls{display:none!important}
+#app .hc-table-wrap{overflow-x:hidden!important;max-width:100%!important}
+#app .hc-employee-head,#app .hc-employee-row{
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr) minmax(0,1fr) minmax(58px,auto)!important;
+  min-width:0!important;width:100%!important;box-sizing:border-box!important;
+}
+#app .hc-employee-head{
+  text-align:center!important;
+  justify-items:center!important;
+  align-items:center!important;
+  padding:9px 4px!important;
+}
+#app .hc-employee-head>span{display:block!important;width:100%!important;text-align:center!important;white-space:normal!important;line-height:1.35!important}
+#app .hc-employee-row>input{text-align:center!important;min-width:0!important;padding-inline:3px!important}
+#app .hc-employee-row .hc-row-actions{justify-content:center!important;gap:3px!important;min-width:0!important}
+@media(max-width:480px){
+  #app .hc-employee-head,#app .hc-employee-row{gap:4px!important;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr) minmax(0,1fr) minmax(48px,auto)!important}
+  #app .hc-employee-head{font-size:10px!important}
+  #app .hc-employee-row input{font-size:10px!important}
+  #app .hc-employee-row .hc-row-actions button{padding:3px 5px!important;font-size:10px!important}
+}
+</style>
