@@ -4547,7 +4547,11 @@ function dailyTipMonthParts(){
 }
 function dailyTipDate(day){
  const info=dailyTipMonthParts();if(!info)return "";
- return String(day)+"-"+info.monthName+"-"+info.year;
+ const date=new Date(info.year,info.monthIndex,Number(day));
+ return new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{day:"numeric",month:language==="en"?"short":"long",year:"numeric"}).format(date);
+}
+function dailyTipSheetName(startDay,endDay){
+ return dailyTipDate(startDay)+" – "+dailyTipDate(endDay);
 }
 function dailyTipEscape(value){
  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
@@ -4655,8 +4659,8 @@ async function dailyTipLoad(){
   dailyTipSheetCache=(result.data||[]).sort((a,b)=>Number(a.start_day||0)-Number(b.start_day||0));
   if(!dailyTipSheetCache.length){
    const now=new Date().toISOString(),firstEnd=Math.min(15,info.days),secondStart=firstEnd+1;
-   const initial=[{branch_id:branchId,report_month:salesReportSelectedMonth,sheet_key:"first-half",sheet_name:"1-"+info.monthName+"-"+info.year+" – "+firstEnd+"-"+info.monthName+"-"+info.year,start_day:1,end_day:firstEnd,rows:[],created_by:user.id,updated_by:user.id,updated_at:now}];
-   if(secondStart<=info.days)initial.push({branch_id:branchId,report_month:salesReportSelectedMonth,sheet_key:"second-half",sheet_name:secondStart+"-"+info.monthName+"-"+info.year+" – "+info.days+"-"+info.monthName+"-"+info.year,start_day:secondStart,end_day:info.days,rows:[],created_by:user.id,updated_by:user.id,updated_at:now});
+   const initial=[{branch_id:branchId,report_month:salesReportSelectedMonth,sheet_key:"first-half",sheet_name:dailyTipSheetName(1,firstEnd),start_day:1,end_day:firstEnd,rows:[],created_by:user.id,updated_by:user.id,updated_at:now}];
+   if(secondStart<=info.days)initial.push({branch_id:branchId,report_month:salesReportSelectedMonth,sheet_key:"second-half",sheet_name:dailyTipSheetName(secondStart,info.days),start_day:secondStart,end_day:info.days,rows:[],created_by:user.id,updated_by:user.id,updated_at:now});
    const inserted=await db.from("sales_report_tip_sheets").insert(initial).select("*");
    if(inserted.error)throw inserted.error;
    dailyTipSheetCache=(inserted.data||initial).sort((a,b)=>Number(a.start_day||0)-Number(b.start_day||0));
@@ -5058,9 +5062,12 @@ document.addEventListener("click",async e=>{
   if(!info||!monthCard||dailyTipBusy)return;
   dailyTipAdd.disabled=true;
   try{
+   const nextStart=dailyTipSheetCache.reduce((max,sheet)=>Math.max(max,Number(sheet.end_day)||0),0)+1;
+   if(nextStart>info.days){if(status)status.textContent=language==="en"?"All dates in this month already have a sheet.":"كل أيام الشهر موجودة بالفعل في شيتات.";return;}
+   const nextEnd=Math.min(info.days,nextStart+14);
    const key="sheet-"+(window.crypto?.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(36).slice(2));
-   const name="Sheet "+(dailyTipSheetCache.length+1);
-   const result=await db.from("sales_report_tip_sheets").insert({branch_id:monthCard.dataset.salesBranchId,report_month:salesReportSelectedMonth,sheet_key:key,sheet_name:name,start_day:1,end_day:info.days,rows:[],created_by:user.id,updated_by:user.id,updated_at:new Date().toISOString()}).select("*").single();
+   const name=dailyTipSheetName(nextStart,nextEnd);
+   const result=await db.from("sales_report_tip_sheets").insert({branch_id:monthCard.dataset.salesBranchId,report_month:salesReportSelectedMonth,sheet_key:key,sheet_name:name,start_day:nextStart,end_day:nextEnd,rows:[],created_by:user.id,updated_by:user.id,updated_at:new Date().toISOString()}).select("*").single();
    if(result.error)throw result.error;
    dailyTipSheetCache.push(result.data);dailyTipActiveSheetKey=key;dailyTipRender();
    const newTab=Array.from(document.querySelectorAll("#dailyTipSheetTabs [data-daily-tip-sheet]")).find(tab=>tab.dataset.dailyTipSheet===key);if(newTab)dailyTipBeginRename(newTab);
