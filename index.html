@@ -11229,3 +11229,40 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   }
 }
 </style>
+
+
+<style id="novaro-communication-duty-input-interaction-fix-v1">
+/* Restore direct text entry in the four AM/PM FOH and BOH fields. */
+#app .novaro-communication-page .novaro-communication-duty-table,
+#app .novaro-communication-page .novaro-communication-duty-table tbody,
+#app .novaro-communication-page .novaro-communication-duty-table tr,
+#app .novaro-communication-page .novaro-communication-duty-table td.novaro-communication-duty-entry{
+  pointer-events:auto!important;
+}
+#app .novaro-communication-page .novaro-communication-duty-table td.novaro-communication-duty-entry{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+}
+#app .novaro-communication-page .novaro-communication-duty-table input.novaro-communication-duty-input{
+  display:block!important;
+  position:relative!important;
+  z-index:20!important;
+  width:100%!important;
+  min-width:0!important;
+  pointer-events:auto!important;
+  user-select:text!important;
+  -webkit-user-select:text!important;
+  touch-action:manipulation!important;
+  cursor:text!important;
+  caret-color:var(--ink)!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+#app .novaro-communication-page .novaro-communication-duty-table input.novaro-communication-duty-input:focus,
+#app .novaro-communication-page .novaro-communication-duty-table input.novaro-communication-duty-input:focus-visible{
+  pointer-events:auto!important;
+  user-select:text!important;
+  -webkit-user-select:text!important;
+}
+</style>
