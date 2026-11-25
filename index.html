@@ -4661,6 +4661,58 @@ function dailyTipEscape(value){
  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
 function dailyTipCardMarkup(en){return '<section class="sales-statistics-card daily-tip-card" id="dailyTipCard"><div class="sales-statistics-heading"><h3 class="sales-monthly-analysis-title">'+(en?"Daily Tip":"الإكرامية اليومية")+'</h3></div><div class="daily-tip-toolbar"><span class="daily-tip-month-label" id="dailyTipMonthLabel"></span></div><div class="daily-tip-table-wrap"><table class="sales-statistics-table daily-tip-table" dir="ltr"><thead><tr><th>'+(en?"Date":"التاريخ")+'</th><th>'+(en?"Tip Amount":"قيمة الإكرامية")+'</th><th>'+(en?"Dine-in Sales":"مبيعات الصالة")+'</th><th>%</th></tr></thead><tbody id="dailyTipRows"><tr><td colspan="4">جارٍ تحميل البيانات...</td></tr></tbody></table></div><div class="daily-tip-sheet-tabs" id="dailyTipSheetTabs" role="tablist" aria-label="Daily Tip sheets"></div><button type="button" id="dailyTipSaveButton" class="sales-statistics-save-fullwidth">'+(language==="en"?"Save Daily Tip":"حفظ الإكراميات")+'</button><div class="daily-tip-status" id="dailyTipStatus" role="status" aria-live="polite"></div><div class="daily-tip-sheet-editor" id="dailyTipSheetEditor"></div></section>';}
+function dailyTipRender(){
+ const card=document.querySelector("#dailyTipCard"),monthCard=document.querySelector(".sales-month-card");
+ if(!card||!monthCard)return;
+ const info=dailyTipMonthParts(),branchId=monthCard.dataset.salesBranchId;
+ const label=card.querySelector("#dailyTipMonthLabel"),tabs=card.querySelector("#dailyTipSheetTabs"),editor=card.querySelector("#dailyTipSheetEditor"),tbody=card.querySelector("#dailyTipRows");
+ if(!info){if(label)label.textContent="";return;}
+ if(label)label.textContent=new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{month:"long",year:"numeric"}).format(new Date(info.year,info.monthIndex,1));
+ const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey)||dailyTipSheetCache[0];
+ if(!active){tbody.innerHTML='<tr><td colspan="4">—</td></tr>';tabs.replaceChildren();editor.replaceChildren();return;}
+ dailyTipActiveSheetKey=active.sheet_key;
+ tabs.className="novaro-page-strip";
+ tabs.innerHTML='<div class="novaro-page-strip-list">'+dailyTipSheetCache.map(x=>'<span class="novaro-page-chip-wrap"><button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="novaro-page-chip'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+dailyTipEscape(dailyTipSheetDisplayName(x))+'</span></button><span class="novaro-page-chip-remove" data-delete-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span></span>').join("")+'</div>'+'<button type="button" class="novaro-page-strip-add" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>'
+ tabs.style.display="flex";tabs.style.flexDirection="row";tabs.style.flexWrap="nowrap";tabs.style.alignItems="center";tabs.style.direction=language==="en"?"ltr":"rtl";
+ const dailyTipPageList=tabs.querySelector(".novaro-page-strip-list"),dailyTipAddButton=tabs.querySelector("#dailyTipAddSheetInline");
+ if(dailyTipPageList){dailyTipPageList.style.flex="1 1 auto";dailyTipPageList.style.width="auto";dailyTipPageList.style.minWidth="0";dailyTipPageList.style.maxWidth="100%";}
+ if(dailyTipAddButton){dailyTipAddButton.style.flex="0 0 32px";dailyTipAddButton.style.margin="0";};
+ const rows=Array.isArray(active.rows)?active.rows:[];
+ const byDay=new Map(rows.map(x=>[Number(x.day),x]));
+ const days=Array.from({length:Math.max(0,Math.min(info.days,Number(active.end_day))-Math.max(1,Number(active.start_day))+1)},(_,i)=>Math.max(1,Number(active.start_day))+i);
+ tbody.innerHTML=days.map(day=>{
+  const row=byDay.get(day)||{},tip=row.tip_amount??"",sales=row.dinein_sales??"",pct=Number(sales)>0&&tip!==""?(Number(tip)/Number(sales)*100):null;
+  return '<tr data-daily-tip-day="'+day+'"><td class="daily-tip-date">'+dailyTipDate(day)+'</td><td><input class="sales-stat-cell-input daily-tip-input" type="text" inputmode="decimal" autocomplete="off" data-tip-amount value="'+dailyTipEscape(tip)+'" aria-label="Tip Amount '+day+'"></td><td><input class="sales-stat-cell-input daily-tip-input" type="text" inputmode="decimal" autocomplete="off" data-dinein-sales value="'+dailyTipEscape(sales)+'" aria-label="Dine-in Sales '+day+'"></td><td class="daily-tip-percent">'+(pct===null?'—':pct.toFixed(2).replace(/\.?0+$/,"")+'%')+'</td></tr>';
+ }).join("")||'<tr><td colspan="4">No dates in this sheet</td></tr>';
+ let totalFoot=card.querySelector(".daily-tip-table tfoot");
+ if(!totalFoot){totalFoot=document.createElement("tfoot");card.querySelector(".daily-tip-table").appendChild(totalFoot);}
+ dailyTipUpdateTotals();
+ editor.replaceChildren();
+ const selectedDay=Number(document.querySelector(".sales-report-page #salesReportDay")?.value||0);
+ if(selectedDay>0)loadSalesReportDayTips(selectedDay);
+}
+function dailyTipCalculateTotals(rows){
+ let tipTotal=0,salesTotal=0;
+ for(const row of (Array.isArray(rows)?rows:[])){
+  const tipRaw=String(row?.tip_amount??"").trim(),salesRaw=String(row?.dinein_sales??"").trim();
+  const tip=tipRaw===""?0:statisticsNumber(tipRaw),sales=salesRaw===""?0:statisticsNumber(salesRaw);
+  if(Number.isFinite(tip))tipTotal+=tip;
+  if(Number.isFinite(sales))salesTotal+=sales;
+ }
+ return {tipTotal,salesTotal,pct:salesTotal>0?tipTotal/salesTotal*100:null};
+}
+function dailyTipUpdateTotals(){
+ const card=document.querySelector("#dailyTipCard");if(!card)return;
+ const rows=Array.from(card.querySelectorAll("#dailyTipRows tr[data-daily-tip-day]")).map(tr=>({
+  tip_amount:tr.querySelector("[data-tip-amount]")?.value??"",
+  dinein_sales:tr.querySelector("[data-dinein-sales]")?.value??""
+ }));
+ const {tipTotal,salesTotal,pct}=dailyTipCalculateTotals(rows);
+ const fmt=n=>Number(n).toLocaleString(language==="en"?"en-US":"en-US",{maximumFractionDigits:2});
+ const foot=card.querySelector(".daily-tip-table tfoot");if(!foot)return;
+ foot.innerHTML='<tr class="daily-tip-total-row"><td>'+(language==="en"?"Total":"الإجمالي")+'</td><td>'+fmt(tipTotal)+'</td><td>'+fmt(salesTotal)+'</td><td>'+(pct===null?"—":fmt(pct)+"%")+'</td></tr>';
+ /* Daily Tip totals remain local to this card. */
+}
 function dailyTipBeginRename(tab){
  const selected=dailyTipSheetCache.find(x=>x.sheet_key===tab?.dataset.dailyTipSheet);if(!selected||tab.querySelector("input"))return;
  const input=document.createElement("input");input.type="text";input.className="daily-tip-sheet-name-input";input.value=selected.sheet_name;input.maxLength=80;input.setAttribute("aria-label",language==="en"?"Edit sheet name":"تعديل اسم الشيت");
