@@ -11376,12 +11376,15 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 </style>
 
 
-<style id="novaro-communication-duty-heading-connected-divider-v1">
-/* Continue the separator below each AM/PM duty heading into the center split. */
-#app .novaro-communication-page .novaro-duty-card-heading{
+<style id="novaro-communication-duty-heading-connected-divider-v2">
+/* Target the live Communication Book markup classes (not the legacy novaro-duty-card classes). */
+#app .novaro-communication-page .novaro-communication-duty-grid > .novaro-communication-duty-card:first-child{
+  border-inline-end:1px solid var(--line)!important;
+}
+#app .novaro-communication-page .novaro-communication-section-title{
   border-bottom:0!important;
 }
-#app .novaro-communication-page .novaro-duty-card-fields{
+#app .novaro-communication-page .novaro-communication-duty-fields{
   box-sizing:border-box!important;
   width:100%!important;
   border-top:1px solid var(--line)!important;
