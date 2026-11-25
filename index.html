@@ -11052,3 +11052,68 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app#app .novaro-branch-reports-rebuilt-item:disabled *,
 #app#app .novaro-branch-reports-rebuilt-item[disabled] *{opacity:1!important;filter:none!important}
 </style>
+
+<style id="novaro-communication-allocation-no-horizontal-scroll-mint-v1">
+/* Keep the four-column allocation table fully inside the page frame on every screen. */
+#app .novaro-communication-page .novaro-communication-allocation-wrap,
+#app .novaro-communication-sheet .novaro-communication-allocation-wrap{
+  box-sizing:border-box!important;
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  margin-inline:0!important;
+}
+#app .novaro-communication-page .novaro-communication-allocation-table,
+#app .novaro-communication-sheet .novaro-communication-allocation-table{
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+}
+#app .novaro-communication-page .novaro-communication-allocation-table th,
+#app .novaro-communication-page .novaro-communication-allocation-table td,
+#app .novaro-communication-sheet .novaro-communication-allocation-table th,
+#app .novaro-communication-sheet .novaro-communication-allocation-table td{
+  box-sizing:border-box!important;
+  min-width:0!important;
+  max-width:25%!important;
+  padding:4px 2px!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  white-space:normal!important;
+}
+#app .novaro-communication-page .novaro-communication-allocation-table thead th,
+#app .novaro-communication-sheet .novaro-communication-allocation-table thead th{
+  background:var(--mint)!important;
+  color:var(--ink)!important;
+  font-weight:800!important;
+  text-align:center!important;
+}
+#app .novaro-communication-page .novaro-communication-allocation-table thead tr:first-child th,
+#app .novaro-communication-sheet .novaro-communication-allocation-table thead tr:first-child th{
+  background:var(--mint)!important;
+  color:var(--ink)!important;
+}
+#app .novaro-communication-page .novaro-communication-allocation-table .novaro-communication-table-input,
+#app .novaro-communication-sheet .novaro-communication-allocation-table .novaro-communication-table-input{
+  box-sizing:border-box!important;
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  padding:2px 1px!important;
+  font-size:clamp(9px,2.6vw,12px)!important;
+  text-align:center!important;
+}
+@media(max-width:600px){
+  #app .novaro-communication-page .novaro-communication-allocation-table th,
+  #app .novaro-communication-page .novaro-communication-allocation-table td,
+  #app .novaro-communication-sheet .novaro-communication-allocation-table th,
+  #app .novaro-communication-sheet .novaro-communication-allocation-table td{padding:3px 1px!important;font-size:10px!important}
+}
+</style>
