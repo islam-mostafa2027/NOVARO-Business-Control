@@ -3206,92 +3206,7 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
 :root:not([data-novaro-mode="dark"]) .app-header #langToggleApp:focus svg,
 :root:not([data-novaro-mode="dark"]) .app-header #logout:focus svg{color:var(--nv-btn-soft-text)!important;stroke:currentColor!important}
 </style>
-<style id="novaro-statistics-daily-tip-page-strip-v3">
-/* Rebuild both sheet switchers using the Communication Book page-strip layout. */
-#app#app .sales-report-page #salesStatisticsSheetTabs,
-#app#app .sales-report-page #dailyTipSheetTabs{
-  box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:8px!important;
-  width:100%!important;min-width:0!important;min-height:0!important;margin:14px 0 0!important;padding:8px!important;
-  overflow:visible!important;overscroll-behavior:initial!important;border:1px solid var(--line)!important;
-  border-radius:12px!important;background:var(--surface,#fff)!important;direction:inherit!important;
-  scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important;
-}
-#app#app .sales-report-page .novaro-page-strip-list{
-  box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:7px!important;
-  flex:1 1 auto!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;
-  padding:2px 1px!important;overscroll-behavior-x:contain!important;scrollbar-width:none!important;
-  -webkit-overflow-scrolling:touch!important;
-}
-#app#app .sales-report-page .novaro-page-strip-list::-webkit-scrollbar{display:none!important}
-#app#app .statistics-sheet-pill,
-#app#app .daily-tip-sheet-pill{
-  position:relative!important;display:inline-flex!important;align-items:center!important;gap:6px!important;
-  flex:0 0 auto!important;min-width:0!important;margin:0!important;padding:0!important;
-}
-#app#app .sales-report-page .statistics-sheet-tab{
-  position:relative!important;box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;
-  justify-content:center!important;flex:0 0 auto!important;min-width:0!important;max-width:180px!important;
-  min-height:36px!important;height:36px!important;max-height:36px!important;padding:0 34px 0 9px!important;
-  border:1px solid var(--line)!important;border-radius:9px!important;background:var(--surface,#fff)!important;
-  color:var(--ink,var(--text))!important;-webkit-text-fill-color:var(--ink,var(--text))!important;
-  font-family:inherit!important;font-size:11px!important;font-weight:700!important;line-height:1.2!important;
-  white-space:nowrap!important;box-shadow:none!important;cursor:pointer!important;
-}
-#app#app .sales-report-page .statistics-sheet-tab.is-active,
-#app#app .sales-report-page .daily-tip-sheet-tab.is-active{
-  border-color:var(--g)!important;background:var(--mint)!important;color:var(--ink)!important;
-  -webkit-text-fill-color:var(--ink)!important;
-}
-#app#app .sales-report-page .daily-tip-sheet-tab{padding:0 9px!important}
-#app#app .sales-report-page .statistics-sheet-name{
-  display:inline-block!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
-}
-#app#app .sales-report-page .statistics-sheet-delete{
-  position:absolute!important;inset-inline-end:5px!important;top:50%!important;transform:translateY(-50%)!important;
-  display:inline-flex!important;align-items:center!important;justify-content:center!important;
-  box-sizing:border-box!important;width:21px!important;min-width:21px!important;height:21px!important;min-height:21px!important;
-  margin:0!important;padding:0!important;border:1px solid var(--line)!important;border-radius:7px!important;
-  background:var(--surface,#fff)!important;color:var(--text,var(--ink))!important;
-  -webkit-text-fill-color:var(--text,var(--ink))!important;font-size:14px!important;font-weight:500!important;line-height:1!important;
-}
-#app#app .sales-report-page .daily-tip-sheet-delete{
-  display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 21px!important;
-  box-sizing:border-box!important;width:21px!important;min-width:21px!important;height:21px!important;min-height:21px!important;
-  margin:0!important;padding:0!important;border:1px solid var(--line)!important;border-radius:7px!important;
-  background:var(--surface,#fff)!important;color:var(--text,var(--ink))!important;
-  -webkit-text-fill-color:var(--text,var(--ink))!important;font-size:14px!important;font-weight:500!important;line-height:1!important;
-}
-#app#app .sales-report-page .statistics-sheet-add-inline,
-#app#app .sales-report-page .daily-tip-sheet-add-inline{
-  display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 36px!important;
-  box-sizing:border-box!important;width:36px!important;min-width:36px!important;max-width:36px!important;
-  height:36px!important;min-height:36px!important;max-height:36px!important;margin:0!important;padding:0!important;
-  border:1px solid var(--g)!important;border-radius:9px!important;background:var(--g)!important;
-  color:#fff!important;-webkit-text-fill-color:#fff!important;font-size:21px!important;font-weight:700!important;
-  line-height:1!important;box-shadow:none!important;cursor:pointer!important;
-}
-#app#app .sales-report-page .statistics-sheet-tab:focus,
-#app#app .sales-report-page .statistics-sheet-tab:focus-visible,
-#app#app .sales-report-page .daily-tip-sheet-tab:focus,
-#app#app .sales-report-page .daily-tip-sheet-tab:focus-visible,
-#app#app .sales-report-page .statistics-sheet-add-inline:focus,
-#app#app .sales-report-page .daily-tip-sheet-add-inline:focus{outline:none!important;box-shadow:none!important}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page #salesStatisticsSheetTabs,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page #dailyTipSheetTabs{background:var(--surface,#1b2821)!important}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .statistics-sheet-tab.is-active,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .daily-tip-sheet-tab.is-active{background:#294b3e!important;border-color:#426b58!important;color:#edf7f1!important;-webkit-text-fill-color:#edf7f1!important}
-@media(max-width:600px){
-  #app#app .sales-report-page #salesStatisticsSheetTabs,
-  #app#app .sales-report-page #dailyTipSheetTabs{gap:6px!important;margin-top:12px!important;padding:6px!important;border-radius:10px!important}
-  #app#app .sales-report-page .novaro-page-strip-list{gap:5px!important}
-  #app#app .sales-report-page .statistics-sheet-tab{min-height:33px!important;height:33px!important;max-height:33px!important;padding-inline-start:7px!important;font-size:10px!important}
-  #app#app .sales-report-page .daily-tip-sheet-tab{min-height:33px!important;height:33px!important;max-height:33px!important;padding:0 7px!important;font-size:10px!important}
-  #app#app .sales-report-page .statistics-sheet-delete,
-  #app#app .sales-report-page .daily-tip-sheet-delete{width:19px!important;min-width:19px!important;height:19px!important;min-height:19px!important}
-  #app#app .sales-report-page .statistics-sheet-add-inline,
-  #app#app .sales-report-page .daily-tip-sheet-add-inline{flex-basis:33px!important;width:33px!important;min-width:33px!important;height:33px!important;min-height:33px!important}
-}
-/* Shade every cell across Thursday, Friday and Saturday rows in Statistics only. */
+<style id="novaro-statistics-weekend-shading">/* Shade every cell across Thursday, Friday and Saturday rows in Statistics only. */
 #app#app .sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table:not(.daily-tip-table) tbody tr.sales-weekend-row>td{
   background:#edf5f0!important;border-color:#d4e4da!important;color:#263b31!important;font-weight:700!important;
 }
@@ -3299,7 +3214,17 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
   background:#2b4036!important;border-color:#496253!important;color:#e5eee9!important;
 }
 </style>
-</head><body><script>
+<style id="novaro-shared-page-strip-compat">
+#app .novaro-page-chip-wrap{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;min-width:0}
+#app .novaro-page-chip:focus,#app .novaro-page-chip:focus-visible,#app .novaro-page-strip-add:focus,#app .novaro-page-strip-add:focus-visible{outline:none;box-shadow:none}
+#app .novaro-page-chip.is-editing{padding:0 5px}
+#app .novaro-communication-page-name-input{width:104px;min-width:64px;max-width:130px;height:26px;padding:2px 5px;border:1px solid var(--line);border-radius:6px;background:var(--surface,#fff);color:var(--ink);font:inherit;font-size:11px;outline:none;box-shadow:none}
+#app .sales-report-page #salesStatisticsSheetTabs.novaro-page-strip,#app .sales-report-page #dailyTipSheetTabs.novaro-page-strip{box-sizing:border-box;width:100%;min-width:0}
+#app .sales-report-page .novaro-page-chip-wrap{max-width:100%}
+#app .sales-report-page .novaro-page-chip{max-width:180px}
+#app .sales-report-page .novaro-page-chip-date{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#app .sales-report-page .novaro-page-chip-remove{touch-action:manipulation}
+</style></head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
  "use strict";
@@ -4506,6 +4431,30 @@ document.addEventListener("click",async e=>{
  await saveCommunicationBookPage(button);
 });
 
+
+function communicationBeginPageRename(tab){
+ const index=Number(tab?.dataset.communicationPageIndex),page=branchCommunicationPages[index];
+ if(!page||tab.querySelector("input"))return;
+ const input=document.createElement("input");input.type="text";input.className="novaro-communication-page-name-input";input.value=String(page.date||"");input.maxLength=80;input.setAttribute("aria-label",language==="en"?"Edit page name":"تعديل اسم الصفحة");
+ tab.replaceChildren(input);tab.classList.add("is-editing");input.focus();input.select();
+ let finished=false;
+ const finish=save=>{if(finished)return;finished=true;const value=input.value.trim();tab.classList.remove("is-editing");if(save&&value){page.date=value;}render();};
+ input.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();finish(true);}else if(event.key==="Escape"){event.preventDefault();finish(false);}});
+ input.addEventListener("blur",()=>finish(true));
+}
+let communicationPageHoldTimer=null,communicationPageHoldTab=null,communicationPageHoldTriggered=false;
+document.addEventListener("pointerdown",event=>{
+ const tab=event.target.closest?.("#communicationBookPageTabs [data-communication-page-index]");
+ if(!tab||event.pointerType==="mouse")return;
+ communicationPageHoldTab=tab;communicationPageHoldTriggered=false;
+ communicationPageHoldTimer=setTimeout(()=>{communicationPageHoldTriggered=true;communicationBeginPageRename(tab);},550);
+});
+["pointerup","pointercancel","pointermove"].forEach(type=>document.addEventListener(type,()=>{if(communicationPageHoldTimer){clearTimeout(communicationPageHoldTimer);communicationPageHoldTimer=null;}}));
+document.addEventListener("dblclick",event=>{
+ const tab=event.target.closest?.("#communicationBookPageTabs [data-communication-page-index]");
+ if(!tab)return;event.preventDefault();communicationBeginPageRename(tab);
+});
+
 document.addEventListener("input",e=>{const field=e.target.closest?.("[data-communication-sheet-field]");if(!field)return;const activeSheet=branchCommunicationPages[branchCommunicationActivePage];if(activeSheet){activeSheet.values=activeSheet.values||{};activeSheet.values[field.dataset.communicationSheetField]=field.value;}},true);
 function bindMoneyFieldFormatting(){
  const selector='.sales-report-page [data-sales-metric],.sales-report-page [data-saved-sales-metric],.sales-report-page [data-communication-metric],.sales-report-page .sales-monthly-analysis-field:nth-child(-n+4) input';
@@ -4625,7 +4574,8 @@ function dailyTipRender(){
  const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey)||dailyTipSheetCache[0];
  if(!active){tbody.innerHTML='<tr><td colspan="4">—</td></tr>';tabs.replaceChildren();editor.replaceChildren();const monthTipField=monthCard.querySelector('[data-sales-metric="month_to_date_tip"]');if(monthTipField){monthTipField.value="";syncMonthlyAnalysis();}return;}
  dailyTipActiveSheetKey=active.sheet_key;
- tabs.innerHTML='<div class="novaro-page-strip-list">'+dailyTipSheetCache.map(x=>'<span class="daily-tip-sheet-pill"><button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="daily-tip-sheet-tab'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'">'+dailyTipEscape(x.sheet_name)+'</button><button type="button" class="daily-tip-sheet-delete" data-delete-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</button></span>').join("")+'</div>'+'<button type="button" class="daily-tip-sheet-add-inline" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>';
+ tabs.classList.add("novaro-page-strip");
+ tabs.innerHTML='<div class="novaro-page-strip-list">'+dailyTipSheetCache.map(x=>'<span class="novaro-page-chip-wrap"><button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="novaro-page-chip'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+dailyTipEscape(x.sheet_name)+'</span></button><span class="novaro-page-chip-remove" data-delete-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span></span>').join("")+'</div>'+'<button type="button" class="novaro-page-strip-add" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>';
  const rows=Array.isArray(active.rows)?active.rows:[];
  const byDay=new Map(rows.map(x=>[Number(x.day),x]));
  const days=Array.from({length:Math.max(0,Math.min(info.days,Number(active.end_day))-Math.max(1,Number(active.start_day))+1)},(_,i)=>Math.max(1,Number(active.start_day))+i);
@@ -4787,10 +4737,12 @@ async function statisticsRenameSheet(oldMonth){
 function statisticsSheetsRender(){
  const tabs=document.querySelector("#salesStatisticsSheetTabs");if(!tabs)return;
  statisticsSortSheets();
+ tabs.classList.add("novaro-page-strip");
  tabs.innerHTML='<div class="novaro-page-strip-list">'+statisticsSheetCache.map(sheet=>{
   const active=sheet.report_month===(salesStatisticsSelectedMonth||salesReportSelectedMonth);
-  return '<span class="statistics-sheet-pill"><span role="tab" tabindex="0" aria-selected="'+(active?"true":"false")+'" class="statistics-sheet-tab'+(active?" is-active":"")+'" data-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'"><span class="statistics-sheet-name">'+dailyTipEscape(statisticsMonthLabel(sheet.report_month))+'</span>'+(profile?.role==="owner_admin"?'<span class="statistics-sheet-delete" data-delete-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span>':"")+'</span></span>';
- }).join("")+'</div>'+(statisticsCanEditSheets()?'<button type="button" class="statistics-sheet-add-inline" id="statisticsAddSheetInline" aria-label="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'" title="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'">＋</button>':"");
+  const monthName=dailyTipEscape(statisticsMonthLabel(sheet.report_month));
+  return '<span class="novaro-page-chip-wrap"><button type="button" role="tab" tabindex="0" aria-selected="'+(active?"true":"false")+'" class="novaro-page-chip'+(active?" is-active":"")+'" data-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'"><span class="novaro-page-chip-date">'+monthName+'</span></button>'+(profile?.role==="owner_admin"?'<span class="novaro-page-chip-remove" data-delete-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span>':"")+'</span>';
+ }).join("")+'</div>'+(statisticsCanEditSheets()?'<button type="button" class="novaro-page-strip-add" id="statisticsAddSheetInline" aria-label="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'" title="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'">＋</button>':"");
 }
 async function statisticsSheetsLoad(branchId,month){
  if(!branchId||!statisticsMonthParts(month))return;
@@ -5419,7 +5371,10 @@ document.addEventListener("click",async e=>{
  const addCommunicationPage=e.target.closest("[data-add-communication-page]");
  if(addCommunicationPage){const now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");branchCommunicationPages.push({id:Date.now(),date:today});branchCommunicationActivePage=branchCommunicationPages.length-1;render();return;}
  const communicationPageTab=e.target.closest("[data-communication-page-index]");
- if(communicationPageTab){branchCommunicationActivePage=Number(communicationPageTab.dataset.communicationPageIndex)||0;render();return;}
+ if(communicationPageTab){
+  if(communicationPageTab.classList.contains("is-editing")||e.target.closest(".novaro-communication-page-name-input"))return;
+  branchCommunicationActivePage=Number(communicationPageTab.dataset.communicationPageIndex)||0;render();return;
+ }
  const communicationSheetField=e.target.closest("[data-communication-sheet-field]");
  if(communicationSheetField){const activeSheet=branchCommunicationPages[branchCommunicationActivePage];if(activeSheet){activeSheet.values=activeSheet.values||{};activeSheet.values[communicationSheetField.dataset.communicationSheetField]=communicationSheetField.value;}}
  if(e.target.closest("[data-open-comparison-tip-waste]")){branchReportsComparisonPage=true;branchReportsDailyTipOpen=false;render();return;}
@@ -6087,7 +6042,7 @@ if(page==="sales"){
   const communicationHeaderFields='<div class="novaro-communication-date-fields"><label class="novaro-communication-date-field"><span>'+(en?"Day":"اليوم")+'</span><input type="text" placeholder="'+(en?"Enter day":"اكتب اليوم")+'" aria-label="'+(en?"Day":"اليوم")+'"></label><label class="novaro-communication-date-field"><span>'+(en?"Date":"التاريخ")+'</span><input type="text" placeholder="'+(en?"Enter date":"اكتب التاريخ")+'" aria-label="'+(en?"Date":"التاريخ")+'"></label></div>';
   if(!branchCommunicationPages.length){const now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");branchCommunicationPages=[{id:Date.now(),date:today}];branchCommunicationActivePage=0;}
   branchCommunicationActivePage=Math.max(0,Math.min(branchCommunicationActivePage,branchCommunicationPages.length-1));
-  const pageTabs=branchCommunicationPages.map((item,index)=>'<button type="button" class="novaro-page-chip'+(index===branchCommunicationActivePage?' is-active':'')+'" data-communication-page-index="'+index+'"><span class="novaro-page-chip-date">'+esc(item.date)+'</span><span class="novaro-page-chip-remove" data-delete-communication-page="'+index+'" role="button" tabindex="0" aria-label="'+(en?"Delete page":"حذف الصفحة")+'" title="'+(en?"Delete page":"حذف الصفحة")+'"><span aria-hidden="true">×</span></span></button>').join("");
+  const pageTabs=branchCommunicationPages.map((item,index)=>'<span class="novaro-page-chip-wrap"><button type="button" class="novaro-page-chip'+(index===branchCommunicationActivePage?' is-active':'')+'" data-communication-page-index="'+index+'" title="'+(en?"Long-press or double-click to rename":"اضغط مطولاً أو مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+esc(item.date)+'</span></button><span class="novaro-page-chip-remove" data-delete-communication-page="'+index+'" role="button" tabindex="0" aria-label="'+(en?"Delete page":"حذف الصفحة")+'" title="'+(en?"Delete page":"حذف الصفحة")+'"><span aria-hidden="true">×</span></span></span>').join("");
   const managerRow=(shift,part)=>'<div class="novaro-duty-field"><label class="novaro-duty-field-label" data-language-fixed="true"><bdi dir="ltr" data-language-fixed="true">'+part+'</bdi></label><input class="novaro-communication-table-input novaro-communication-duty-input novaro-duty-field-input" data-communication-sheet-field="'+shift.toLowerCase()+'_'+part.toLowerCase()+'" type="text" inputmode="text" autocomplete="off" autocapitalize="sentences" spellcheck="false" aria-label="'+shift+' '+part+'"> </div>';
   const allocationRows=(shift)=>Array.from({length:10},(_,i)=>'<div class="novaro-allocation-row"><input class="novaro-communication-table-input novaro-allocation-input" data-communication-sheet-field="'+shift.toLowerCase()+'_name_'+(i+1)+'" type="text" aria-label="'+(en?(shift==="AM"?"AM":"PM"):(shift==="AM"?"صباحي":"مسائي"))+' '+(en?"name":"الاسم")+' '+(i+1)+'"><input class="novaro-communication-table-input novaro-allocation-input" data-communication-sheet-field="'+shift.toLowerCase()+'_duty_'+(i+1)+'" type="text" aria-label="'+(en?(shift==="AM"?"AM":"PM"):(shift==="AM"?"صباحي":"مسائي"))+' '+(en?"station or side duty":"المحطة أو المهمة")+' '+(i+1)+'"></div>').join("");
   const allocationCard=(shift)=>'<section class="novaro-allocation-card"><h4 class="novaro-allocation-card-heading">'+(shift==="AM"?(en?"Today’s Allocations - AM":"توزيعات اليوم - صباحي"):(en?"Today’s Allocations - PM":"توزيعات اليوم - مسائي"))+'</h4><div class="novaro-allocation-labels"><span>'+(en?"Name":"الاسم")+'</span><span>'+(en?"Section":"القسم")+'</span></div><div class="novaro-allocation-rows">'+allocationRows(shift)+'</div></section>';
