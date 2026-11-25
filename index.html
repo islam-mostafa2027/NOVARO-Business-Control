@@ -4585,73 +4585,27 @@ document.addEventListener("click",event=>{
   const en=language==="en",activeIndex=Math.max(0,Math.min(branchCommunicationActivePage,branchCommunicationPages.length-1)),page=branchCommunicationPages[activeIndex]||{date:"",values:{}},pageNumber=activeIndex+1;
   const rows=[[en?"Page":"الصفحة",en?"Date":"التاريخ",en?"Field":"الحقل",en?"Value":"القيمة"]];
   const header={};document.querySelectorAll("[data-communication-header-field]").forEach(field=>header[field.dataset.communicationHeaderField]=field.value);
-  const addRow=(field,value,date=header.date||page.date||"")=>rows.push([pageNumber,date,field,value??""]);
+  const date=header.date||page.date||"",addRow=(field,value)=>rows.push([pageNumber,date,field,value??""]);
   addRow(en?"Day":"اليوم",header.day||"");
-  addRow(en?"Date":"التاريخ",header.date||page.date||"");
-  rows.push([pageNumber,header.date||page.date||"",en?"Branch performance summary":"ملخص مؤشرات الفرع",""]);
+  addRow(en?"Date":"التاريخ",date);
+  rows.push([pageNumber,date,en?"Branch performance summary":"ملخص مؤشرات الفرع",""]);
   document.querySelectorAll(".novaro-communication-summary .sales-metric").forEach(metric=>{const label=metric.querySelector("label")?.innerText.trim()||"",field=metric.querySelector("input,textarea,select"),value=field?(field.value??""):(metric.querySelector(".sales-metric-value")?.innerText.trim()||"");addRow(label,value);});
-  rows.push([pageNumber,header.date||page.date||"",en?"Manager on Duty - AM":"المسؤول عن الوردية - صباحي",""]);
   const sheetValues={...(page.values||{})};
   document.querySelectorAll("[data-communication-sheet-field]").forEach(field=>{sheetValues[field.dataset.communicationSheetField]=field.value;});
-  [["am_foh",en?"AM FOH":"FOH صباحي"],["am_boh",en?"AM BOH":"BOH صباحي"],["pm_foh",en?"PM FOH":"FOH مسائي"],["pm_boh",en?"PM BOH":"BOH مسائي"]].forEach(([key,label])=>addRow(label,sheetValues[key]||""));
-  rows.push([pageNumber,header.date||page.date||"",en?"Manager on Duty - PM":"المسؤول عن الوردية - مسائي",""]);
-  rows.push([pageNumber,header.date||page.date||"",en?"Today’s Allocations - AM / PM":"توزيعات اليوم - صباحي / مسائي",""]);
-  rows.push([pageNumber,header.date||page.date||"",en?"AM Name":"اسم الصباح",en?"AM Section":"قسم الصباح"]);
-  for(let i=1;i<=10;i++){
-   const amName=sheetValues["am_name_"+i]||"",amDuty=sheetValues["am_duty_"+i]||"",pmName=sheetValues["pm_name_"+i]||"",pmDuty=sheetValues["pm_duty_"+i]||"";
-   rows.push([pageNumber,header.date||page.date||"",amName,amDuty]);
-   rows.push([pageNumber,header.date||page.date||"",pmName,pmDuty]);
-  }
+  rows.push([pageNumber,date,en?"Manager on Duty - AM":"المسؤول عن الوردية - صباحي",""]);
+  addRow(en?"AM FOH":"FOH صباحي",sheetValues.am_foh||"");
+  addRow(en?"AM BOH":"BOH صباحي",sheetValues.am_boh||"");
+  rows.push([pageNumber,date,en?"Manager on Duty - PM":"المسؤول عن الوردية - مسائي",""]);
+  addRow(en?"PM FOH":"FOH مسائي",sheetValues.pm_foh||"");
+  addRow(en?"PM BOH":"BOH مسائي",sheetValues.pm_boh||"");
+  rows.push([pageNumber,date,en?"Today’s Allocations - AM":"توزيعات اليوم - صباحي",""]);
+  for(let i=1;i<=10;i++){addRow((en?"AM Name ":"اسم الصباح ")+i,sheetValues["am_name_"+i]||"");addRow((en?"AM Section ":"قسم الصباح ")+i,sheetValues["am_duty_"+i]||"");}
+  rows.push([pageNumber,date,en?"Today’s Allocations - PM":"توزيعات اليوم - مسائي",""]);
+  for(let i=1;i<=10;i++){addRow((en?"PM Name ":"اسم المساء ")+i,sheetValues["pm_name_"+i]||"");addRow((en?"PM Section ":"قسم المساء ")+i,sheetValues["pm_duty_"+i]||"");}
   const csv="\uFEFF"+rows.map(row=>row.map(value=>'"'+String(value??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),link=document.createElement("a");
   link.href=url;link.download="NOVARO-Communication-Book-"+(new Date().toISOString().slice(0,10))+".csv";document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);return;
  }
-});
-
-
-
-function communicationBeginPageRename(tab){
- const index=Number(tab?.dataset.communicationPageIndex),page=branchCommunicationPages[index];
- if(!page||tab.querySelector("input"))return;
- const input=document.createElement("input");input.type="text";input.className="novaro-communication-page-name-input";input.value=String(page.date||"");input.maxLength=80;input.setAttribute("aria-label",language==="en"?"Edit page name":"تعديل اسم الصفحة");
- tab.replaceChildren(input);tab.classList.add("is-editing");input.focus();input.select();
- let finished=false;
- const finish=save=>{if(finished)return;finished=true;const value=input.value.trim();tab.classList.remove("is-editing");if(save&&value){page.date=value;}render();};
- input.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();finish(true);}else if(event.key==="Escape"){event.preventDefault();finish(false);}});
- input.addEventListener("blur",()=>finish(true));
-}
-let communicationPageHoldTimer=null,communicationPageHoldTab=null,communicationPageHoldTriggered=false;
-document.addEventListener("pointerdown",event=>{
- const tab=event.target.closest?.("nav.novaro-page-strip [data-communication-page-index]");
- if(!tab||event.pointerType==="mouse")return;
- communicationPageHoldTab=tab;communicationPageHoldTriggered=false;
- communicationPageHoldTimer=setTimeout(()=>{communicationPageHoldTriggered=true;communicationBeginPageRename(tab);},550);
-});
-["pointerup","pointercancel","pointermove"].forEach(type=>document.addEventListener(type,()=>{if(communicationPageHoldTimer){clearTimeout(communicationPageHoldTimer);communicationPageHoldTimer=null;}}));
-document.addEventListener("dblclick",event=>{
- const tab=event.target.closest?.("nav.novaro-page-strip [data-communication-page-index]");
- if(!tab)return;event.preventDefault();communicationBeginPageRename(tab);
-});
-
-document.addEventListener("input",e=>{const field=e.target.closest?.("[data-communication-sheet-field]");if(!field)return;const activeSheet=branchCommunicationPages[branchCommunicationActivePage];if(activeSheet){activeSheet.values=activeSheet.values||{};activeSheet.values[field.dataset.communicationSheetField]=field.value;try{novaroSaveCommunicationPages();}catch(error){console.warn("NOVARO communication page local save failed:",error);}}},true);
-function bindMoneyFieldFormatting(){
- const selector='.sales-report-page [data-sales-metric],.sales-report-page [data-saved-sales-metric],.sales-report-page [data-communication-metric],.sales-report-page .sales-monthly-analysis-field:nth-child(-n+4) input';
- document.addEventListener("focusin",e=>{const field=e.target.closest&&e.target.closest(selector);if(field)field.value=String(field.value??"").replace(/,/g,"");},true);
- document.addEventListener("focusout",e=>{const field=e.target.closest&&e.target.closest(selector);if(field){formatMoneyField(field);if(field.matches("[data-sales-metric]"))syncMonthlyAnalysis();}},true);
-}
-bindMoneyFieldFormatting();
-function syncStatisticsAverages(row,skipMonthlyTotals){
- if(!row)return;
- let rowTickets=0,rowSales=0;
- ["dinein","takeaway","delivery","catering"].forEach(group=>{
-  const tickets=row.querySelector('[data-stat-tickets="'+group+'"]');
-  const sales=row.querySelector('[data-stat-sales="'+group+'"]');
-  const average=row.querySelector('[data-stat-average="'+group+'"]');
-  const ticketText=tickets?String(tickets.value).trim():"",salesText=sales?String(sales.value).trim():"";
-  const ticketValue=statisticsNumber(ticketText),salesValue=statisticsNumber(salesText);
-  if(ticketText!==""&&Number.isFinite(ticketValue)&&ticketValue>0)rowTickets+=ticketValue;
-  if(salesText!==""&&Number.isFinite(salesValue))rowSales+=salesValue;
-  if(average)average.value=(ticketText!==""&&salesText!==""&&Number.isFinite(ticketValue)&&Number.isFinite(salesValue)&&ticketValue>0)?formatStatisticsNumber(Number((salesValue/ticketValue).toFixed(2))):"";
  });
  const totalTickets=row.querySelector("[data-stat-total-tickets]"),totalSales=row.querySelector("[data-stat-total-sales]"),target=row.querySelector("[data-stat-target]"),ach=row.querySelector("[data-stat-ach]");
  if(totalTickets)totalTickets.value=String(rowTickets);
