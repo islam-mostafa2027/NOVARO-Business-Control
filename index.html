@@ -10415,3 +10415,65 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   #app .novaro-communication-sheet .novaro-allocation-cards{padding-bottom:0!important;margin-bottom:10px!important}
 }
 </style>
+
+
+<style id="novaro-communication-continuous-dividers-v1">
+/* Metrics: remove every cell border; one shared center divider will run through the full report. */
+#app .headcount-page-card.sales-report-page>.sales-month-card.saved-sales-report-card .sales-metrics-grid{
+  border:0!important;
+  border-radius:0!important;
+  overflow:visible!important;
+}
+#app .headcount-page-card.sales-report-page>.sales-month-card.saved-sales-report-card .sales-metric{
+  border:0!important;
+  border-radius:0!important;
+}
+/* One uninterrupted center rule from the metrics area down to the allocations table. */
+#app .headcount-page-card.sales-report-page{
+  position:relative!important;
+  isolation:isolate!important;
+}
+#app .headcount-page-card.sales-report-page::after{
+  content:"";
+  position:absolute;
+  z-index:4;
+  pointer-events:none;
+  inset-inline-start:50%;
+  top:112px;
+  bottom:108px;
+  width:1px;
+  background:var(--line);
+  transform:translateX(-.5px);
+}
+/* Remove the per-row/per-heading pseudo dividers between Name and Section. */
+#app .novaro-communication-sheet .novaro-allocation-labels::after,
+#app .novaro-communication-sheet .novaro-allocation-row::after{
+  content:none!important;
+  display:none!important;
+}
+/* Replace segmented dividers with one continuous divider in each allocation table. */
+#app .novaro-communication-sheet .novaro-allocation-card{
+  position:relative!important;
+}
+#app .novaro-communication-sheet .novaro-allocation-card::after{
+  content:"";
+  position:absolute;
+  z-index:3;
+  pointer-events:none;
+  top:42px;
+  bottom:0;
+  inset-inline-start:64.3%;
+  width:1px;
+  background:var(--line);
+  transform:translateX(-.5px);
+}
+@media(max-width:600px){
+  #app .headcount-page-card.sales-report-page::after{
+    top:104px;
+    bottom:100px;
+  }
+  #app .novaro-communication-sheet .novaro-allocation-card::after{
+    top:44px;
+  }
+}
+</style>
