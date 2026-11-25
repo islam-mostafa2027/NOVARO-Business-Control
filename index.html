@@ -6073,6 +6073,25 @@ function novaroShiftReportMarkup(en,branch){
 #app .shift-report-page .shift-report-sheet-delete{display:inline!important;flex:none!important;width:auto!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:inherit!important;font-size:13px!important;font-weight:900!important;line-height:1!important;box-shadow:none!important;cursor:pointer!important}
 #app .shift-report-page .shift-report-tab.active .shift-report-sheet-delete{color:#fff!important}
 #app .shift-report-page .shift-report-sheet-delete:hover{background:transparent!important;color:#ffb5b5!important;border:0!important}
+/* Align the add-sheet control at the opposite edge of the sheet tabs. */
+#app .shift-report-page .shift-report-tabs{display:flex!important;align-items:center!important;width:100%!important;box-sizing:border-box!important;gap:5px!important}
+#app .shift-report-page .shift-report-sheet-pill{flex:0 0 auto!important}
+#app .shift-report-page .shift-report-sheet-add{flex:0 0 32px!important;margin-left:auto!important;align-self:center!important}
+/* Use one consistent visual treatment for all column headings and the label column. */
+#app .shift-report-page .shift-report-table thead th,
+#app .shift-report-page .shift-report-table tbody th{
+ background:var(--surface-2,#edf2ee)!important;
+ color:var(--text)!important;
+ border-color:var(--line)!important;
+ font-family:inherit!important;
+ font-size:11px!important;
+ font-weight:800!important;
+ line-height:1.25!important;
+ text-align:center!important;
+ vertical-align:middle!important;
+}
+#app .shift-report-page .shift-report-table thead th{padding:7px 3px!important;white-space:normal!important}
+#app .shift-report-page .shift-report-table tbody th{padding:6px 3px!important}
 /* Fit the complete shift report table inside its card, like the Daily Tip table. */
 #app .shift-report-page .shift-report-table-wrap{width:100%!important;max-width:100%!important;overflow-x:hidden!important;overflow-y:visible!important;box-sizing:border-box!important}
 #app .shift-report-page .shift-report-table{width:100%!important;min-width:0!important;max-width:100%!important;table-layout:fixed!important;border-spacing:2px!important;font-size:11px!important}
