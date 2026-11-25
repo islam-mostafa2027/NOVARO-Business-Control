@@ -5560,9 +5560,9 @@ document.addEventListener("click",async e=>{
   branchCommunicationInlineOpen=false;
   branchAttendanceMenuOpen=false;
   const selected=headcountSectionToggle.dataset.hcSectionToggle;
-  const root=headcountSectionToggle.closest(".hc-section-switcher")?.parentElement;
-  root?.querySelectorAll("[data-hc-section-toggle]").forEach(button=>{const active=button===headcountSectionToggle;button.classList.toggle("is-active",active);button.setAttribute("aria-expanded",active?"true":"false");});
-  root?.querySelectorAll("[data-hc-section-panel]").forEach(panel=>{panel.hidden=panel.dataset.hcSectionPanel!==selected;});
+  document.querySelectorAll("[data-hc-section-toggle]").forEach(button=>{const active=button===headcountSectionToggle;button.classList.toggle("is-active",active);button.setAttribute("aria-expanded",active?"true":"false");});
+  document.querySelectorAll("[data-hc-section-panel]").forEach(panel=>{panel.hidden=panel.dataset.hcSectionPanel!==selected;});
+  document.querySelectorAll("[data-toggle-headcount-attendance]").forEach(button=>button.setAttribute("aria-expanded","false"));
   return;
  }
  const headcountBranchButton=e.target.closest("[data-headcount-branch]");
