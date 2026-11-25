@@ -3224,6 +3224,8 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
 #app .sales-report-page .novaro-page-chip{max-width:180px}
 #app .sales-report-page .novaro-page-chip-date{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #app .sales-report-page .novaro-page-chip-remove{touch-action:manipulation}
+
+#app .sales-report-page .novaro-page-chip-remove{box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 18px!important;width:18px!important;min-width:18px!important;height:18px!important;padding:0!important;border-radius:50%!important;border:1px solid var(--line)!important;background:var(--mint)!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;font-size:11px!important;font-weight:800!important;line-height:1!important;}
 </style>
 
 </head><body><script>
@@ -4749,6 +4751,10 @@ function statisticsSheetsRender(){
   const monthName=dailyTipEscape(statisticsMonthLabel(sheet.report_month));
   return '<span class="novaro-page-chip-wrap"><button type="button" role="tab" tabindex="0" aria-selected="'+(active?"true":"false")+'" class="novaro-page-chip'+(active?" is-active":"")+'" data-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'"><span class="novaro-page-chip-date">'+monthName+'</span></button>'+(profile?.role==="owner_admin"?'<span class="novaro-page-chip-remove" data-delete-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span>':"")+'</span>';
  }).join("")+'</div>'+(statisticsCanEditSheets()?'<button type="button" class="novaro-page-strip-add" id="statisticsAddSheetInline" aria-label="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'" title="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'">＋</button>':"");
+ tabs.style.display="flex";tabs.style.flexDirection="row";tabs.style.flexWrap="nowrap";tabs.style.alignItems="center";tabs.style.direction="rtl";
+ const statisticsPageList=tabs.querySelector(".novaro-page-strip-list"),statisticsAddButton=tabs.querySelector("#statisticsAddSheetInline");
+ if(statisticsPageList){statisticsPageList.style.flex="1 1 auto";statisticsPageList.style.width="auto";statisticsPageList.style.minWidth="0";statisticsPageList.style.maxWidth="100%";}
+ if(statisticsAddButton){statisticsAddButton.style.flex="0 0 32px";statisticsAddButton.style.margin="0";};
 }
 async function statisticsSheetsLoad(branchId,month){
  if(!branchId||!statisticsMonthParts(month))return;
