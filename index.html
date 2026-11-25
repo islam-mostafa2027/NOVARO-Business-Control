@@ -5372,7 +5372,8 @@ document.addEventListener("click",async e=>{
  if(addCommunicationPage){const now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");branchCommunicationPages.push({id:Date.now(),date:today});branchCommunicationActivePage=branchCommunicationPages.length-1;render();return;}
  const communicationPageTab=e.target.closest("[data-communication-page-index]");
  if(communicationPageTab){
-  if(communicationPageHoldTriggered){communicationPageHoldTriggered=false;return;}\n  if(communicationPageTab.classList.contains("is-editing")||e.target.closest(".novaro-communication-page-name-input"))return;
+  if(communicationPageHoldTriggered){communicationPageHoldTriggered=false;return;}
+  if(communicationPageTab.classList.contains("is-editing")||e.target.closest(".novaro-communication-page-name-input"))return;
   branchCommunicationActivePage=Number(communicationPageTab.dataset.communicationPageIndex)||0;render();return;
  }
  const communicationSheetField=e.target.closest("[data-communication-sheet-field]");
