@@ -11387,3 +11387,18 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   border-top:1px solid var(--line)!important;
 }
 </style>
+
+
+<style id="novaro-communication-summary-heading-typography-final-v2">
+/* Final high-specificity override: prevent older communication-book rules from shrinking the summary title. */
+#app .headcount-page-card.sales-report-page.novaro-communication-page:has(.novaro-communication-header) > .sales-month-card.saved-sales-report-card.novaro-communication-summary > .novaro-communication-card-heading{
+  font-size:18px!important;
+  line-height:1.4!important;
+  font-weight:800!important;
+}
+@media(max-width:600px){
+  #app .headcount-page-card.sales-report-page.novaro-communication-page:has(.novaro-communication-header) > .sales-month-card.saved-sales-report-card.novaro-communication-summary > .novaro-communication-card-heading{
+    font-size:16px!important;
+  }
+}
+</style>
