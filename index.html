@@ -6230,7 +6230,7 @@ function novaroCommunicationBookMarkup(inline=false){
   const communicationHeaderFields='<div class="novaro-communication-date-fields"><label class="novaro-communication-date-field"><span>'+(en?"Day":"اليوم")+'</span><input data-communication-header-field="day" type="text" value="'+esc(savedHeader.day||"")+'" placeholder="'+(en?"Enter day":"اكتب اليوم")+'" aria-label="'+(en?"Day":"اليوم")+'"></label><label class="novaro-communication-date-field"><span>'+(en?"Date":"التاريخ")+'</span><input data-communication-header-field="date" type="text" value="'+esc(savedHeader.date||"")+'" placeholder="'+(en?"Enter date":"اكتب التاريخ")+'" aria-label="'+(en?"Date":"التاريخ")+'"></label></div>';
   if(!branchCommunicationPages.length&&!novaroLoadCommunicationPages()){const now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");branchCommunicationPages=[{id:Date.now(),date:today}];branchCommunicationActivePage=0;}
   branchCommunicationActivePage=Math.max(0,Math.min(branchCommunicationActivePage,branchCommunicationPages.length-1));
-  const pageTabs=branchCommunicationPages.map((item,index)=>'<span class="novaro-page-chip-wrap"><button type="button" class="novaro-page-chip'+(index===branchCommunicationActivePage?' is-active':'')+'" data-communication-page-index="'+index+'" title="'+(en?"Long-press or double-click to rename":"اضغط مطولاً أو مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+esc(item.date)+'</span></button><span class="novaro-page-chip-remove" data-delete-communication-page="'+index+'" role="button" tabindex="0" aria-label="'+(en?"Delete page":"حذف الصفحة")+'" title="'+(en?"Delete page":"حذف الصفحة")+'"><span aria-hidden="true">×</span></span></span>').join("");
+  const pageTabs=branchCommunicationPages.map((item,index)=>'<span class="novaro-page-chip-wrap"><button type="button" class="novaro-page-chip'+(index===branchCommunicationActivePage?' is-active':'')+'" data-communication-page-index="'+index+'" title="'+(en?"Long-press or double-click to rename":"اضغط مطولاً أو مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+esc(item.date)+'</span><span class="novaro-page-chip-remove" data-delete-communication-page="'+index+'" role="button" tabindex="0" aria-label="'+(en?"Delete page":"حذف الصفحة")+'" title="'+(en?"Delete page":"حذف الصفحة")+'"><span aria-hidden="true">×</span></span></button></span>').join("");
   const managerRow=(shift,part)=>'<tr><th class="novaro-communication-duty-label" scope="row"><bdi dir="ltr" data-language-fixed="true">'+part+'</bdi></th><td class="novaro-communication-duty-entry"><input class="novaro-communication-table-input novaro-communication-duty-input" data-communication-sheet-field="'+shift.toLowerCase()+'_'+part.toLowerCase()+'" type="text" inputmode="text" autocomplete="off" autocapitalize="sentences" spellcheck="false" aria-label="'+shift+' '+part+'"></td></tr>';
   const allocationRows=()=>Array.from({length:10},(_,i)=>'<tr><td><input class="novaro-communication-table-input novaro-allocation-input" data-communication-sheet-field="am_name_'+(i+1)+'" type="text" aria-label="'+(en?"AM name ":"اسم الصباح ")+(i+1)+'"></td><td><input class="novaro-communication-table-input novaro-allocation-input" data-communication-sheet-field="am_duty_'+(i+1)+'" type="text" aria-label="'+(en?"AM station or side duty ":"مهمة الصباح ")+(i+1)+'"></td><td><input class="novaro-communication-table-input novaro-allocation-input" data-communication-sheet-field="pm_name_'+(i+1)+'" type="text" aria-label="'+(en?"PM name ":"اسم المساء ")+(i+1)+'"></td><td><input class="novaro-communication-table-input novaro-allocation-input" data-communication-sheet-field="pm_duty_'+(i+1)+'" type="text" aria-label="'+(en?"PM station or side duty ":"مهمة المساء ")+(i+1)+'"></td></tr>').join("");
   const allocationCard=(shift)=>'<section class="novaro-allocation-card"><h4 class="novaro-allocation-card-heading">'+(shift==="AM"?(en?"Today’s Allocations - AM":"توزيعات اليوم - صباحي"):(en?"Today’s Allocations - PM":"توزيعات اليوم - مسائي"))+'</h4><div class="novaro-allocation-labels"><span>'+(en?"Name":"الاسم")+'</span><span>'+(en?"Section":"القسم")+'</span></div><div class="novaro-allocation-rows">'+allocationRows(shift)+'</div></section>';
@@ -11116,4 +11116,20 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   #app .novaro-communication-sheet .novaro-communication-allocation-table th,
   #app .novaro-communication-sheet .novaro-communication-allocation-table td{padding:3px 1px!important;font-size:10px!important}
 }
+</style>
+
+<style id="novaro-communication-page-delete-inside-tab-v1">
+#app .novaro-communication-page .novaro-page-chip-wrap{gap:0!important}
+#app .novaro-communication-page .novaro-page-chip{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  gap:7px!important;padding:0 8px!important;max-width:180px!important;
+}
+#app .novaro-communication-page .novaro-page-chip-remove{
+  box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 16px!important;width:16px!important;min-width:16px!important;height:16px!important;
+  margin:0!important;padding:0!important;border:1px solid var(--g)!important;border-radius:50%!important;
+  background:var(--g)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
+  font-size:11px!important;font-weight:800!important;line-height:1!important;cursor:pointer!important;
+}
+#app .novaro-communication-page .novaro-page-chip-date{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
 </style>
