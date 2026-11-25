@@ -3266,6 +3266,48 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
 }
 </style>
 
+<style id="novaro-daily-tip-horizontal-sheet-slider-v1">
+/* Keep Daily Tip sheets on one horizontal, swipeable row. */
+#app .sales-report-page #dailyTipSheetTabs.novaro-page-strip{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  min-width:0!important;
+}
+#app .sales-report-page #dailyTipSheetTabs .novaro-page-strip-list{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  flex:1 1 0!important;
+  width:0!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  white-space:nowrap!important;
+  overscroll-behavior-x:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-x!important;
+  scrollbar-width:thin!important;
+}
+#app .sales-report-page #dailyTipSheetTabs .novaro-page-chip-wrap{
+  display:inline-flex!important;
+  flex:0 0 auto!important;
+  flex-wrap:nowrap!important;
+  white-space:nowrap!important;
+}
+#app .sales-report-page #dailyTipSheetTabs .novaro-page-chip{
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+}
+#app .sales-report-page #dailyTipSheetTabs #dailyTipAddSheetInline{
+  flex:0 0 28px!important;
+}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
