@@ -10674,3 +10674,59 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .headcount-page-card.sales-report-page>.sales-month-card.saved-sales-report-card .novaro-communication-card-heading{box-sizing:border-box!important;width:100%!important;margin:0 0 10px!important;padding-bottom:9px!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important}
 #app .novaro-communication-sheet .novaro-duty-cards{box-sizing:border-box!important;margin-top:0!important;padding-top:10px!important;border-top:1px solid var(--line)!important}
 </style>
+
+
+<style id="novaro-communication-input-visibility-and-compact-v1">
+/* Make empty communication-book fields visibly editable instead of blending into the white card. */
+#app .novaro-communication-sheet .novaro-duty-field-input,
+#app .novaro-communication-sheet .novaro-allocation-input{
+  box-sizing:border-box!important;
+  background:#f6fbf8!important;
+  border:1px solid #cbded3!important;
+  border-radius:6px!important;
+  color:var(--ink)!important;
+  -webkit-text-fill-color:var(--ink)!important;
+}
+#app .novaro-communication-sheet .novaro-duty-field-input{
+  height:24px!important;
+  min-height:24px!important;
+  max-height:24px!important;
+  padding:1px 5px!important;
+}
+#app .novaro-communication-sheet .novaro-duty-field{
+  min-height:32px!important;
+}
+#app .novaro-communication-sheet .novaro-duty-field-label{
+  min-height:22px!important;
+  height:22px!important;
+  border-radius:6px!important;
+}
+#app .novaro-communication-sheet .novaro-allocation-input{
+  height:19px!important;
+  min-height:19px!important;
+  max-height:19px!important;
+  padding:1px 4px!important;
+}
+#app .novaro-communication-sheet .novaro-duty-field-input:focus,
+#app .novaro-communication-sheet .novaro-allocation-input:focus{
+  border-color:#72b49a!important;
+  background:#fff!important;
+  outline:none!important;
+  box-shadow:0 0 0 2px #287d6b18!important;
+}
+@media(max-width:600px){
+  #app .novaro-communication-sheet .novaro-duty-field{
+    min-height:30px!important;
+  }
+  #app .novaro-communication-sheet .novaro-duty-field-input{
+    height:22px!important;
+    min-height:22px!important;
+    max-height:22px!important;
+  }
+  #app .novaro-communication-sheet .novaro-allocation-input{
+    height:18px!important;
+    min-height:18px!important;
+    max-height:18px!important;
+  }
+}
+</style>
