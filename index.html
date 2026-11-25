@@ -10428,23 +10428,6 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   border:0!important;
   border-radius:0!important;
 }
-/* One uninterrupted center rule from the metrics area down to the allocations table. */
-#app .headcount-page-card.sales-report-page:has(.novaro-communication-header){
-  position:relative!important;
-  isolation:isolate!important;
-}
-#app .headcount-page-card.sales-report-page:has(.novaro-communication-header)::after{
-  content:"";
-  position:absolute;
-  z-index:4;
-  pointer-events:none;
-  inset-inline-start:50%;
-  top:112px;
-  bottom:108px;
-  width:1px;
-  background:var(--line);
-  transform:translateX(-.5px);
-}
 /* Remove the per-row/per-heading pseudo dividers between Name and Section. */
 #app .novaro-communication-sheet .novaro-allocation-labels::after,
 #app .novaro-communication-sheet .novaro-allocation-row::after{
@@ -10468,10 +10451,6 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   transform:translateX(-.5px);
 }
 @media(max-width:600px){
-  #app .headcount-page-card.sales-report-page:has(.novaro-communication-header)::after{
-    top:104px;
-    bottom:100px;
-  }
   #app .novaro-communication-sheet .novaro-allocation-card::after{
     top:44px;
   }
