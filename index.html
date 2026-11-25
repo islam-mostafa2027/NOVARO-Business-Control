@@ -5891,7 +5891,7 @@ async function getSingleStocktakeReport(id){
  return {session:q.data,branch,location,rows:(r.data||[]).filter(x=>x.items).map(x=>({...x.items,quantity:Number(x.counted_quantity||0)}))};
 }
 function stocktakeReportTable(data){
- const rows=(data.rows||[]).filter(x=>Number(x.quantity||0)>0),en=language==="en",branch=branchLabel(data.branch)||"—";
+ const rows=(data.rows||[]),en=language==="en",branch=branchLabel(data.branch)||"—";
  const groupOf=x=>x.categories?.group_key||"equipment";
  const groups=categoryGroups.map(g=>({key:g.key,label:en?(g.name_en||g.name_ar):(g.name_ar||g.name_en)}));
  const itemCards=list=>'<div class="stocktake-item-grid">'+list.map((x,i)=>'<article class="stocktake-item-card"><div class="stocktake-item-top"><span class="stocktake-item-number">'+(i+1)+'</span><strong class="stocktake-item-name">'+esc(en?(x.name_en||x.name_ar):(x.name_ar||x.name_en))+'</strong></div><div class="stocktake-item-details"><div><span>'+(en?"Item code":"كود الصنف")+'</span><b>'+esc(x.item_code||"—")+'</b></div><div><span>'+(en?"Unit":"الوحدة")+'</span><b>'+esc(en?(x.unit_en||x.unit_ar):(x.unit_ar||x.unit_en)||"—")+'</b></div><div class="stocktake-item-quantity"><span>'+(en?"Counted quantity":"الكمية الفعلية")+'</span><b>'+fmtQty(x.quantity)+'</b></div></div></article>').join("")+'</div>';
