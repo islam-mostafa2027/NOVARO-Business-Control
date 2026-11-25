@@ -5832,35 +5832,7 @@ function printStocktakeReport(targetWindow,reportData){
  const w=targetWindow||window.open("","_blank");if(!w)return alert(en?"Allow pop-ups to open the printable report.":"اسمح بفتح النوافذ المنبثقة لعرض التقرير القابل للطباعة.");
  const report=stocktakeReportTable(data);
  const html='<!doctype html><html lang="'+(en?"en":"ar")+'" dir="'+(en?"ltr":"rtl")+'"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style> *{box-sizing:border-box} html,body{margin:0;padding:0;font-family:Arial,Tahoma,sans-serif;color:#263b4a;background:#fff;font-size:11px} .single-stocktake-report{width:100%;max-width:none;margin:0 auto;display:grid;gap:8px} .print-report-head{padding:10px!important;text-align:center;border:1px solid #dcebf1!important;border-radius:12px!important;background:#f7fbfd!important;margin:0!important;break-inside:avoid} .print-report-brand{font-size:15px;font-weight:850;letter-spacing:1px;color:#315b70;line-height:1.2} .print-report-head h2{font-size:15px;font-weight:700;margin:3px 0 7px;color:#263b4a;line-height:1.3} .report-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center} .report-meta span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:42px;padding:5px 4px;background:#edf5f8;border:1px solid #d7e7ee;border-radius:9px;font-size:9px;line-height:1.25;overflow-wrap:anywhere} .report-meta span b{display:block;font-size:8px;line-height:1.25} .report-group{padding:9px!important;margin:0!important;border:1px solid #dcebf1!important;border-radius:12px!important;background:#fff!important;break-inside:auto} .stocktake-group-heading{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px;padding-bottom:6px;border-bottom:1px solid #e4eef2} .stocktake-group-heading h3{margin:0;font-size:13px;color:#315b70} .stocktake-group-count{min-width:23px;height:23px;display:grid;place-items:center;padding:0 7px;border-radius:8px;background:#e4f2f7;color:#315b70;font-weight:800;font-size:10px} .stocktake-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px} .stocktake-item-card{min-width:0;padding:7px;border:1px solid #dce8ed;border-radius:10px;background:#fdfefe;break-inside:avoid;page-break-inside:avoid} .stocktake-item-top{display:flex;align-items:flex-start;gap:6px;margin-bottom:6px} .stocktake-item-number{flex:0 0 21px;height:21px;display:grid;place-items:center;border-radius:7px;background:#e5f2f7;color:#315b70;font-size:10px;font-weight:800} .stocktake-item-name{font-size:11px;line-height:1.35;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px} .stocktake-item-details>div{min-width:0;padding:5px;border-radius:7px;background:#eff5f7} .stocktake-item-details span{display:block;font-size:8px;color:#6a808c;margin-bottom:2px} .stocktake-item-details b{display:block;font-size:9px;color:#263b4a;overflow-wrap:anywhere} .stocktake-item-details .stocktake-item-quantity{grid-column:1/-1;background:#e5f2f7} .stocktake-item-quantity b{font-size:12px;color:#315b70} .app-watermark{margin-top:8px;text-align:center;color:#718894;font-size:9px} .app-watermark strong{color:#315b70} .print-actions{max-width:100%;margin:0 auto 8px;text-align:start} .print-actions button{border:0;border-radius:8px;padding:8px 14px;background:#315b70;color:#fff;font-weight:700;cursor:pointer} @page{size:auto;margin:8mm} @media print{html,body{width:100%;height:auto;margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-actions{display:none!important}.single-stocktake-report{width:100%;max-width:none;margin:0;gap:6px}.report-group{break-inside:auto}.stocktake-item-card{break-inside:avoid;page-break-inside:avoid}.print-report-head,.stocktake-group-heading{break-after:avoid;page-break-after:avoid}} @media screen{body{max-width:1400px;margin:16px auto;padding:14px;background:#f1f8fb}.single-stocktake-report{max-width:none}} </style></head><body><div class="print-actions"><button type="button" onclick="window.print()">'+(en?"Print / Save PDF":"طباعة / حفظ PDF")+'</button></div>'+report+'
-<style id="novaro-communication-horizontal-lines-full-width-v1">
-/* Extend every horizontal separator in the communication sheet to both card edges. */
-#app .novaro-communication-sheet .novaro-duty-cards,
-#app .novaro-communication-sheet .novaro-allocation-cards{
-  box-sizing:border-box!important;
-  width:100%!important;
-  max-width:none!important;
-  margin-inline:0!important;
-}
-#app .novaro-communication-sheet .novaro-allocation-card-heading{
-  box-sizing:border-box!important;
-  width:100%!important;
-}
-#app .novaro-communication-sheet .novaro-allocation-labels,
-#app .novaro-communication-sheet .novaro-allocation-rows{
-  padding-inline:0!important;
-}
-#app .novaro-communication-sheet .novaro-allocation-row{
-  box-sizing:border-box!important;
-  width:100%!important;
-  padding-inline:0!important;
-}
-#app .novaro-communication-sheet .novaro-allocation-labels{
-  border-bottom:1px solid var(--line)!important;
-}
-#app .novaro-communication-sheet .novaro-allocation-row{
-  border-bottom:1px solid color-mix(in srgb,var(--line) 78%,transparent)!important;
-}
-</style>
+
 
 </body></html>';
 
@@ -10485,5 +10457,34 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   #app .novaro-communication-sheet .novaro-allocation-card::after{
     top:44px;
   }
+}
+</style>
+<style id="novaro-communication-horizontal-lines-full-width-v1">
+/* Extend every horizontal separator in the communication sheet to both card edges. */
+#app .novaro-communication-sheet .novaro-duty-cards,
+#app .novaro-communication-sheet .novaro-allocation-cards{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:none!important;
+  margin-inline:0!important;
+}
+#app .novaro-communication-sheet .novaro-allocation-card-heading{
+  box-sizing:border-box!important;
+  width:100%!important;
+}
+#app .novaro-communication-sheet .novaro-allocation-labels,
+#app .novaro-communication-sheet .novaro-allocation-rows{
+  padding-inline:0!important;
+}
+#app .novaro-communication-sheet .novaro-allocation-row{
+  box-sizing:border-box!important;
+  width:100%!important;
+  padding-inline:0!important;
+}
+#app .novaro-communication-sheet .novaro-allocation-labels{
+  border-bottom:1px solid var(--line)!important;
+}
+#app .novaro-communication-sheet .novaro-allocation-row{
+  border-bottom:1px solid color-mix(in srgb,var(--line) 78%,transparent)!important;
 }
 </style>
