@@ -4444,14 +4444,14 @@ function communicationBeginPageRename(tab){
 }
 let communicationPageHoldTimer=null,communicationPageHoldTab=null,communicationPageHoldTriggered=false;
 document.addEventListener("pointerdown",event=>{
- const tab=event.target.closest?.("#communicationBookPageTabs [data-communication-page-index]");
+ const tab=event.target.closest?.("nav.novaro-page-strip [data-communication-page-index]");
  if(!tab||event.pointerType==="mouse")return;
  communicationPageHoldTab=tab;communicationPageHoldTriggered=false;
  communicationPageHoldTimer=setTimeout(()=>{communicationPageHoldTriggered=true;communicationBeginPageRename(tab);},550);
 });
 ["pointerup","pointercancel","pointermove"].forEach(type=>document.addEventListener(type,()=>{if(communicationPageHoldTimer){clearTimeout(communicationPageHoldTimer);communicationPageHoldTimer=null;}}));
 document.addEventListener("dblclick",event=>{
- const tab=event.target.closest?.("#communicationBookPageTabs [data-communication-page-index]");
+ const tab=event.target.closest?.("nav.novaro-page-strip [data-communication-page-index]");
  if(!tab)return;event.preventDefault();communicationBeginPageRename(tab);
 });
 
@@ -5372,7 +5372,7 @@ document.addEventListener("click",async e=>{
  if(addCommunicationPage){const now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");branchCommunicationPages.push({id:Date.now(),date:today});branchCommunicationActivePage=branchCommunicationPages.length-1;render();return;}
  const communicationPageTab=e.target.closest("[data-communication-page-index]");
  if(communicationPageTab){
-  if(communicationPageTab.classList.contains("is-editing")||e.target.closest(".novaro-communication-page-name-input"))return;
+  if(communicationPageHoldTriggered){communicationPageHoldTriggered=false;return;}\n  if(communicationPageTab.classList.contains("is-editing")||e.target.closest(".novaro-communication-page-name-input"))return;
   branchCommunicationActivePage=Number(communicationPageTab.dataset.communicationPageIndex)||0;render();return;
  }
  const communicationSheetField=e.target.closest("[data-communication-sheet-field]");
