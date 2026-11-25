@@ -4590,36 +4590,58 @@ function syncStatisticsAverages(row){
  if(totalTickets)totalTickets.value=String(rowTickets);
  if(totalSales)totalSales.value=formatStatisticsNumber(Number(rowSales.toFixed(2)));
  if(ach){const targetText=target?String(target.value).trim():"",targetValue=statisticsNumber(targetText);ach.value=(targetText!==""&&Number.isFinite(targetValue)&&targetValue>0)?String(Number((rowSales/targetValue*100).toFixed(2))):"";}
- syncStatisticsMonthlyTotals();
+ syncStatisticsMonthlyTotals(row);
 }
-function syncStatisticsMonthlyTotals(){
- const table=document.querySelector(".sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table");if(!table)return;
- const rows=table.querySelectorAll("tbody tr"),groups=["dinein","takeaway","delivery","catering"],totalsByGroup={};
- groups.forEach(group=>totalsByGroup[group]={tickets:0,sales:0});
- let totalTickets=0,totalSales=0,targetTotal=0;
- rows.forEach(row=>{
-  groups.forEach(group=>{
-   const ticketValue=statisticsNumber(row.querySelector("[data-stat-tickets='"+group+"']")?.value);
-   const salesValue=statisticsNumber(row.querySelector("[data-stat-sales='"+group+"']")?.value);
-   if(Number.isFinite(ticketValue))totalsByGroup[group].tickets+=ticketValue;
-   if(Number.isFinite(salesValue))totalsByGroup[group].sales+=salesValue;
-  });
-  const rowTickets=statisticsNumber(row.querySelector("[data-stat-total-tickets]")?.value);
-  const rowSales=statisticsNumber(row.querySelector("[data-stat-total-sales]")?.value);
-  const rowTarget=statisticsNumber(row.querySelector("[data-stat-target]")?.value);
-  if(Number.isFinite(rowTickets))totalTickets+=rowTickets;
-  if(Number.isFinite(rowSales))totalSales+=rowSales;
-  if(Number.isFinite(rowTarget))targetTotal+=rowTarget;
- });
+const statisticsTotalsCacheByTable=new WeakMap();
+function statisticsRowTotals(row,groups){
+ const groupValues={};let rowTickets=0,rowSales=0;
  groups.forEach(group=>{
-  const values={[group+"-tickets"]:totalsByGroup[group].tickets,[group+"-sales"]:totalsByGroup[group].sales,[group+"-average"]:totalsByGroup[group].tickets>0?totalsByGroup[group].sales/totalsByGroup[group].tickets:null};
+  const ticketField=row.querySelector("[data-stat-tickets='"+group+"']"),salesField=row.querySelector("[data-stat-sales='"+group+"']");
+  const ticketText=String(ticketField?.value??"").trim(),salesText=String(salesField?.value??"").trim();
+  const ticketValue=statisticsNumber(ticketText),salesValue=statisticsNumber(salesText);
+  groupValues[group]={tickets:Number.isFinite(ticketValue)?ticketValue:0,sales:Number.isFinite(salesValue)?salesValue:0};
+  if(ticketText!==""&&Number.isFinite(ticketValue)&&ticketValue>0)rowTickets+=ticketValue;
+  if(salesText!==""&&Number.isFinite(salesValue))rowSales+=salesValue;
+ });
+ const targetValue=statisticsNumber(row.querySelector("[data-stat-target]")?.value);
+ return {groups:groupValues,totalTickets:rowTickets,totalSales:Number(rowSales.toFixed(2)),target:Number.isFinite(targetValue)?targetValue:0};
+}
+function updateStatisticsTotalsCache(cache,metrics,multiplier){
+ cache.totalTickets+=metrics.totalTickets*multiplier;
+ cache.totalSales+=metrics.totalSales*multiplier;
+ cache.target+=metrics.target*multiplier;
+ Object.keys(metrics.groups).forEach(group=>{
+  cache.groups[group].tickets+=metrics.groups[group].tickets*multiplier;
+  cache.groups[group].sales+=metrics.groups[group].sales*multiplier;
+ });
+}
+function syncStatisticsMonthlyTotals(changedRow){
+ const table=document.querySelector(".sales-report-page .sales-statistics-card:not(.daily-tip-card) .sales-statistics-table");if(!table)return;
+ const groups=["dinein","takeaway","delivery","catering"];
+ let cache=statisticsTotalsCacheByTable.get(table);
+ if(!cache||!changedRow){
+  cache={rows:new Map(),groups:{},totalTickets:0,totalSales:0,target:0};
+  groups.forEach(group=>cache.groups[group]={tickets:0,sales:0});
+  table.querySelectorAll("tbody tr").forEach(row=>{
+   const metrics=statisticsRowTotals(row,groups);cache.rows.set(row,metrics);updateStatisticsTotalsCache(cache,metrics,1);
+  });
+  statisticsTotalsCacheByTable.set(table,cache);
+ }else if(cache.rows.has(changedRow)){
+  updateStatisticsTotalsCache(cache,cache.rows.get(changedRow),-1);
+  const metrics=statisticsRowTotals(changedRow,groups);cache.rows.set(changedRow,metrics);updateStatisticsTotalsCache(cache,metrics,1);
+ }else{
+  const metrics=statisticsRowTotals(changedRow,groups);cache.rows.set(changedRow,metrics);updateStatisticsTotalsCache(cache,metrics,1);
+ }
+ groups.forEach(group=>{
+  const tickets=cache.groups[group].tickets,sales=cache.groups[group].sales;
+  const values={[group+"-tickets"]:tickets,[group+"-sales"]:sales,[group+"-average"]:tickets>0?sales/tickets:null};
   Object.entries(values).forEach(([key,value])=>{const cell=table.querySelector("[data-stat-total='"+key+"']");if(cell)cell.textContent=value===null?"—":formatStatisticsNumber(Number(value.toFixed(2)));});
  });
- const totals={"total-tickets":totalTickets,"total-sales":totalSales,target:targetTotal,ach:targetTotal>0?totalSales/targetTotal*100:null};
+ const totals={"total-tickets":cache.totalTickets,"total-sales":cache.totalSales,target:cache.target,ach:cache.target>0?cache.totalSales/cache.target*100:null};
  Object.entries(totals).forEach(([key,value])=>{const cell=table.querySelector("[data-stat-total='"+key+"']");if(cell)cell.textContent=value===null?"—":formatStatisticsNumber(Number(value.toFixed(2)));});
  const page=document.querySelector(".sales-report-page"),monthToDateField=page?.querySelector("[data-sales-metric='month_to_date_sales']"),totalSalesCell=table.querySelector("[data-stat-total='total-sales']");
  if(monthToDateField){monthToDateField.value=totalSalesCell?.textContent?.trim()||"";syncMonthlyAnalysis();}
- const yesterdaySalesField=page?.querySelector("[data-sales-metric='yesterday_sales']"),selectedDay=Number(page?.querySelector("#salesReportDay")?.value||0),previousDayRow=selectedDay>1?rows[selectedDay-2]:null,previousDaySales=previousDayRow?.querySelector("[data-stat-total-sales]");
+ const yesterdaySalesField=page?.querySelector("[data-sales-metric='yesterday_sales']"),selectedDay=Number(page?.querySelector("#salesReportDay")?.value||0),rows=table.querySelectorAll("tbody tr"),previousDayRow=selectedDay>1?rows[selectedDay-2]:null,previousDaySales=previousDayRow?.querySelector("[data-stat-total-sales]");
  if(yesterdaySalesField)yesterdaySalesField.value=selectedDay>1&&previousDaySales?String(previousDaySales.value||"").trim():"";
 }
 window.syncStatisticsAverages=syncStatisticsAverages;
