@@ -11156,3 +11156,19 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   color:var(--ink)!important;
 }
 </style>
+
+<style id="novaro-communication-foh-boh-logical-alignment-v1">
+/* Keep FOH/BOH at the logical start of their label cell: left in English, right in Arabic. */
+#app .novaro-communication-page .novaro-communication-duty-table th.novaro-communication-duty-label{
+  direction:inherit!important;
+  text-align:start!important;
+  padding-inline-start:6px!important;
+  padding-inline-end:4px!important;
+}
+#app .novaro-communication-page .novaro-communication-duty-table th.novaro-communication-duty-label bdi{
+  direction:inherit!important;
+  unicode-bidi:isolate!important;
+  display:inline-block!important;
+  text-align:start!important;
+}
+</style>
