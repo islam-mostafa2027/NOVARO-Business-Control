@@ -4573,7 +4573,7 @@ function bindMoneyFieldFormatting(){
  document.addEventListener("focusout",e=>{const field=e.target.closest&&e.target.closest(selector);if(field){formatMoneyField(field);if(field.matches("[data-sales-metric]"))syncMonthlyAnalysis();}},true);
 }
 bindMoneyFieldFormatting();
-function syncStatisticsAverages(row){
+function syncStatisticsAverages(row,skipMonthlyTotals){
  if(!row)return;
  let rowTickets=0,rowSales=0;
  ["dinein","takeaway","delivery","catering"].forEach(group=>{
@@ -4590,7 +4590,7 @@ function syncStatisticsAverages(row){
  if(totalTickets)totalTickets.value=String(rowTickets);
  if(totalSales)totalSales.value=formatStatisticsNumber(Number(rowSales.toFixed(2)));
  if(ach){const targetText=target?String(target.value).trim():"",targetValue=statisticsNumber(targetText);ach.value=(targetText!==""&&Number.isFinite(targetValue)&&targetValue>0)?String(Number((rowSales/targetValue*100).toFixed(2))):"";}
- syncStatisticsMonthlyTotals(row);
+ if(!skipMonthlyTotals)syncStatisticsMonthlyTotals(row);
 }
 const statisticsTotalsCacheByTable=new WeakMap();
 function statisticsRowTotals(row,groups){
@@ -5220,9 +5220,9 @@ document.addEventListener("click",async e=>{
   if(!branch||!monthPattern.test(month||"")){if(status)status.textContent=language==="en"?"Choose a valid month first.":"اختار شهر صحيح الأول.";return;}
   const loadButton=e.target.closest("#loadSalesMonth");loadButton.disabled=true;if(status)status.textContent=language==="en"?"Loading...":"جارٍ التحميل...";
   try{
-   await statisticsSheetsLoad(branch.id,salesStatisticsSelectedMonth||month);
    const statisticsMonth=salesStatisticsSelectedMonth||month;
-   const [reportResult,targetResult,statisticsResult]=await Promise.all([
+   const [sheetsResult,reportResult,targetResult,statisticsResult]=await Promise.all([
+    statisticsSheetsLoad(branch.id,statisticsMonth),
     db.from("sales_report_months").select("daily_sales_target,month_to_date_sales,yesterday_sales,yesterday_tip,month_to_date_tip").eq("branch_id",branch.id).eq("report_month",month).maybeSingle(),
     db.from("sales_report_targets").select("sales_target").eq("branch_id",branch.id).eq("report_month",month).maybeSingle(),
     db.from("sales_report_statistics_entries").select("report_day,dinein_tickets,dinein_sales,takeaway_tickets,takeaway_sales,delivery_tickets,delivery_sales,catering_tickets,catering_sales,daily_target").eq("branch_id",branch.id).eq("report_month",statisticsMonth)
@@ -5232,7 +5232,7 @@ document.addEventListener("click",async e=>{
    salesMonthCard.querySelectorAll("[data-sales-metric]").forEach(input=>{const value=values[input.dataset.salesMetric];input.value=value===null||value===undefined?"":String(value);formatMoneyField(input);});
    const monthlyTargetMirror=salesMonthCard.querySelector("#monthlyAnalysisField1"),salesTargetSource=salesMonthCard.querySelector('[data-sales-metric="sales_target"]'),monthlySalesMirror=salesMonthCard.querySelector("#monthlyAnalysisField2"),monthToDateSalesSource=salesMonthCard.querySelector('[data-sales-metric="month_to_date_sales"]');if(monthlyTargetMirror)monthlyTargetMirror.value=salesTargetSource?.value||"";if(monthlySalesMirror)monthlySalesMirror.value=monthToDateSalesSource?.value||"";
    const statisticsTable=document.querySelector(".sales-report-page .sales-statistics-table"),statisticsFields={dinein_tickets:"[data-stat-tickets='dinein']",dinein_sales:"[data-stat-sales='dinein']",takeaway_tickets:"[data-stat-tickets='takeaway']",takeaway_sales:"[data-stat-sales='takeaway']",delivery_tickets:"[data-stat-tickets='delivery']",delivery_sales:"[data-stat-sales='delivery']",catering_tickets:"[data-stat-tickets='catering']",catering_sales:"[data-stat-sales='catering']",daily_target:"[data-stat-target]"};
-   if(statisticsTable){const savedRows=new Map((statisticsResult.data||[]).map(item=>[Number(item.report_day),item]));statisticsTable.querySelectorAll("tbody tr").forEach((row,index)=>{const saved=savedRows.get(index+1)||{};Object.entries(statisticsFields).forEach(([key,selector])=>{const field=row.querySelector(selector);if(field)field.value=saved[key]===null||saved[key]===undefined?"":formatStatisticsNumber(Number(saved[key]));});syncStatisticsAverages(row);});syncSelectedStatisticsDailyTarget();}
+   if(statisticsTable){const savedRows=new Map((statisticsResult.data||[]).map(item=>[Number(item.report_day),item]));statisticsTable.querySelectorAll("tbody tr").forEach((row,index)=>{const saved=savedRows.get(index+1)||{};Object.entries(statisticsFields).forEach(([key,selector])=>{const field=row.querySelector(selector);if(field)field.value=saved[key]===null||saved[key]===undefined?"":formatStatisticsNumber(Number(saved[key]));});syncStatisticsAverages(row,true);});syncStatisticsMonthlyTotals();syncSelectedStatisticsDailyTarget();}
    salesMonthCard.dataset.loadedMonth=month;
    /* Statistics month loading is independent from Daily Tip sheets. */
    if(status)status.textContent=language==="en"?"Month loaded.":"تم تحميل بيانات الشهر.";
