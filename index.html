@@ -10199,6 +10199,36 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 
 
 
+
+<style id="novaro-communication-borderless-entry-fields-v1">
+/* Communication Book: keep the table grid, but remove the extra boxes around entry fields. */
+#app .novaro-communication-sheet .novaro-duty-field-input,
+#app .novaro-communication-sheet .novaro-allocation-input{
+  border:0!important;
+  border-color:transparent!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  outline:0!important;
+}
+#app .novaro-communication-sheet .novaro-duty-field-input:focus,
+#app .novaro-communication-sheet .novaro-duty-field-input:focus-visible,
+#app .novaro-communication-sheet .novaro-allocation-input:focus,
+#app .novaro-communication-sheet .novaro-allocation-input:focus-visible{
+  border:0!important;
+  border-color:transparent!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  outline:0!important;
+}
+/* Preserve the horizontal row rules and the existing vertical column dividers. */
+#app .novaro-communication-sheet .novaro-duty-field{
+  border-bottom:1px solid var(--line)!important;
+}
+#app .novaro-communication-sheet .novaro-allocation-row{
+  border-bottom:1px solid var(--line)!important;
+}
+</style>
 </body>
 
 
