@@ -3224,7 +3224,9 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
 #app .sales-report-page .novaro-page-chip{max-width:180px}
 #app .sales-report-page .novaro-page-chip-date{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #app .sales-report-page .novaro-page-chip-remove{touch-action:manipulation}
-</style></head><body><script>
+</style>
+
+</head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
  "use strict";
@@ -4574,7 +4576,7 @@ function dailyTipRender(){
  const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey)||dailyTipSheetCache[0];
  if(!active){tbody.innerHTML='<tr><td colspan="4">—</td></tr>';tabs.replaceChildren();editor.replaceChildren();const monthTipField=monthCard.querySelector('[data-sales-metric="month_to_date_tip"]');if(monthTipField){monthTipField.value="";syncMonthlyAnalysis();}return;}
  dailyTipActiveSheetKey=active.sheet_key;
- tabs.classList.add("novaro-page-strip");
+ tabs.className="novaro-page-strip";
  tabs.innerHTML='<div class="novaro-page-strip-list">'+dailyTipSheetCache.map(x=>'<span class="novaro-page-chip-wrap"><button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="novaro-page-chip'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+dailyTipEscape(x.sheet_name)+'</span></button><span class="novaro-page-chip-remove" data-delete-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span></span>').join("")+'</div>'+'<button type="button" class="novaro-page-strip-add" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>';
  const rows=Array.isArray(active.rows)?active.rows:[];
  const byDay=new Map(rows.map(x=>[Number(x.day),x]));
@@ -4737,7 +4739,7 @@ async function statisticsRenameSheet(oldMonth){
 function statisticsSheetsRender(){
  const tabs=document.querySelector("#salesStatisticsSheetTabs");if(!tabs)return;
  statisticsSortSheets();
- tabs.classList.add("novaro-page-strip");
+ tabs.className="novaro-page-strip";
  tabs.innerHTML='<div class="novaro-page-strip-list">'+statisticsSheetCache.map(sheet=>{
   const active=sheet.report_month===(salesStatisticsSelectedMonth||salesReportSelectedMonth);
   const monthName=dailyTipEscape(statisticsMonthLabel(sheet.report_month));
@@ -7759,9 +7761,6 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .sales-report-page .daily-tip-table td:first-child{font-size:10px;font-weight:700;white-space:nowrap;direction:ltr}
 #app .sales-report-page .daily-tip-input{width:100%!important;min-width:0!important;box-sizing:border-box!important;text-align:center!important;font-size:10px!important;padding:5px 2px!important}
 #app .sales-report-page .daily-tip-percent{font-size:10px;font-weight:800;direction:ltr}
-#app .sales-report-page .daily-tip-sheet-tabs{display:flex;align-items:center;gap:5px;overflow-x:auto;padding:9px 2px 5px;direction:ltr}
-#app .sales-report-page .daily-tip-sheet-tab{flex:0 0 auto;max-width:180px;padding:7px 12px;border:1px solid var(--line);border-radius:8px 8px 0 0;background:var(--surface,#f8fbf9);color:var(--text,var(--ink));font-size:10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#app .sales-report-page .daily-tip-sheet-tab.is-active{background:var(--card,#fff);border-bottom:2px solid #32866a;color:var(--text,var(--ink))}
 #app .sales-report-page .daily-tip-sheet-editor{display:flex;align-items:end;gap:7px;flex-wrap:wrap;padding:8px 2px;border-top:1px solid var(--line)}
 #app .sales-report-page .daily-tip-duration-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2,var(--surface));color:var(--text);font-size:11px;font-weight:700;text-align:start}
 #app .sales-report-page .daily-tip-duration-toggle strong{font-size:10px;font-weight:800;direction:ltr;white-space:nowrap}
@@ -7770,20 +7769,10 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 #app .sales-report-page .daily-tip-sheet-editor button{min-height:30px;padding:5px 10px;font-size:10px}
 #app .sales-report-page .daily-tip-status{min-height:16px;margin-top:4px;text-align:center;font-size:10px;color:var(--muted)}
 :root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-table th{background:#293b33!important;color:#e5eee9!important}
-:root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-sheet-tab.is-active{background:#202f28}
-@media(max-width:600px){#app .sales-report-page .daily-tip-card{padding:7px!important}#app .sales-report-page .daily-tip-table{min-width:390px!important}#app .sales-report-page .daily-tip-toolbar{gap:5px}}
+:root[data-novaro-mode="dark"] @media(max-width:600px){#app .sales-report-page .daily-tip-card{padding:7px!important}#app .sales-report-page .daily-tip-table{min-width:390px!important}#app .sales-report-page .daily-tip-toolbar{gap:5px}}
 </style>
 
-<style id="novaro-statistics-month-sheets-v1">
-#app .sales-report-page .statistics-sheet-tabs{display:flex;align-items:center;gap:5px;overflow-x:auto;padding:9px 2px 5px;direction:ltr;border-top:1px solid var(--line);margin-top:8px}
-#app .sales-report-page .statistics-sheet-pill{display:inline-flex;align-items:center;flex:0 0 auto;gap:2px}
-#app .sales-report-page .statistics-sheet-tab{flex:0 0 auto;max-width:180px;min-height:32px;padding:7px 12px;border:1px solid var(--line);border-radius:8px 8px 0 0;background:var(--surface,#f8fbf9);color:var(--text,var(--ink));font-size:11px;font-weight:700;white-space:nowrap}
-#app .sales-report-page .statistics-sheet-tab.is-active{background:var(--card,#fff);border-bottom:2px solid #32866a;color:var(--text,var(--ink))}
-#app .sales-report-page .statistics-sheet-delete{width:21px;height:24px;flex:none;border:0;border-radius:6px;background:transparent;color:var(--muted);font-size:15px;line-height:1}
-#app .sales-report-page .statistics-sheet-delete:hover{background:rgba(190,65,65,.1);color:#bd4545}
-#app .sales-report-page .statistics-sheet-add-inline{width:32px;height:32px;flex:none;border:1px dashed var(--line);border-radius:8px;background:var(--surface,#f8fbf9);color:var(--text,var(--ink));font-size:17px;font-weight:700}
-:root[data-novaro-mode="dark"] #app .sales-report-page .statistics-sheet-tab.is-active{background:#202f28}
-</style>
+
 
 <style id="novaro-theme-regression-fix-v1">
 /* Final mode-specific rules for the actual logout control and launch screen. */
@@ -7816,21 +7805,11 @@ body[dir="ltr"] .about-page-heading{direction:ltr}body[dir="rtl"] .about-page-he
 </body></html>
 <style id="novaro-daily-tip-sheet-delete-total-v2">
 /* Sheet capsules: neutral/transparent at rest, green only while hovered. */
-#app .sales-report-page #dailyTipSheetTabs{display:flex!important;align-items:center!important;gap:7px!important}
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-pill{display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;gap:3px!important;padding:2px 5px 2px 9px!important;border:1px solid var(--line)!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important}
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-tab,
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-tab.is-active{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:34px!important;max-width:180px!important;padding:5px 7px!important;border:0!important;border-radius:999px!important;background:transparent!important;background-color:transparent!important;color:var(--text,var(--ink))!important;box-shadow:none!important;font-size:12px!important;font-weight:700!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-pill:hover{background:#23845f!important;border-color:#23845f!important;box-shadow:0 4px 13px #23845f22!important}
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-pill:hover .daily-tip-sheet-tab{background:transparent!important;color:#fff!important}
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-tab:focus-visible{outline:2px solid #23845f!important;outline-offset:2px!important}
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-delete{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 19px!important;width:19px!important;height:19px!important;min-height:19px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;color:var(--muted,var(--ink))!important;font-size:16px!important;font-weight:700!important;line-height:1!important;cursor:pointer!important}
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-delete:hover{background:#b83d3d!important;color:#fff!important}
-#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-add-inline{flex:0 0 32px!important}
 #app .sales-report-page .daily-tip-table thead th{background:#293b33!important;color:#f2f6f3!important;border-color:#40564b!important;font-weight:800!important}
 #app .sales-report-page .daily-tip-table tfoot td{height:34px!important;padding:6px 4px!important;background:#e8edf7!important;border:1px solid #9eacc4!important;color:#263b5b!important;font-weight:900!important;text-align:center!important;white-space:nowrap!important}
 :root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-table thead th{background:#293b33!important;color:#e5eee9!important;border-color:#40564b!important}
 :root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-table tfoot td{background:#34445b!important;border-color:#526783!important;color:#edf2fa!important}
-@media(max-width:600px){#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-tab{min-height:32px!important;padding:4px 5px!important;font-size:11px!important}#app .sales-report-page #dailyTipSheetTabs .daily-tip-sheet-pill{gap:1px!important;padding-inline:4px!important}}
+@media(max-width:600px){}
 </style>
 
 
@@ -9629,63 +9608,11 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 }
 </style>
 
-<style id="novaro-statistics-sheet-tabs-daily-tip-match-v2">
-/* Keep month tabs and the add control visually matched; selected sheet is subtly highlighted, never green. */
-#app .sales-report-page .statistics-sheet-tabs{display:flex!important;align-items:flex-end!important;gap:5px!important;overflow-x:auto!important;overscroll-behavior-x:contain!important;padding:0 2px!important;margin:0!important;border:0!important;direction:ltr!important;scrollbar-width:none!important}
-#app .sales-report-page .statistics-sheet-tabs::-webkit-scrollbar{display:none!important}
-#app .sales-report-page .statistics-sheet-pill{position:relative!important;display:inline-flex!important;align-items:stretch!important;flex:0 0 auto!important;gap:0!important;margin:0!important;padding:0!important}
-#app#app .sales-report-page .statistics-sheet-tab{position:relative!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;min-height:27px!important;height:27px!important;max-width:180px!important;padding:3px 23px 3px 9px!important;border:1px solid #c8e5d7!important;border-radius:7px 7px 0 0!important;background:#dff1e9!important;color:#20372f!important;-webkit-text-fill-color:#20372f!important;font-size:10px!important;font-weight:800!important;line-height:1.15!important;white-space:nowrap!important;box-shadow:none!important}
-#app#app .sales-report-page .statistics-sheet-tab.is-active,
-#app#app .sales-report-page .statistics-sheet-tab.is-active:active{background:#f0faf4!important;background-color:#f0faf4!important;border-color:#9bcbb1!important;color:#20372f!important;-webkit-text-fill-color:#20372f!important;box-shadow:inset 0 1px 0 #fff,0 1px 4px #397b581c!important}
-#app .sales-report-page .statistics-sheet-name{display:inline-block!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-#app .sales-report-page .statistics-sheet-delete{position:absolute!important;z-index:2!important;right:3px!important;top:50%!important;transform:translateY(-50%)!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:16px!important;height:16px!important;min-height:16px!important;margin:0!important;padding:0!important;border:0!important;border-radius:4px!important;background:transparent!important;color:#557568!important;-webkit-text-fill-color:#557568!important;font-size:12px!important;font-weight:800!important;line-height:1!important}
-#app .sales-report-page .statistics-sheet-pill:has(.statistics-sheet-tab.is-active) .statistics-sheet-delete{color:#557568!important;-webkit-text-fill-color:#557568!important}
-#app .sales-report-page .statistics-sheet-delete:hover{background:#bd45451c!important;color:#bd4545!important;-webkit-text-fill-color:#bd4545!important}
-#app#app .sales-report-page .statistics-sheet-add-inline{appearance:none!important;-webkit-appearance:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 27px!important;box-sizing:border-box!important;width:27px!important;min-width:27px!important;max-width:27px!important;height:27px!important;min-height:27px!important;max-height:27px!important;margin:0!important;padding:3px 0!important;border:1px solid #c8e5d7!important;border-radius:7px 7px 0 0!important;background:#dff1e9!important;color:#20372f!important;-webkit-text-fill-color:#20372f!important;font-family:inherit!important;font-size:13px!important;font-weight:800!important;line-height:1!important;box-shadow:none!important}
-#app#app .sales-report-page .statistics-sheet-add-inline:hover{background:#dff1e9!important;color:#20372f!important;-webkit-text-fill-color:#20372f!important;border-color:#c8e5d7!important}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .statistics-sheet-tab,:root[data-novaro-mode="dark"] #app#app .sales-report-page .statistics-sheet-add-inline{background:#dff1e9!important;color:#20372f!important;-webkit-text-fill-color:#20372f!important}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .statistics-sheet-tab.is-active{background:#f0faf4!important;background-color:#f0faf4!important;color:#20372f!important;-webkit-text-fill-color:#20372f!important;border-color:#9bcbb1!important}
-@media(max-width:600px){#app#app .sales-report-page .statistics-sheet-tab{min-height:26px!important;height:26px!important;padding:3px 21px 3px 7px!important;font-size:10px!important}#app#app .sales-report-page .statistics-sheet-delete{width:15px!important;height:15px!important;min-height:15px!important;font-size:11px!important}#app#app .sales-report-page .statistics-sheet-add-inline{flex-basis:26px!important;width:26px!important;min-width:26px!important;max-width:26px!important;height:26px!important;min-height:26px!important;max-height:26px!important;font-size:12px!important}}
-</style>
 
 
 
-<style id="novaro-statistics-month-tabs-pill-match-v3">
-/* Match the November/December tabs and add-sheet control to the four report action pills. */
-#app#app .sales-report-page .statistics-sheet-tabs{
-  display:flex!important;
-  align-items:center!important;
-  gap:8px!important;
-  padding:8px 8px 10px!important;
-  margin:8px 0 0!important;
-  box-sizing:border-box!important;
-}
-#app#app .sales-report-page .statistics-sheet-tab{
-  min-height:34px!important;
-  height:34px!important;
-  padding:7px 28px 7px 14px!important;
-  border-radius:999px!important;
-  font-size:11px!important;
-  line-height:1.2!important;
-}
-#app#app .sales-report-page .statistics-sheet-tab.is-active{border-radius:999px!important}
-#app#app .sales-report-page .statistics-sheet-add-inline{
-  flex:0 0 34px!important;width:34px!important;min-width:34px!important;max-width:34px!important;
-  height:34px!important;min-height:34px!important;max-height:34px!important;
-  padding:7px!important;border-radius:999px!important;font-size:16px!important;
-}
-#app .sales-report-page .statistics-sheet-delete{
-  right:7px!important;width:17px!important;height:17px!important;border-radius:50%!important;
-}
-@media(max-width:600px){
-  #app#app .sales-report-page .statistics-sheet-tabs{gap:7px!important;padding:7px 7px 9px!important;margin-top:7px!important}
-  #app#app .sales-report-page .statistics-sheet-tab{min-height:34px!important;height:34px!important;padding:7px 26px 7px 12px!important;font-size:11px!important}
-  #app#app .sales-report-page .statistics-sheet-add-inline{
-    flex-basis:34px!important;width:34px!important;min-width:34px!important;max-width:34px!important;
-    height:34px!important;min-height:34px!important;max-height:34px!important;font-size:16px!important;
-  }
-}
-</style>
+
+
 
 <style id="novaro-statistics-fullwidth-save-v1">#app .sales-report-page .sales-statistics-save-fullwidth{display:block;width:100%;box-sizing:border-box;margin:10px 0 8px;padding:12px 16px;min-height:44px;border:0;border-radius:999px;background:var(--primary,#176b4d);color:#fff;font:inherit;font-weight:700;cursor:pointer}#app .sales-report-page .sales-statistics-save-fullwidth:disabled{opacity:.6;cursor:wait}@media print{#saveStatisticsSheet{display:none!important}}/* Keep zoom controls in the heading; show save feedback beneath the save button. */
 #app .sales-report-page .sales-statistics-save-status{display:block;width:100%;min-height:0;margin:6px 0 0;text-align:center;font-size:12px;line-height:1.5;color:var(--muted,#718078)}
@@ -9995,186 +9922,15 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .sales-report-page .sales-statistics-table .sales-stat-cell-input,#app .sales-report-page .daily-tip-table .daily-tip-input{box-sizing:border-box!important;min-height:25px!important;height:25px!important;max-height:25px!important;border-radius:6px!important}
 #app .sales-report-page .sales-statistics-table .sales-stat-cell-input:focus,#app .sales-report-page .sales-statistics-table .sales-stat-cell-input:focus-visible,#app .sales-report-page .daily-tip-table .daily-tip-input:focus,#app .sales-report-page .daily-tip-table .daily-tip-input:focus-visible{outline:none!important;box-shadow:none!important}
 #app .sales-report-page .sales-statistics-table tfoot td{border-radius:4px!important;font-weight:800!important}
-/* Statistics month sheets and Daily Tip sheets use the compact Communication Book strip. */
-#app .sales-report-page .statistics-sheet-tabs,#app .sales-report-page .daily-tip-sheet-tabs{box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:5px!important;min-height:0!important;width:100%!important;margin:8px 0 0!important;padding:4px 6px!important;overflow-x:auto!important;overscroll-behavior-x:contain!important;border:1px solid var(--line)!important;border-radius:9px!important;background:var(--surface-soft,var(--surface,#fff))!important;direction:ltr!important;scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important}
-#app .sales-report-page .statistics-sheet-tabs::-webkit-scrollbar,#app .sales-report-page .daily-tip-sheet-tabs::-webkit-scrollbar{display:none!important}
-#app .sales-report-page .statistics-sheet-pill,#app .sales-report-page .daily-tip-sheet-pill{display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;gap:3px!important;margin:0!important;padding:0!important}
-#app .sales-report-page .statistics-sheet-tab,#app .sales-report-page .daily-tip-sheet-tab{box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-width:0!important;min-height:28px!important;height:28px!important;max-width:180px!important;padding:0 22px 0 8px!important;border:1px solid var(--line)!important;border-radius:7px!important;background:var(--surface,#fff)!important;color:var(--ink)!important;font-size:10px!important;font-weight:800!important;line-height:1.15!important;white-space:nowrap!important;box-shadow:none!important}
-#app .sales-report-page .statistics-sheet-tab.is-active,#app .sales-report-page .daily-tip-sheet-tab.is-active{border-color:#9bcbb1!important;background:#eaf6ef!important;color:#20372f!important}
-#app .sales-report-page .statistics-sheet-delete,#app .sales-report-page .daily-tip-sheet-delete{box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 17px!important;width:17px!important;min-width:17px!important;height:17px!important;min-height:17px!important;margin:0!important;padding:0!important;border:0!important;border-radius:5px!important;background:transparent!important;color:var(--muted)!important;font-size:12px!important;font-weight:800!important;line-height:1!important}
-#app .sales-report-page .statistics-sheet-add-inline,#app .sales-report-page .daily-tip-sheet-add-inline{box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 28px!important;width:28px!important;min-width:28px!important;max-width:28px!important;height:28px!important;min-height:28px!important;padding:0!important;border:1px dashed var(--line)!important;border-radius:7px!important;background:var(--surface,#fff)!important;color:var(--ink)!important;font-size:17px!important;line-height:1!important}
-#app .sales-report-page .daily-tip-sheet-editor{gap:6px!important;padding:6px 2px 2px!important;border-top:1px solid var(--line)!important}
-#app .sales-report-page .daily-tip-sheet-editor .daily-tip-duration-toggle{min-height:28px!important;padding:4px 8px!important;border-radius:7px!important;font-size:10px!important}
-@media(max-width:600px){
-#app .sales-report-page .sales-statistics-card{padding:6px!important;border-radius:10px!important}
-#app .sales-report-page .sales-statistics-card > .sales-statistics-heading{min-height:32px!important;padding:5px 7px!important;margin-bottom:7px!important}
-#app .sales-report-page .sales-statistics-card > .sales-statistics-heading .sales-monthly-analysis-title{font-size:11px!important}
-#app .sales-report-page .statistics-sheet-tabs,#app .sales-report-page .daily-tip-sheet-tabs{gap:4px!important;padding:3px 5px!important;margin-top:7px!important}
-#app .sales-report-page .statistics-sheet-tab,#app .sales-report-page .daily-tip-sheet-tab{min-height:26px!important;height:26px!important;padding:0 20px 0 7px!important;font-size:9px!important}
-#app .sales-report-page .statistics-sheet-add-inline,#app .sales-report-page .daily-tip-sheet-add-inline{flex-basis:26px!important;width:26px!important;min-width:26px!important;height:26px!important;min-height:26px!important}
-}
-:root[data-novaro-mode="dark"] #app .sales-report-page .statistics-sheet-tab.is-active,:root[data-novaro-mode="dark"] #app .sales-report-page .daily-tip-sheet-tab.is-active{background:#294b3e!important;border-color:#426b58!important;color:#edf7f1!important}
 </style>
 
 
 <style id="novaro-statistics-daily-tip-communication-design-v2">
 /* Strong, scoped overrides: the existing #app#app rules were outranking v1. */
-/* Compact date/sheet switcher strips, matching the Communication Book strip. */
-#app#app .sales-report-page .statistics-sheet-tabs,
-#app#app .sales-report-page .daily-tip-sheet-tabs{
-  box-sizing:border-box!important;display:flex!important;align-items:center!important;gap:5px!important;
-  width:100%!important;min-height:0!important;margin:8px 0 0!important;padding:4px 6px!important;
-  overflow-x:auto!important;overscroll-behavior-x:contain!important;-webkit-overflow-scrolling:touch!important;
-  border:1px solid var(--line)!important;border-radius:9px!important;
-  background:var(--surface-soft,var(--surface,#fff))!important;direction:ltr!important;scrollbar-width:none!important;
-}
-#app#app .sales-report-page .statistics-sheet-tabs::-webkit-scrollbar,
-#app#app .sales-report-page .daily-tip-sheet-tabs::-webkit-scrollbar{display:none!important}
-#app#app .sales-report-page .statistics-sheet-pill,
-#app#app .sales-report-page .daily-tip-sheet-pill{
-  position:relative!important;display:inline-flex!important;align-items:center!important;gap:3px!important;
-  flex:0 0 auto!important;margin:0!important;padding:0!important;
-}
-#app#app .sales-report-page .statistics-sheet-tab,
-#app#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab{
-  box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
-  flex:0 0 auto!important;min-width:0!important;min-height:28px!important;height:28px!important;max-height:28px!important;
-  max-width:180px!important;padding:0 22px 0 8px!important;border:1px solid var(--line)!important;
-  border-radius:7px!important;background:var(--surface,#fff)!important;color:var(--ink,var(--text))!important;
-  -webkit-text-fill-color:var(--ink,var(--text))!important;font-size:10px!important;font-weight:800!important;
-  line-height:1.15!important;white-space:nowrap!important;box-shadow:none!important;
-}
-#app#app .sales-report-page .statistics-sheet-tab.is-active,
-#app#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab.is-active{
-  border-color:#9bcbb1!important;background:#eaf6ef!important;background-color:#eaf6ef!important;
-  color:#20372f!important;-webkit-text-fill-color:#20372f!important;box-shadow:none!important;
-}
-#app#app .sales-report-page .statistics-sheet-tab:hover,
-#app#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab:hover,
-#app#app .sales-report-page .statistics-sheet-tab:focus-visible,
-#app#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab:focus-visible{
-  background:#eaf6ef!important;border-color:#9bcbb1!important;color:#20372f!important;
-  -webkit-text-fill-color:#20372f!important;box-shadow:none!important;outline:none!important;
-}
-#app#app .sales-report-page .statistics-sheet-delete,
-#app#app .sales-report-page .daily-tip-sheet-delete{
-  box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
-  flex:0 0 17px!important;width:17px!important;min-width:17px!important;height:17px!important;min-height:17px!important;
-  margin:0!important;padding:0!important;border:0!important;border-radius:5px!important;background:transparent!important;
-  color:var(--muted,#718078)!important;-webkit-text-fill-color:var(--muted,#718078)!important;
-  font-size:12px!important;font-weight:800!important;line-height:1!important;box-shadow:none!important;
-}
-#app#app .sales-report-page .statistics-sheet-add-inline,
-#app#app .sales-report-page .daily-tip-sheet-add-inline{
-  box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
-  flex:0 0 28px!important;width:28px!important;min-width:28px!important;max-width:28px!important;
-  height:28px!important;min-height:28px!important;max-height:28px!important;margin:0!important;padding:0!important;
-  border:1px dashed var(--line)!important;border-radius:7px!important;background:var(--surface,#fff)!important;
-  color:var(--ink,var(--text))!important;-webkit-text-fill-color:var(--ink,var(--text))!important;
-  font-size:17px!important;line-height:1!important;box-shadow:none!important;
-}
-/* Apply the compact Communication Book typography and cell rhythm to all table contents. */
-#app#app .sales-report-page .sales-statistics-table thead th,
-#app#app .sales-report-page .daily-tip-table thead th{
-  box-sizing:border-box!important;min-height:34px!important;padding:6px 4px!important;
-  background:var(--mint,#dff1e9)!important;color:var(--ink,#20372f)!important;
-  -webkit-text-fill-color:var(--ink,#20372f)!important;border:1px solid var(--line)!important;
-  border-radius:4px!important;font-family:inherit!important;font-size:10px!important;font-weight:800!important;
-  line-height:1.2!important;text-align:center!important;vertical-align:middle!important;
-}
-#app#app .sales-report-page .sales-statistics-table tbody td,
-#app#app .sales-report-page .daily-tip-table tbody td{
-  box-sizing:border-box!important;height:29px!important;min-height:29px!important;padding:2px 3px!important;
-  background:var(--surface,#fff)!important;color:var(--text,var(--ink))!important;
-  border:1px solid color-mix(in srgb,var(--line) 85%,transparent)!important;border-radius:4px!important;
-  font-family:inherit!important;font-size:10px!important;font-weight:600!important;
-  line-height:1.2!important;text-align:center!important;vertical-align:middle!important;
-}
-#app#app .sales-report-page .sales-statistics-table tbody td :is(span,strong,b,small,label),
-#app#app .sales-report-page .daily-tip-table tbody td :is(span,strong,b,small,label){
-  font-family:inherit!important;font-size:10px!important;line-height:1.2!important;
-}
-#app#app .sales-report-page .sales-statistics-table .sales-stat-cell-input,
-#app#app .sales-report-page .daily-tip-table .daily-tip-input{
-  box-sizing:border-box!important;display:block!important;width:100%!important;min-width:0!important;
-  height:25px!important;min-height:25px!important;max-height:25px!important;margin:0!important;padding:2px 3px!important;
-  border:0!important;border-radius:6px!important;background:transparent!important;color:var(--text,var(--ink))!important;
-  -webkit-text-fill-color:var(--text,var(--ink))!important;font-family:inherit!important;font-size:10px!important;
-  font-weight:600!important;line-height:1.15!important;text-align:center!important;box-shadow:none!important;
-  outline:none!important;
-}
-#app#app .sales-report-page .sales-statistics-table .sales-stat-cell-input:focus,
-#app#app .sales-report-page .sales-statistics-table .sales-stat-cell-input:focus-visible,
-#app#app .sales-report-page .daily-tip-table .daily-tip-input:focus,
-#app#app .sales-report-page .daily-tip-table .daily-tip-input:focus-visible{
-  border:0!important;outline:none!important;box-shadow:none!important;background:transparent!important;
-}
-#app#app .sales-report-page .sales-statistics-table tfoot td,
-#app#app .sales-report-page .daily-tip-table tfoot td{
-  box-sizing:border-box!important;height:30px!important;min-height:30px!important;padding:4px 3px!important;
-  border:1px solid #9eacc4!important;border-radius:4px!important;background:#e8edf7!important;color:#263b5b!important;
-  -webkit-text-fill-color:#263b5b!important;font-family:inherit!important;font-size:10px!important;
-  font-weight:800!important;line-height:1.2!important;text-align:center!important;white-space:nowrap!important;
-}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .sales-statistics-table tbody td,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .daily-tip-table tbody td{
-  background:#22352e!important;color:#e5eee9!important;border-color:#40564b!important;
-}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .sales-statistics-table tbody .sales-stat-cell-input,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .daily-tip-table tbody .daily-tip-input{
-  color:#e5eee9!important;-webkit-text-fill-color:#e5eee9!important;
-}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .sales-statistics-table tfoot td,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .daily-tip-table tfoot td{
-  background:#34445b!important;border-color:#526783!important;color:#edf2fa!important;-webkit-text-fill-color:#edf2fa!important;
-}
-@media(max-width:600px){
-  #app#app .sales-report-page .statistics-sheet-tabs,
-  #app#app .sales-report-page .daily-tip-sheet-tabs{gap:4px!important;margin-top:7px!important;padding:3px 5px!important}
-  #app#app .sales-report-page .statistics-sheet-tab,
-  #app#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab{
-    min-height:26px!important;height:26px!important;max-height:26px!important;padding:0 20px 0 7px!important;font-size:9px!important;
-  }
-  #app#app .sales-report-page .statistics-sheet-add-inline,
-  #app#app .sales-report-page .daily-tip-sheet-add-inline{
-    flex-basis:26px!important;width:26px!important;min-width:26px!important;max-width:26px!important;
-    height:26px!important;min-height:26px!important;max-height:26px!important;
-  }
-  #app#app .sales-report-page .sales-statistics-table tbody td,
-  #app#app .sales-report-page .daily-tip-table tbody td{padding:2px!important}
-}
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .statistics-sheet-tab.is-active,
-:root[data-novaro-mode="dark"] #app#app .sales-report-page .daily-tip-sheet-tabs .daily-tip-sheet-tab.is-active{
-  background:#294b3e!important;border-color:#426b58!important;color:#edf7f1!important;-webkit-text-fill-color:#edf7f1!important;
-}
 </style>
 
 
-<style id="novaro-statistics-sheet-delete-spacing-v1">
-/* Give the month label a clear, safe gap before its separate delete target. */
-#app#app .sales-report-page .statistics-sheet-tab{
-  padding-inline-end:40px!important;
-}
-#app#app .sales-report-page .statistics-sheet-delete{
-  right:8px!important;
-  width:18px!important;
-  min-width:18px!important;
-  height:18px!important;
-  min-height:18px!important;
-}
-@media(max-width:600px){
-  #app#app .sales-report-page .statistics-sheet-tab{
-    padding-inline-end:38px!important;
-  }
-  #app#app .sales-report-page .statistics-sheet-delete{
-    right:7px!important;
-    width:17px!important;
-    min-width:17px!important;
-    height:17px!important;
-    min-height:17px!important;
-  }
-}
-</style>
+
 
 
 
