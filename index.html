@@ -4842,7 +4842,7 @@ function statisticsSheetsRender(){
  tabs.innerHTML='<div class="novaro-page-strip-list">'+statisticsSheetCache.map(sheet=>{
   const active=sheet.report_month===(salesStatisticsSelectedMonth||salesReportSelectedMonth);
   const monthName=dailyTipEscape(statisticsMonthLabel(sheet.report_month));
-  return '<span class="novaro-page-chip-wrap"><button type="button" role="tab" tabindex="0" aria-selected="'+(active?"true":"false")+'" class="novaro-page-chip'+(active?" is-active":"")+'" data-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'"><span class="novaro-page-chip-date">'+monthName+'</span></button>'+(profile?.role==="owner_admin"?'<span class="novaro-page-chip-remove" data-delete-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span>':"")+'</span>';
+  return '<span class="novaro-page-chip-wrap"><button type="button" role="tab" tabindex="0" aria-selected="'+(active?"true":"false")+'" class="novaro-page-chip'+(active?" is-active":"")+'" data-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'"><span class="novaro-page-chip-date">'+monthName+'</span>'+(profile?.role==="owner_admin"?'<span class="novaro-page-chip-remove" data-delete-statistics-sheet-month="'+dailyTipEscape(sheet.report_month)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span>':"")+'</button></span>';
  }).join("")+'</div>'+(statisticsCanEditSheets()?'<button type="button" class="novaro-page-strip-add" id="statisticsAddSheetInline" aria-label="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'" title="'+(language==="en"?"Add next month sheet":"إضافة شيت للشهر التالي")+'">＋</button>':"");
  tabs.style.display="flex";tabs.style.flexDirection="row";tabs.style.flexWrap="nowrap";tabs.style.alignItems="center";tabs.style.direction="rtl";
  const statisticsPageList=tabs.querySelector(".novaro-page-strip-list"),statisticsAddButton=tabs.querySelector("#statisticsAddSheetInline");
@@ -10132,5 +10132,51 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   #app#app .sales-report-page #dailyTipCard table.daily-tip-table th,
   #app#app .sales-report-page #dailyTipCard table.daily-tip-table td{padding-inline:1px!important}
   #app#app .sales-report-page #dailyTipCard table.daily-tip-table .daily-tip-input{font-size:8.5px!important}
+}
+</style>
+
+<style id="novaro-statistics-layout-refinement-v1">
+/* Statistics month tabs: one horizontal, touch-scrollable strip. */
+#app .sales-report-page #salesStatisticsSheetTabs{
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  align-items:center!important;gap:7px!important;overflow:hidden!important;
+  width:100%!important;min-width:0!important;box-sizing:border-box!important;
+}
+#app .sales-report-page #salesStatisticsSheetTabs .novaro-page-strip-list{
+  display:flex!important;flex:1 1 0!important;flex-direction:row!important;
+  flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-start!important;
+  width:0!important;min-width:0!important;max-width:100%!important;
+  overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;
+  overscroll-behavior-x:contain!important;-webkit-overflow-scrolling:touch!important;
+  touch-action:pan-x!important;scrollbar-width:thin!important;gap:7px!important;
+}
+#app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip-wrap{
+  display:inline-flex!important;flex:0 0 auto!important;min-width:max-content!important;
+  max-width:none!important;gap:0!important;
+}
+#app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip{
+  display:inline-flex!important;flex:0 0 auto!important;flex-direction:row!important;
+  align-items:center!important;justify-content:center!important;gap:7px!important;
+  width:auto!important;max-width:none!important;min-width:max-content!important;
+  white-space:nowrap!important;
+}
+#app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip-remove{
+  position:static!important;display:inline-flex!important;flex:0 0 18px!important;
+  width:18px!important;min-width:18px!important;height:18px!important;
+  align-items:center!important;justify-content:center!important;margin:0!important;
+  padding:0!important;border-radius:50%!important;border:1px solid var(--line)!important;
+  background:var(--mint)!important;color:var(--ink)!important;
+  -webkit-text-fill-color:var(--ink)!important;font-size:11px!important;
+  font-weight:800!important;line-height:1!important;cursor:pointer!important;
+}
+/* Let the Date and Day columns size to their actual localized contents. */
+#app .sales-report-page .sales-statistics-table{table-layout:auto!important;}
+#app .sales-report-page .sales-statistics-table th:nth-child(1),
+#app .sales-report-page .sales-statistics-table td:nth-child(1),
+#app .sales-report-page .sales-statistics-table th:nth-child(2),
+#app .sales-report-page .sales-statistics-table td:nth-child(2){
+  width:1%!important;min-width:max-content!important;max-width:none!important;
+  white-space:nowrap!important;overflow-wrap:normal!important;
+  padding-left:8px!important;padding-right:8px!important;
 }
 </style>
