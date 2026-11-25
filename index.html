@@ -11502,3 +11502,46 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   #app .hc-employee-row .hc-row-actions button{padding:3px 5px!important;font-size:10px!important}
 }
 </style>
+
+
+<style id="novaro-headcount-register-header-exact-alignment-v3">
+/* Make each column title share the exact grid track and box geometry of its input. */
+#app .hc-table-wrap{width:100%!important;min-width:0!important;box-sizing:border-box!important}
+#app .hc-employee-head,#app .hc-employee-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr) minmax(0,1fr) 58px!important;
+  column-gap:4px!important;
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  padding-left:4px!important;
+  padding-right:4px!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+#app .hc-employee-head{justify-items:stretch!important}
+#app .hc-employee-head>span:nth-child(-n+3){
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  justify-self:stretch!important;
+  margin:0!important;
+}
+#app .hc-employee-row>input{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  text-align:center!important;
+}
+#app .hc-employee-row>.hc-row-actions{
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  justify-content:center!important;
+  margin:0!important;
+}
+</style>
