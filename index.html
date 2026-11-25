@@ -3820,6 +3820,7 @@ function setLanguage(next){
  localStorage.setItem("novaro-language",language);
  if(user&&profile)render();
  applyLanguage();
+ if(typeof dailyTipRender==="function")dailyTipRender();
 }
 document.addEventListener("click",e=>{const toggle=e.target.closest?.("#langToggle,#langToggleApp");if(toggle)setLanguage(language==="ar"?"en":"ar")});
 let languageUpdatePending=false;
@@ -4630,7 +4631,7 @@ function dailyTipRender(){
  dailyTipActiveSheetKey=active.sheet_key;
  tabs.className="novaro-page-strip";
  tabs.innerHTML='<div class="novaro-page-strip-list">'+dailyTipSheetCache.map(x=>'<span class="novaro-page-chip-wrap"><button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="novaro-page-chip'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+dailyTipEscape(dailyTipSheetDisplayName(x))+'</span></button><span class="novaro-page-chip-remove" data-delete-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span></span>').join("")+'</div>'+'<button type="button" class="novaro-page-strip-add" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>'
- tabs.style.display="flex";tabs.style.flexDirection="row";tabs.style.flexWrap="nowrap";tabs.style.alignItems="center";tabs.style.direction="rtl";
+ tabs.style.display="flex";tabs.style.flexDirection="row";tabs.style.flexWrap="nowrap";tabs.style.alignItems="center";tabs.style.direction=language==="en"?"ltr":"rtl";
  const dailyTipPageList=tabs.querySelector(".novaro-page-strip-list"),dailyTipAddButton=tabs.querySelector("#dailyTipAddSheetInline");
  if(dailyTipPageList){dailyTipPageList.style.flex="1 1 auto";dailyTipPageList.style.width="auto";dailyTipPageList.style.minWidth="0";dailyTipPageList.style.maxWidth="100%";}
  if(dailyTipAddButton){dailyTipAddButton.style.flex="0 0 32px";dailyTipAddButton.style.margin="0";};
