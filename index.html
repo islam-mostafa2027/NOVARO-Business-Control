@@ -4606,6 +4606,52 @@ document.addEventListener("click",event=>{
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),link=document.createElement("a");
   link.href=url;link.download="NOVARO-Communication-Book-"+(new Date().toISOString().slice(0,10))+".csv";document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);return;
  }
+});
+
+
+
+function communicationBeginPageRename(tab){
+ const index=Number(tab?.dataset.communicationPageIndex),page=branchCommunicationPages[index];
+ if(!page||tab.querySelector("input"))return;
+ const input=document.createElement("input");input.type="text";input.className="novaro-communication-page-name-input";input.value=String(page.date||"");input.maxLength=80;input.setAttribute("aria-label",language==="en"?"Edit page name":"تعديل اسم الصفحة");
+ tab.replaceChildren(input);tab.classList.add("is-editing");input.focus();input.select();
+ let finished=false;
+ const finish=save=>{if(finished)return;finished=true;const value=input.value.trim();tab.classList.remove("is-editing");if(save&&value){page.date=value;}render();};
+ input.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();finish(true);}else if(event.key==="Escape"){event.preventDefault();finish(false);}});
+ input.addEventListener("blur",()=>finish(true));
+}
+let communicationPageHoldTimer=null,communicationPageHoldTab=null,communicationPageHoldTriggered=false;
+document.addEventListener("pointerdown",event=>{
+ const tab=event.target.closest?.("nav.novaro-page-strip [data-communication-page-index]");
+ if(!tab||event.pointerType==="mouse")return;
+ communicationPageHoldTab=tab;communicationPageHoldTriggered=false;
+ communicationPageHoldTimer=setTimeout(()=>{communicationPageHoldTriggered=true;communicationBeginPageRename(tab);},550);
+});
+["pointerup","pointercancel","pointermove"].forEach(type=>document.addEventListener(type,()=>{if(communicationPageHoldTimer){clearTimeout(communicationPageHoldTimer);communicationPageHoldTimer=null;}}));
+document.addEventListener("dblclick",event=>{
+ const tab=event.target.closest?.("nav.novaro-page-strip [data-communication-page-index]");
+ if(!tab)return;event.preventDefault();communicationBeginPageRename(tab);
+});
+
+document.addEventListener("input",e=>{const field=e.target.closest?.("[data-communication-sheet-field]");if(!field)return;const activeSheet=branchCommunicationPages[branchCommunicationActivePage];if(activeSheet){activeSheet.values=activeSheet.values||{};activeSheet.values[field.dataset.communicationSheetField]=field.value;try{novaroSaveCommunicationPages();}catch(error){console.warn("NOVARO communication page local save failed:",error);}}},true);
+function bindMoneyFieldFormatting(){
+ const selector='.sales-report-page [data-sales-metric],.sales-report-page [data-saved-sales-metric],.sales-report-page [data-communication-metric],.sales-report-page .sales-monthly-analysis-field:nth-child(-n+4) input';
+ document.addEventListener("focusin",e=>{const field=e.target.closest&&e.target.closest(selector);if(field)field.value=String(field.value??"").replace(/,/g,"");},true);
+ document.addEventListener("focusout",e=>{const field=e.target.closest&&e.target.closest(selector);if(field){formatMoneyField(field);if(field.matches("[data-sales-metric]"))syncMonthlyAnalysis();}},true);
+}
+bindMoneyFieldFormatting();
+function syncStatisticsAverages(row,skipMonthlyTotals){
+ if(!row)return;
+ let rowTickets=0,rowSales=0;
+ ["dinein","takeaway","delivery","catering"].forEach(group=>{
+  const tickets=row.querySelector('[data-stat-tickets="'+group+'"]');
+  const sales=row.querySelector('[data-stat-sales="'+group+'"]');
+  const average=row.querySelector('[data-stat-average="'+group+'"]');
+  const ticketText=tickets?String(tickets.value).trim():"",salesText=sales?String(sales.value).trim():"";
+  const ticketValue=statisticsNumber(ticketText),salesValue=statisticsNumber(salesText);
+  if(ticketText!==""&&Number.isFinite(ticketValue)&&ticketValue>0)rowTickets+=ticketValue;
+  if(salesText!==""&&Number.isFinite(salesValue))rowSales+=salesValue;
+  if(average)average.value=(ticketText!==""&&salesText!==""&&Number.isFinite(ticketValue)&&Number.isFinite(salesValue)&&ticketValue>0)?formatStatisticsNumber(Number((salesValue/ticketValue).toFixed(2))):"";
  });
  const totalTickets=row.querySelector("[data-stat-total-tickets]"),totalSales=row.querySelector("[data-stat-total-sales]"),target=row.querySelector("[data-stat-target]"),ach=row.querySelector("[data-stat-ach]");
  if(totalTickets)totalTickets.value=String(rowTickets);
