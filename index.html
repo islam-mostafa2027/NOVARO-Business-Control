@@ -5558,14 +5558,21 @@ document.addEventListener("click",async e=>{
  if(e.target.closest("[data-open-headcount-communication]")){branchAttendanceMenuOpen=false;const workforceButton=document.querySelector("[data-hc-workforce-rebuilt=\"workforce\"]");const workforcePanel=document.getElementById("hcWorkforcePanel");if(workforcePanel)workforcePanel.hidden=true;if(workforceButton){workforceButton.classList.remove("is-active");workforceButton.setAttribute("aria-expanded","false");}document.querySelectorAll("[data-toggle-headcount-attendance]").forEach(button=>button.setAttribute("aria-expanded","false"));const branchIdForBook=headcountBranchId;if(!canAccessSalesReports()||!salesReportBranches().some(item=>item.id===branchIdForBook)){alert(language==="en"?"You do not have permission to access this branch book.":"ليس لديك صلاحية الوصول إلى دفتر هذا الفرع.");return;}salesReportBranchId=branchIdForBook;if(branchCommunicationInlineOpen){branchCommunicationInlineOpen=false;render();return;}branchCommunicationInlineOpen=true;branchReportsCommunicationPage=false;branchCommunicationReturnToHeadcount=false;if(!branchCommunicationPages.length){const now=new Date(),today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");branchCommunicationPages=[{id:Date.now(),date:today}];branchCommunicationActivePage=0;}render();return;}
  const headcountSectionToggle=e.target.closest("[data-hc-workforce-rebuilt]");
  if(headcountSectionToggle){
-  const workforcePanel=document.getElementById("hcWorkforcePanel");
-  const isAlreadyOpen=headcountSectionToggle.getAttribute("aria-expanded")==="true"&&workforcePanel&&!workforcePanel.hidden;
-  branchCommunicationInlineOpen=false;branchAttendanceMenuOpen=false;
+  const currentPanel=document.getElementById("hcWorkforcePanel");
+  const isAlreadyOpen=!!currentPanel&&!currentPanel.hidden;
+  branchCommunicationInlineOpen=false;
+  branchAttendanceMenuOpen=false;
   document.querySelectorAll("[data-hc-workforce-rebuilt]").forEach(button=>{button.classList.remove("is-active");button.setAttribute("aria-expanded","false");});
-  document.querySelectorAll("[data-toggle-headcount-attendance]").forEach(button=>button.setAttribute("aria-expanded","false"));
-  document.querySelectorAll("[data-open-headcount-communication]").forEach(button=>button.setAttribute("aria-expanded","false"));
+  document.querySelectorAll("[data-toggle-headcount-attendance],[data-open-headcount-communication]").forEach(button=>button.setAttribute("aria-expanded","false"));
   document.querySelectorAll("[data-hc-section-panel]").forEach(panel=>panel.hidden=true);
-  if(!isAlreadyOpen){headcountSectionToggle.classList.add("is-active");headcountSectionToggle.setAttribute("aria-expanded","true");if(workforcePanel)workforcePanel.hidden=false;}
+  // Re-render to remove any previously opened attendance or communication slide from the page.
+  render();
+  if(!isAlreadyOpen){
+   const rebuiltButton=document.querySelector('[data-hc-workforce-rebuilt="workforce"]');
+   const rebuiltPanel=document.getElementById("hcWorkforcePanel");
+   if(rebuiltPanel)rebuiltPanel.hidden=false;
+   if(rebuiltButton)rebuiltButton.setAttribute("aria-expanded","true");
+  }
   return;
  }
  const headcountBranchButton=e.target.closest("[data-headcount-branch]");
