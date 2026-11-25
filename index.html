@@ -4597,9 +4597,7 @@ function dailyTipSheetName(startDay,endDay){
  return dailyTipDate(startDay)+" – "+dailyTipDate(endDay);
 }
 function dailyTipSheetDisplayName(sheet){
- const raw=String(sheet?.sheet_name||"").trim();
- const dateRange=/^[0-9٠-٩۰-۹]{1,2}\s+[\p{L}.]+\s+[0-9٠-٩۰-۹]{4}\s*[–-]\s*[0-9٠-٩۰-۹]{1,2}\s+[\p{L}.]+\s+[0-9٠-٩۰-۹]{4}$/u;
- return dateRange.test(raw)?dailyTipSheetName(sheet.start_day,sheet.end_day):raw||dailyTipSheetName(sheet.start_day,sheet.end_day);
+ return dailyTipSheetName(sheet?.start_day,sheet?.end_day);
 }
 function dailyTipEscape(value){
  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
