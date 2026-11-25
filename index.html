@@ -4548,10 +4548,16 @@ function dailyTipMonthParts(){
 function dailyTipDate(day){
  const info=dailyTipMonthParts();if(!info)return "";
  const date=new Date(info.year,info.monthIndex,Number(day));
- return new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{day:"numeric",month:language==="en"?"short":"long",year:"numeric"}).format(date);
+ return new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{day:"numeric",month:"short",year:"numeric"}).format(date);
 }
 function dailyTipSheetName(startDay,endDay){
  return dailyTipDate(startDay)+" – "+dailyTipDate(endDay);
+}
+function dailyTipSheetDisplayName(sheet){
+ const raw=String(sheet?.sheet_name||"").trim();
+ const digits="[0-9٠-٩۰-۹]{1,2}",year="[0-9٠-٩۰-۹]{4}",month="[\\p{L}.]+";
+ const dateRange=new RegExp("^"+digits+"[\\s-]+"+month+"[\\s-]+"+year+"\\s*[–-]\\s*"+digits+"[\\s-]+"+month+"[\\s-]+"+year+"$","u");
+ return dateRange.test(raw)?dailyTipSheetName(sheet.start_day,sheet.end_day):raw||dailyTipSheetName(sheet.start_day,sheet.end_day);
 }
 function dailyTipEscape(value){
  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
@@ -4579,12 +4585,12 @@ function dailyTipRender(){
  const info=dailyTipMonthParts(),branchId=monthCard.dataset.salesBranchId;
  const label=card.querySelector("#dailyTipMonthLabel"),tabs=card.querySelector("#dailyTipSheetTabs"),editor=card.querySelector("#dailyTipSheetEditor"),tbody=card.querySelector("#dailyTipRows");
  if(!info){if(label)label.textContent="";return;}
- if(label)label.textContent=info.monthName+" "+info.year;
+ if(label)label.textContent=new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{month:"long",year:"numeric"}).format(new Date(info.year,info.monthIndex,1));
  const active=dailyTipSheetCache.find(x=>x.sheet_key===dailyTipActiveSheetKey)||dailyTipSheetCache[0];
  if(!active){tbody.innerHTML='<tr><td colspan="4">—</td></tr>';tabs.replaceChildren();editor.replaceChildren();const monthTipField=monthCard.querySelector('[data-sales-metric="month_to_date_tip"]');if(monthTipField){monthTipField.value="";syncMonthlyAnalysis();}return;}
  dailyTipActiveSheetKey=active.sheet_key;
  tabs.className="novaro-page-strip";
- tabs.innerHTML='<div class="novaro-page-strip-list">'+dailyTipSheetCache.map(x=>'<span class="novaro-page-chip-wrap"><button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="novaro-page-chip'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+dailyTipEscape(x.sheet_name)+'</span></button><span class="novaro-page-chip-remove" data-delete-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span></span>').join("")+'</div>'+'<button type="button" class="novaro-page-strip-add" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>'
+ tabs.innerHTML='<div class="novaro-page-strip-list">'+dailyTipSheetCache.map(x=>'<span class="novaro-page-chip-wrap"><button type="button" role="tab" aria-selected="'+(x.sheet_key===active.sheet_key?'true':'false')+'" class="novaro-page-chip'+(x.sheet_key===active.sheet_key?' is-active':'')+'" data-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" title="'+(language==="en"?"Double-click to edit":"اضغط مرتين لتعديل الاسم")+'"><span class="novaro-page-chip-date">'+dailyTipEscape(dailyTipSheetDisplayName(x))+'</span></button><span class="novaro-page-chip-remove" data-delete-daily-tip-sheet="'+dailyTipEscape(x.sheet_key)+'" role="button" tabindex="0" aria-label="'+(language==="en"?"Delete sheet":"حذف الشيت")+'" title="'+(language==="en"?"Delete sheet":"حذف الشيت")+'">×</span></span>').join("")+'</div>'+'<button type="button" class="novaro-page-strip-add" id="dailyTipAddSheetInline" aria-label="'+(language==="en"?"Add sheet":"إضافة شيت")+'" title="'+(language==="en"?"Add sheet":"إضافة شيت")+'">＋</button>'
  tabs.style.display="flex";tabs.style.flexDirection="row";tabs.style.flexWrap="nowrap";tabs.style.alignItems="center";tabs.style.direction="rtl";
  const dailyTipPageList=tabs.querySelector(".novaro-page-strip-list"),dailyTipAddButton=tabs.querySelector("#dailyTipAddSheetInline");
  if(dailyTipPageList){dailyTipPageList.style.flex="1 1 auto";dailyTipPageList.style.width="auto";dailyTipPageList.style.minWidth="0";dailyTipPageList.style.maxWidth="100%";}
