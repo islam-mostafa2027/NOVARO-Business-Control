@@ -10372,16 +10372,23 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 </style>
 
 
-<style id="novaro-communication-final-horizontal-rules-v2">
-/* Remove both physical side rails around the six-metric grid, including RTL mapping. */
+<style id="novaro-communication-final-horizontal-rules-v3">
+/* Remove the grid frame and only the outer cell edges; retain internal separators. */
 #app .novaro-communication-header + .sales-month-card.saved-sales-report-card .sales-metrics-grid{
+  border:0!important;
   border-left:0!important;
   border-right:0!important;
   border-inline-start:0!important;
   border-inline-end:0!important;
   border-radius:0!important;
 }
-/* A quiet full-width rule below the four AM/PM FOH/BOH fields. */
+#app .novaro-communication-header + .sales-month-card.saved-sales-report-card .sales-metric:nth-child(3n){
+  border-inline-end:0!important;
+}
+#app .novaro-communication-header + .sales-month-card.saved-sales-report-card .sales-metric:nth-last-child(-n+3){
+  border-bottom:0!important;
+}
+/* Keep the duty-section rule full width. */
 #app .novaro-communication-sheet .novaro-duty-cards{
   box-sizing:border-box!important;
   width:100%!important;
@@ -10389,16 +10396,22 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   padding-bottom:9px!important;
   margin-bottom:9px!important;
 }
-/* Finish the allocations section with a full-width bottom rule. */
+/* The allocation divider now reaches the bottom rule with no intervening padding. */
 #app .novaro-communication-sheet .novaro-allocation-cards{
   box-sizing:border-box!important;
   width:100%!important;
   border-bottom:1px solid var(--line)!important;
-  padding-bottom:9px!important;
+  padding-bottom:0!important;
   margin-bottom:12px!important;
 }
 @media(max-width:600px){
+  #app .novaro-communication-header + .sales-month-card.saved-sales-report-card .sales-metric:nth-child(2n){
+    border-inline-end:0!important;
+  }
+  #app .novaro-communication-header + .sales-month-card.saved-sales-report-card .sales-metric:nth-last-child(-n+2){
+    border-bottom:0!important;
+  }
   #app .novaro-communication-sheet .novaro-duty-cards{padding-bottom:7px!important;margin-bottom:7px!important}
-  #app .novaro-communication-sheet .novaro-allocation-cards{padding-bottom:7px!important;margin-bottom:10px!important}
+  #app .novaro-communication-sheet .novaro-allocation-cards{padding-bottom:0!important;margin-bottom:10px!important}
 }
 </style>
