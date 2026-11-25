@@ -3249,17 +3249,20 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
 }
 </style>
 <style id="novaro-daily-tip-heading-centered-v1">
-/* Center the Daily Tip title inside its existing heading strip. */
-#app .sales-report-page .daily-tip-card > .sales-statistics-heading{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
+/* Keep the Daily Tip heading exactly centered in its white strip. */
+#app#app .sales-report-page #dailyTipCard > .sales-statistics-heading{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  place-items:center!important;
   text-align:center!important;
 }
-#app .sales-report-page .daily-tip-card > .sales-statistics-heading .sales-monthly-analysis-title{
+#app#app .sales-report-page #dailyTipCard > .sales-statistics-heading .sales-monthly-analysis-title{
+  display:block!important;
   width:100%!important;
-  margin:0 auto!important;
+  max-width:100%!important;
+  margin:0!important;
   text-align:center!important;
+  justify-self:center!important;
 }
 </style>
 
@@ -4595,8 +4598,7 @@ function dailyTipSheetName(startDay,endDay){
 }
 function dailyTipSheetDisplayName(sheet){
  const raw=String(sheet?.sheet_name||"").trim();
- const digits="[0-9٠-٩۰-۹]{1,2}",year="[0-9٠-٩۰-۹]{4}",month="[\\p{L}.]+";
- const dateRange=new RegExp("^"+digits+"[\\s-]+"+month+"[\\s-]+"+year+"\\s*[–-]\\s*"+digits+"[\\s-]+"+month+"[\\s-]+"+year+"$","u");
+ const dateRange=/^[0-9٠-٩۰-۹]{1,2}\\s+[\\p{L}.]+\\s+[0-9٠-٩۰-۹]{4}\\s*[–-]\\s*[0-9٠-٩۰-۹]{1,2}\\s+[\\p{L}.]+\\s+[0-9٠-٩۰-۹]{4}$/u;
  return dateRange.test(raw)?dailyTipSheetName(sheet.start_day,sheet.end_day):raw||dailyTipSheetName(sheet.start_day,sheet.end_day);
 }
 function dailyTipEscape(value){
