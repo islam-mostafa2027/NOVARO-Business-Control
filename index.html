@@ -4567,7 +4567,7 @@ function dailyTipSheetDisplayName(sheet){
 function dailyTipEscape(value){
  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
-function dailyTipCardMarkup(en){return '<section class="sales-statistics-card daily-tip-card" id="dailyTipCard"><div class="sales-statistics-heading"><h3 class="sales-monthly-analysis-title">'+(en?"Daily Tip":"الإكرامية اليومية")+'</h3></div><div class="daily-tip-toolbar"><span class="daily-tip-month-label" id="dailyTipMonthLabel"></span></div><div class="daily-tip-table-wrap"><table class="sales-statistics-table daily-tip-table" dir="ltr"><thead><tr><th>'+(en?"Date":"التاريخ")+'</th><th>'+(en?"Tip Amount":"قيمة الإكرامية")+'</th><th>'+(en?"Dine-in Sales":"مبيعات الصالة")+'</th><th>%</th></tr></thead><tbody id="dailyTipRows"><tr><td colspan="4">جارٍ تحميل البيانات...</td></tr></tbody></table></div><div class="daily-tip-sheet-tabs" id="dailyTipSheetTabs" role="tablist" aria-label="Daily Tip sheets"></div><div class="daily-tip-sheet-editor" id="dailyTipSheetEditor"></div><div class="daily-tip-status" id="dailyTipStatus" role="status" aria-live="polite"></div></section>';}
+function dailyTipCardMarkup(en){return '<section class="sales-statistics-card daily-tip-card" id="dailyTipCard"><div class="sales-statistics-heading"><h3 class="sales-monthly-analysis-title">'+(en?"Daily Tip":"الإكرامية اليومية")+'</h3></div><div class="daily-tip-toolbar"><span class="daily-tip-month-label" id="dailyTipMonthLabel"></span></div><div class="daily-tip-table-wrap"><table class="sales-statistics-table daily-tip-table" dir="ltr"><thead><tr><th>'+(en?"Date":"التاريخ")+'</th><th>'+(en?"Tip Amount":"قيمة الإكرامية")+'</th><th>'+(en?"Dine-in Sales":"مبيعات الصالة")+'</th><th>%</th></tr></thead><tbody id="dailyTipRows"><tr><td colspan="4">جارٍ تحميل البيانات...</td></tr></tbody></table></div><div class="daily-tip-sheet-tabs" id="dailyTipSheetTabs" role="tablist" aria-label="Daily Tip sheets"></div><div class="daily-tip-sheet-editor" id="dailyTipSheetEditor"></div><div class="daily-tip-status" id="dailyTipStatus" role="status" aria-live="polite"></div><button type="button" id="dailyTipSaveButton" class="sales-statistics-save-fullwidth">'+(language==="en"?"Save Daily Tip":"حفظ الإكراميات")+'</button></section>';}
 function syncYesterdayTipFromDailySheet(){
  const page=document.querySelector(".sales-report-page"),field=page?.querySelector('[data-sales-metric="yesterday_tip"]');
  if(!field)return;
@@ -4825,6 +4825,17 @@ document.addEventListener("change",async e=>{
  try{await dailyTipSaveActive();}
  catch(error){if(status)status.textContent=(language==="en"?"Could not save: ":"تعذر الحفظ: ")+(error.message||String(error));}
  finally{dailyTipBusy=false;}
+});
+
+document.addEventListener("click",async e=>{
+ const button=e.target.closest("#dailyTipSaveButton");if(!button)return;
+ const status=document.querySelector("#dailyTipStatus");
+ if(dailyTipBusy||button.disabled)return;
+ dailyTipBusy=true;button.disabled=true;button.setAttribute("aria-busy","true");
+ if(status)status.textContent=language==="en"?"Saving Daily Tip...":"جارٍ حفظ الإكراميات...";
+ try{await dailyTipSaveActive();}
+ catch(error){if(status)status.textContent=(language==="en"?"Could not save Daily Tip: ":"تعذر حفظ الإكراميات: ")+(error.message||String(error));}
+ finally{dailyTipBusy=false;button.disabled=false;button.removeAttribute("aria-busy");}
 });
 
 
@@ -9979,6 +9990,8 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   min-width:70px!important;
   max-width:70px!important;
 }
+#app .sales-report-page #dailyTipSaveButton{margin:10px 0 0!important}
+@media print{#dailyTipSaveButton{display:none!important}}
 </style>
 
 <style id="novaro-daily-tip-fit-card-v1">
