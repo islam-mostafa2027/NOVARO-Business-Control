@@ -3855,7 +3855,7 @@ function applyLanguage(){
  const headcountNavLabel=document.getElementById("headcountNavLabel");
  if(headcountNavLabel)headcountNavLabel.innerHTML=language==="en"?"<span>Headcount</span>":"<span>عدد</span><span>العاملين</span>";
  const salesReportNavLabel=document.getElementById("salesReportNavLabel");
- if(salesReportNavLabel)salesReportNavLabel.innerHTML=language==="en"?"<span>Ops</span><span>Reports</span>":"<span>تقارير</span><span>التشغيل</span>";
+ if(salesReportNavLabel){salesReportNavLabel.textContent=language==="en"?"Ops Reports":"تقارير التشغيل";salesReportNavLabel.style.setProperty("display","block","important");salesReportNavLabel.style.setProperty("width","max-content","important");salesReportNavLabel.style.setProperty("max-width","100%","important");salesReportNavLabel.style.setProperty("margin-inline","auto","important");salesReportNavLabel.style.setProperty("text-align","center","important");salesReportNavLabel.style.setProperty("white-space","nowrap","important");salesReportNavLabel.style.setProperty("direction",language==="en"?"ltr":"rtl","important");}
  const langToggle=document.getElementById("langToggleApp");
  if(langToggle){const label=langToggle.querySelector("#langToggleLabel");if(label)label.textContent=language==="ar"?"English":"العربية";const targetLabel=language==="ar"?"English":"Arabic";langToggle.setAttribute("aria-label",language==="en"?"Switch language to Arabic":"Change language to English");langToggle.title=langToggle.getAttribute("aria-label");}
  if(obs){obs.takeRecords();obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["placeholder","title","aria-label","alt"]});}
