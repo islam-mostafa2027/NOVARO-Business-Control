@@ -6280,19 +6280,22 @@ if(page==="sales"){
     const statisticsTable=reportRoot.querySelector(".sales-statistics-table:not(.daily-tip-table)");
     statisticsCard=statisticsTable?.closest(".sales-statistics-card")||null;
    }
-   const actionsCard=reportRoot.querySelector(".sales-export-card"),snapshotStatus=reportRoot.querySelector("#salesSnapshotStatus");
    const categoryCard=document.createElement("section");categoryCard.className="card novaro-branch-reports-rebuilt novaro-branch-report-categories-page";
    categoryCard.innerHTML='<div class="novaro-branch-reports-rebuilt-head"><button type="button" class="soft headcount-back" id="branchReportsLogbookBack">← '+(en?"Back":"رجوع")+'</button><div><h3>'+(en?"Statistics":"الإحصائيات")+'</h3></div></div>';
    const movedCards=document.createElement("div");movedCards.className="branch-statistics-moved-cards";
    movedCards.style.cssText="display:block!important;width:100%!important;min-width:0!important;margin:0!important;padding:0!important;";
-   if(statisticsCard){statisticsCard.hidden=false;statisticsCard.style.setProperty("display","block","important");movedCards.appendChild(statisticsCard);}
-   if(actionsCard)movedCards.appendChild(actionsCard);
-   if(snapshotStatus)movedCards.appendChild(snapshotStatus);
-   categoryCard.appendChild(movedCards);reportRoot.prepend(categoryCard);
+   if(statisticsCard){statisticsCard.hidden=false;statisticsCard.style.removeProperty("display");movedCards.appendChild(statisticsCard);}
+   categoryCard.appendChild(movedCards);
    const dateSelector=reportRoot.querySelector(".sales-date-selector-card"),monthCard=reportRoot.querySelector(".sales-month-card");
-   if(dateSelector){dateSelector.hidden=true;dateSelector.style.setProperty("display","none","important");}
-   if(monthCard){monthCard.hidden=true;monthCard.style.setProperty("display","none","important");}
+   [dateSelector,monthCard].forEach(card=>{if(card){card.hidden=true;card.style.setProperty("display","none","important");}});
    reportRoot.querySelector(".daily-tip-card")?.remove();
+   reportRoot.querySelector(".sales-export-card")?.remove();
+   reportRoot.querySelector("#salesSnapshotStatus")?.remove();
+   /* Rebuild the visible page from only the Statistics card. Keep hidden month/date controls in the DOM because the existing loader and data model depend on them. */
+   const support=document.createElement("div");support.hidden=true;support.setAttribute("aria-hidden","true");
+   if(dateSelector)support.appendChild(dateSelector);
+   if(monthCard)support.appendChild(monthCard);
+   reportRoot.replaceChildren(categoryCard,support);
   }else if(reportRoot){
    reportRoot.querySelector(".sales-statistics-card:not(.daily-tip-card)")?.remove();reportRoot.querySelector(".sales-export-card")?.remove();reportRoot.querySelector("#salesSnapshotStatus")?.remove();
   }
