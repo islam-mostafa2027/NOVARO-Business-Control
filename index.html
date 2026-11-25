@@ -3308,7 +3308,24 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
   flex:0 0 28px!important;
 }
 </style>
-<style id="novaro-home-stock-card-square">#main .home-summary-stats>.stat-card:last-child{grid-column:auto!important;width:auto!important}</style></head><body><script>
+<style id="novaro-home-stock-card-square">#main .home-summary-stats>.stat-card:last-child{grid-column:auto!important;width:auto!important}</style>
+<style id="novaro-daily-tip-compact-back-header-v1">
+/* Keep the Daily Tip back row only as tall as its button and minimize the gap above the table. */
+#app .sales-report-page .novaro-sales-report-branch-head{
+  display:flex!important;
+  align-items:center!important;
+  min-height:0!important;
+  height:auto!important;
+  margin:0 0 3px!important;
+  padding:0!important;
+  gap:0!important;
+}
+#app .sales-report-page .novaro-sales-report-branch-head .headcount-back{
+  min-height:34px!important;
+  margin:0!important;
+}
+</style>
+</head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
  "use strict";
@@ -6224,9 +6241,9 @@ if(page==="sales"){
   novaroHydrateCommunicationBook(m);
   }else if(branchReportsComparisonPage){
   const en=language==="en",tipBranch=salesReportBranches().find(b=>b.id===salesReportBranchId);
-  const dailyTipContent=branchReportsDailyTipOpen&&tipBranch?'<section class="sales-report-page"><div class="sales-month-card" data-sales-branch-id="'+esc(tipBranch.id)+'" hidden></div>'+dailyTipCardMarkup(en)+'</section>':branchReportsDailyTipOpen?'<section class="card"><p>'+(en?"You do not have permission to access this branch report.":"ليس لديك صلاحية الوصول إلى تقرير هذا الفرع.")+'</p></section>':"";
+  const dailyTipContent=branchReportsDailyTipOpen&&tipBranch?'<div class="sales-month-card" data-sales-branch-id="'+esc(tipBranch.id)+'" hidden></div>'+dailyTipCardMarkup(en):branchReportsDailyTipOpen?'<section class="card"><p>'+(en?"You do not have permission to access this branch report.":"ليس لديك صلاحية الوصول إلى تقرير هذا الفرع.")+'</p></section>':"";
   const emptyCategoryContent=branchReportsEmptyCategory?'<section class="card novaro-branch-report-empty-state"><div class="empty">' +(en?"No data":"لا توجد بيانات")+'</div></section>':"";
-  m.innerHTML=branchReportsDailyTipOpen?'<section class="sales-report-page"><div class="headcount-detail-top novaro-sales-report-branch-head"><button type="button" class="soft headcount-back" id="branchReportsComparisonBack">← '+(en?"Back":"رجوع")+'</button></div></section>'+dailyTipContent: '<section class="card novaro-branch-reports-rebuilt novaro-branch-report-categories-page"><div class="novaro-branch-reports-rebuilt-head"><button type="button" class="soft headcount-back" id="branchReportsComparisonBack">← '+(en?"Back":"رجوع")+'</button><div><h3>'+(en?"Comparison & Daily Tip & Daily Waste":"المقارنة & الاكرامية اليومية & الهالك اليومي")+'</h3></div></div><div class="novaro-branch-reports-rebuilt-list"><button type="button" class="novaro-branch-reports-rebuilt-item" data-empty-report-category="comparison"><span class="novaro-branch-reports-rebuilt-number" aria-hidden="true">1</span><span class="novaro-branch-reports-rebuilt-text"><strong>'+(en?"Comparison":"المقارنة")+'</strong></span><span class="novaro-branch-reports-rebuilt-chevron" aria-hidden="true">›</span></button><button type="button" class="novaro-branch-reports-rebuilt-item" data-open-daily-tip-card aria-expanded="false"><span class="novaro-branch-reports-rebuilt-number" aria-hidden="true">2</span><span class="novaro-branch-reports-rebuilt-text"><strong>'+(en?"Daily Tip":"الاكرامية اليومية")+'</strong></span><span class="novaro-branch-reports-rebuilt-chevron" aria-hidden="true">›</span></button><button type="button" class="novaro-branch-reports-rebuilt-item" data-empty-report-category="waste"><span class="novaro-branch-reports-rebuilt-number" aria-hidden="true">3</span><span class="novaro-branch-reports-rebuilt-text"><strong>'+(en?"Daily Waste":"الهالك اليومي")+'</strong></span><span class="novaro-branch-reports-rebuilt-chevron" aria-hidden="true">›</span></button></div></section>'+emptyCategoryContent;
+  m.innerHTML=branchReportsDailyTipOpen?'<section class="sales-report-page"><div class="headcount-detail-top novaro-sales-report-branch-head"><button type="button" class="soft headcount-back" id="branchReportsComparisonBack">← '+(en?"Back":"رجوع")+'</button></div>'+dailyTipContent+'</section>': '<section class="card novaro-branch-reports-rebuilt novaro-branch-report-categories-page"><div class="novaro-branch-reports-rebuilt-head"><button type="button" class="soft headcount-back" id="branchReportsComparisonBack">← '+(en?"Back":"رجوع")+'</button><div><h3>'+(en?"Comparison & Daily Tip & Daily Waste":"المقارنة & الاكرامية اليومية & الهالك اليومي")+'</h3></div></div><div class="novaro-branch-reports-rebuilt-list"><button type="button" class="novaro-branch-reports-rebuilt-item" data-empty-report-category="comparison"><span class="novaro-branch-reports-rebuilt-number" aria-hidden="true">1</span><span class="novaro-branch-reports-rebuilt-text"><strong>'+(en?"Comparison":"المقارنة")+'</strong></span><span class="novaro-branch-reports-rebuilt-chevron" aria-hidden="true">›</span></button><button type="button" class="novaro-branch-reports-rebuilt-item" data-open-daily-tip-card aria-expanded="false"><span class="novaro-branch-reports-rebuilt-number" aria-hidden="true">2</span><span class="novaro-branch-reports-rebuilt-text"><strong>'+(en?"Daily Tip":"الاكرامية اليومية")+'</strong></span><span class="novaro-branch-reports-rebuilt-chevron" aria-hidden="true">›</span></button><button type="button" class="novaro-branch-reports-rebuilt-item" data-empty-report-category="waste"><span class="novaro-branch-reports-rebuilt-number" aria-hidden="true">3</span><span class="novaro-branch-reports-rebuilt-text"><strong>'+(en?"Daily Waste":"الهالك اليومي")+'</strong></span><span class="novaro-branch-reports-rebuilt-chevron" aria-hidden="true">›</span></button></div></section>'+emptyCategoryContent;
   if(branchReportsDailyTipOpen&&tipBranch)dailyTipLoad();
 }else if(branchReportsLogbookPage&&!branchReportsStatisticsOpen){
   const en=language==="en";
