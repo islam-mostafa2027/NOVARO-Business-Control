@@ -10340,3 +10340,33 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
  #app .hc-section-switcher-buttons .hc-section-switch.headcount-branch-pill .headcount-branch-copy strong{font-size:13px!important;font-weight:800!important;line-height:1.4!important;}
  #app .hc-section-switcher-buttons .hc-section-switch.headcount-branch-pill .headcount-branch-arrow{margin-inline-start:auto!important;}
 </style>
+
+
+<style id="novaro-communication-shift-divider-and-metrics-edges-v1">
+/* Communication Book: remove only the side edges of the six-metric frame. */
+#app .headcount-page-card.sales-report-page > .sales-month-card.saved-sales-report-card:has(.novaro-communication-card-heading) .sales-metrics-grid{
+  border-inline-start:0!important;
+  border-inline-end:0!important;
+  border-radius:0!important;
+}
+/* Use one subtle vertical divider between AM and PM in both shift sections. */
+#app .novaro-communication-sheet .novaro-duty-cards,
+#app .novaro-communication-sheet .novaro-allocation-cards{
+  column-gap:0!important;
+}
+#app .novaro-communication-sheet .novaro-duty-cards > .novaro-duty-card:first-child,
+#app .novaro-communication-sheet .novaro-allocation-cards > .novaro-allocation-card:first-child{
+  border-inline-end:1px solid var(--line)!important;
+  padding-inline-end:8px!important;
+}
+#app .novaro-communication-sheet .novaro-duty-cards > .novaro-duty-card:last-child,
+#app .novaro-communication-sheet .novaro-allocation-cards > .novaro-allocation-card:last-child{
+  padding-inline-start:8px!important;
+}
+@media(max-width:600px){
+  #app .novaro-communication-sheet .novaro-duty-cards > .novaro-duty-card:first-child,
+  #app .novaro-communication-sheet .novaro-allocation-cards > .novaro-allocation-card:first-child{padding-inline-end:5px!important}
+  #app .novaro-communication-sheet .novaro-duty-cards > .novaro-duty-card:last-child,
+  #app .novaro-communication-sheet .novaro-allocation-cards > .novaro-allocation-card:last-child{padding-inline-start:5px!important}
+}
+</style>
