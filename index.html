@@ -3885,6 +3885,8 @@ function setLanguage(next){
  if(typeof dailyTipRender==="function")dailyTipRender();
 }
 document.addEventListener("click",e=>{const toggle=e.target.closest?.("#langToggle,#langToggleApp");if(toggle)setLanguage(language==="ar"?"en":"ar")});
+// Capture workforce navigation first so stale slide states are cleared before the regular click handler renders.
+document.addEventListener("click",e=>{const workforce=e.target.closest?.("[data-hc-section-toggle]");if(!workforce)return;branchCommunicationInlineOpen=false;branchAttendanceMenuOpen=false;const main=document.getElementById("main");main?.querySelectorAll("[data-hc-section-panel]").forEach(panel=>{panel.hidden=panel.dataset.hcSectionPanel!=="workforce";});main?.querySelectorAll("[data-toggle-headcount-attendance]").forEach(button=>button.setAttribute("aria-expanded","false"));main?.querySelectorAll("[data-open-headcount-communication]").forEach(button=>button.setAttribute("aria-expanded","false"));},true);
 let languageUpdatePending=false;
 const languageObserver=new MutationObserver(()=>{if(languageUpdatePending)return;languageUpdatePending=true;queueMicrotask(()=>{languageUpdatePending=false;applyLanguage();});});
 window.__novaroObserver=languageObserver;
