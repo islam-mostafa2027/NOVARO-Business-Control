@@ -11203,3 +11203,29 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   box-shadow:none!important;
 }
 </style>
+
+
+<style id="novaro-communication-allocation-body-rows-compact-v1">
+/* Slightly reduce the height of allocation rows below the headings. */
+#app .novaro-communication-page .novaro-communication-allocation-table tbody td,
+#app .novaro-communication-sheet .novaro-communication-allocation-table tbody td{
+  padding:2px 2px!important;
+  vertical-align:middle!important;
+}
+#app .novaro-communication-page .novaro-communication-allocation-table tbody .novaro-communication-table-input,
+#app .novaro-communication-sheet .novaro-communication-allocation-table tbody .novaro-communication-table-input{
+  height:24px!important;
+  min-height:24px!important;
+  max-height:24px!important;
+  padding:1px 1px!important;
+  line-height:20px!important;
+}
+@media(max-width:600px){
+  #app .novaro-communication-page .novaro-communication-allocation-table tbody .novaro-communication-table-input,
+  #app .novaro-communication-sheet .novaro-communication-allocation-table tbody .novaro-communication-table-input{
+    height:21px!important;
+    min-height:21px!important;
+    max-height:21px!important;
+  }
+}
+</style>
