@@ -11563,3 +11563,8 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 /* Move only the job-title header a little farther left; keep the input field and other labels unchanged. */
 #app .hc-employee-head>span:nth-child(3){transform:translateX(-22px)!important;}
 </style>
+
+<style id="novaro-hide-duplicate-shift-report-action-v1">
+/* When the Shift Report table is open, hide only its redundant launch button. */
+#app .sales-report-page:has(.shift-report-page) [data-open-shift-report-table]{display:none!important}
+</style>
