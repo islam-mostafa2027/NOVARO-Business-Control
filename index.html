@@ -11566,5 +11566,5 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 
 <style id="novaro-hide-duplicate-shift-report-action-v1">
 /* When the Shift Report table is open, hide only its redundant launch button. */
-#app .sales-report-page:has(.shift-report-page) [data-open-shift-report-table]{display:none!important}
+#app .sales-report-page:has([data-open-shift-report-table]):has(~ .shift-report-page){display:none!important}
 </style>
