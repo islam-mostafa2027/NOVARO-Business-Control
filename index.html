@@ -11895,3 +11895,101 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .hka-page #hkaAddPeriod,#app .hka-page button.hka-add-period{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;max-width:34px!important;max-height:34px!important;flex:0 0 34px!important;aspect-ratio:1/1!important;border-radius:50%!important;padding:0!important;box-sizing:border-box!important;}
 @media(max-width:480px){#app .hka-page .hka-header-layout[dir="rtl"]{gap:6px!important}#app .hka-page .hka-back-zoom .hka-zoom-controls button,#app .hka-page button[data-hka-zoom]{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;max-width:34px!important;max-height:34px!important;flex-basis:34px!important}#app .hka-page #hkaAddPeriod,#app .hka-page button.hka-add-period{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;max-width:34px!important;max-height:34px!important;flex-basis:34px!important}}
 </style>
+
+
+<style id="novaro-item-card-desktop-columns-v2">
+/* Desktop item cards: keep QR and photo inside their own columns and give the name/code column the remaining width. */
+@media(min-width:601px){
+  :root #app .items-page article.item-card .item-card-top{
+    display:grid!important;
+    grid-template-columns:88px minmax(0,1fr) 88px!important;
+    align-items:center!important;
+    justify-content:stretch!important;
+    column-gap:10px!important;
+    min-width:0!important;
+    width:100%!important;
+    direction:ltr!important;
+  }
+  :root #app .items-page article.item-card .item-card-qr-column,
+  :root #app .items-page article.item-card .item-card-picture-column{
+    width:88px!important;
+    min-width:0!important;
+    max-width:88px!important;
+    flex:none!important;
+    justify-self:center!important;
+    box-sizing:border-box!important;
+  }
+  :root #app .items-page article.item-card .item-card-symbol,
+  :root #app .items-page article.item-card .item-card-picture{
+    width:88px!important;
+    min-width:88px!important;
+    max-width:88px!important;
+    height:88px!important;
+    min-height:88px!important;
+    max-height:88px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+  :root #app .items-page article.item-card .item-qrcode-wrap{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+  :root #app .items-page article.item-card .item-qrcode{
+    width:76px!important;
+    min-width:76px!important;
+    max-width:76px!important;
+    height:76px!important;
+    min-height:76px!important;
+    max-height:76px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+  :root #app .items-page article.item-card .item-qrcode img,
+  :root #app .items-page article.item-card .item-qrcode canvas{
+    width:68px!important;
+    height:68px!important;
+    max-width:68px!important;
+    max-height:68px!important;
+    object-fit:contain!important;
+  }
+  :root #app .items-page article.item-card .item-card-title{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    flex:none!important;
+    justify-self:stretch!important;
+    align-items:stretch!important;
+    box-sizing:border-box!important;
+  }
+  :root #app .items-page article.item-card .item-card-field{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+  :root #app .items-page article.item-card .item-card-title strong,
+  :root #app .items-page article.item-card .item-card-title .item-card-code{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    overflow-wrap:anywhere!important;
+  }
+  :root #app .items-page article.item-card .item-card-image,
+  :root #app .items-page article.item-card .item-card-placeholder{
+    width:78px!important;
+    height:78px!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    object-fit:cover!important;
+  }
+  :root #app .items-page article.item-card .item-photo-label,
+  :root #app .items-page article.item-card .item-qr-label{
+    width:88px!important;
+    min-width:0!important;
+    max-width:88px!important;
+    box-sizing:border-box!important;
+  }
+}
+</style>
