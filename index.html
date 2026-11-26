@@ -4502,52 +4502,7 @@ async function employeeAttendanceSave(){
 }
 function employeeAttendanceExport(kind){
  const sh=employeeAttendanceActive();if(!sh)return;const en=language==="en",dates=housekeepingDates(sh),rows=employeeAttendanceRows(sh),matrix=[[en?"No.":"م",en?"Employee Code":"الكود الوظيفي",en?"Employee Name":"اسم الموظف",en?"Job Title":"المسمى الوظيفي",...dates],...rows.map((r,i)=>[i+1,r.code,r.name,r.jobTitle,...dates.map(d=>r.days[d]||"")])];
- const html='<html><head><meta charset="UTF-8"></head><body><table border="1">'+matrix.map((r,i)=>'<tr>'+r.map(v=>'<'+(i?"td":"th")+'>'+esc(v)+'</'+(i?"td":"th")+'>').join("")+'</tr>').join("")+'</table><style id="novaro-attendance-destination-grid-v1">\n#app#app .hka-page .attendance-destination-grid{display:grid!important;grid-template-columns:repeat(10,minmax(0,1fr))!important;gap:5px!important;width:min(100%,420px)!important;max-height:190px!important;overflow-y:auto!important;overflow-x:hidden!important;padding:7px!important;border:1px solid var(--line)!important;border-radius:10px!important;background:var(--surface,var(--card))!important;box-sizing:border-box!important;}\n#app#app .hka-page .attendance-destination-number{display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;width:100%!important;min-height:30px!important;height:30px!important;padding:0!important;border:1px solid var(--line)!important;border-radius:7px!important;background:var(--bg,var(--card))!important;color:var(--ink,var(--text))!important;font-size:12px!important;font-weight:650!important;cursor:pointer!important;}\n#app#app .hka-page .attendance-destination-number.is-selected{background:var(--g)!important;border-color:var(--g)!important;color:#fff!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--g) 20%,transparent)!important;}\n#app#app .hka-page .hka-inline-destination{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:6px!important;width:100%!important;}\n@media(max-width:520px){#app#app .hka-page .attendance-destination-grid{grid-template-columns:repeat(10,minmax(0,1fr))!important;gap:4px!important;padding:6px!important;}#app#app .hka-page .attendance-destination-number{height:28px!important;min-height:28px!important;font-size:11px!important;}}\n</style>\n
-<style id="novaro-attendance-destination-modal-v2">
-#app .hka-page .attendance-destination-modal-backdrop{
- position:fixed!important;inset:0!important;z-index:99999!important;
- display:flex!important;align-items:center!important;justify-content:center!important;
- padding:16px!important;box-sizing:border-box!important;
- background:rgba(12,20,16,.48)!important;backdrop-filter:blur(2px)!important;
-}
-#app .hka-page .attendance-destination-modal{
- display:flex!important;flex-direction:column!important;gap:10px!important;
- width:min(390px,calc(100vw - 32px))!important;max-width:390px!important;
- max-height:min(78vh,520px)!important;overflow:hidden!important;
- padding:16px!important;box-sizing:border-box!important;
- border:1px solid var(--line)!important;border-radius:16px!important;
- background:var(--card,#fff)!important;color:var(--ink,var(--text))!important;
- box-shadow:0 18px 55px rgba(0,0,0,.24)!important;
-}
-#app .hka-page .attendance-destination-modal-title{font-size:15px!important;font-weight:800!important;text-align:center!important;}
-#app .hka-page .attendance-destination-modal-hint{font-size:11px!important;line-height:1.6!important;color:var(--muted)!important;text-align:center!important;}
-#app .hka-page .attendance-destination-modal .hka-inline-destination{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;width:100%!important;min-height:0!important;}
-#app .hka-page .attendance-destination-modal .hka-inline-destination>span{font-size:11px!important;font-weight:700!important;text-align:center!important;}
-#app .hka-page .attendance-destination-grid{
- display:grid!important;grid-template-columns:repeat(10,minmax(0,1fr))!important;
- gap:6px!important;width:100%!important;max-height:220px!important;
- overflow-y:auto!important;overflow-x:hidden!important;
- padding:8px!important;border:1px solid var(--line)!important;
- border-radius:11px!important;background:var(--surface,var(--bg))!important;
- box-sizing:border-box!important;
-}
-#app .hka-page .attendance-destination-number{
- display:flex!important;align-items:center!important;justify-content:center!important;
- width:100%!important;min-width:0!important;height:30px!important;min-height:30px!important;
- padding:0!important;border:1px solid var(--line)!important;border-radius:7px!important;
- background:var(--card)!important;color:var(--ink,var(--text))!important;
- font-size:12px!important;font-weight:750!important;cursor:pointer!important;
-}
-#app .hka-page .attendance-destination-number.is-selected{
- background:var(--g)!important;border-color:var(--g)!important;color:#fff!important;
- box-shadow:0 0 0 2px color-mix(in srgb,var(--g) 22%,transparent)!important;
-}
-#app .hka-page .attendance-destination-modal-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;}
-#app .hka-page .attendance-destination-modal-actions button{width:100%!important;min-height:40px!important;height:40px!important;border-radius:9px!important;}
-#app .hka-page .attendance-destination-modal-actions button:disabled{opacity:.42!important;cursor:not-allowed!important;}
-</style>
-
-</body></html>';
+ const html='<html><head><meta charset="UTF-8"></head><body><table border="1">'+matrix.map((r,i)=>'<tr>'+r.map(v=>'<'+(i?"td":"th")+'>'+esc(v)+'</'+(i?"td":"th")+'>').join("")+'</tr>').join("")+'</table></body></html>';
  if(kind==="excel"){const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="Employee-Attendance-"+sh.start_date+".xls";a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);return;}
  const w=window.open("","_blank");if(!w)return;w.document.write(html);w.document.close();w.focus();w.print();
 }
@@ -11059,6 +11014,20 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   width:max-content!important;
   margin:0!important;
 }
+</style>
+<style id="novaro-attendance-destination-modal-v3">
+#app .hka-page .attendance-destination-modal-backdrop{position:fixed!important;inset:0!important;z-index:99999!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:16px!important;box-sizing:border-box!important;background:rgba(12,20,16,.48)!important;backdrop-filter:blur(2px)!important;}
+#app .hka-page .attendance-destination-modal{display:flex!important;flex-direction:column!important;gap:10px!important;width:min(390px,calc(100vw - 32px))!important;max-width:390px!important;max-height:min(78vh,520px)!important;overflow:hidden!important;padding:16px!important;box-sizing:border-box!important;border:1px solid var(--line)!important;border-radius:16px!important;background:var(--card,#fff)!important;color:var(--ink,var(--text))!important;box-shadow:0 18px 55px rgba(0,0,0,.24)!important;}
+#app .hka-page .attendance-destination-modal-title{font-size:15px!important;font-weight:800!important;text-align:center!important;}
+#app .hka-page .attendance-destination-modal-hint{font-size:11px!important;line-height:1.6!important;color:var(--muted)!important;text-align:center!important;}
+#app .hka-page .attendance-destination-modal .hka-inline-destination{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;width:100%!important;min-height:0!important;}
+#app .hka-page .attendance-destination-modal .hka-inline-destination>span{font-size:11px!important;font-weight:700!important;text-align:center!important;}
+#app .hka-page .attendance-destination-grid{display:grid!important;grid-template-columns:repeat(10,minmax(0,1fr))!important;gap:6px!important;width:100%!important;max-height:220px!important;overflow-y:auto!important;overflow-x:hidden!important;padding:8px!important;border:1px solid var(--line)!important;border-radius:11px!important;background:var(--surface,var(--bg))!important;box-sizing:border-box!important;}
+#app .hka-page .attendance-destination-number{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;height:30px!important;min-height:30px!important;padding:0!important;border:1px solid var(--line)!important;border-radius:7px!important;background:var(--card)!important;color:var(--ink,var(--text))!important;font-size:12px!important;font-weight:750!important;cursor:pointer!important;}
+#app .hka-page .attendance-destination-number.is-selected{background:var(--g)!important;border-color:var(--g)!important;color:#fff!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--g) 22%,transparent)!important;}
+#app .hka-page .attendance-destination-modal-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;}
+#app .hka-page .attendance-destination-modal-actions button{width:100%!important;min-height:40px!important;height:40px!important;border-radius:9px!important;}
+#app .hka-page .attendance-destination-modal-actions button:disabled{opacity:.42!important;cursor:not-allowed!important;}
 </style>
 </body>
 
