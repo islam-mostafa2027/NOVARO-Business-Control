@@ -4374,7 +4374,11 @@ function housekeepingExport(kind){
  const matrix=[headers,...rows.map((r,i)=>[String(i+1),housekeepingDisplayName(r),...dates.map(d=>r.days[d]||"")])];
  const filename="Housekeeping-Attendance-"+sheet.start_date+"-"+sheet.end_date;
  if(kind==="excel"){
-  const html='<html><head><meta charset="UTF-8"></head><body><table border="1">'+matrix.map((r,i)=>'<tr>'+r.map(v=>'<'+(i===0?"th":"td")+'>'+esc(v)+'</'+(i===0?"th":"td")+'>').join("")+'</tr>').join("")+'</table></body></html>';
+  const html='<html><head><meta charset="UTF-8"></head><body><table border="1">'+matrix.map((r,i)=>'<tr>'+r.map(v=>'<'+(i===0?"th":"td")+'>'+esc(v)+'</'+(i===0?"th":"td")+'>').join("")+'</tr>').join("")+'</table><style id="novaro-hka-small-round-controls-v4">/* Compact housekeeping controls without changing their established RTL positions. */
+#app .hka-page .hka-back-zoom .hka-zoom-controls button,#app .hka-page button[data-hka-zoom]{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;flex:0 0 22px!important;aspect-ratio:1/1!important;border-radius:50%!important;padding:0!important;font-size:12px!important;line-height:20px!important;}
+#app .hka-page .headcount-back{height:30px!important;min-height:30px!important;padding:4px 9px!important;font-size:12px!important;line-height:1.15!important;border-radius:12px!important;width:auto!important;max-width:max-content!important;}
+#app .hka-page #hkaAddPeriod,#app .hka-page button.hka-add-period{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;flex:0 0 22px!important;aspect-ratio:1/1!important;border-radius:50%!important;padding:0!important;font-size:12px!important;line-height:20px!important;}
+</style></body></html>';
   const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename+".xls";a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);return;
  }
  const print=document.createElement("iframe");print.style.cssText="position:fixed;right:0;bottom:0;width:0;height:0;border:0";document.body.appendChild(print);
