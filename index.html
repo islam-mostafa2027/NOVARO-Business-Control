@@ -4316,7 +4316,7 @@ function housekeepingActive(){
  return housekeepingSheets.find(x=>String(x.id)===String(housekeepingActiveSheetId))||housekeepingSheets[0]||null;
 }
 function housekeepingFormatRange(sheet){
- const fmt=d=>new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{day:"numeric",month:"long",year:"numeric"}).format(new Date(d+"T12:00:00"));
+ const fmt=d=>{if(!d)return "—";const date=new Date(d+"T12:00:00");return Number.isNaN(date.getTime())?"—":new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{day:"numeric",month:"long",year:"numeric"}).format(date);};
  return fmt(sheet.start_date)+" – "+fmt(sheet.end_date);
 }
 function housekeepingMarkup(branch,title){
