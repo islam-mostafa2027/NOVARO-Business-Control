@@ -4444,38 +4444,7 @@ async function employeeAttendanceSave(){
 }
 function employeeAttendanceExport(kind){
  const sh=employeeAttendanceActive();if(!sh)return;const en=language==="en",dates=housekeepingDates(sh),rows=employeeAttendanceRows(sh),matrix=[[en?"No.":"م",en?"Employee Code":"الكود الوظيفي",en?"Employee Name":"اسم الموظف",en?"Job Title":"المسمى الوظيفي",...dates],...rows.map((r,i)=>[i+1,r.code,r.name,r.jobTitle,...dates.map(d=>r.days[d]||"")])];
- const html='<html><head><meta charset="UTF-8"></head><body><table border="1">'+matrix.map((r,i)=>'<tr>'+r.map(v=>'<'+(i?"td":"th")+'>'+esc(v)+'</'+(i?"td":"th")+'>').join("")+'</tr>').join("")+'</table>
-<style id="novaro-hka-sequence-column-checkbox-fix-v1">
-/* Keep the sequence column as a real table cell; reserve enough room for its optional checkbox and number. */
-#app .hka-page .hka-table th.hka-seq,
-#app .hka-page .hka-table td.hka-seq{
-  display:table-cell!important;
-  box-sizing:border-box!important;
-  width:36px!important;
-  min-width:36px!important;
-  max-width:36px!important;
-  padding-inline:2px!important;
-  text-align:center!important;
-  white-space:nowrap!important;
-  vertical-align:middle!important;
-}
-#app .hka-page .hka-table td.hka-seq .attendance-row-pick{
-  display:inline-block!important;
-  position:static!important;
-  width:13px!important;height:13px!important;
-  min-width:13px!important;max-width:13px!important;
-  min-height:13px!important;max-height:13px!important;
-  margin:0 2px 0 0!important;
-  padding:0!important;
-  vertical-align:middle!important;
-}
-#app .hka-page .hka-table td.hka-seq .hka-seq-number{
-  display:inline-block!important;
-  vertical-align:middle!important;
-  line-height:1.2!important;
-}
-</style>
-</body></html>';
+ const html='<html><head><meta charset="UTF-8"></head><body><table border="1">'+matrix.map((r,i)=>'<tr>'+r.map(v=>'<'+(i?"td":"th")+'>'+esc(v)+'</'+(i?"td":"th")+'>').join("")+'</tr>').join("")+'</table></body></html>';
  if(kind==="excel"){const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="Employee-Attendance-"+sh.start_date+".xls";a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);return;}
  const w=window.open("","_blank");if(!w)return;w.document.write(html);w.document.close();w.focus();w.print();
 }
