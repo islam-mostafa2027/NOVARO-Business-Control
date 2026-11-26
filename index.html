@@ -7585,6 +7585,34 @@ editCategory=function(id){__novaroBaseEditCategory(id);const group=$("editCatGro
  #novaro-attendance-cell-color-picker .novaro-cell-color-swatch{appearance:none;-webkit-appearance:none;width:32px;height:32px;min-width:32px;min-height:32px;padding:0;border:2px solid rgba(50,65,55,.28);border-radius:50%;background:var(--swatch)!important;box-shadow:none;cursor:pointer}
  #novaro-attendance-cell-color-picker .novaro-cell-color-swatch:focus-visible{outline:2px solid var(--g,#55a77b);outline-offset:2px}
  #novaro-attendance-cell-color-picker .novaro-cell-color-clear{display:block;width:100%;min-height:32px;margin-top:9px;border:1px solid var(--line,#cbd5cf);border-radius:7px;background:var(--bg,#f5f7f5);color:inherit;font:inherit;font-size:11px;font-weight:700}
+
+ /* Isolate picker action buttons from the app-wide green primary-button theme. */
+ #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch){
+  appearance:none!important;-webkit-appearance:none!important;
+  background:#eef2ef!important;background-image:none!important;
+  background-color:#eef2ef!important;color:#34443b!important;
+  -webkit-text-fill-color:#34443b!important;
+  border:1px solid #cbd6cf!important;
+  box-shadow:none!important;filter:none!important;
+ }
+ #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch):hover,
+ #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch):active{
+  background:#e2e9e4!important;background-image:none!important;
+  background-color:#e2e9e4!important;color:#263b30!important;
+  -webkit-text-fill-color:#263b30!important;border-color:#b8c8bd!important;
+  box-shadow:none!important;filter:none!important;transform:none!important;
+ }
+ :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch){
+  background:#303b35!important;background-image:none!important;background-color:#303b35!important;
+  color:#edf4ef!important;-webkit-text-fill-color:#edf4ef!important;
+  border-color:#56665c!important;
+ }
+ :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch):hover,
+ :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch):active{
+  background:#3a4940!important;background-image:none!important;background-color:#3a4940!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:#718579!important;
+ }
+
  `;
  document.head.appendChild(style);
 })();
