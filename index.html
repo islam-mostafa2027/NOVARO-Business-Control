@@ -12160,7 +12160,74 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 </style>
 
 
-<style id="novaro-hka-header-ltr-branch-anchor-v1">\n/* English header mirrors the Arabic two-edge layout: controls stay left, branch details stay right. */\n#app .hka-page .hka-header-layout[dir="ltr"]{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;grid-template-areas:"back branch"!important;align-items:start!important;justify-content:stretch!important;gap:8px!important;width:100%!important;min-width:0!important;}\n#app .hka-page .hka-header-layout[dir="ltr"]>.hka-back-zoom{grid-area:back!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-self:start!important;justify-content:flex-start!important;width:max-content!important;min-width:0!important;margin:0!important;}\n#app .hka-page .hka-header-layout[dir="ltr"]>.hka-back-zoom>.headcount-back{align-self:flex-start!important;margin:0!important;}\n#app .hka-page .hka-header-layout[dir="ltr"]>.hka-back-zoom>.hka-zoom-controls{align-self:flex-start!important;justify-content:flex-start!important;margin:0!important;width:max-content!important;}\n#app .hka-page .hka-header-layout[dir="ltr"]>.hka-title-stack{grid-area:branch!important;display:flex!important;flex-direction:column!important;align-items:flex-end!important;justify-self:stretch!important;align-self:start!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:0!important;text-align:right!important;}\n#app .hka-page .hka-header-layout[dir="ltr"]>.hka-title-stack>.hka-branch-line{display:flex!important;align-items:center!important;justify-content:flex-end!important;width:100%!important;min-width:0!important;text-align:right!important;}\n@media(max-width:480px){#app .hka-page .hka-header-layout[dir="ltr"]{gap:6px!important;}#app .hka-page .hka-header-layout[dir="ltr"]>.hka-title-stack{max-width:none!important;}}\n</style>\n<style id="novaro-item-card-desktop-columns-v2">
+<style id="novaro-hka-header-ltr-branch-anchor-v2">
+/* English header: keep controls at the left edge and branch details at the right edge. */
+#app .hka-page .hka-header-layout[dir="ltr"] {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  grid-template-areas: "back branch" !important;
+  align-items: start !important;
+  justify-content: stretch !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+#app .hka-page .hka-header-layout[dir="ltr"] > .hka-back-zoom {
+  grid-area: back !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-self: start !important;
+  justify-content: flex-start !important;
+  width: max-content !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+#app .hka-page .hka-header-layout[dir="ltr"] > .hka-back-zoom > .headcount-back {
+  align-self: flex-start !important;
+  margin: 0 !important;
+}
+#app .hka-page .hka-header-layout[dir="ltr"] > .hka-back-zoom > .hka-zoom-controls {
+  align-self: flex-start !important;
+  justify-content: flex-start !important;
+  margin: 0 !important;
+  width: max-content !important;
+}
+#app .hka-page .hka-header-layout[dir="ltr"] > .hka-title-stack {
+  grid-area: branch !important;
+  display: flex !important;
+  flex: 0 1 auto !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-self: stretch !important;
+  align-self: start !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: right !important;
+}
+#app .hka-page .hka-header-layout[dir="ltr"] > .hka-title-stack > .hka-branch-line {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  text-align: right !important;
+}
+#app .hka-page .hka-header-layout[dir="ltr"] > .hka-title-stack .hka-branch-name,
+#app .hka-page .hka-header-layout[dir="ltr"] > .hka-title-stack .hka-branch-address {
+  text-align: right !important;
+}
+@media (max-width: 480px) {
+  #app .hka-page .hka-header-layout[dir="ltr"] {
+    gap: 6px !important;
+  }
+}
+</style>\n<style id="novaro-item-card-desktop-columns-v2">
 /* Desktop item cards: keep QR and photo inside their own columns and give the name/code column the remaining width. */
 @media(min-width:601px){
   :root #app .items-page article.item-card .item-card-top{
