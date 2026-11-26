@@ -4297,6 +4297,7 @@ function housekeepingDates(sheet){
  return dates;
 }
 function housekeepingFitDateColumns(){const table=document.querySelector(".hka-table");if(!table)return;const dates=housekeepingDates(housekeepingActive()||{}),canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");if(!ctx)return;const locale=language==="en"?"en":"ar-EG",thead=table.querySelector("thead tr");dates.forEach((d,i)=>{const date=new Date(d+"T12:00:00"),month=new Intl.DateTimeFormat(locale,{month:"short"}).format(date),weekday=new Intl.DateTimeFormat(locale,{weekday:"short"}).format(date),header=date.getDate()+" "+month,th=thead?.cells[i+2];let width=58;ctx.font=getComputedStyle(th||table).font;width=Math.max(width,ctx.measureText(header).width+24);ctx.font=getComputedStyle(th?.querySelector("small")||th||table).font;width=Math.max(width,ctx.measureText(weekday).width+24);table.querySelectorAll("tbody tr").forEach(row=>{const input=row.cells[i+2]?.querySelector("input");if(input){const style=getComputedStyle(input);ctx.font=style.font||style.fontSize+" "+style.fontFamily;const text=input.value||"";width=Math.max(width,ctx.measureText(text).width+parseFloat(style.paddingLeft||0)+parseFloat(style.paddingRight||0)+parseFloat(style.borderLeftWidth||0)+parseFloat(style.borderRightWidth||0)+12);}});width=Math.ceil(width);if(th){th.style.width=width+"px";th.style.minWidth=width+"px";th.style.maxWidth=width+"px";}table.querySelectorAll("tbody tr").forEach(row=>{const cell=row.cells[i+2];if(cell){cell.style.width=width+"px";cell.style.minWidth=width+"px";cell.style.maxWidth=width+"px";}});});}
+function housekeepingFitNameColumn(){const table=document.querySelector(".hka-table");if(!table)return;const head=table.querySelector("thead tr")?.cells[1];if(!head)return;const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");if(!ctx)return;let width=185;const measure=el=>{const style=getComputedStyle(el);ctx.font=style.font||style.fontSize+" "+style.fontFamily;return ctx.measureText(el.value??el.textContent??"").width+parseFloat(style.paddingLeft||0)+parseFloat(style.paddingRight||0)+parseFloat(style.borderLeftWidth||0)+parseFloat(style.borderRightWidth||0)+18;};width=Math.max(width,measure(head));table.querySelectorAll("tbody tr").forEach(row=>{const input=row.cells[1]?.querySelector("input");if(input)width=Math.max(width,measure(input));});width=Math.ceil(width);[head,...table.querySelectorAll("tbody tr")].forEach((rowOrCell)=>{const cell=rowOrCell===head?head:rowOrCell.cells[1];if(cell){cell.style.width=width+"px";cell.style.minWidth=width+"px";cell.style.maxWidth=width+"px";const input=cell.querySelector("input");if(input){input.style.width="100%";input.style.minWidth="0";input.style.boxSizing="border-box";}}});}
 function housekeepingSheetRows(sheet){
  if(!sheet.sheet_data||typeof sheet.sheet_data!=="object")sheet.sheet_data={version:1,rows:[]};
  if(!Array.isArray(sheet.sheet_data.rows))sheet.sheet_data.rows=[];
@@ -4317,7 +4318,7 @@ function housekeepingActive(){
  return housekeepingSheets.find(x=>String(x.id)===String(housekeepingActiveSheetId))||housekeepingSheets[0]||null;
 }
 function housekeepingFormatRange(sheet){
- const fmt=d=>{if(!d)return "—";const date=new Date(d+"T12:00:00");return Number.isNaN(date.getTime())?"—":new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{day:"numeric",month:"long",year:"numeric"}).format(date);};
+ const fmt=d=>{if(!d)return "—";const date=new Date(d+"T12:00:00");return Number.isNaN(date.getTime())?"—":new Intl.DateTimeFormat(language==="en"?"en-GB":"ar-EG",{day:"numeric",month:"short",year:"numeric"}).format(date);};
  return fmt(sheet.start_date)+" – "+fmt(sheet.end_date);
 }
 function housekeepingMarkup(branch,title){
@@ -4356,7 +4357,7 @@ function housekeepingExport(kind){
 document.addEventListener("input",e=>{
  const name=e.target.closest?.("[data-hka-name]"),day=e.target.closest?.("[data-hka-day]");
  const sheet=housekeepingActive();if(!sheet)return;
- if(name){const row=housekeepingSheetRows(sheet).find(r=>String(r.id)===String(name.dataset.hkaName));if(row)row.name=name.value;}
+ if(name){const row=housekeepingSheetRows(sheet).find(r=>String(r.id)===String(name.dataset.hkaName));if(row)row.name=name.value;setTimeout(housekeepingFitNameColumn,0);}
  if(day){const row=housekeepingSheetRows(sheet).find(r=>String(r.id)===String(day.dataset.hkaDay));if(row)row.days[day.dataset.hkaDate]=day.value;}if(day)setTimeout(housekeepingFitDateColumns,0);
  const start=e.target.closest?.("#hkaStart"),end=e.target.closest?.("#hkaEnd");if(start)sheet.start_date=start.value;if(end)sheet.end_date=end.value;
 });
@@ -6569,7 +6570,7 @@ if(page==="headcountAttendanceEmployee"||page==="headcountAttendanceHousekeeping
    if(housekeepingLoadedBranchId!==headcountBranchId||!housekeepingSheets.length){
     m.innerHTML='<section class="card"><p class="muted">'+(language==="en"?"Loading attendance sheet...":"جاري تحميل كشف الحضور...")+'</p></section>';
     housekeepingLoad(headcountBranchId).then(()=>render()).catch(error=>{console.error("Housekeeping attendance load:",error);const host=document.getElementById("app");if(host)host.querySelector("main")?.insertAdjacentHTML("beforeend",'<p class="hka-error">'+esc(error.message||String(error))+'</p>');});
-   }else{m.innerHTML=housekeepingMarkup(attendanceBranch,attendanceTitle);setTimeout(housekeepingFitDateColumns,0);setTimeout(housekeepingFitDateColumns,120);}
+   }else{m.innerHTML=housekeepingMarkup(attendanceBranch,attendanceTitle);setTimeout(housekeepingFitDateColumns,0);setTimeout(housekeepingFitDateColumns,120);setTimeout(housekeepingFitNameColumn,0);setTimeout(housekeepingFitNameColumn,120);}
   }else m.innerHTML='<section class="card headcount-page-card hc-section-switcher"><div class="headcount-detail-top"><button type="button" class="soft headcount-back" id="headcountAttendanceBack">← '+(language==="en"?"Back to Headcount":"العودة إلى عدد العاملين")+'</button><div><h3>'+esc(branchLabel(attendanceBranch))+'</h3><p class="muted">'+esc(attendanceTitle)+'</p></div></div><div class="hc-section-panel hc-attendance-placeholder"><div class="hc-section-heading"><div><h3>'+esc(attendanceTitle)+'</h3></div></div></div></section>';
  }
 }
