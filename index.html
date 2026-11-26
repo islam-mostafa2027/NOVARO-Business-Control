@@ -4428,18 +4428,7 @@ function housekeepingExport(kind){
  const filename="Housekeeping-Attendance-"+sheet.start_date+"-"+sheet.end_date;
  if(kind==="excel"){
   const html='<html><head><meta charset="UTF-8"></head><body><table border="1">'+matrix.map((r,i)=>'<tr>'+r.map(v=>'<'+(i===0?"th":"td")+'>'+esc(v)+'</'+(i===0?"th":"td")+'>').join("")+'</tr>').join("")+'</table>
-<style id="novaro-attendance-card-refinements-v1">
-#app .hka-page .hka-branch-name,#app .hka-page .hka-branch-address{font-size:14px!important;line-height:1.25!important}
-#app .hka-page .hka-title-line>h3{font-size:13px!important;line-height:1.25!important;font-weight:500!important;color:var(--muted)!important;margin:2px 0 0!important}
-#app .hka-page .hka-back-zoom .hka-zoom-controls button,#app .hka-page button[data-hka-zoom]{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;flex:0 0 22px!important;font-size:12px!important;line-height:20px!important}
-#app .hka-page .hka-table .hka-seq{width:fit-content!important;min-width:0!important;max-width:none!important;padding-inline:4px!important;white-space:nowrap!important}
-#app .hka-page .hka-table .hka-name{inset-inline-start:var(--hka-seq-width,36px)!important}
-@media(max-width:480px){
- #app .hka-page .hka-branch-name,#app .hka-page .hka-branch-address{font-size:12px!important}
- #app .hka-page .hka-title-line>h3{font-size:11px!important}
- #app .hka-page .hka-back-zoom .hka-zoom-controls button,#app .hka-page button[data-hka-zoom]{width:21px!important;height:21px!important;min-width:21px!important;min-height:21px!important;max-width:21px!important;max-height:21px!important;flex-basis:21px!important}
-}
-</style>
+
 </body></html>';
   const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename+".xls";a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);return;
  }
@@ -10873,7 +10862,28 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .hka-page .hka-back-zoom .hka-zoom-controls button,#app .hka-page button[data-hka-zoom]{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;flex:0 0 22px!important;aspect-ratio:1/1!important;border-radius:50%!important;padding:0!important;font-size:12px!important;line-height:20px!important;}
 #app .hka-page .headcount-back{height:30px!important;min-height:30px!important;padding:4px 9px!important;font-size:12px!important;line-height:1.15!important;border-radius:12px!important;width:auto!important;max-width:max-content!important;}
 #app .hka-page #hkaAddPeriod,#app .hka-page button.hka-add-period{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;flex:0 0 22px!important;aspect-ratio:1/1!important;border-radius:50%!important;padding:0!important;font-size:12px!important;line-height:20px!important;}
-</style></body>
+</style><style id="novaro-attendance-card-refinements-v1">
+#app .hka-page .hka-branch-name,#app .hka-page .hka-branch-address{font-size:14px!important;line-height:1.25!important}
+#app .hka-page .hka-title-line>h3{font-size:13px!important;line-height:1.25!important;font-weight:500!important;color:var(--muted)!important;margin:2px 0 0!important}
+#app .hka-page .hka-back-zoom .hka-zoom-controls button,#app .hka-page button[data-hka-zoom]{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;flex:0 0 22px!important;font-size:12px!important;line-height:20px!important}
+#app .hka-page .hka-table .hka-seq{width:fit-content!important;min-width:0!important;max-width:none!important;padding-inline:4px!important;white-space:nowrap!important}
+#app .hka-page .hka-table .hka-name{inset-inline-start:var(--hka-seq-width,36px)!important}
+@media(max-width:480px){
+ #app .hka-page .hka-branch-name,#app .hka-page .hka-branch-address{font-size:12px!important}
+ #app .hka-page .hka-title-line>h3{font-size:11px!important}
+ #app .hka-page .hka-back-zoom .hka-zoom-controls button,#app .hka-page button[data-hka-zoom]{width:21px!important;height:21px!important;min-width:21px!important;min-height:21px!important;max-width:21px!important;max-height:21px!important;flex-basis:21px!important}
+}
+</style>
+<style id="novaro-employee-attendance-layout-v1">
+#app .eha-page .eha-table .hka-seq{width:1%!important;min-width:0!important;white-space:nowrap!important;padding-inline:3px!important}
+#app .eha-page .eha-table .eha-code{position:sticky;inset-inline-start:24px;z-index:3;min-width:100px;width:100px}
+#app .eha-page .eha-table thead .eha-code{z-index:4;background:var(--bg,#f6f7f4)}
+#app .eha-page .eha-table .hka-name{inset-inline-start:124px!important}
+#app .eha-page .eha-table td.eha-code input{min-width:80px;text-align:center}
+#app .hka-page .hka-table .hka-seq{width:1%!important;min-width:0!important;white-space:nowrap!important;padding-inline:3px!important}
+#app .hka-page .hka-table .hka-name{inset-inline-start:24px!important}
+</style>
+</body>
 
 
 
