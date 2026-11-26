@@ -6584,7 +6584,7 @@ if(page==="headcount"){
   const canManage=profile.role==="owner_admin"||profile.role==="branch_manager";
   const canManageJobRequirements=profile.role==="owner_admin";
   const jobOptions='<option value="">'+(language==="en"?"Choose job title":"اختر المسمى الوظيفي")+'</option>'+branchRoles.map(r=>'<option value="'+r.id+'">'+esc(localizedHeadcountField(r,"job_title"))+'</option>').join("");
-  const roleRows=branchRoles.map(r=>'<div class="hc-role-row" data-role-row="'+r.id+'"><input class="hc-role-title" data-original-value="'+esc(r.job_title)+'" data-display-value="'+esc(localizedHeadcountField(r,"job_title"))+'" aria-label="'+(language==="en"?"Job title":"المسمى الوظيفي")+'" value="'+esc(localizedHeadcountField(r,"job_title"))+'" '+(!canManageJobRequirements?'disabled':'')+'><input class="hc-role-count" aria-label="'+(language==="en"?"Required count":"العدد المطلوب")+'" type="number" min="0" step="1" inputmode="numeric" value="'+Number(r.required_count||0)+'" '+(!canManage?'disabled':'')+'><div class="hc-row-actions">'+(canManage?'<button type="button" class="soft" data-save-role="'+r.id+'">'+(language==="en"?"Save count":"حفظ العدد")+'</button>':'')+(canManageJobRequirements?'<button type="button" class="soft hc-delete" data-delete-role="'+r.id+'">×</button>':'')+'</div></div>').join("");
+  const roleRows=branchRoles.map(r=>'<div class="hc-role-row" data-role-row="'+r.id+'"><input class="hc-role-title" data-original-value="'+esc(r.job_title)+'" data-display-value="'+esc(localizedHeadcountField(r,"job_title"))+'" aria-label="'+(language==="en"?"Job title":"المسمى الوظيفي")+'" value="'+esc(localizedHeadcountField(r,"job_title"))+'" '+(!canManageJobRequirements?'disabled':'')+'><input class="hc-role-count" aria-label="'+(language==="en"?"Required count":"العدد المطلوب")+'" type="number" min="0" step="1" inputmode="numeric" value="'+Number(r.required_count||0)+'" '+(!canManage?'disabled':'')+'><div class="hc-row-actions">'+(canManage?'<button type="button" class="soft hc-icon-action hc-save-role" data-save-role="'+r.id+'" aria-label="'+(language==="en"?"Save required count":"حفظ العدد المطلوب")+'" title="'+(language==="en"?"Save required count":"حفظ العدد المطلوب")+'">✓</button>':'')+(canManageJobRequirements?'<button type="button" class="soft hc-delete hc-icon-action" data-delete-role="'+r.id+'" aria-label="'+(language==="en"?"Delete job title":"حذف المسمى الوظيفي")+'" title="'+(language==="en"?"Delete job title":"حذف المسمى الوظيفي")+'">×</button>':'')+'</div></div>').join("");
   const normalizeHeadcountTitle=value=>String(value||"").normalize("NFKC").replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").trim().toLocaleLowerCase().split(/\s+/).map(word=>word.startsWith("ال")&&word.length>2?word.slice(2):word).map(word=>word==="مطعم"?"فرع":word).join("");
   const sortedBranchEmployees=[...branchEmployees].map((emp,index)=>({emp,index,roleIndex:branchRoles.findIndex(role=>String(role.id)===String(emp.job_title_id||""))>=0?branchRoles.findIndex(role=>String(role.id)===String(emp.job_title_id||"")):branchRoles.findIndex(role=>normalizeHeadcountTitle(role.job_title)===normalizeHeadcountTitle(emp.job_title))})).sort((a,b)=>(a.roleIndex<0?branchRoles.length:a.roleIndex)-(b.roleIndex<0?branchRoles.length:b.roleIndex)||a.index-b.index).map(x=>x.emp);
   const employeeRows=sortedBranchEmployees.map((emp,index)=>'<div class="hc-employee-row" data-employee-row="'+emp.id+'"><input class="hc-employee-number" aria-label="'+(language==="en"?"Employee number":"الرقم الوظيفي")+'" value="'+esc(emp.employee_number)+'" '+(!canManage?'disabled':'')+'><input class="hc-employee-name" data-original-value="'+esc(emp.full_name)+'" data-display-value="'+esc(localizedHeadcountField(emp,"full_name"))+'" aria-label="'+(language==="en"?"Employee name":"اسم الموظف")+'" value="'+esc(localizedHeadcountField(emp,"full_name"))+'" '+(!canManage?'disabled':'')+'><input class="hc-employee-title" data-original-value="'+esc(emp.job_title)+'" data-display-value="'+esc(localizedHeadcountField(emp,"job_title"))+'" aria-label="'+(language==="en"?"Job title":"المسمى الوظيفي")+'" value="'+esc(localizedHeadcountField(emp,"job_title"))+'" placeholder="'+(language==="en"?"Job title":"المسمى الوظيفي")+'" '+(!canManage?'disabled':'')+'>'+(canManage?'<div class="hc-row-actions"><button type="button" class="soft hc-icon-action hc-save-employee" data-save-employee="'+emp.id+'" aria-label="'+(language==="en"?"Save employee":"حفظ الموظف")+'" title="'+(language==="en"?"Save employee":"حفظ الموظف")+'">✓</button><button type="button" class="soft hc-delete hc-icon-action" data-delete-employee="'+emp.id+'" aria-label="'+(language==="en"?"Delete employee":"حذف الموظف")+'" title="'+(language==="en"?"Delete employee":"حذف الموظف")+'">×</button></div>':'')+'</div>').join("");
@@ -11991,5 +11991,33 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
     max-width:88px!important;
     box-sizing:border-box!important;
   }
+}
+</style>
+
+<style id="novaro-required-role-icon-actions-layout-v1">
+/* Match required-role actions to the compact circular employee-row controls. */
+#app .hc-role-row .hc-row-actions{width:100%;gap:4px;justify-content:center}
+#app .hc-role-row .hc-row-actions .hc-icon-action{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ width:25px!important;height:25px!important;min-width:25px!important;max-width:25px!important;
+ min-height:25px!important;padding:0!important;border-radius:50%!important;
+ flex:0 0 25px!important;font-size:15px!important;font-weight:800!important;line-height:1!important;
+}
+#app .hc-role-row .hc-save-role{color:var(--success,#278365)!important}
+#app .hc-role-row .hc-delete{color:#a84343!important}
+#app .hc-role-head,#app .hc-role-row{
+ grid-template-columns:minmax(0,1.3fr) minmax(125px,1fr) 58px!important;
+ column-gap:8px!important;padding-inline:8px!important;box-sizing:border-box!important;
+}
+@media(max-width:600px){
+ #app .hc-role-head,#app .hc-role-row{
+  grid-template-columns:minmax(0,1fr) minmax(76px,1fr) 50px!important;
+  column-gap:5px!important;padding-inline:8px!important;
+ }
+ #app .hc-role-row .hc-row-actions{gap:3px}
+ #app .hc-role-row .hc-row-actions .hc-icon-action{
+  width:23px!important;height:23px!important;min-width:23px!important;max-width:23px!important;
+  min-height:23px!important;flex-basis:23px!important;font-size:14px!important;
+ }
 }
 </style>
