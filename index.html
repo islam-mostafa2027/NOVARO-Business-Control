@@ -12213,6 +12213,13 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .hka-page .attendance-row-hint{font-size:12px!important;opacity:.8;}
 @media(max-width:600px){#app .hka-page .attendance-row-action-panel{align-items:stretch!important;}#app .hka-page .attendance-row-action-panel button{min-height:34px!important;}}
 #app .hka-page .hka-table td.hka-name>.attendance-row-pick,#app .eha-page .eha-table td.hka-name>.attendance-row-pick{width:15px!important;height:15px!important;min-width:15px!important;max-width:15px!important;min-height:15px!important;max-height:15px!important;}
+<style id="novaro-attendance-row-picker-visibility-v2">
+/* Keep employee name inputs visible while selection checkboxes are active. */
+#app .hka-page td.hka-name:has(>.attendance-row-pick)>input:not(.attendance-row-pick){position:relative!important;z-index:1!important;display:block!important;opacity:1!important;visibility:visible!important;color:var(--text)!important;background:var(--card)!important;padding-left:24px!important;padding-inline-start:24px!important;}
+#app .hka-page td.hka-name>.attendance-row-pick{left:4px!important;right:auto!important;inset-inline-start:auto!important;z-index:3!important;background:var(--card)!important;opacity:1!important;visibility:visible!important;}
+</style>
+
+
 </style>
 
 
