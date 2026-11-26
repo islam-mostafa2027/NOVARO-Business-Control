@@ -4312,9 +4312,13 @@ function housekeepingLatinToArabic(value){
 }
 function housekeepingDisplayName(row){
  const source=String(row?.name??"");if(!source)return "";
- const key=source.toLocaleLowerCase().replace(/[^a-z]/g,"");
- const shiftTitles={hawskybyngsbahy:{ar:"هاوس كيبنج صباحي",en:"Housekeeping AM"},hawskybyngmsay:{ar:"هاوس كيبنج مسائي",en:"Housekeeping PM"}};
- const shift=shiftTitles[key];
+ const key=source.toLocaleLowerCase().normalize("NFKD").replace(/[^a-z]/g,"");
+ // Match only the two known housekeeping shift labels in this attendance sheet.
+ const isHousekeeping=key.startsWith("haws")&&key.includes("kybyng");
+ const shift=isHousekeeping&&key.includes("sbahy")
+  ?{ar:"هاوس كيبنج صباحي",en:"Housekeeping AM"}
+  :isHousekeeping&&(key.includes("msay")||key.includes("msy"))
+   ?{ar:"هاوس كيبنج مسائي",en:"Housekeeping PM"}:null;
  if(shift)return shift[language==="en"?"en":"ar"];
  const sourceLang=row.name_lang||(housekeepingNameScript(source));
  if(sourceLang===language)return source;
