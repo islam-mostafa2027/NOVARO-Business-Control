@@ -4305,12 +4305,12 @@ function housekeepingFitDateColumns(){const table=document.querySelector(".hka-t
 function housekeepingFitNameColumn(){const table=document.querySelector(".hka-table");if(!table)return;const head=table.querySelector("thead tr")?.cells[1];if(!head)return;const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");if(!ctx)return;let width=150;const measure=el=>{const style=getComputedStyle(el);ctx.font=style.font||style.fontSize+" "+style.fontFamily;return ctx.measureText(el.value??el.textContent??"").width+parseFloat(style.paddingLeft||0)+parseFloat(style.paddingRight||0)+parseFloat(style.borderLeftWidth||0)+parseFloat(style.borderRightWidth||0)+18;};width=Math.max(width,measure(head));table.querySelectorAll("tbody tr").forEach(row=>{const input=row.cells[1]?.querySelector("input");if(input)width=Math.max(width,measure(input));});width=Math.ceil(width);[head,...table.querySelectorAll("tbody tr")].forEach((rowOrCell)=>{const cell=rowOrCell===head?head:rowOrCell.cells[1];if(cell){cell.style.width=width+"px";cell.style.minWidth=width+"px";cell.style.maxWidth=width+"px";const input=cell.querySelector("input");if(input){input.style.width="100%";input.style.minWidth="0";input.style.boxSizing="border-box";}}});}
 function attendanceFitSequenceColumn(table){
  if(!table)return;const seq=table.querySelector("thead .hka-seq");if(!seq)return;
- const width=seq.getBoundingClientRect().width;table.style.setProperty("--hka-seq-width",width+"px");
+ const width=seq.offsetWidth;table.style.setProperty("--hka-seq-width",width+"px");
  if(table.classList.contains("eha-table")){
-  const code=table.querySelector("thead .eha-code"),codeWidth=code?code.getBoundingClientRect().width:100;
+  const code=table.querySelector("thead .eha-code"),codeWidth=code?code.offsetWidth:100;
+  table.style.setProperty("--hka-name-offset",(width+codeWidth)+"px");
   table.querySelectorAll(".eha-code").forEach(cell=>cell.style.insetInlineStart=width+"px");
-  table.querySelectorAll(".hka-name").forEach(cell=>cell.style.insetInlineStart=(width+codeWidth)+"px");
- }else table.querySelectorAll(".hka-name").forEach(cell=>cell.style.insetInlineStart=width+"px");
+ }else table.style.removeProperty("--hka-name-offset");
 }
 function housekeepingNameScript(value){return /[\u0600-\u06FF]/.test(String(value||""))?"ar":"en";}
 function housekeepingArabicToLatin(value){
@@ -12117,7 +12117,7 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .hka-page .hka-title-line>h3{font-size:13px!important;line-height:1.25!important;font-weight:500!important;color:var(--muted)!important;margin:2px 0 0!important}
 #app .hka-page .hka-back-zoom .hka-zoom-controls button,#app .hka-page button[data-hka-zoom]{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;flex:0 0 22px!important;font-size:12px!important;line-height:20px!important}
 #app .hka-page .hka-table .hka-seq{width:fit-content!important;min-width:0!important;max-width:none!important;padding-inline:4px!important;white-space:nowrap!important}
-#app .hka-page .hka-table .hka-name{inset-inline-start:var(--hka-seq-width,36px)!important}
+#app .hka-page .hka-table .hka-name{inset-inline-start:var(--hka-seq-width,24px)!important}
 @media(max-width:480px){
  #app .hka-page .hka-branch-name,#app .hka-page .hka-branch-address{font-size:12px!important}
  #app .hka-page .hka-title-line>h3{font-size:11px!important}
@@ -12126,9 +12126,9 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 </style>
 <style id="novaro-employee-attendance-layout-v1">
 #app .eha-page .eha-table .hka-seq{width:1%!important;min-width:0!important;white-space:nowrap!important;padding-inline:3px!important}
-#app .eha-page .eha-table .eha-code{position:sticky;inset-inline-start:24px;z-index:3;min-width:100px;width:100px}
+#app .eha-page .eha-table .eha-code{position:sticky;inset-inline-start:var(--hka-seq-width,24px);z-index:3;min-width:100px;width:100px}
 #app .eha-page .eha-table thead .eha-code{z-index:4;background:var(--bg,#f6f7f4)}
-#app .eha-page .eha-table .hka-name{inset-inline-start:124px!important}
+#app .eha-page .eha-table .hka-name{inset-inline-start:var(--hka-name-offset,124px)!important}
 #app .eha-page .eha-table td.eha-code input{min-width:80px;text-align:center}
 #app .hka-page .hka-table .hka-seq{width:1%!important;min-width:0!important;white-space:nowrap!important;padding-inline:3px!important}
 #app .hka-page .hka-table .hka-name{inset-inline-start:24px!important}
