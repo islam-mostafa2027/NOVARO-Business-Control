@@ -11047,17 +11047,10 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .hka-page .attendance-destination-modal-actions button:disabled, #app .eha-page .attendance-destination-modal-actions button:disabled{opacity:.42!important;cursor:not-allowed!important;}
 </style>
 
-<style id="novaro-attendance-destination-circles-fixed-v5">
-/* Keep each destination number on one horizontal line inside a true circle. */
-#app .attendance-destination-modal .attendance-destination-grid{
-  display:grid!important;
-  grid-template-columns:repeat(auto-fill,40px)!important;
-  grid-auto-flow:row!important;
-  justify-content:center!important;
-  align-content:start!important;
-  justify-items:center!important;
-  gap:6px!important;
-}
+<style id="novaro-attendance-destination-circles-fixed-v6">
+/* Force each destination selector to render as a true circular button. */
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
 #app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]{
   appearance:none!important;
   -webkit-appearance:none!important;
@@ -11073,7 +11066,10 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   flex:0 0 40px!important;
   aspect-ratio:1/1!important;
   padding:0!important;
+  margin:0!important;
   border-radius:50%!important;
+  clip-path:circle(50% at 50% 50%)!important;
+  overflow:hidden!important;
   align-items:center!important;
   justify-content:center!important;
   justify-self:center!important;
@@ -11086,7 +11082,15 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   line-height:1!important;
   font-size:12px!important;
   text-align:center!important;
-  overflow:hidden!important;
+}
+#app .attendance-destination-modal .attendance-destination-grid{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fill,40px)!important;
+  grid-auto-flow:row!important;
+  justify-content:center!important;
+  align-content:start!important;
+  justify-items:center!important;
+  gap:6px!important;
 }
 </style>
 </body>
