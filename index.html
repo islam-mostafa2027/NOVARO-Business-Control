@@ -3378,7 +3378,7 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
   var app=document.getElementById("app"),login=document.getElementById("loginErr"),target=null;
   if(app&&app.classList.contains("hidden")&&login)target=login;
   if(!target)target=document.getElementById("formErr")||document.getElementById("userErr");
-  if(target){target.textContent=item.message;target.title=item.type+" | "+JSON.stringify(item.details||{});return;}
+  if(target){var detail="";if(item.type==="resource.load"){var d=item.details||{};detail="\\n"+(d.tag||"")+" "+(d.url||"");}target.textContent=item.message+detail;target.title=item.type+" | "+JSON.stringify(item.details||{});return;}
   var main=document.getElementById("main");if(!main)return;
   var box=main.querySelector(".novaro-runtime-error");
   if(!box){box=document.createElement("div");box.className="novaro-runtime-error";box.setAttribute("role","alert");main.prepend(box);}
