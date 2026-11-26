@@ -4503,31 +4503,7 @@ async function employeeAttendanceSave(){
 function employeeAttendanceExport(kind){
  const sh=employeeAttendanceActive();if(!sh)return;const en=language==="en",dates=housekeepingDates(sh),rows=employeeAttendanceRows(sh),matrix=[[en?"No.":"م",en?"Employee Code":"الكود الوظيفي",en?"Employee Name":"اسم الموظف",en?"Job Title":"المسمى الوظيفي",...dates],...rows.map((r,i)=>[i+1,r.code,r.name,r.jobTitle,...dates.map(d=>r.days[d]||"")])];
  const html='<html><head><meta charset="UTF-8"></head><body><table border="1">'+matrix.map((r,i)=>'<tr>'+r.map(v=>'<'+(i?"td":"th")+'>'+esc(v)+'</'+(i?"td":"th")+'>').join("")+'</tr>').join("")+'</table>
-<style id="novaro-attendance-destination-circles-fixed-v4">
-/* Keep destination-number circles at their intended physical size in both attendance pages. */
-#app .attendance-destination-modal .attendance-destination-grid{
-  grid-template-columns:repeat(auto-fill,34px)!important;
-  justify-content:center!important;
-  align-content:start!important;
-}
-#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]{
-  display:flex!important;
-  box-sizing:border-box!important;
-  width:34px!important;
-  min-width:34px!important;
-  max-width:34px!important;
-  height:34px!important;
-  min-height:34px!important;
-  max-height:34px!important;
-  flex:0 0 34px!important;
-  aspect-ratio:1/1!important;
-  padding:0!important;
-  border-radius:50%!important;
-  align-items:center!important;
-  justify-content:center!important;
-  justify-self:center!important;
-}
-</style>
+
 </body></html>';
  if(kind==="excel"){const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="Employee-Attendance-"+sh.start_date+".xls";a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);return;}
  const w=window.open("","_blank");if(!w)return;w.document.write(html);w.document.close();w.focus();w.print();
@@ -11071,6 +11047,32 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .hka-page .attendance-destination-modal-actions, #app .eha-page .attendance-destination-modal-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;}
 #app .hka-page .attendance-destination-modal-actions button, #app .eha-page .attendance-destination-modal-actions button{width:100%!important;min-height:40px!important;height:40px!important;border-radius:9px!important;}
 #app .hka-page .attendance-destination-modal-actions button:disabled, #app .eha-page .attendance-destination-modal-actions button:disabled{opacity:.42!important;cursor:not-allowed!important;}
+</style>
+
+<style id="novaro-attendance-destination-circles-fixed-v4">
+/* Keep destination-number circles at their intended physical size in both attendance pages. */
+#app .attendance-destination-modal .attendance-destination-grid{
+  grid-template-columns:repeat(auto-fill,34px)!important;
+  justify-content:center!important;
+  align-content:start!important;
+}
+#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]{
+  display:flex!important;
+  box-sizing:border-box!important;
+  width:34px!important;
+  min-width:34px!important;
+  max-width:34px!important;
+  height:34px!important;
+  min-height:34px!important;
+  max-height:34px!important;
+  flex:0 0 34px!important;
+  aspect-ratio:1/1!important;
+  padding:0!important;
+  border-radius:50%!important;
+  align-items:center!important;
+  justify-content:center!important;
+  justify-self:center!important;
+}
 </style>
 </body>
 
