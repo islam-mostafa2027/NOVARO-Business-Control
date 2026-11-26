@@ -11057,13 +11057,13 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   display:flex!important;
   flex-flow:row nowrap!important;
   box-sizing:border-box!important;
-  width:34px!important;
-  min-width:34px!important;
-  max-width:34px!important;
-  height:34px!important;
-  min-height:34px!important;
-  max-height:34px!important;
-  flex:0 0 34px!important;
+  width:30px!important;
+  min-width:30px!important;
+  max-width:30px!important;
+  height:30px!important;
+  min-height:30px!important;
+  max-height:30px!important;
+  flex:0 0 30px!important;
   aspect-ratio:1/1!important;
   padding:0!important;
   margin:0!important;
@@ -11080,17 +11080,32 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   direction:ltr!important;
   unicode-bidi:isolate!important;
   line-height:1!important;
-  font-size:11px!important;
+  font-size:10px!important;
   text-align:center!important;
 }
 #app .attendance-destination-modal .attendance-destination-grid{
   display:grid!important;
-  grid-template-columns:repeat(auto-fill,34px)!important;
+  grid-template-columns:repeat(auto-fill,30px)!important;
   grid-auto-flow:row!important;
   justify-content:center!important;
   align-content:start!important;
   justify-items:center!important;
-  gap:6px!important;
+  gap:5px!important;
+}
+
+/* Keep the circle edge neutral instead of green, including hover/selected states. */
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
+#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]{
+  border:1px solid rgba(120,130,140,.35)!important;
+  border-color:rgba(120,130,140,.35)!important;
+  box-shadow:none!important;
+}
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus-visible,
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus-visible,
+#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus-visible{
+  outline:2px solid rgba(120,130,140,.55)!important;
+  outline-offset:2px!important;
 }
 </style>
 </body>
