@@ -12258,7 +12258,7 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 </style>
 
 <style id="novaro-hka-compact-controls-isolation-v1">
-/* Keep only the HKA zoom and add-period controls outside the shared large-button system. */
+/* Restore the light neutral attendance-control appearance and a comfortably readable compact size. */
 #app#app .hka-page .hka-compact-icon-button{
   -webkit-appearance:none!important;
   appearance:none!important;
@@ -12266,36 +12266,39 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
-  width:16px!important;
-  height:16px!important;
-  min-width:16px!important;
-  min-height:16px!important;
-  max-width:16px!important;
-  max-height:16px!important;
-  flex:0 0 16px!important;
+  width:22px!important;
+  height:22px!important;
+  min-width:22px!important;
+  min-height:22px!important;
+  max-width:22px!important;
+  max-height:22px!important;
+  flex:0 0 22px!important;
   aspect-ratio:1/1!important;
   margin:0!important;
   padding:0!important;
-  border:1px solid var(--nv-btn-primary,#287d57)!important;
+  border:1px solid var(--line)!important;
   border-radius:50%!important;
-  background:linear-gradient(110deg,var(--nv-btn-primary,#287d57),var(--nv-btn-primary-deep,#1d6548))!important;
-  background-image:linear-gradient(110deg,var(--nv-btn-primary,#287d57),var(--nv-btn-primary-deep,#1d6548))!important;
-  color:#fff!important;
-  -webkit-text-fill-color:#fff!important;
-  font-size:10px!important;
+  background:var(--surface-2,var(--card))!important;
+  background-image:none!important;
+  color:var(--text)!important;
+  -webkit-text-fill-color:var(--text)!important;
+  font-size:13px!important;
   font-weight:800!important;
-  line-height:14px!important;
-  box-shadow:0 2px 7px color-mix(in srgb,var(--nv-btn-primary,#287d57) 17%,transparent)!important;
+  line-height:20px!important;
+  box-shadow:none!important;
   white-space:nowrap!important;
 }
-#app#app .hka-page .hka-back-zoom .hka-zoom-controls{gap:2px!important;}
+#app#app .hka-page .hka-back-zoom .hka-zoom-controls{gap:4px!important;}
 #app#app .hka-page .hka-compact-icon-button:hover{
-  background:linear-gradient(110deg,var(--nv-btn-primary,#287d57),var(--nv-btn-primary-deep,#1d6548))!important;
-  background-image:linear-gradient(110deg,var(--nv-btn-primary,#287d57),var(--nv-btn-primary-deep,#1d6548))!important;
-  filter:brightness(1.06)!important;
+  background:var(--surface-2,var(--card))!important;
+  background-image:none!important;
+  border-color:var(--line)!important;
+  color:var(--text)!important;
+  -webkit-text-fill-color:var(--text)!important;
+  filter:brightness(.97)!important;
   transform:none!important;
 }
-#app#app .hka-page .hka-compact-icon-button:active{transform:scale(.94)!important;}
-#app#app .hka-page .hka-compact-icon-button:focus-visible{outline:2px solid var(--nv-btn-primary,#287d57)!important;outline-offset:2px!important;}
+#app#app .hka-page .hka-compact-icon-button:active{transform:scale(.96)!important;}
+#app#app .hka-page .hka-compact-icon-button:focus-visible{outline:2px solid var(--text)!important;outline-offset:2px!important;}
 </style>
 
