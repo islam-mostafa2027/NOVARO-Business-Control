@@ -4312,13 +4312,15 @@ function housekeepingLatinToArabic(value){
 }
 function housekeepingDisplayName(row){
  const source=String(row?.name??"");if(!source)return "";
- const key=source.toLocaleLowerCase().normalize("NFKD").replace(/[^a-z]/g,"");
- // Match only the two known housekeeping shift labels in this attendance sheet.
- const isHousekeeping=key.startsWith("haws")&&key.includes("kybyng");
- const shift=isHousekeeping&&key.includes("sbahy")
-  ?{ar:"هاوس كيبنج صباحي",en:"Housekeeping AM"}
-  :isHousekeeping&&(key.includes("msay")||key.includes("msy"))
-   ?{ar:"هاوس كيبنج مسائي",en:"Housekeeping PM"}:null;
+ // Resolve the two housekeeping shift labels from either their Arabic originals
+ // or the Latin transliterations already stored in older attendance sheets.
+ const latinKey=source.toLocaleLowerCase().normalize("NFKD").replace(/[^a-z]/g,"");
+ const arabicKey=source.normalize("NFKC").replace(/[\\u064B-\\u065F\\u0670\\u0640]/g,"").replace(/[\\s\\p{P}\\p{S}]/gu,"").replace(/[أإآ]/g,"ا").replace(/ى/g,"ي");
+ const isLatinHousekeeping=latinKey.startsWith("haws")&&latinKey.includes("kybyng");
+ const isArabicHousekeeping=arabicKey.startsWith("هاوسكيب")||arabicKey.startsWith("هاوسكيبين");
+ const morning=(isLatinHousekeeping&&latinKey.includes("s bahy".replace(/ /g,"")))||(isArabicHousekeeping&&arabicKey.includes("صباح"));
+ const evening=(isLatinHousekeeping&&(latinKey.includes("msay")||latinKey.includes("msy")))||(isArabicHousekeeping&&arabicKey.includes("مسائ"));
+ const shift=morning?{ar:"هاوس كيبنج صباحي",en:"Housekeeping AM"}:evening?{ar:"هاوس كيبنج مسائي",en:"Housekeeping PM"}:null;
  if(shift)return shift[language==="en"?"en":"ar"];
  const sourceLang=row.name_lang||(housekeepingNameScript(source));
  if(sourceLang===language)return source;
