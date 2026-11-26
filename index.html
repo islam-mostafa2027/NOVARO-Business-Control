@@ -7586,29 +7586,40 @@ editCategory=function(id){__novaroBaseEditCategory(id);const group=$("editCatGro
  #novaro-attendance-cell-color-picker .novaro-cell-color-swatch:focus-visible{outline:2px solid var(--g,#55a77b);outline-offset:2px}
  #novaro-attendance-cell-color-picker .novaro-cell-color-clear{display:block;width:100%;min-height:32px;margin-top:9px;border:1px solid var(--line,#cbd5cf);border-radius:7px;background:var(--bg,#f5f7f5);color:inherit;font:inherit;font-size:11px;font-weight:700}
 
- /* Isolate picker action buttons from the app-wide green primary-button theme. */
- #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch){
+ /* High-specificity isolation: the app-wide primary-button selector contains IDs
+    inside :not(), so these picker rules must outrank it explicitly. */
+ #novaro-attendance-cell-color-picker button.novaro-cell-color-swatch:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button){
   appearance:none!important;-webkit-appearance:none!important;
-  background:#eef2ef!important;background-image:none!important;
-  background-color:#eef2ef!important;color:#34443b!important;
-  -webkit-text-fill-color:#34443b!important;
-  border:1px solid #cbd6cf!important;
-  box-shadow:none!important;filter:none!important;
- }
- #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch):hover,
- #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch):active{
-  background:#e2e9e4!important;background-image:none!important;
-  background-color:#e2e9e4!important;color:#263b30!important;
-  -webkit-text-fill-color:#263b30!important;border-color:#b8c8bd!important;
+  background:var(--swatch)!important;background-image:none!important;background-color:var(--swatch)!important;
+  border:2px solid rgba(50,65,55,.28)!important;border-radius:50%!important;
   box-shadow:none!important;filter:none!important;transform:none!important;
+  width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;padding:0!important;
  }
- :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch){
+ #novaro-attendance-cell-color-picker button.novaro-cell-color-swatch:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button):hover,
+ #novaro-attendance-cell-color-picker button.novaro-cell-color-swatch:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button):active{
+  background:var(--swatch)!important;background-image:none!important;background-color:var(--swatch)!important;
+  filter:brightness(.92)!important;transform:none!important;
+ }
+ #novaro-attendance-cell-color-picker button.novaro-cell-color-clear:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button){
+  appearance:none!important;-webkit-appearance:none!important;
+  background:#eef2ef!important;background-image:none!important;background-color:#eef2ef!important;
+  color:#34443b!important;-webkit-text-fill-color:#34443b!important;
+  border:1px solid #cbd6cf!important;border-radius:7px!important;
+  box-shadow:none!important;filter:none!important;transform:none!important;
+  min-height:32px!important;height:32px!important;padding:5px 10px!important;
+ }
+ #novaro-attendance-cell-color-picker button.novaro-cell-color-clear:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button):hover,
+ #novaro-attendance-cell-color-picker button.novaro-cell-color-clear:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button):active{
+  background:#e2e9e4!important;background-image:none!important;background-color:#e2e9e4!important;
+  color:#263b30!important;-webkit-text-fill-color:#263b30!important;
+  border-color:#b8c8bd!important;box-shadow:none!important;filter:none!important;transform:none!important;
+ }
+ :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button.novaro-cell-color-clear:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button){
   background:#303b35!important;background-image:none!important;background-color:#303b35!important;
-  color:#edf4ef!important;-webkit-text-fill-color:#edf4ef!important;
-  border-color:#56665c!important;
+  color:#edf4ef!important;-webkit-text-fill-color:#edf4ef!important;border-color:#56665c!important;
  }
- :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch):hover,
- :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button:not(.novaro-cell-color-swatch):active{
+ :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button.novaro-cell-color-clear:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button):hover,
+ :root[data-novaro-mode="dark"] #novaro-attendance-cell-color-picker button.novaro-cell-color-clear:not(#tabs button):not(#novaro-ai-launcher):not([data-theme]):not(.hka-compact-icon-button):active{
   background:#3a4940!important;background-image:none!important;background-color:#3a4940!important;
   color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:#718579!important;
  }
