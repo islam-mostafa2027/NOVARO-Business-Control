@@ -3393,6 +3393,32 @@ html[data-novaro-mode="light"] body #app#app #main .novaro-branch-reports-rebuil
 #app#app .eha-page .hka-inline-action-panel .hka-inline-destination{display:inline-flex!important;grid-column:1/-1!important;align-items:center!important;gap:6px!important;}
 #app#app .eha-page .hka-inline-action-panel .hka-inline-destination select{display:inline-block!important;visibility:visible!important;min-width:92px!important;width:auto!important;min-height:32px!important;height:32px!important;}
 </style>
+<style id="novaro-eha-row-selection-alignment-v3">
+/* Match employee header and row checkboxes; keep them centered in a fixed 24px selector column. */
+#app#app .eha-page .eha-table.hka-selection-mode .hka-row-select-col{
+  position:sticky!important;inset-inline-start:0!important;
+  width:24px!important;min-width:24px!important;max-width:24px!important;
+  box-sizing:border-box!important;padding:0!important;
+  text-align:center!important;vertical-align:middle!important;
+  background:var(--card)!important;z-index:10!important;
+}
+#app#app .eha-page .eha-table.hka-selection-mode thead .hka-row-select-col{
+  z-index:16!important;background:var(--bg,#f6f7f4)!important;
+}
+#app#app .eha-page .eha-table.hka-selection-mode .hka-row-select-col input{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  appearance:auto!important;-webkit-appearance:checkbox!important;
+  box-sizing:border-box!important;width:13px!important;height:13px!important;
+  min-width:13px!important;min-height:13px!important;max-width:13px!important;max-height:13px!important;
+  margin:0 auto!important;padding:0!important;
+  transform:scale(.72)!important;transform-origin:center center!important;
+  accent-color:var(--g)!important;cursor:pointer!important;
+}
+#app#app .eha-page .eha-table.hka-selection-mode .hka-seq{inset-inline-start:24px!important;}
+#app#app .eha-page .eha-table.hka-selection-mode .eha-code{inset-inline-start:calc(24px + var(--hka-seq-width,24px))!important;}
+#app#app .eha-page .eha-table.hka-selection-mode .hka-name{inset-inline-start:calc(24px + var(--hka-seq-width,24px) + var(--eha-code-width,82px))!important;}
+#app#app .eha-page .eha-table.hka-selection-mode .eha-job-title{inset-inline-start:calc(24px + var(--hka-seq-width,24px) + var(--eha-code-width,82px) + var(--eha-name-width,128px))!important;}
+</style>
 </head><body><script>
 /* NOVARO error capture: no permanent UI; show details only when an error occurs. */
 (function(){
