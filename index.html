@@ -11590,7 +11590,7 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 </style>
 <style id="novaro-statistics-sheet-tabs-small-lowered-v1">
 /* Lower the statistics sheet tabs and add-sheet control slightly, keeping them aligned. */
-#app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip-wrap{transform:translateY(2px)!important;}
+#app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip-wrap{transform:none!important;}
 #app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip,
 #app .sales-report-page #salesStatisticsSheetTabs .novaro-page-strip-add{transform:none!important;}
 #app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip{display:inline-flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;height:27px!important;min-height:27px!important;padding:3px 7px!important;font-size:11px!important;line-height:1.2!important;gap:5px!important;border-radius:6px!important;overflow:visible!important;vertical-align:middle!important;}
@@ -11598,6 +11598,8 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip-remove{flex-basis:14px!important;width:14px!important;min-width:14px!important;height:14px!important;font-size:9px!important;}
 #app .sales-report-page #salesStatisticsSheetTabs .novaro-page-strip-add{display:inline-flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;flex-basis:27px!important;width:27px!important;min-width:27px!important;height:27px!important;min-height:27px!important;padding:0!important;font-size:12px!important;line-height:1!important;border-radius:6px!important;overflow:visible!important;vertical-align:middle!important;}
 #app .sales-report-page #salesStatisticsSheetTabs{align-items:flex-start!important;overflow:visible!important;padding-top:2px!important;padding-bottom:5px!important;min-height:34px!important;box-sizing:border-box!important;}
+/* The horizontal tab scroller was clipping the page button vertically; give its viewport real inner room instead of shifting the button into the clipped edge. */
+#app .sales-report-page #salesStatisticsSheetTabs .novaro-page-strip-list{box-sizing:content-box!important;min-height:27px!important;padding-top:4px!important;padding-bottom:5px!important;align-items:center!important;}
 #app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip-wrap{align-items:center!important;overflow:visible!important;}
 #app .sales-report-page #salesStatisticsSheetTabs .novaro-page-chip,
 #app .sales-report-page #salesStatisticsSheetTabs .novaro-page-strip-add{overflow:visible!important;clip-path:none!important;}
