@@ -3933,7 +3933,7 @@ const languageObserver=new MutationObserver(()=>{if(languageUpdatePending)return
 window.__novaroObserver=languageObserver;
 languageObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
 
-if(!window.supabase||typeof window.supabase.createClient!=="function"){throw new Error("تعذر تحميل مكتبة الاتصال الآمن. تحقق من اتصال الإنترنت ثم أعد فتح البرنامج.");}
+if(!window.supabase||typeof window.supabase.createClient!=="function"){throw new Error("تعذر تحميل مكتبة الاتصال الآمن / Could not load the connection library. تحقق من الإنترنت ثم أعد فتح البرنامج / Check your internet connection and reload.");}
 const db=window.supabase.createClient("https://acgbcucjdmkboryxbhid.supabase.co","sb_publishable_vQDlXiK2w8tbqA7iVgXfDw__zDbw2mz",{auth:{flowType:"pkce",detectSessionInUrl:false,experimental:{passkey:true}}});
 
 // Handle recovery callbacks explicitly before showing the password form.
