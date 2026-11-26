@@ -11047,65 +11047,52 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app .hka-page .attendance-destination-modal-actions button:disabled, #app .eha-page .attendance-destination-modal-actions button:disabled{opacity:.42!important;cursor:not-allowed!important;}
 </style>
 
-<style id="novaro-attendance-destination-circles-fixed-v6">
-/* Force each destination selector to render as a true circular button. */
+<style id="novaro-attendance-destination-circles-fixed-v7">
+/* Use one solid Mint Green color for every destination number button and state. */
 #app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
 #app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
-#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]{
-  appearance:none!important;
-  -webkit-appearance:none!important;
-  display:flex!important;
-  flex-flow:row nowrap!important;
-  box-sizing:border-box!important;
-  width:30px!important;
-  min-width:30px!important;
-  max-width:30px!important;
-  height:30px!important;
-  min-height:30px!important;
-  max-height:30px!important;
-  flex:0 0 30px!important;
-  aspect-ratio:1/1!important;
-  padding:0!important;
-  margin:0!important;
-  border-radius:50%!important;
-  clip-path:circle(50% at 50% 50%)!important;
-  overflow:hidden!important;
-  align-items:center!important;
-  justify-content:center!important;
-  justify-self:center!important;
-  white-space:nowrap!important;
-  word-break:keep-all!important;
-  overflow-wrap:normal!important;
-  writing-mode:horizontal-tb!important;
-  direction:ltr!important;
-  unicode-bidi:isolate!important;
-  line-height:1!important;
-  font-size:10px!important;
-  text-align:center!important;
-}
-#app .attendance-destination-modal .attendance-destination-grid{
-  display:grid!important;
-  grid-template-columns:repeat(auto-fill,30px)!important;
-  grid-auto-flow:row!important;
-  justify-content:center!important;
-  align-content:start!important;
-  justify-items:center!important;
-  gap:5px!important;
-}
-
-/* Keep the circle edge neutral instead of green, including hover/selected states. */
-#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
-#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
-#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]{
-  border:1px solid rgba(120,130,140,.35)!important;
-  border-color:rgba(120,130,140,.35)!important;
+#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:hover,
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:hover,
+#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:hover,
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option].is-selected,
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option].is-selected,
+#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option].is-selected,
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:active,
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:active,
+#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:active,
+:root[data-novaro-mode="dark"] #app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option],
+:root[data-novaro-mode="dark"] #app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]{
+  background:#BFEBD2!important;
+  background-color:#BFEBD2!important;
+  background-image:none!important;
+  border:1px solid #BFEBD2!important;
+  border-color:#BFEBD2!important;
+  color:#205B43!important;
+  -webkit-text-fill-color:#205B43!important;
   box-shadow:none!important;
+  outline-color:#BFEBD2!important;
+  text-shadow:none!important;
 }
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus,
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus,
+#app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus,
 #app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus-visible,
 #app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus-visible,
 #app .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]:focus-visible{
-  outline:2px solid rgba(120,130,140,.55)!important;
+  outline:2px solid #BFEBD2!important;
   outline-offset:2px!important;
+  box-shadow:none!important;
+}
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]::before,
+#app .hka-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]::after,
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]::before,
+#app .eha-page .attendance-destination-modal .attendance-destination-grid>button.attendance-destination-number[data-attendance-destination-option]::after{
+  background:#BFEBD2!important;
+  background-color:#BFEBD2!important;
+  background-image:none!important;
+  border-color:#BFEBD2!important;
+  box-shadow:none!important;
 }
 </style>
 </body>
