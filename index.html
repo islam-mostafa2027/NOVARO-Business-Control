@@ -3842,6 +3842,12 @@ function translateCanonical(value){
  return out;
 }
 function translateText(value){
+ const source=String(value??"");
+ if(language==="en"&&typeof normalizeNovaroJobTitle==="function"){
+  const jobTitle=normalizeNovaroJobTitle(source);
+  if(/^هاوس.*صباحي$/.test(jobTitle))return "Housekeeping AM";
+  if(/^هاوس.*مسائي$/.test(jobTitle))return "Housekeeping PM";
+ }
  const canonical=translateCanonical(value);
  if(language==="ar")return canonical;
  let out=canonical;
