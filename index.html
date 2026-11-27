@@ -13069,3 +13069,34 @@ filter:none!important;transform:none!important;outline:none!important;
 }
 </style>
 
+
+<style id="novaro-eha-vacation-card-centering-and-carryover-v1">
+/* Keep the Vacation & Holidays trigger compact and centered within its card. */
+#app#app .eha-page .eha-vacation-header{
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ gap:0!important;
+ width:100%!important;
+ min-width:0!important;
+}
+#app#app .eha-page .eha-vacation-header>.eha-vacation-toggle{
+ display:flex!important;
+ flex:0 1 420px!important;
+ width:min(100%,420px)!important;
+ max-width:420px!important;
+ min-width:0!important;
+ min-height:40px!important;
+ height:40px!important;
+ padding:6px 12px!important;
+ margin:0 auto!important;
+}
+/* Light blue background for the editable Carryover V field only. */
+#app#app .eha-page .eha-leave-table tbody td:nth-child(5) input:not([readonly]){
+ background:#DDF1FF!important;
+ background-color:#DDF1FF!important;
+ color:#183B55!important;
+ -webkit-text-fill-color:#183B55!important;
+ border-color:#B7DDF5!important;
+}
+</style>
