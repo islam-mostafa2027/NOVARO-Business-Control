@@ -5937,12 +5937,10 @@ document.addEventListener("click",async e=>{
   if(!allowed.some(b=>b.id===headcountBranchId)){alert(language==="en"?"You do not have permission to access this branch.":"ليس لديك صلاحية الوصول إلى هذا الفرع.");return;}
   if(headcountAttendancePageButton.dataset.openHeadcountAttendancePage==="housekeeping"){
    page="headcountAttendanceHousekeeping";branchAttendanceMenuOpen=false;
-   try{await housekeepingLoad(headcountBranchId);}catch(error){console.error("Housekeeping attendance load:",error);alert((language==="en"?"Could not load Housekeeping Attendance: ":"تعذر تحميل كشف حضور الهاوس كيبينج: ")+(error.message||String(error)));return;}
    render();return;
   }
   if(headcountAttendancePageButton.dataset.openHeadcountAttendancePage==="employee"){
    page="headcountAttendanceEmployee";branchAttendanceMenuOpen=false;
-   try{await employeeAttendanceLoad(headcountBranchId);}catch(error){console.error("Employee attendance load:",error);alert((language==="en"?"Could not load Employee Attendance: ":"تعذر تحميل كشف حضور الموظفين: ")+(error.message||String(error)));return;}
    render();return;
   }
   return;
@@ -6792,11 +6790,11 @@ if(page==="headcountAttendanceEmployee"||page==="headcountAttendanceHousekeeping
    if(housekeepingLoadedBranchId!==headcountBranchId||!housekeepingSheets.length){
     m.innerHTML='<section class="card"><p class="muted">'+(language==="en"?"Loading attendance sheet...":"جاري تحميل كشف الحضور...")+'</p></section>';
     housekeepingLoad(headcountBranchId).then(()=>render()).catch(error=>{console.error("Housekeeping attendance load:",error);const host=document.getElementById("app");if(host)host.querySelector("main")?.insertAdjacentHTML("beforeend",'<p class="hka-error">'+esc(error.message||String(error))+'</p>');});
-   }else{m.innerHTML=housekeepingMarkup(attendanceBranch,attendanceTitle);setTimeout(housekeepingFitDateColumns,0);setTimeout(housekeepingFitDateColumns,120);setTimeout(housekeepingFitNameColumn,0);setTimeout(housekeepingFitNameColumn,120);setTimeout(()=>attendanceFitSequenceColumn(document.querySelector(".hka-table")),0);setTimeout(()=>attendanceFitSequenceColumn(document.querySelector(".hka-table")),120);}
+   }else{m.innerHTML=housekeepingMarkup(attendanceBranch,attendanceTitle);setTimeout(housekeepingFitDateColumns,0);setTimeout(housekeepingFitNameColumn,0);setTimeout(()=>attendanceFitSequenceColumn(document.querySelector(".hka-table")),0);}
   }else if(employeeAttendanceLoadedBranchId!==headcountBranchId||!employeeAttendanceSheets.length){
    m.innerHTML='<section class="card"><p class="muted">'+(language==="en"?"Loading attendance sheet...":"جاري تحميل كشف الحضور...")+'</p></section>';
    employeeAttendanceLoad(headcountBranchId).then(()=>render()).catch(error=>{console.error("Employee attendance load:",error);const host=document.getElementById("app");if(host)host.querySelector("main")?.insertAdjacentHTML("beforeend",'<p class="hka-error">'+esc(error.message||String(error))+'</p>');});
-  }else{m.innerHTML=employeeAttendanceMarkup(attendanceBranch,attendanceTitle);setTimeout(()=>employeeAttendanceFitColumns(document.querySelector(".eha-table")),0);setTimeout(()=>employeeAttendanceFitColumns(document.querySelector(".eha-table")),120);}
+  }else{m.innerHTML=employeeAttendanceMarkup(attendanceBranch,attendanceTitle);setTimeout(()=>employeeAttendanceFitColumns(document.querySelector(".eha-table")),0);}
  }
 }
 if(page==="counts")m.innerHTML='<section class="card"><div class="row"><h3>'+(language==="en"?"Stocktake":"الجرد")+'</h3><button onclick="addSession()">＋ '+(language==="en"?"New stocktake session":"جلسة جرد")+'</button></div>'+(profile.role==="owner_admin"?'<div class="field"><label>'+(language==="en"?"View stocktake by branch":"عرض الجرد حسب الفرع")+'</label><select id="countBranch"><option value="">'+(language==="en"?"All branches":"كل الفروع")+'</option>'+branches.map(b=>'<option value="'+b.id+'">'+esc(branchLabel(b))+'</option>').join("")+'</select></div>':"")+'<div id="sessions"><div class="empty">'+(language==="en"?"Loading...":"تحميل...")+'</div></div></section>';
