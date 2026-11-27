@@ -4489,7 +4489,7 @@ async function employeeAttendanceLoad(branchId){
  employeeVacationPanelOpen=false;
  if(!branchId||!canManageHeadcount()&&profile?.role!=="viewer"&&profile?.role!=="inventory_staff")return;
  const q=await db.from("branch_attendance_sheets").select("id,branch_id,title,start_date,end_date,sheet_data,is_archived,created_by,updated_by").eq("branch_id",branchId).eq("title","Employee Attendance").eq("is_archived",false).order("start_date",{ascending:true});if(q.error)throw q.error;
- employeeAttendanceSheets=(q.data||[]).map(x=>({...x,sheet_data:x.sheet_data||{rows:[]}}));if(!employeeAttendanceSheets.length)employeeAttendanceSheets=[employeeAttendanceMakeSheet()];employeeAttendanceSheets.forEach(employeeAttendanceRows);employeeAttendanceActiveSheetId=employeeAttendanceSheets[0].id;employeeAttendanceLoadedBranchId=branchId;
+ employeeAttendanceSheets=(q.data||[]).map(x=>({...x,sheet_data:x.sheet_data||{rows:[]}}));if(!employeeAttendanceSheets.length)employeeAttendanceSheets=[employeeAttendanceMakeSheet()];employeeAttendanceActiveSheetId=employeeAttendanceSheets[0].id;employeeAttendanceRows(employeeAttendanceActive());employeeAttendanceLoadedBranchId=branchId;
 }
 function employeeAttendanceActive(){return employeeAttendanceSheets.find(x=>String(x.id)===String(employeeAttendanceActiveSheetId))||employeeAttendanceSheets[0]||null;}
 function employeeAttendanceBalance(total,taken){
