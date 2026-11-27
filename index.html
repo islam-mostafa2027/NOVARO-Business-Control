@@ -4363,7 +4363,8 @@ function employeeAttendanceFitColumns(table){
  const fit=(cell,min,max)=>{if(!cell)return 0;const index=cell.cellIndex;let w=Math.max(min,measure(cell));table.querySelectorAll("tbody tr").forEach(row=>{const input=row.cells[index]?.querySelector("input");if(input)w=Math.max(w,measure(input));});w=Math.min(max,Math.ceil(w));[cell,...Array.from(table.querySelectorAll("tbody tr"),row=>row.cells[index]).filter(Boolean)].forEach(el=>{el.style.width=w+"px";el.style.minWidth=w+"px";el.style.maxWidth=w+"px";const input=el.querySelector("input");if(input){input.style.width="100%";input.style.minWidth="0";input.style.maxWidth="100%";input.style.boxSizing="border-box";}});return w;};
  const selectionWidth=table.classList.contains("hka-selection-mode")?24:0,seqWidth=fit(seq,24,30),codeWidth=fit(code,70,100),nameWidth=fit(name,118,170),jobWidth=fit(job,48,170);
  table.style.setProperty("--hka-seq-width",seqWidth+"px");table.style.setProperty("--eha-selection-width",selectionWidth+"px");table.style.setProperty("--eha-code-width",codeWidth+"px");table.style.setProperty("--eha-name-width",nameWidth+"px");table.style.setProperty("--eha-job-width",jobWidth+"px");table.style.setProperty("--eha-code-offset",(selectionWidth+seqWidth)+"px");table.style.setProperty("--eha-name-offset",(selectionWidth+seqWidth+codeWidth)+"px");table.style.setProperty("--eha-job-offset",(selectionWidth+seqWidth+codeWidth+nameWidth)+"px");
- const setStickyStart=(selector,offset)=>table.querySelectorAll(selector).forEach(el=>{el.style.setProperty("inset-inline-start",offset+"px","important");el.style.setProperty("inset-inline-end","auto","important");el.style.removeProperty("left");el.style.removeProperty("right");});
+ const isLtr=table.getAttribute("dir")==="ltr"||getComputedStyle(table).direction==="ltr";
+ const setStickyStart=(selector,offset)=>table.querySelectorAll(selector).forEach(el=>{el.style.setProperty("inset-inline-start",offset+"px","important");el.style.setProperty("inset-inline-end","auto","important");el.style.setProperty("left",isLtr?offset+"px":"auto","important");el.style.setProperty("right",isLtr?"auto":offset+"px","important");});
  setStickyStart(".hka-seq",selectionWidth);setStickyStart(".eha-code",selectionWidth+seqWidth);setStickyStart(".hka-name",selectionWidth+seqWidth+codeWidth);setStickyStart(".eha-job-title",selectionWidth+seqWidth+codeWidth+nameWidth); return {seqWidth,codeWidth,nameWidth,jobWidth,selectionWidth};
 }
 function attendanceFitSequenceColumn(table){
@@ -12899,4 +12900,20 @@ background:var(--g)!important;background-color:var(--g)!important;background-ima
 color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:var(--g)!important;
 box-shadow:none!important;filter:none!important;transform:none!important;outline:none!important;-webkit-tap-highlight-color:transparent!important;
 }
+</style>
+
+<style id="novaro-eha-final-sticky-mint-and-vacation-header-v1">
+/* Set both logical and physical sticky edges from the table language direction. */
+#app#app .eha-page .eha-table th.eha-code,#app#app .eha-page .eha-table td.eha-code{box-sizing:border-box!important;}
+/* The vacation zoom controls are a separate grid item beside the title toggle. */
+#app#app .eha-page .eha-vacation-header{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;width:100%!important;min-width:0!important;}
+#app#app .eha-page .eha-vacation-header>.eha-vacation-toggle{display:flex!important;grid-column:1!important;width:100%!important;min-width:0!important;flex:initial!important;}
+#app#app .eha-page .eha-vacation-header>.eha-vacation-zoom-controls{position:static!important;grid-column:2!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;width:max-content!important;min-width:max-content!important;padding:0 10px!important;margin:0!important;}
+/* Match the agreed Mint Green login-button palette, not the dark Main Green. */
+#app#app .hka-page button.hka-compact-icon-button[data-hka-zoom],
+#app#app .eha-page button.hka-compact-icon-button[data-eha-zoom],
+#app#app .eha-page button.hka-compact-icon-button[data-eha-vacation-zoom]{background:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;background-color:#dff5e9!important;background-image:linear-gradient(145deg,#f2fff8 0%,#dff5e9 100%)!important;border:1px solid #b9dfcf!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;box-shadow:0 4px 14px rgba(34,112,83,.09)!important;}
+#app#app .hka-page button.hka-compact-icon-button[data-hka-zoom]:hover,#app#app .hka-page button.hka-compact-icon-button[data-hka-zoom]:active,#app#app .hka-page button.hka-compact-icon-button[data-hka-zoom]:focus,#app#app .hka-page button.hka-compact-icon-button[data-hka-zoom]:focus-visible,
+#app#app .eha-page button.hka-compact-icon-button[data-eha-zoom]:hover,#app#app .eha-page button.hka-compact-icon-button[data-eha-zoom]:active,#app#app .eha-page button.hka-compact-icon-button[data-eha-zoom]:focus,#app#app .eha-page button.hka-compact-icon-button[data-eha-zoom]:focus-visible,
+#app#app .eha-page button.hka-compact-icon-button[data-eha-vacation-zoom]:hover,#app#app .eha-page button.hka-compact-icon-button[data-eha-vacation-zoom]:active,#app#app .eha-page button.hka-compact-icon-button[data-eha-vacation-zoom]:focus,#app#app .eha-page button.hka-compact-icon-button[data-eha-vacation-zoom]:focus-visible{background:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;background-color:#cceedd!important;background-image:linear-gradient(145deg,#e5fbef 0%,#cceedd 100%)!important;border-color:#91cdb3!important;color:#216b55!important;-webkit-text-fill-color:#216b55!important;box-shadow:0 6px 18px rgba(34,112,83,.14)!important;filter:none!important;transform:none!important;outline:none!important;-webkit-tap-highlight-color:transparent!important;}
 </style>
