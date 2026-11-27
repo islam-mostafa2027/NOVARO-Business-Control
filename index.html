@@ -5940,6 +5940,7 @@ document.addEventListener("click",async e=>{
    render();return;
   }
   if(headcountAttendancePageButton.dataset.openHeadcountAttendancePage==="employee"){
+   try{await employeeAttendanceLoad(headcountBranchId);}catch(error){console.error("Employee attendance load:",error);alert((language==="en"?"Could not load Employee Attendance: ":"تعذر تحميل كشف حضور الموظفين: ")+(error.message||String(error)));return;}
    page="headcountAttendanceEmployee";branchAttendanceMenuOpen=false;
    render();return;
   }
