@@ -4361,7 +4361,7 @@ function employeeAttendanceFitColumns(table){
  if(!table)return;const head=table.querySelector("thead tr");if(!head)return;const seq=head.querySelector(".hka-seq"),code=head.querySelector(".eha-code"),name=head.querySelector(".hka-name"),job=head.querySelector(".eha-job-title");const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");if(!ctx)return;
  const measure=el=>{const st=getComputedStyle(el);ctx.font=st.font||st.fontSize+" "+st.fontFamily;return ctx.measureText(el.value??el.textContent??"").width+parseFloat(st.paddingLeft||0)+parseFloat(st.paddingRight||0)+parseFloat(st.borderLeftWidth||0)+parseFloat(st.borderRightWidth||0)+8;};
  const fit=(cell,min,max)=>{if(!cell)return 0;const index=cell.cellIndex;let w=Math.max(min,measure(cell));table.querySelectorAll("tbody tr").forEach(row=>{const input=row.cells[index]?.querySelector("input");if(input)w=Math.max(w,measure(input));});w=Math.min(max,Math.ceil(w));[cell,...Array.from(table.querySelectorAll("tbody tr"),row=>row.cells[index]).filter(Boolean)].forEach(el=>{el.style.width=w+"px";el.style.minWidth=w+"px";el.style.maxWidth=w+"px";const input=el.querySelector("input");if(input){input.style.width="100%";input.style.minWidth="0";input.style.maxWidth="100%";input.style.boxSizing="border-box";}});return w;};
- const selectionWidth=table.classList.contains("hka-selection-mode")?24:0,seqWidth=fit(seq,24,30),codeWidth=fit(code,70,100),nameWidth=fit(name,118,170),jobWidth=fit(job,48,170);
+ const selectionWidth=table.classList.contains("hka-selection-mode")?24:0,measuredSeqWidth=fit(seq,24,30),seqWidth=seq?seq.offsetWidth:measuredSeqWidth,codeWidth=fit(code,70,100),nameWidth=fit(name,118,170),jobWidth=fit(job,48,170);
  table.style.setProperty("--hka-seq-width",seqWidth+"px");table.style.setProperty("--eha-selection-width",selectionWidth+"px");table.style.setProperty("--eha-code-width",codeWidth+"px");table.style.setProperty("--eha-name-width",nameWidth+"px");table.style.setProperty("--eha-job-width",jobWidth+"px");table.style.setProperty("--eha-code-offset",(selectionWidth+seqWidth)+"px");table.style.setProperty("--eha-name-offset",(selectionWidth+seqWidth+codeWidth)+"px");table.style.setProperty("--eha-job-offset",(selectionWidth+seqWidth+codeWidth+nameWidth)+"px");
  const isLtr=table.getAttribute("dir")==="ltr"||getComputedStyle(table).direction==="ltr";
  const setStickyStart=(selector,offset)=>table.querySelectorAll(selector).forEach(el=>{if(isLtr&&selector===".eha-code"){el.style.setProperty("inset-inline-start","auto","important");el.style.setProperty("inset-inline-end","auto","important");el.style.setProperty("left",offset+"px","important");el.style.setProperty("right","auto","important");return;}el.style.setProperty("inset-inline-start",offset+"px","important");el.style.setProperty("inset-inline-end","auto","important");el.style.setProperty("left",isLtr?offset+"px":"auto","important");el.style.setProperty("right",isLtr?"auto":offset+"px","important");});
@@ -5937,12 +5937,10 @@ document.addEventListener("click",async e=>{
   if(!allowed.some(b=>b.id===headcountBranchId)){alert(language==="en"?"You do not have permission to access this branch.":"ليس لديك صلاحية الوصول إلى هذا الفرع.");return;}
   if(headcountAttendancePageButton.dataset.openHeadcountAttendancePage==="housekeeping"){
    page="headcountAttendanceHousekeeping";branchAttendanceMenuOpen=false;
-   try{await housekeepingLoad(headcountBranchId);}catch(error){console.error("Housekeeping attendance load:",error);alert((language==="en"?"Could not load Housekeeping Attendance: ":"تعذر تحميل كشف حضور الهاوس كيبينج: ")+(error.message||String(error)));return;}
    render();return;
   }
   if(headcountAttendancePageButton.dataset.openHeadcountAttendancePage==="employee"){
    page="headcountAttendanceEmployee";branchAttendanceMenuOpen=false;
-   try{await employeeAttendanceLoad(headcountBranchId);}catch(error){console.error("Employee attendance load:",error);alert((language==="en"?"Could not load Employee Attendance: ":"تعذر تحميل كشف حضور الموظفين: ")+(error.message||String(error)));return;}
    render();return;
   }
   return;
@@ -6792,11 +6790,11 @@ if(page==="headcountAttendanceEmployee"||page==="headcountAttendanceHousekeeping
    if(housekeepingLoadedBranchId!==headcountBranchId||!housekeepingSheets.length){
     m.innerHTML='<section class="card"><p class="muted">'+(language==="en"?"Loading attendance sheet...":"جاري تحميل كشف الحضور...")+'</p></section>';
     housekeepingLoad(headcountBranchId).then(()=>render()).catch(error=>{console.error("Housekeeping attendance load:",error);const host=document.getElementById("app");if(host)host.querySelector("main")?.insertAdjacentHTML("beforeend",'<p class="hka-error">'+esc(error.message||String(error))+'</p>');});
-   }else{m.innerHTML=housekeepingMarkup(attendanceBranch,attendanceTitle);setTimeout(housekeepingFitDateColumns,0);setTimeout(housekeepingFitDateColumns,120);setTimeout(housekeepingFitNameColumn,0);setTimeout(housekeepingFitNameColumn,120);setTimeout(()=>attendanceFitSequenceColumn(document.querySelector(".hka-table")),0);setTimeout(()=>attendanceFitSequenceColumn(document.querySelector(".hka-table")),120);}
+   }else{m.innerHTML=housekeepingMarkup(attendanceBranch,attendanceTitle);setTimeout(housekeepingFitDateColumns,0);setTimeout(housekeepingFitNameColumn,0);setTimeout(()=>attendanceFitSequenceColumn(document.querySelector(".hka-table")),0);}
   }else if(employeeAttendanceLoadedBranchId!==headcountBranchId||!employeeAttendanceSheets.length){
    m.innerHTML='<section class="card"><p class="muted">'+(language==="en"?"Loading attendance sheet...":"جاري تحميل كشف الحضور...")+'</p></section>';
    employeeAttendanceLoad(headcountBranchId).then(()=>render()).catch(error=>{console.error("Employee attendance load:",error);const host=document.getElementById("app");if(host)host.querySelector("main")?.insertAdjacentHTML("beforeend",'<p class="hka-error">'+esc(error.message||String(error))+'</p>');});
-  }else{m.innerHTML=employeeAttendanceMarkup(attendanceBranch,attendanceTitle);setTimeout(()=>employeeAttendanceFitColumns(document.querySelector(".eha-table")),0);setTimeout(()=>employeeAttendanceFitColumns(document.querySelector(".eha-table")),120);}
+  }else{m.innerHTML=employeeAttendanceMarkup(attendanceBranch,attendanceTitle);setTimeout(()=>employeeAttendanceFitColumns(document.querySelector(".eha-table")),0);}
  }
 }
 if(page==="counts")m.innerHTML='<section class="card"><div class="row"><h3>'+(language==="en"?"Stocktake":"الجرد")+'</h3><button onclick="addSession()">＋ '+(language==="en"?"New stocktake session":"جلسة جرد")+'</button></div>'+(profile.role==="owner_admin"?'<div class="field"><label>'+(language==="en"?"View stocktake by branch":"عرض الجرد حسب الفرع")+'</label><select id="countBranch"><option value="">'+(language==="en"?"All branches":"كل الفروع")+'</option>'+branches.map(b=>'<option value="'+b.id+'">'+esc(branchLabel(b))+'</option>').join("")+'</select></div>':"")+'<div id="sessions"><div class="empty">'+(language==="en"?"Loading...":"تحميل...")+'</div></div></section>';
