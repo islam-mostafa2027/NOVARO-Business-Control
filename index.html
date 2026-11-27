@@ -4363,7 +4363,7 @@ function employeeAttendanceFitColumns(table){
  const fit=(cell,min,max)=>{if(!cell)return 0;const index=cell.cellIndex;let w=Math.max(min,measure(cell));table.querySelectorAll("tbody tr").forEach(row=>{const input=row.cells[index]?.querySelector("input");if(input)w=Math.max(w,measure(input));});w=Math.min(max,Math.ceil(w));[cell,...Array.from(table.querySelectorAll("tbody tr"),row=>row.cells[index]).filter(Boolean)].forEach(el=>{el.style.width=w+"px";el.style.minWidth=w+"px";el.style.maxWidth=w+"px";const input=el.querySelector("input");if(input){input.style.width="100%";input.style.minWidth="0";input.style.maxWidth="100%";input.style.boxSizing="border-box";}});return w;};
  const selectionWidth=table.classList.contains("hka-selection-mode")?24:0,seqWidth=fit(seq,24,30),codeWidth=fit(code,70,100),nameWidth=fit(name,118,138),jobWidth=fit(job,88,122);
  table.style.setProperty("--hka-seq-width",seqWidth+"px");table.style.setProperty("--eha-selection-width",selectionWidth+"px");table.style.setProperty("--eha-code-width",codeWidth+"px");table.style.setProperty("--eha-name-width",nameWidth+"px");table.style.setProperty("--eha-code-offset",(selectionWidth+seqWidth)+"px");table.style.setProperty("--eha-name-offset",(selectionWidth+seqWidth+codeWidth)+"px");table.style.setProperty("--eha-job-offset",(selectionWidth+seqWidth+codeWidth+nameWidth)+"px");
- const setStickyStart=(selector,offset)=>table.querySelectorAll(selector).forEach(el=>{el.style.insetInlineStart=offset+"px";el.style.insetInlineEnd="auto";});
+ const isLtr=getComputedStyle(table).direction==="ltr";const setStickyStart=(selector,offset)=>table.querySelectorAll(selector).forEach(el=>{el.style.insetInlineStart=offset+"px";el.style.insetInlineEnd="auto";el.style.left=isLtr?offset+"px":"auto";el.style.right=isLtr?"auto":offset+"px";});
  setStickyStart(".hka-seq",selectionWidth);setStickyStart(".eha-code",selectionWidth+seqWidth);setStickyStart(".hka-name",selectionWidth+seqWidth+codeWidth);setStickyStart(".eha-job-title",selectionWidth+seqWidth+codeWidth+nameWidth); return {seqWidth,codeWidth,nameWidth,jobWidth,selectionWidth};
 }
 function attendanceFitSequenceColumn(table){
@@ -12830,4 +12830,42 @@ html[data-novaro-mode="light"] body #app .app-header.novaro-header-column .heade
 #app#app .eha-page .eha-leave-table td input{height:23px!important;min-height:23px!important;max-height:23px!important;box-sizing:border-box!important;padding:2px 3px!important;line-height:1.1!important;}
 #app#app .eha-page .eha-leave-table td:nth-child(n+5) input{height:23px!important;min-height:23px!important;max-height:23px!important;padding:2px 1px!important;}
 #app#app .eha-page .eha-vacation-toggle{padding-left:14px!important;padding-right:14px!important;}
+</style>
+
+
+<style id="novaro-eha-final-sticky-and-zoom-state-fix-v1">
+/* Keep all employee-attendance frozen columns aligned in both text directions. */
+#app#app .eha-page .eha-table th.hka-seq,
+#app#app .eha-page .eha-table td.hka-seq,
+#app#app .eha-page .eha-table th.eha-code,
+#app#app .eha-page .eha-table td.eha-code,
+#app#app .eha-page .eha-table th.hka-name,
+#app#app .eha-page .eha-table td.hka-name,
+#app#app .eha-page .eha-table th.eha-job-title,
+#app#app .eha-page .eha-table td.eha-job-title{box-sizing:border-box!important;}
+/* Neutralize the older green hover/pressed styles on every zoom control. */
+#app#app .hka-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:hover,
+#app#app .hka-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:active,
+#app#app .hka-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:focus,
+#app#app .hka-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:focus-visible,
+#app#app .eha-page .eha-vacation-zoom-controls button.hka-compact-icon-button:hover,
+#app#app .eha-page .eha-vacation-zoom-controls button.hka-compact-icon-button:active,
+#app#app .eha-page .eha-vacation-zoom-controls button.hka-compact-icon-button:focus,
+#app#app .eha-page .eha-vacation-zoom-controls button.hka-compact-icon-button:focus-visible,
+#app#app .eha-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:hover,
+#app#app .eha-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:active,
+#app#app .eha-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:focus,
+#app#app .eha-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:focus-visible{background:var(--surface,#fff)!important;background-color:var(--surface,#fff)!important;background-image:none!important;color:var(--text,#26352d)!important;-webkit-text-fill-color:var(--text,#26352d)!important;border-color:var(--line,#dce5df)!important;box-shadow:none!important;filter:none!important;transform:none!important;outline:none!important;transition:none!important;}
+:root[data-novaro-mode="dark"] #app#app .hka-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:hover,
+:root[data-novaro-mode="dark"] #app#app .hka-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:active,
+:root[data-novaro-mode="dark"] #app#app .hka-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:focus,
+:root[data-novaro-mode="dark"] #app#app .hka-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:focus-visible,
+:root[data-novaro-mode="dark"] #app#app .eha-page .eha-vacation-zoom-controls button.hka-compact-icon-button:hover,
+:root[data-novaro-mode="dark"] #app#app .eha-page .eha-vacation-zoom-controls button.hka-compact-icon-button:active,
+:root[data-novaro-mode="dark"] #app#app .eha-page .eha-vacation-zoom-controls button.hka-compact-icon-button:focus,
+:root[data-novaro-mode="dark"] #app#app .eha-page .eha-vacation-zoom-controls button.hka-compact-icon-button:focus-visible,
+:root[data-novaro-mode="dark"] #app#app .eha-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:hover,
+:root[data-novaro-mode="dark"] #app#app .eha-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:active,
+:root[data-novaro-mode="dark"] #app#app .eha-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:focus,
+:root[data-novaro-mode="dark"] #app#app .eha-page .hka-back-zoom .hka-zoom-controls button.hka-compact-icon-button:focus-visible{background:var(--surface,#2d3933)!important;background-color:var(--surface,#2d3933)!important;background-image:none!important;color:var(--text,#e4ebe6)!important;-webkit-text-fill-color:var(--text,#e4ebe6)!important;border-color:var(--line,#46554c)!important;box-shadow:none!important;filter:none!important;transform:none!important;outline:none!important;transition:none!important;}
 </style>
