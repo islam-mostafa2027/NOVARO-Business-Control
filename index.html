@@ -13207,3 +13207,15 @@ html body #app .eha-page .eha-leave-table thead tr>th:nth-child(8){
 #app .eha-page .hka-title-stack>.hka-branch-line{align-self:stretch!important;}
 #app .eha-page .hka-title-stack>.hka-zoom-controls{align-self:flex-start!important;margin:2px 0 0!important;}
 </style>
+
+<style id="novaro-employee-attendance-zoom-language-alignment-v3">
+/* Align employee zoom with the branch details' inline end in each language. */
+#app .eha-page .hka-header-layout[dir="rtl"]>.hka-title-stack>.hka-zoom-controls{
+  align-self:flex-start!important;
+  justify-content:flex-start!important;
+}
+#app .eha-page .hka-header-layout[dir="ltr"]>.hka-title-stack>.hka-zoom-controls{
+  align-self:flex-end!important;
+  justify-content:flex-end!important;
+}
+</style>
